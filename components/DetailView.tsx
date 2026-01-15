@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail } from '../services/kobisService';
-// UPDATED IMPORT: Use the new prediction service
-import { getMoviePrediction } from '../services/predictionService';
+// UPDATED IMPORT: Reverted to use the direct Gemini service
+import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, BarChart2, TrendingDown, RefreshCw, AlertTriangle, GitCompare } from 'lucide-react';
 
@@ -49,10 +49,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setDetailLoading(false);
       setTrendLoading(false);
 
-      // 2. Fetch Prediction from Python Backend
+      // 2. Fetch Prediction directly from Gemini (Client-side)
       if (trend.length > 0 && info) {
-        // UPDATED CALL: Call the backend wrapper instead of direct Gemini
-        const pred = await getMoviePrediction(movie.movieNm, trend, info, movie.audiAcc);
+        // UPDATED CALL: Use predictMoviePerformance from geminiService
+        const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
         setPrediction(pred);
         setAiLoading(false);
       } else {
@@ -69,8 +69,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
   const handleShare = async () => {
     if (!movie) return;
-    const rankChange = Number(movie.rankInten);
-    const changeSymbol = rankChange > 0 ? '🔺' : rankChange < 0 ? '🔻' : '-';
     
     const text = `🎬 [BoxOffice Pro]
 영화: ${movie.movieNm}
@@ -168,7 +166,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
                 <div className="w-6 h-6 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
                 <div className="flex flex-col items-center">
                   <p className="text-sm text-indigo-600 font-bold animate-pulse">실시간 AI 데이터 계산 중...</p>
-                  <p className="text-xs text-indigo-400 mt-1">잠시만 기다려주세요</p>
+                  <p className="text-xs text-indigo-400 mt-1">PSA 감쇠 & 계절성 가중치 계산</p>
                 </div>
              </div>
           ) : prediction ? (

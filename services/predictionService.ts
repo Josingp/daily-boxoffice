@@ -35,15 +35,24 @@ export const getMoviePrediction = async (
     });
 
     if (!response.ok) {
-      throw new Error(`Backend Error: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`Backend Error (${response.status}):`, errorText);
+      throw new Error(`Backend responded with ${response.status}`);
     }
 
     const result: PredictionResult = await response.json();
     return result;
 
   } catch (error) {
-    console.error("Prediction Service Failed:", error);
-    // Fallback: Return null so UI handles it gracefully (or use local fallback logic if needed)
+    console.warn("========================================");
+    console.warn("PREDICTION SERVICE CONNECTION FAILED");
+    console.warn("Ensure your Python backend is running:");
+    console.warn("1. pip install fastapi uvicorn google-genai");
+    console.warn("2. export API_KEY='your_key'");
+    console.warn("3. python main.py");
+    console.warn("========================================");
+    console.error(error);
+    // Fallback: Return null so UI handles it gracefully
     return null;
   }
 };
