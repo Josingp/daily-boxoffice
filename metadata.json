@@ -1,0 +1,5 @@
+{
+  "name": "BoxOffice Pro",
+  "description": "A modern, AI-enhanced daily box office tracker for Korean movies using the KOBIS API.",
+  "requestFramePermissions": []
+}
