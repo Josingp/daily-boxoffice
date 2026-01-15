@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
+import { GEMINI_API_KEY } from "../constants";
 
 // Helper to get day of week name
 const getDayName = (dateStr: string) => {
@@ -32,14 +33,13 @@ export const predictMoviePerformance = async (
   movieInfo?: MovieInfo | null,
   currentAudiAcc: string = "0"
 ): Promise<PredictionResult | null> => {
-  // Check if API KEY exists. 
-  // If user hasn't set up the env variable, return null gracefully.
-  if (!process.env.API_KEY || !movieInfo) {
+  // Use the provided GEMINI_API_KEY from constants.ts
+  if (!GEMINI_API_KEY || !movieInfo) {
     console.warn("Gemini API Key is missing. AI predictions disabled.");
     return null;
   }
 
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
   try {
     // 1. Feature Engineering (Prepare data for the "Model")
@@ -47,8 +47,11 @@ export const predictMoviePerformance = async (
       const dayName = getDayName(d.date);
       const daysSinceOpen = getDaysSinceRelease(d.date, movieInfo.openDt);
       
+      // Calculate PSA (Per Screen Average)
+      // PSA < 20 often triggers screen reduction in Korean theaters.
       const psa = d.scrnCnt && d.scrnCnt > 0 ? (d.audiCnt / d.scrnCnt).toFixed(1) : "0";
 
+      // Calculate Growth Rate
       let growthD1 = "N/A";
       if (index > 0) {
         const prev = trendData[index - 1].audiCnt;
@@ -68,7 +71,7 @@ export const predictMoviePerformance = async (
 
     const genre = movieInfo.genres.map(g => g.genreNm).join(", ") || "Unknown";
     
-    // 2. Construct Prompt
+    // 2. Construct the "Data Scientist" Prompt
     const prompt = `
       You are a specialized Korean Box Office Analyst Algorithm.
       
@@ -82,37 +85,36 @@ export const predictMoviePerformance = async (
       **ALGORITHM EXECUTION INSTRUCTIONS:**
 
       1. **Analyze PSA (Per Screen Average) Efficiency**:
-         - Calculate the PSA trend. 
-         - Logic: If PSA is consistently low (e.g., < 20-30 people per screen), predict a *sharp* screen reduction (Screen Decay Rate > 50%) for the coming week.
-         - Logic: If PSA is high (> 80), assume "Word of Mouth" is active and screens will hold steady or increase.
+         - Logic: If PSA is consistently low (< 20-30), predict screen reduction (decay).
+         - Logic: If PSA is high (> 80), assume "Word of Mouth" boost.
 
-      2. **Lifecycle & Seasonality Regression**:
-         - Adjust the "Weekend Multiplier" based on the PSA. High PSA = Higher Multiplier.
-         - Apply Logarithmic Decay based on 'lifecycleDay'.
+      2. **Lifecycle & Seasonality**:
+         - Apply log-decay based on 'lifecycleDay'.
+         - Increase multiplier for upcoming Fri/Sat/Sun.
 
       3. **Final Total Prediction**:
-         - Forecast = Current Accumulated + (Projected Daily Run * Screen Retention Rate).
-         - Stop the forecast when daily audience < 1,000.
+         - Forecast = Current Accumulated + Projected Run.
+         - Be conservative if the movie is older than 4 weeks.
 
-      **OUTPUT REQUIREMENTS (JSON):**
-      - Use "X만", "X억" format for ALL large numbers (e.g. "250만", "1.5억"). NO "2.5M".
-      - "comparisonMetric": A distinct, short string highlighting EXACTLY what data point was similar (e.g. "개봉 첫 주 오프닝 스코어 98% 일치", "2주차 드랍율 -45% 유사", "PSA(좌석판매율) 추이 동일").
+      **OUTPUT REQUIREMENTS (JSON ONLY):**
+      - Format numbers as "X만", "X.X억" (Korean format).
+      - "comparisonMetric": Be specific (e.g. "Opening Score 98% match").
 
       {
-        "analysisText": "한국어 분석 (PSA 효율성 언급 필수).",
+        "analysisText": "Provide a concise Korean analysis focusing on PSA and momentum.",
         "predictedFinalAudi": { "min": number, "max": number, "avg": number },
         "logicFactors": {
-           "decayFactor": "e.g. '스크린 효율 저하로 인한 급감'",
-           "seasonalityScore": "e.g. '주말 반등폭 제한적'",
-           "momentum": "e.g. '좌석 판매율(PSA) 15명 (위험)'"
+           "decayFactor": "e.g. '-15% due to low PSA'",
+           "seasonalityScore": "e.g. 'Weekend boost expected'",
+           "momentum": "e.g. 'Stable'"
         },
         "similarMovies": [
-          { "name": "Movie A", "finalAudi": "350만", "similarityReason": "Reason text", "comparisonMetric": "Specific Data Match Info", "matchType": "OPTIMISTIC" },
-          { "name": "Movie B", "finalAudi": "280만", "similarityReason": "Reason text", "comparisonMetric": "Specific Data Match Info", "matchType": "REALISTIC" },
-          { "name": "Movie C", "finalAudi": "150만", "similarityReason": "Reason text", "comparisonMetric": "Specific Data Match Info", "matchType": "PESSIMISTIC" }
+          { "name": "Name", "finalAudi": "X만", "similarityReason": "Reason", "comparisonMetric": "Metric", "matchType": "OPTIMISTIC" },
+          { "name": "Name", "finalAudi": "X만", "similarityReason": "Reason", "comparisonMetric": "Metric", "matchType": "REALISTIC" },
+          { "name": "Name", "finalAudi": "X만", "similarityReason": "Reason", "comparisonMetric": "Metric", "matchType": "PESSIMISTIC" }
         ],
-        "similarMovieSeries": [Array of 7 numbers for the REALISTIC match, normalized to fit current scale],
-        "predictionSeries": [Array of 3 integers for D+1, D+2, D+3]
+        "similarMovieSeries": [Array of 7 integers for the REALISTIC trend graph],
+        "predictionSeries": [Array of 3 integers for D+1, D+2, D+3 forecast]
       }
     `;
 
@@ -130,7 +132,7 @@ export const predictMoviePerformance = async (
     return JSON.parse(text) as PredictionResult;
 
   } catch (error) {
-    console.error("Prediction Error:", error);
+    console.error("Gemini Prediction Error:", error);
     return null;
   }
 };

@@ -1,6 +1,9 @@
 // KOBIS API Key provided by the user
 export const KOBIS_API_KEY = "7b6e13eaf7ec8194db097e7ea0bba626";
 
+// Google Gemini API Key provided by the user
+export const GEMINI_API_KEY = "AIzaSyDyjaoRk05N6dMxyVIoV4UWAnQrRImRWnw";
+
 // Direct URL for KOBIS API.
 // NOTE: KOBIS API might trigger CORS errors in browsers.
 // If you see CORS errors, you need a proxy server or a browser extension.
