@@ -1,7 +1,9 @@
-// KOBIS API Key provided by the user request
-// In a production environment, this should be proxied to hide the key,
-// but for this frontend-only demo, we keep it here.
+// KOBIS API Key provided by the user
 export const KOBIS_API_KEY = "7b6e13eaf7ec8194db097e7ea0bba626";
+
+// Direct URL for KOBIS API.
+// NOTE: KOBIS API might trigger CORS errors in browsers.
+// If you see CORS errors, you need a proxy server or a browser extension.
 export const KOBIS_BASE_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
 export const KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json";
 export const KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";

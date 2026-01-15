@@ -5,7 +5,7 @@ import { fetchMovieTrend, fetchMovieDetail } from '../services/kobisService';
 // UPDATED IMPORT: Use the direct Gemini service
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, BarChart2, TrendingDown, RefreshCw, AlertTriangle, GitCompare } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, TrendingDown, RefreshCw, AlertTriangle, GitCompare } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
