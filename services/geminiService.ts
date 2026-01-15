@@ -43,7 +43,11 @@ export const predictMoviePerformance = async (
   movieInfo?: MovieInfo | null,
   currentAudiAcc: string = "0"
 ): Promise<PredictionResult | null> => {
-  if (!process.env.API_KEY || !movieInfo) return null;
+  // If API KEY is not set (e.g. running locally without env), return null gracefully
+  if (!process.env.API_KEY || !movieInfo) {
+    console.warn("Gemini API Key is missing. AI predictions disabled.");
+    return null;
+  }
 
   try {
     // 1. Feature Engineering (Prepare data for the "Model")
@@ -118,7 +122,7 @@ export const predictMoviePerformance = async (
           { "name": "Movie B", "finalAudi": "280만", "similarityReason": "Reason text", "comparisonMetric": "Specific Data Match Info", "matchType": "REALISTIC" },
           { "name": "Movie C", "finalAudi": "150만", "similarityReason": "Reason text", "comparisonMetric": "Specific Data Match Info", "matchType": "PESSIMISTIC" }
         ],
-        "similarMovieSeries": [Array of 7 numbers for the REALISTIC match, normalized],
+        "similarMovieSeries": [Array of 7 numbers for the REALISTIC match, normalized to fit current scale],
         "predictionSeries": [Array of 3 integers for D+1, D+2, D+3]
       }
     `;

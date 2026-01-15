@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail } from '../services/kobisService';
-// UPDATED IMPORT: Reverted to use the direct Gemini service
+// UPDATED IMPORT: Use the direct Gemini service
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, BarChart2, TrendingDown, RefreshCw, AlertTriangle, GitCompare } from 'lucide-react';
@@ -51,7 +51,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
       // 2. Fetch Prediction directly from Gemini (Client-side)
       if (trend.length > 0 && info) {
-        // UPDATED CALL: Use predictMoviePerformance from geminiService
+        // Use predictMoviePerformance from geminiService
         const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
         setPrediction(pred);
         setAiLoading(false);
@@ -112,7 +112,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       {/* Content Scrollable */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar pb-24">
         
-        {/* Movie Info (Poster Removed) */}
+        {/* Movie Info */}
         {detailLoading ? (
              <div className="space-y-2 p-4 bg-slate-50 rounded-xl">
                 <div className="h-4 bg-slate-200 rounded w-1/3"></div>
