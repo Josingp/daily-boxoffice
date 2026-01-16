@@ -90,3 +90,11 @@ export interface PredictionResult {
   similarMovieSeries: number[]; // Trend of the most realistic match
   predictionSeries: number[]; // Next 3 days prediction
 }
+
+// [추가] 실시간 예매 데이터 타입
+export interface ReservationData {
+  rank: string;
+  title: string;
+  rate: string;   // 예매율 (예: 18.5%)
+  audiCnt: string; // 예매 관객수 (예: 1,500)
+}
