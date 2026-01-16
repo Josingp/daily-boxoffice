@@ -12,7 +12,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,10 +20,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# KOBIS API Key 로드
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY", "7b6e13eaf7ec8194db097e7ea0bba626")
 
-# KOBIS URL 상수
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
 KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
@@ -36,44 +33,67 @@ def normalize_string(s: str) -> str:
 
 @app.get("/")
 def read_root():
-    return {"status": "ok", "service": "BoxOffice Pro KOBIS Backend"}
+    return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
-# --- 실시간 예매율 크롤러 ---
+# --- [확정] 실시간 예매율 크롤러 ---
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
-    url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do?dmlMode=search"
+    url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Referer': 'https://www.kobis.or.kr/'
+            'Referer': 'https://www.kobis.or.kr/',
+            'Origin': 'https://www.kobis.or.kr',
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
-        resp = requests.get(url, headers=headers, timeout=10)
-        resp.encoding = 'utf-8'
-        html_text = resp.text
-
-        tbody_match = re.search(r'<tbody>(.*?)</tbody>', html_text, re.DOTALL)
-        if not tbody_match: return {"found": False}
         
+        # POST 요청 (검색 모드)
+        data = {'dmlMode': 'search'} 
+        resp = requests.post(url, headers=headers, data=data, timeout=15)
+        
+        if resp.status_code != 200:
+            return {"found": False, "reason": f"Status {resp.status_code}"}
+
+        html_text = resp.text
+        
+        # 테이블 바디 추출
+        tbody_match = re.search(r'<tbody>(.*?)</tbody>', html_text, re.DOTALL)
+        if not tbody_match: 
+            return {"found": False, "reason": "Parsing Fail"}
+        
+        # 각 행(tr) 추출
         rows = re.findall(r'<tr.*?>(.*?)</tr>', tbody_match.group(1), re.DOTALL)
         target_norm = normalize_string(movieName)
         
         for row in rows:
+            # 각 열(td) 추출
             cols = re.findall(r'<td.*?>(.*?)</td>', row, re.DOTALL)
-            if len(cols) < 7: continue
             
-            raw_title = re.sub(r'<[^>]+>', '', cols[1]).strip()
-            if normalize_string(raw_title) == target_norm:
+            # 페이지 소스 기준: 총 8개 컬럼이 있어야 함
+            if len(cols) < 8: continue 
+            
+            # 영화명 태그 제거 (<a ...>제목</a>)
+            raw_title_html = cols[1]
+            clean_title = re.sub(r'<[^>]+>', '', raw_title_html).strip()
+            
+            if normalize_string(clean_title) == target_norm:
                 return {
                     "found": True,
                     "data": {
-                        "rank": re.sub(r'<[^>]+>', '', cols[0]).strip(),
-                        "title": raw_title,
-                        "rate": re.sub(r'<[^>]+>', '', cols[3]).strip(),
-                        "audiCnt": re.sub(r'<[^>]+>', '', cols[6]).strip().replace(',', '')
+                        "rank": re.sub(r'<[^>]+>', '', cols[0]).strip(),        # [0] 순위
+                        "title": clean_title,                                   # [1] 영화명
+                        # [2] 개봉일은 제외
+                        "rate": re.sub(r'<[^>]+>', '', cols[3]).strip(),        # [3] 예매율
+                        "salesAmt": re.sub(r'<[^>]+>', '', cols[4]).strip(),    # [4] 예매매출액
+                        "salesAcc": re.sub(r'<[^>]+>', '', cols[5]).strip(),    # [5] 누적매출액
+                        "audiCnt": re.sub(r'<[^>]+>', '', cols[6]).strip(),     # [6] 예매관객수
+                        "audiAcc": re.sub(r'<[^>]+>', '', cols[7]).strip()      # [7] 누적관객수
                     }
                 }
-        return {"found": False}
+        return {"found": False, "reason": "Not Found in List"}
+        
     except Exception as e:
+        print(f"Scraping Error: {e}")
         return {"found": False, "error": str(e)}
 
 # --- KOBIS API 프록시 ---
@@ -113,5 +133,3 @@ def get_trend(movieCd: str, endDate: str):
             results = list(ex.map(fetch, dates))
             return [r for r in results if r is not None]
     except: return []
-
-# [중요] AI 예측(/predict) 코드는 이제 api/predict.ts (Node.js)가 담당하므로 여기서 삭제했습니다.
