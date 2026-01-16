@@ -2,7 +2,6 @@ import os
 import requests
 import re
 from concurrent.futures import ThreadPoolExecutor
-# [필수] bs4 라이브러리 사용
 from bs4 import BeautifulSoup 
 
 from fastapi import FastAPI, Query
@@ -44,14 +43,14 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
         data = {'dmlMode': 'search'} 
         
         resp = requests.post(url, headers=headers, data=data, timeout=15)
-        resp.encoding = 'utf-8' # 인코딩 강제 지정
+        resp.encoding = 'utf-8'
         
         if resp.status_code != 200:
             return {"found": False, "debug_error": f"HTTP {resp.status_code}"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [핵심 변경] tbody 유무 상관없이 모든 'tr' 검색
+        # [핵심] tbody 여부 상관없이 모든 tr 검색
         rows = soup.find_all("tr")
         
         if not rows:
@@ -63,10 +62,10 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
         for row in rows:
             cols = row.find_all("td")
             
-            # 칸이 8개 미만이면 패스 (데이터 행 아님)
+            # 칸이 8개 미만이면 패스
             if len(cols) < 8: continue
             
-            # 제목 가져오기 (a태그 title 속성 우선, 없으면 텍스트)
+            # 제목 가져오기 (a태그 title 우선)
             a_tag = cols[1].find("a")
             if a_tag and a_tag.get("title"):
                 title_text = a_tag["title"].strip()
@@ -74,7 +73,8 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
                 title_text = cols[1].get_text(strip=True)
                 
             rank_text = cols[0].get_text(strip=True)
-            crawled_list.append(f"[{rank_text}위] {title_text}")
+            if rank_text.isdigit():
+                crawled_list.append(f"[{rank_text}위] {title_text}")
             
             if normalize_string(title_text) == target_norm:
                 return {
@@ -93,7 +93,7 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
         log_msg = ", ".join(crawled_list[:15]) 
         return {
             "found": False, 
-            "debug_error": f"'{movieName}' 미발견.\n[서버가 읽은 목록]: {log_msg}..."
+            "debug_error": f"'{movieName}' 미발견.\n[읽은 목록]: {log_msg}..."
         }
         
     except Exception as e:
