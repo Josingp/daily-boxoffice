@@ -35,7 +35,6 @@ def normalize_string(s: str) -> str:
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
-# --- [확정] 실시간 예매율 크롤러 ---
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
     url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
@@ -47,32 +46,35 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         
-        # POST 요청 (검색 모드)
         data = {'dmlMode': 'search'} 
         resp = requests.post(url, headers=headers, data=data, timeout=15)
         
         if resp.status_code != 200:
-            return {"found": False, "reason": f"Status {resp.status_code}"}
+            return {"found": False, "debug_error": f"HTTP Status {resp.status_code}"}
 
         html_text = resp.text
         
-        # 테이블 바디 추출
-        tbody_match = re.search(r'<tbody>(.*?)</tbody>', html_text, re.DOTALL)
-        if not tbody_match: 
-            return {"found": False, "reason": "Parsing Fail"}
+        # [수정] tbody가 없으면 tr을 직접 찾도록 유연하게 변경
+        tbody_match = re.search(r'<tbody[^>]*>(.*?)</tbody>', html_text, re.DOTALL)
+        if tbody_match:
+            rows_html = tbody_match.group(1)
+        else:
+            rows_html = html_text # tbody 없으면 전체에서 검색 시도
+
+        rows = re.findall(r'<tr[^>]*>(.*?)</tr>', rows_html, re.DOTALL)
         
-        # 각 행(tr) 추출
-        rows = re.findall(r'<tr.*?>(.*?)</tr>', tbody_match.group(1), re.DOTALL)
+        if not rows:
+             # 디버깅용: HTML 앞부분 200자만 잘라서 반환 (차단 문구 확인용)
+             return {"found": False, "debug_error": f"No Rows Found. HTML: {html_text[:200]}..."}
+
         target_norm = normalize_string(movieName)
         
         for row in rows:
-            # 각 열(td) 추출
-            cols = re.findall(r'<td.*?>(.*?)</td>', row, re.DOTALL)
+            cols = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL)
             
-            # 페이지 소스 기준: 총 8개 컬럼이 있어야 함
+            # 컬럼 개수가 부족하면 스킵
             if len(cols) < 8: continue 
             
-            # 영화명 태그 제거 (<a ...>제목</a>)
             raw_title_html = cols[1]
             clean_title = re.sub(r'<[^>]+>', '', raw_title_html).strip()
             
@@ -80,21 +82,20 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
                 return {
                     "found": True,
                     "data": {
-                        "rank": re.sub(r'<[^>]+>', '', cols[0]).strip(),        # [0] 순위
-                        "title": clean_title,                                   # [1] 영화명
-                        # [2] 개봉일은 제외
-                        "rate": re.sub(r'<[^>]+>', '', cols[3]).strip(),        # [3] 예매율
-                        "salesAmt": re.sub(r'<[^>]+>', '', cols[4]).strip(),    # [4] 예매매출액
-                        "salesAcc": re.sub(r'<[^>]+>', '', cols[5]).strip(),    # [5] 누적매출액
-                        "audiCnt": re.sub(r'<[^>]+>', '', cols[6]).strip(),     # [6] 예매관객수
-                        "audiAcc": re.sub(r'<[^>]+>', '', cols[7]).strip()      # [7] 누적관객수
+                        "rank": re.sub(r'<[^>]+>', '', cols[0]).strip(),
+                        "title": clean_title,
+                        "rate": re.sub(r'<[^>]+>', '', cols[3]).strip(),
+                        "salesAmt": re.sub(r'<[^>]+>', '', cols[4]).strip(),
+                        "salesAcc": re.sub(r'<[^>]+>', '', cols[5]).strip(),
+                        "audiCnt": re.sub(r'<[^>]+>', '', cols[6]).strip(),
+                        "audiAcc": re.sub(r'<[^>]+>', '', cols[7]).strip()
                     }
                 }
-        return {"found": False, "reason": "Not Found in List"}
+        
+        return {"found": False, "debug_error": f"Movie '{movieName}' Not In List (Top 100 checked)"}
         
     except Exception as e:
-        print(f"Scraping Error: {e}")
-        return {"found": False, "error": str(e)}
+        return {"found": False, "debug_error": f"Server Exception: {str(e)}"}
 
 # --- KOBIS API 프록시 ---
 @app.get("/kobis/daily")
