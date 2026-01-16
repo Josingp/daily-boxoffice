@@ -11,7 +11,7 @@ from pydantic import BaseModel
 import google.generativeai as genai
 
 app = FastAPI()
-
+g
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
@@ -137,7 +137,7 @@ async def predict(req: PredictionRequest):
         raise HTTPException(status_code=500, detail="Server Configuration Error: API Key Missing")
     
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-3-flash-preview")
         
         prompt = f"""
         Analyze Korean movie "{req.movieName}".
