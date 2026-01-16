@@ -91,8 +91,6 @@ export interface PredictionResult {
   predictionSeries: number[]; // Next 3 days prediction
 }
 
-// [추가] 실시간 예매 데이터 타입
-// ... 기존 코드 유지 ...
 
 // [수정] ReservationData에 페이지 소스의 필드들 추가
 export interface ReservationData {
@@ -103,5 +101,4 @@ export interface ReservationData {
   salesAcc: string;  // 누적매출액 (New)
   audiCnt: string;   // 예매관객수
   audiAcc: string;   // 누적관객수 (New)
-}
 }
