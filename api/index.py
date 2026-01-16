@@ -3,16 +3,19 @@ import json
 import requests
 import re
 import html
+from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
+# [중요] 이 줄이 없어서 에러가 났던 것입니다.
+from typing import List, Dict, Any, Optional
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
-from datetime import datetime, timedelta
 
 app = FastAPI()
 
-# Vercel 환경에서는 CORS 설정이 유연해야 함
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,19 +24,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# [중요] Vercel 환경 변수에서 키를 가져옴
+# 환경 변수 로드
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY", "7b6e13eaf7ec8194db097e7ea0bba626")
 GEMINI_API_KEY = os.environ.get("API_KEY")
 
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+    except Exception as e:
+        print(f"GenAI Config Error: {e}")
 
-# KOBIS URL 상수
+# 상수
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
 KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 
-# 문자열 정규화 (특수문자, 공백 제거 후 소문자 변환)
+# 문자열 정규화 함수
 def normalize_string(s: str) -> str:
     s = html.unescape(s)
     s = re.sub(r'[^0-9a-zA-Z가-힣]', '', s)
@@ -41,7 +47,7 @@ def normalize_string(s: str) -> str:
 
 @app.get("/")
 def read_root():
-    return {"status": "ok", "service": "BoxOffice Pro Backend on Vercel"}
+    return {"status": "ok", "service": "BoxOffice Pro Backend is Running"}
 
 # --- 실시간 예매율 크롤링 ---
 @app.get("/api/reservation")
@@ -116,22 +122,23 @@ def get_trend(movieCd: str, endDate: str):
             return list(ex.map(fetch, dates))
     except: return []
 
-# --- AI 예측 Stub ---
+# --- AI 예측용 데이터 모델 ---
 class PredictionRequest(BaseModel):
     movieName: str
-    trendData: List[Dict]
-    movieInfo: Dict
+    trendData: List[Dict[str, Any]]
+    movieInfo: Dict[str, Any]
     currentAudiAcc: str
 
 @app.post("/predict")
 async def predict(req: PredictionRequest):
     if not GEMINI_API_KEY: raise HTTPException(503, "API Key Missing")
-    # 실제 Gemini 로직 연결 (간소화)
+    
+    # 여기서 실제 Gemini 모델을 호출하여 예측 결과를 생성할 수 있습니다.
+    # 현재는 프론트엔드 테스트를 위한 더미 데이터를 반환합니다.
     return {
-        "analysisText": "AI 분석 완료", 
+        "analysisText": "AI 데이터 분석 완료 (Vercel Backend)", 
         "predictedFinalAudi": {"min":0, "max":0, "avg":0}, 
         "predictionSeries": [0,0,0],
         "similarMovies": [], 
         "logicFactors": {}
     }
-
