@@ -18,10 +18,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [reservation, setReservation] = useState<ReservationData | null>(null);
-  
-  // 에러 상태 추가
   const [resError, setResError] = useState<string | null>(null);
-  
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
 
@@ -43,30 +40,23 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setResError(null);
 
     try {
-      // 1. 데이터 병렬 요청
       const trend = await fetchMovieTrend(movie.movieCd, targetDate);
       const info = await fetchMovieDetail(movie.movieCd);
-      
-      // [수정] 예매율 데이터 요청 (에러 메시지 포함된 객체 반환)
       const resResult = await fetchRealtimeReservation(movie.movieNm);
 
       setTrendData(trend);
       setMovieDetail(info);
 
-      // 예매율 데이터 처리
       if (resResult && resResult.data) {
         setReservation(resResult.data);
       } else {
         setReservation(null);
-        // 서버가 보낸 에러 메시지가 있으면 저장, 없으면 기본 메시지
-        setResError(resResult?.error || "데이터를 찾을 수 없습니다.");
+        setResError(resResult?.error || "데이터 없음");
       }
       
       setLoading(false);
 
-      // 2. AI 예측
       if (trend.length > 0 && info) {
-        // [참고] node.js 백엔드로 분리된 predict 호출
         const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
         setPrediction(pred);
       }
@@ -74,7 +64,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
     } catch (e: any) {
       console.error(e);
-      setResError(e.message || "알 수 없는 오류");
+      setResError(e.message);
       setLoading(false);
       setAiLoading(false);
     }
@@ -82,7 +72,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
   const handleShare = async () => {
     if (!movie) return;
-    const text = `🎬 ${movie.movieNm} 예매율 ${reservation?.rate || '-'} / 예측 ${prediction ? formatKoreanNumber(prediction.predictedFinalAudi.avg) : '분석중'}`;
+    const text = `🎬 ${movie.movieNm} AI 분석 리포트 확인하기`;
     if (navigator.share) {
       try { await navigator.share({ title: movie.movieNm, text }); } catch {}
     } else {
@@ -100,6 +90,9 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
   if (!movie) return null;
 
+  // 안전한 숫자 변환 헬퍼 (replace 에러 방지)
+  const safeParse = (val: string | undefined) => parseInt((val || '0').replace(/,/g, ''));
+
   return (
     <div className={`fixed inset-0 z-50 flex flex-col bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
@@ -116,12 +109,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar pb-24 bg-slate-50/30">
         
-        {/* Real-time Reservation Card */}
+        {/* 실시간 예매 정보 */}
         {reservation ? (
           <div className="bg-gradient-to-br from-violet-600 to-indigo-700 p-5 rounded-2xl text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
              <div className="absolute top-0 right-0 -mt-2 -mr-2 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
-             
-             {/* 헤더 */}
              <div className="flex justify-between items-start mb-4 relative z-10">
               <div className="flex items-center gap-2">
                 <Ticket size={18} className="text-indigo-200" />
@@ -133,36 +124,26 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
               </div>
             </div>
 
-            {/* 데이터 그리드 */}
             <div className="grid grid-cols-2 gap-y-4 gap-x-2 relative z-10">
-              {/* 1. 예매율 & 순위 */}
               <div className="col-span-2 flex items-baseline gap-2 pb-2 border-b border-white/10">
                  <span className="text-4xl font-black tracking-tight">{reservation.rate}</span>
                  <span className="text-lg font-medium text-indigo-200">예매 {reservation.rank}위</span>
               </div>
-
-              {/* 2. 예매 관객수 */}
               <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">예매 관객수</p>
-                <p className="font-bold text-lg">{formatNumber(parseInt(reservation.audiCnt.replace(/,/g, '')))}명</p>
+                <p className="font-bold text-lg">{formatNumber(safeParse(reservation.audiCnt))}명</p>
               </div>
-
-              {/* 3. 누적 관객수 */}
               <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">누적 관객수</p>
-                <p className="font-bold text-lg">{formatNumber(parseInt(reservation.audiAcc.replace(/,/g, '')))}명</p>
+                <p className="font-bold text-lg">{formatNumber(safeParse(reservation.audiAcc))}명</p>
               </div>
-
-              {/* 4. 예매 매출액 */}
               <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">예매 매출액</p>
-                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(parseInt(reservation.salesAmt.replace(/,/g, '')))}원</p>
+                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(safeParse(reservation.salesAmt))}원</p>
               </div>
-
-               {/* 5. 누적 매출액 */}
                <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">누적 매출액</p>
-                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(parseInt(reservation.salesAcc.replace(/,/g, '')))}원</p>
+                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(safeParse(reservation.salesAcc))}원</p>
               </div>
             </div>
           </div>
@@ -170,21 +151,17 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
            loading ? (
              <div className="h-48 bg-slate-100 rounded-2xl animate-pulse"></div>
            ) : (
-             // [중요] 에러 발생 시 빨간 박스로 표시 (디버깅용)
              <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center py-6">
                 <div className="flex justify-center mb-2 text-red-400"><AlertTriangle size={24}/></div>
-                <p className="text-xs font-bold text-red-600 mb-1">실시간 정보를 불러올 수 없음</p>
-                <p className="text-[10px] text-red-500 bg-white p-2 rounded border border-red-100 font-mono break-all leading-tight">
-                  {resError || "원인 미상 (API 응답 없음)"}
-                </p>
-                <p className="text-[9px] text-red-300 mt-2">
-                  * KOBIS 사이트 접속 차단 또는 영화명 불일치 가능성
+                <p className="text-xs font-bold text-red-600 mb-1">예매 정보 없음</p>
+                <p className="text-[10px] text-red-500 bg-white p-2 rounded border border-red-100 font-mono break-all">
+                  {resError || "API 응답 없음"}
                 </p>
              </div>
            )
         )}
 
-        {/* Movie Info */}
+        {/* 영화 기본 정보 */}
         {loading ? (
              <div className="space-y-2 p-4 bg-slate-50 rounded-xl">
                 <div className="h-4 bg-slate-200 rounded w-1/3"></div>
@@ -202,7 +179,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
         )}
 
-        {/* Stats Grid */}
+        {/* 일별 통계 */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-slate-500"><TrendingUp size={16} /><span className="text-xs font-semibold">일일 관객수</span></div>
@@ -216,10 +193,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
         </div>
 
-        {/* Chart Section */}
+        {/* 차트 */}
         <TrendChart data={trendData} loading={loading} prediction={prediction} />
 
-        {/* AI Analysis Report */}
+        {/* AI 분석 리포트 (복구됨) */}
         {prediction && !aiLoading && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
             <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold text-sm">
