@@ -1,12 +1,7 @@
-// KOBIS API Key provided by the user
-export const KOBIS_API_KEY = "7b6e13eaf7ec8194db097e7ea0bba626";
+// [수정] API Key는 백엔드(api/index.py)에서 관리하므로 여기서는 삭제했습니다.
+// 프론트엔드 코드에 키가 남아있으면 해커가 개발자 도구로 훔쳐갈 수 있습니다.
 
-// Google Gemini API Key provided by the user
-export const GEMINI_API_KEY = "AIzaSyDyjaoRk05N6dMxyVIoV4UWAnQrRImRWnw";
-
-// Direct URL for KOBIS API.
-// NOTE: KOBIS API might trigger CORS errors in browsers.
-// If you see CORS errors, you need a proxy server or a browser extension.
+// Direct URL for KOBIS API. (참고용 주소)
 export const KOBIS_BASE_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
 export const KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json";
 export const KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
@@ -32,7 +27,7 @@ export const formatKoreanNumber = (num: number | string): string => {
   return n.toLocaleString();
 };
 
-// Helper to get today's date in YYYYMMDD format for initial load (usually yesterday for Box Office)
+// Helper to get today's date in YYYYMMDD format for initial load
 export const getYesterdayStr = (): string => {
   const date = new Date();
   date.setDate(date.getDate() - 1);
