@@ -4,7 +4,7 @@ import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, TrendingDown, RefreshCw, AlertTriangle, GitCompare, Ticket } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -19,6 +19,9 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [reservation, setReservation] = useState<ReservationData | null>(null);
   
+  // 에러 상태 추가
+  const [resError, setResError] = useState<string | null>(null);
+  
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
 
@@ -27,6 +30,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setIsVisible(true);
       setPrediction(null);
       setReservation(null);
+      setResError(null);
       loadData(movie);
     } else {
       setIsVisible(false);
@@ -36,29 +40,41 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
   const loadData = async (movie: DailyBoxOfficeList) => {
     setLoading(true);
     setAiLoading(true);
+    setResError(null);
 
     try {
-      // 1. 모든 데이터 병렬 요청 (속도 최적화)
-      const [trend, info, resData] = await Promise.all([
-        fetchMovieTrend(movie.movieCd, targetDate),
-        fetchMovieDetail(movie.movieCd),
-        fetchRealtimeReservation(movie.movieNm)
-      ]);
+      // 1. 데이터 병렬 요청
+      const trend = await fetchMovieTrend(movie.movieCd, targetDate);
+      const info = await fetchMovieDetail(movie.movieCd);
+      
+      // [수정] 예매율 데이터 요청 (에러 메시지 포함된 객체 반환)
+      const resResult = await fetchRealtimeReservation(movie.movieNm);
 
       setTrendData(trend);
       setMovieDetail(info);
-      setReservation(resData);
+
+      // 예매율 데이터 처리
+      if (resResult && resResult.data) {
+        setReservation(resResult.data);
+      } else {
+        setReservation(null);
+        // 서버가 보낸 에러 메시지가 있으면 저장, 없으면 기본 메시지
+        setResError(resResult?.error || "데이터를 찾을 수 없습니다.");
+      }
+      
       setLoading(false);
 
       // 2. AI 예측
       if (trend.length > 0 && info) {
+        // [참고] node.js 백엔드로 분리된 predict 호출
         const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
         setPrediction(pred);
       }
       setAiLoading(false);
 
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      setResError(e.message || "알 수 없는 오류");
       setLoading(false);
       setAiLoading(false);
     }
@@ -154,13 +170,21 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
            loading ? (
              <div className="h-48 bg-slate-100 rounded-2xl animate-pulse"></div>
            ) : (
-             <div className="bg-white p-4 rounded-xl border border-slate-100 text-center py-6">
-                <p className="text-xs text-slate-400">실시간 예매 정보를 불러올 수 없습니다.<br/>(TOP 200 미진입 또는 개봉 전)</p>
+             // [중요] 에러 발생 시 빨간 박스로 표시 (디버깅용)
+             <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center py-6">
+                <div className="flex justify-center mb-2 text-red-400"><AlertTriangle size={24}/></div>
+                <p className="text-xs font-bold text-red-600 mb-1">실시간 정보를 불러올 수 없음</p>
+                <p className="text-[10px] text-red-500 bg-white p-2 rounded border border-red-100 font-mono break-all leading-tight">
+                  {resError || "원인 미상 (API 응답 없음)"}
+                </p>
+                <p className="text-[9px] text-red-300 mt-2">
+                  * KOBIS 사이트 접속 차단 또는 영화명 불일치 가능성
+                </p>
              </div>
            )
         )}
-        
-        {/* Movie Info (간략화) */}
+
+        {/* Movie Info */}
         {loading ? (
              <div className="space-y-2 p-4 bg-slate-50 rounded-xl">
                 <div className="h-4 bg-slate-200 rounded w-1/3"></div>
