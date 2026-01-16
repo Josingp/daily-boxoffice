@@ -1,18 +1,17 @@
 import os
-import json
 import requests
 import re
-import html
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Dict, Any, Optional
+# [변경] PDF에 나온 방식대로 BeautifulSoup 사용
+from bs4 import BeautifulSoup 
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,7 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# KOBIS API Key
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY", "7b6e13eaf7ec8194db097e7ea0bba626")
 
 # URL 상수
@@ -29,66 +27,78 @@ KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffic
 KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 
-def normalize_string(s: str) -> str:
-    s = html.unescape(s)
-    s = re.sub(r'[^0-9a-zA-Z가-힣]', '', s)
-    return s.lower()
-
 @app.get("/")
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
-# --- 실시간 예매율 크롤러 ---
+# --- [BeautifulSoup 적용] 실시간 예매율 크롤러 ---
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
     url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
     try:
+        # 1. 사이트 접속 (요청)
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Referer': 'https://www.kobis.or.kr/',
-            'Origin': 'https://www.kobis.or.kr',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
         data = {'dmlMode': 'search'} 
         resp = requests.post(url, headers=headers, data=data, timeout=15)
         
         if resp.status_code != 200:
-            return {"found": False, "reason": f"Status {resp.status_code}"}
+            return {"found": False, "debug_error": f"KOBIS 접속 실패 ({resp.status_code})"}
 
-        html_text = resp.text
+        # 2. PDF 방식: HTML 파싱 (BeautifulSoup 사용)
+        soup = BeautifulSoup(resp.text, 'html.parser')
         
-        tbody_match = re.search(r'<tbody>(.*?)</tbody>', html_text, re.DOTALL)
-        if not tbody_match: 
-            return {"found": False, "reason": "Parsing Fail"}
+        # 3. 데이터 찾기 (테이블의 각 행 'tr'을 모두 찾음)
+        # KOBIS 테이블 구조: <tbody id="tbody_0"> 안에 <tr>들이 있음
+        rows = soup.select("tbody tr")
         
-        rows = re.findall(r'<tr.*?>(.*?)</tr>', tbody_match.group(1), re.DOTALL)
-        target_norm = normalize_string(movieName)
-        
+        if not rows:
+             return {"found": False, "debug_error": "테이블 데이터를 찾을 수 없습니다."}
+
+        # 검색어 정규화 (공백/특수문자 제거 후 소문자)
+        target_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
+        seen_titles = []
+
         for row in rows:
-            cols = re.findall(r'<td.*?>(.*?)</td>', row, re.DOTALL)
-            if len(cols) < 8: continue 
+            # 각 행의 칸(td)들을 다 가져옴
+            cols = row.find_all("td")
             
-            raw_title_html = cols[1]
-            clean_title = re.sub(r'<[^>]+>', '', raw_title_html).strip()
+            # 유효한 데이터 행인지 확인 (컬럼이 8개여야 함)
+            if len(cols) < 8: continue
             
-            if normalize_string(clean_title) == target_norm:
+            # [1]번째 칸: 영화 제목 (a 태그 안의 텍스트 또는 그냥 텍스트)
+            title_text = cols[1].get_text(strip=True)
+            seen_titles.append(title_text)
+            
+            # 제목 비교
+            current_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', title_text).lower()
+            
+            if current_norm == target_norm:
+                # 찾았다! 데이터 추출
                 return {
                     "found": True,
                     "data": {
-                        "rank": re.sub(r'<[^>]+>', '', cols[0]).strip(),
-                        "title": clean_title,
-                        "rate": re.sub(r'<[^>]+>', '', cols[3]).strip(),
-                        "salesAmt": re.sub(r'<[^>]+>', '', cols[4]).strip(),
-                        "salesAcc": re.sub(r'<[^>]+>', '', cols[5]).strip(),
-                        "audiCnt": re.sub(r'<[^>]+>', '', cols[6]).strip(),
-                        "audiAcc": re.sub(r'<[^>]+>', '', cols[7]).strip()
+                        "rank": cols[0].get_text(strip=True),       # 순위
+                        "title": title_text,                        # 제목
+                        "rate": cols[3].get_text(strip=True),       # 예매율
+                        "salesAmt": cols[4].get_text(strip=True),   # 예매매출액
+                        "salesAcc": cols[5].get_text(strip=True),   # 누적매출액
+                        "audiCnt": cols[6].get_text(strip=True),    # 예매관객수
+                        "audiAcc": cols[7].get_text(strip=True)     # 누적관객수
                     }
                 }
-        return {"found": False, "reason": "Not Found in List"}
+        
+        # 못 찾았을 때
+        return {
+            "found": False, 
+            "debug_error": f"'{movieName}' 없음. (검색된 목록: {', '.join(seen_titles[:5])}...)"
+        }
         
     except Exception as e:
-        return {"found": False, "error": str(e)}
+        return {"found": False, "debug_error": f"서버 오류: {str(e)}"}
 
 # --- KOBIS API 프록시 ---
 @app.get("/kobis/daily")
@@ -114,7 +124,11 @@ def get_trend(movieCd: str, endDate: str):
         def fetch(dt):
             try:
                 res = requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={dt}", timeout=3).json()
-                movie = next((m for m in res['boxOfficeResult']['dailyBoxOfficeList'] if m['movieCd'] == movieCd), None)
+                box_res = res.get('boxOfficeResult', {})
+                daily_list = box_res.get('dailyBoxOfficeList', [])
+                if not daily_list: return None
+                
+                movie = next((m for m in daily_list if m['movieCd'] == movieCd), None)
                 if movie:
                     return {
                         "date": dt, "dateDisplay": f"{dt[4:6]}/{dt[6:8]}",
