@@ -1,15 +1,20 @@
 import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo, ReservationData } from '../types';
 
-// FastAPI 백엔드 호출 헬퍼
-const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string>): Promise<T> => {
+// [중요] 백엔드 API 호출 헬퍼 (상대 경로 사용)
+// 로컬에서는 http://localhost:8000으로, 배포 시에는 /api 경로로 자동 연결됩니다.
+const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string> = {}): Promise<T> => {
   const query = new URLSearchParams(params).toString();
-  // vite.config.ts의 proxy 설정(/kobis -> localhost:8000/kobis)에 따라 요청
-  const response = await fetch(`${endpoint}?${query}`);
-  if (!response.ok) throw new Error(`Backend Error: ${response.status}`);
+  const url = query ? `${endpoint}?${query}` : endpoint;
+  
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Backend Error (${response.status}): ${await response.text()}`);
+  }
   return await response.json();
 };
 
 export const fetchDailyBoxOffice = async (targetDt: string): Promise<KobisResponse> => {
+  // 백엔드의 /kobis/daily 엔드포인트 호출
   return fetchFromBackend<KobisResponse>('/kobis/daily', { targetDt });
 };
 
@@ -21,40 +26,36 @@ export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | nul
   try {
     const data = await fetchFromBackend<KobisMovieInfoResponse>('/kobis/detail', { movieCd });
     return data.movieInfoResult.movieInfo;
-  } catch {
+  } catch (e) {
+    console.error("Movie Detail Error:", e);
     return null;
   }
 };
 
 export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
   try {
+    // 백엔드의 /kobis/trend 사용 (속도 훨씬 빠름)
     return await fetchFromBackend<TrendDataPoint[]>('/kobis/trend', { movieCd, endDate: endDateStr });
-  } catch {
+  } catch (e) {
+    console.error("Trend Fetch Error:", e);
     return [];
   }
 };
 
-// [수정됨] 실시간 예매율 (백엔드 /api/reservation 호출)
+// 실시간 예매율 (백엔드 크롤링)
 export const fetchRealtimeReservation = async (movieName: string): Promise<ReservationData | null> => {
   try {
-    // 1. URL 인코딩 적용 (한글 깨짐 방지)
-    const encodedName = encodeURIComponent(movieName);
+    const response = await fetchFromBackend<{found: boolean, data: ReservationData}>(
+      '/api/reservation', 
+      { movieName } // 자동으로 URL 인코딩 처리됨
+    );
     
-    // 2. Vite Proxy를 통해 FastAPI 백엔드로 요청
-    const response = await fetch(`/api/reservation?movieName=${encodedName}`);
-    
-    if (!response.ok) return null;
-
-    const json = await response.json();
-    
-    if (json.found) {
-      return json.data; 
-    } else {
-      console.warn(`[Reservation] '${movieName}' not found in Top list.`);
-      return null;
+    if (response.found && response.data) {
+      return response.data;
     }
+    return null;
   } catch (error) {
-    console.error("Reservation Fetch Error:", error);
+    console.warn("[Reservation] Fetch failed:", error);
     return null;
   }
 };
