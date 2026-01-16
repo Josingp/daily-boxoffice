@@ -159,7 +159,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
              </div>
            )
         )}
-
+        
         {/* Movie Info (간략화) */}
         {loading ? (
              <div className="space-y-2 p-4 bg-slate-50 rounded-xl">
