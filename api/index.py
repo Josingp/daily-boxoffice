@@ -1,9 +1,11 @@
 import os
+import json
 import requests
 import re
+import html
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
-# [필수] HTML 파싱을 위한 도구
+# [필수] HTML 파싱 라이브러리
 from bs4 import BeautifulSoup 
 
 from fastapi import FastAPI, Query
@@ -21,14 +23,19 @@ app.add_middleware(
 
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY", "7b6e13eaf7ec8194db097e7ea0bba626")
 
-# URL 상수
+# --- https://herba.kr/boncho/?m=view&t=dict&id=2948 ---
+# 1. 공식 OpenAPI (JSON 반환)
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
 KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 
+# 2. 실시간 크롤링 타겟 (HTML 반환)
+# 사용자님이 말씀하신 바로 그 주소입니다.
+KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
+
+
 def normalize_string(s: str) -> str:
     # 비교 정확도를 위해: 특수문자/공백 제거 + 소문자 변환
-    # 예: "아바타: 불과 재" -> "아바타불과재"
     return re.sub(r'[^0-9a-zA-Z가-힣]', '', s).lower()
 
 @app.get("/")
@@ -38,7 +45,9 @@ def read_root():
 # --- [핵심] 실시간 예매율 크롤러 (BeautifulSoup Ver.) ---
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
-    url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
+    # 상단에 정의한 상수 사용
+    url = KOBIS_REALTIME_URL
+    
     try:
         # 1. 요청 보내기 (브라우저처럼 속이기)
         headers = {
@@ -46,7 +55,7 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
             'Referer': 'https://www.kobis.or.kr/',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        # [중요] 이 데이터가 없으면 빈 화면만 줍니다.
+        # [중요] 검색 모드로 요청해야 데이터가 나옵니다.
         data = {'dmlMode': 'search'} 
         
         resp = requests.post(url, headers=headers, data=data, timeout=15)
@@ -54,38 +63,34 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
         if resp.status_code != 200:
             return {"found": False, "debug_error": f"KOBIS 접속 실패 (HTTP {resp.status_code})"}
 
-        # 2. HTML 파싱 (PDF에 나온 방식)
+        # 2. HTML 파싱
         soup = BeautifulSoup(resp.text, 'html.parser')
         
         # 3. 데이터 위치 찾기: <tbody> 안의 <tr>들
         rows = soup.select("tbody tr")
         
         if not rows:
-             return {"found": False, "debug_error": "데이터 테이블(tbody)을 찾지 못했습니다. KOBIS 페이지 구조가 변경되었을 수 있습니다."}
+             return {"found": False, "debug_error": "데이터 테이블(tbody)을 찾지 못했습니다. 구조가 변경되었을 수 있습니다."}
 
         target_norm = normalize_string(movieName)
         
-        # [디버깅] 서버가 실제로 읽은 영화 제목들을 기록 (에러 시 보여줌)
+        # [디버깅] 서버가 읽은 영화 제목들 기록
         crawled_log = [] 
 
         for row in rows:
-            # 한 줄(tr)에서 모든 칸(td) 가져오기
             cols = row.find_all("td")
             
-            # 칸 개수가 부족하면 데이터 행이 아님 (빈 줄 등)
+            # 칸 개수가 부족하면 데이터 행이 아님
             if len(cols) < 8: continue
             
-            # [1]번 칸: 영화 제목 (a 태그 안의 텍스트일 수도, 그냥 텍스트일 수도 있음)
-            # get_text(strip=True)는 태그를 무시하고 순수 글자만 가져옵니다.
+            # [1]번 칸: 영화 제목
             title_text = cols[1].get_text(strip=True)
             rank_text = cols[0].get_text(strip=True)
             
-            # 로그에 저장 (순위: 제목)
             crawled_log.append(f"[{rank_text}위] {title_text}")
             
-            # 4. 제목 비교 (정규화 후 비교)
+            # 4. 제목 비교
             if normalize_string(title_text) == target_norm:
-                # 찾았다! 데이터 추출 (스크린샷 컬럼 인덱스 기준)
                 return {
                     "found": True,
                     "data": {
@@ -99,12 +104,11 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
                     }
                 }
         
-        # 5. 끝까지 찾았는데 없을 때: 디버깅 정보 제공
-        # 읽어온 영화 제목 상위 10개를 에러 메시지로 보여줍니다.
+        # 5. 못 찾았을 때 디버깅 정보 반환
         log_msg = ", ".join(crawled_log[:10]) 
         return {
             "found": False, 
-            "debug_error": f"'{movieName}'을 찾을 수 없습니다.\n[서버가 읽은 목록]: {log_msg}..."
+            "debug_error": f"'{movieName}' 미발견.\n[서버가 읽은 목록]: {log_msg}..."
         }
         
     except Exception as e:
