@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult } from '../types';
+import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult, ReservationData } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
-import { fetchMovieTrend, fetchMovieDetail } from '../services/kobisService';
+import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 // UPDATED IMPORT: Use the direct Gemini service
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, TrendingDown, RefreshCw, AlertTriangle, GitCompare } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Clock, Calendar as CalendarIcon, Target, Activity, TrendingDown, RefreshCw, AlertTriangle, GitCompare, Ticket } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -15,17 +15,23 @@ interface DetailViewProps {
 
 const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  
+  // Data States
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
-  const [trendLoading, setTrendLoading] = useState(false);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [reservation, setReservation] = useState<ReservationData | null>(null); // 실시간 예매율 상태
+  
+  // Loading States
+  const [trendLoading, setTrendLoading] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
     if (movie) {
       setIsVisible(true);
       setPrediction(null);
+      setReservation(null);
       loadData(movie);
     } else {
       setIsVisible(false);
@@ -38,20 +44,21 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setAiLoading(true);
 
     try {
-      // 1. Fetch Basic Data
-      const [trend, info] = await Promise.all([
+      // 1. Fetch Basic Data + Reservation (Parallel)
+      const [trend, info, resData] = await Promise.all([
         fetchMovieTrend(movie.movieCd, targetDate),
-        fetchMovieDetail(movie.movieCd)
+        fetchMovieDetail(movie.movieCd),
+        fetchRealtimeReservation(movie.movieNm) // 실시간 예매율 호출
       ]);
 
       setTrendData(trend);
       setMovieDetail(info);
+      setReservation(resData);
       setDetailLoading(false);
       setTrendLoading(false);
 
-      // 2. Fetch Prediction directly from Gemini (Client-side)
+      // 2. Fetch Prediction
       if (trend.length > 0 && info) {
-        // Use predictMoviePerformance from geminiService
         const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
         setPrediction(pred);
         setAiLoading(false);
@@ -73,6 +80,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     const text = `🎬 [BoxOffice Pro]
 영화: ${movie.movieNm}
 현재: ${formatKoreanNumber(movie.audiAcc)}명
+예매율: ${reservation ? reservation.rate : '집계중'}
 예상: ${prediction ? formatKoreanNumber(prediction.predictedFinalAudi.avg) : '?'}명`;
 
     if (navigator.share) {
@@ -110,8 +118,44 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       </div>
 
       {/* Content Scrollable */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar pb-24">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar pb-24 bg-slate-50/30">
         
+        {/* --- [NEW] Real-time Reservation Card --- */}
+        {reservation ? (
+          <div className="bg-gradient-to-br from-violet-600 to-indigo-700 p-5 rounded-2xl text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
+             <div className="absolute top-0 right-0 -mt-2 -mr-2 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
+             
+             <div className="flex justify-between items-start mb-3 relative z-10">
+              <div className="flex items-center gap-2">
+                <Ticket size={18} className="text-indigo-200" />
+                <span className="font-bold text-sm tracking-wide">실시간 예매율 (KOBIS)</span>
+              </div>
+              <div className="flex items-center gap-1 text-[10px] bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full text-indigo-100">
+                <RefreshCw size={10} />
+                <span>실시간</span>
+              </div>
+            </div>
+
+            <div className="flex items-end gap-3 mb-2 relative z-10">
+               <span className="text-4xl font-black tracking-tight">{reservation.rate}</span>
+               <span className="text-sm font-medium text-indigo-200 mb-1.5">전체 {reservation.rank}위</span>
+            </div>
+            
+            <div className="text-xs text-indigo-100 relative z-10">
+              예매 관객수: <span className="font-bold text-white border-b border-white/30">{formatNumber(parseInt(reservation.audiCnt))}명</span>
+            </div>
+          </div>
+        ) : (
+           /* Show skeleton or empty state if checking */
+           detailLoading ? (
+             <div className="h-32 bg-slate-100 rounded-2xl animate-pulse"></div>
+           ) : (
+             <div className="bg-white p-4 rounded-xl border border-slate-100 text-center py-6">
+                <p className="text-xs text-slate-400">실시간 예매율 순위권(TOP 100)에 없는 영화입니다.</p>
+             </div>
+           )
+        )}
+
         {/* Movie Info */}
         {detailLoading ? (
              <div className="space-y-2 p-4 bg-slate-50 rounded-xl">
@@ -141,12 +185,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-slate-500"><TrendingUp size={16} /><span className="text-xs font-semibold">일일 관객수</span></div>
             <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.audiCnt)}명</div>
             <div className="mt-1">{getChangeElement(movie.audiInten)}</div>
           </div>
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-slate-500"><DollarSign size={16} /><span className="text-xs font-semibold">일일 매출액</span></div>
             <div className="text-xl font-black text-slate-800 tracking-tight">{formatKoreanNumber(movie.salesAmt)}원</div>
              <div className="mt-1">{getChangeElement(String(Math.floor(Number(movie.salesInten))))}</div>
