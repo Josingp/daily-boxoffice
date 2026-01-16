@@ -17,13 +17,13 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
     // 1. 과거 데이터
     const baseData = data.map((item) => ({
       ...item,
-      predictCnt: null as number | null, // 과거 데이터엔 예측값 없음
+      predictCnt: null as number | null,
       isFuture: false,
     }));
 
     if (!prediction || !prediction.predictionSeries) return baseData;
 
-    // 2. 미래 예측 데이터 추가
+    // 2. 미래 예측 데이터
     const lastDateStr = data[data.length - 1].date;
     const futureData = [];
     
@@ -32,9 +32,6 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
       parseInt(lastDateStr.substring(4, 6)) - 1,
       parseInt(lastDateStr.substring(6, 8))
     );
-
-    // 차트의 끊김을 방지하기 위해 마지막 실제 데이터를 예측의 시작점으로 추가 (선택사항)
-    // futureData.push({ ...baseData[baseData.length-1], predictCnt: baseData[baseData.length-1].audiCnt, isFuture: true });
 
     for (let i = 0; i < prediction.predictionSeries.length; i++) {
       const nextDate = new Date(lastDate);
@@ -58,15 +55,15 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
 
   if (loading) {
     return (
-      <div className="h-[240px] w-full flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100 animate-pulse">
-        <div className="text-slate-400 text-sm">데이터 불러오는 중...</div>
+      <div className="flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100 animate-pulse" style={{ height: '240px', width: '100%' }}>
+        <div className="text-slate-400 text-sm">데이터 분석 중...</div>
       </div>
     );
   }
 
   if (data.length === 0) {
     return (
-      <div className="h-[240px] w-full flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100">
+      <div className="flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100" style={{ height: '240px', width: '100%' }}>
         <span className="text-slate-400 text-sm">데이터가 없습니다.</span>
       </div>
     );
@@ -77,7 +74,8 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
       <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
         📊 관객수 추이 및 예측
       </h3>
-      <div className="h-[220px] w-full">
+      {/* [수정] style 속성을 사용하여 높이를 명시적으로 지정 (Recharts 에러 방지) */}
+      <div style={{ width: '100%', height: '220px' }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
@@ -106,8 +104,6 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
                 return [`${value.toLocaleString()}명`, label];
               }}
             />
-            
-            {/* 실제 관객수 */}
             <Area 
               type="monotone" 
               dataKey="audiCnt" 
@@ -115,10 +111,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
               strokeWidth={2}
               fillOpacity={1} 
               fill="url(#colorAudi)" 
-              animationDuration={1500}
             />
-
-            {/* 예측 데이터 (점선) */}
             {prediction && (
                <Line 
                 type="monotone" 
@@ -130,8 +123,6 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
                 connectNulls
               />
             )}
-            
-            {/* 오늘 기준선 */}
             {prediction && (
               <ReferenceLine x={data[data.length - 1]?.dateDisplay} stroke="#cbd5e1" strokeDasharray="3 3" />
             )}
