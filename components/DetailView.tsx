@@ -40,13 +40,11 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setResError(null);
 
     try {
-      // 1. 기본 데이터 로드
       const trend = await fetchMovieTrend(movie.movieCd, targetDate);
       const info = await fetchMovieDetail(movie.movieCd);
       setTrendData(trend);
       setMovieDetail(info);
 
-      // 2. 실시간 예매율 로드 (에러가 나도 화면은 죽지 않게 처리)
       try {
         const resResult = await fetchRealtimeReservation(movie.movieNm);
         if (resResult && resResult.data) {
@@ -62,7 +60,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       
       setLoading(false);
 
-      // 3. AI 예측 로드
       if (trend.length > 0 && info) {
         try {
           const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
@@ -82,7 +79,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
   const handleShare = async () => {
     if (!movie) return;
-    const text = `🎬 ${movie.movieNm} 리포트`;
+    const text = `🎬 ${movie.movieNm} AI 분석`;
     if (navigator.share) {
       try { await navigator.share({ title: movie.movieNm, text }); } catch {}
     } else {
@@ -99,7 +96,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     return <span className="text-slate-400 text-xs">-</span>;
   };
 
-  // [핵심] 절대 에러 안 나게 문자열을 숫자로 바꾸는 함수
   const safeNum = (val: any): number => {
     if (!val) return 0;
     const str = String(val).replace(/,/g, '');
@@ -125,7 +121,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar pb-24 bg-slate-50/30">
         
-        {/* 실시간 예매 정보 섹션 */}
+        {/* 실시간 예매 정보 */}
         {reservation ? (
           <div className="bg-gradient-to-br from-violet-600 to-indigo-700 p-5 rounded-2xl text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
              <div className="absolute top-0 right-0 -mt-2 -mr-2 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
@@ -178,7 +174,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
            )
         )}
 
-        {/* 영화 기본 정보 (null 체크 강화) */}
+        {/* 영화 기본 정보 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
            {movieDetail ? (
              <div className="grid grid-cols-1 gap-2 text-sm text-slate-700">
@@ -205,7 +201,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
         </div>
 
-        {/* 차트 */}
         <TrendChart data={trendData} loading={loading} prediction={prediction} />
 
         {/* AI 분석 리포트 */}
