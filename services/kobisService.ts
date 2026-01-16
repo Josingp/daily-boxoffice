@@ -54,24 +54,28 @@ export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Prom
   }
 };
 
-// 5. 실시간 예매율 (백엔드 크롤링)
-export const fetchRealtimeReservation = async (movieName: string): Promise<ReservationData | null> => {
+// ... (fetchFromBackend 함수 등 기존 코드 상단 유지) ...
+
+// 5. 실시간 예매율 (디버깅용 에러 메시지 포함)
+export const fetchRealtimeReservation = async (movieName: string): Promise<{ data: any, error?: string } | null> => {
   try {
-    // 특수문자 및 공백 처리를 위해 인코딩
     const encodedName = encodeURIComponent(movieName);
     const response = await fetch(`/api/reservation?movieName=${encodedName}`);
     
-    if (!response.ok) return null;
+    // 네트워크 에러 처리
+    if (!response.ok) {
+       return { data: null, error: `Network Error: ${response.status}` };
+    }
 
     const json = await response.json();
     
     if (json.found) {
-      return json.data; 
+      return { data: json.data }; // 성공
     } else {
-      return null;
+      // 실패 시 서버가 보낸 구체적인 이유(debug_error) 반환
+      return { data: null, error: json.debug_error || "Unknown Error" };
     }
-  } catch (error) {
-    console.error("Reservation Fetch Error:", error);
-    return null;
+  } catch (error: any) {
+    return { data: null, error: `Client Error: ${error.message}` };
   }
 };
