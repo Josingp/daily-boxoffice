@@ -1,7 +1,7 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
-// [핵심 수정] Google 라이브러리 직접 사용 금지 (API 키 노출/누락 방지)
-// 대신 Vercel 백엔드(/predict)로 요청을 보냅니다.
+// [수정] Google 라이브러리 제거! 
+// 이제 브라우저가 아니라, Vercel 백엔드(/predict)에게 대신 물어봅니다.
 export const predictMoviePerformance = async (
   movieName: string,
   trendData: TrendDataPoint[],
@@ -27,7 +27,7 @@ export const predictMoviePerformance = async (
       }
     };
 
-    // 백엔드로 POST 요청
+    // Vercel 백엔드로 요청 전송
     const response = await fetch("/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,7 +35,9 @@ export const predictMoviePerformance = async (
     });
 
     if (!response.ok) {
-      console.error(`Backend Error: ${response.status}`);
+      // 백엔드 에러 로그 확인
+      const errorText = await response.text();
+      console.error(`Backend Error (${response.status}):`, errorText);
       return null;
     }
 
