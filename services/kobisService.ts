@@ -1,20 +1,18 @@
 import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo, ReservationData } from '../types';
 
-// [중요] 백엔드 API 호출 헬퍼 (상대 경로 사용)
-// 로컬에서는 http://localhost:8000으로, 배포 시에는 /api 경로로 자동 연결됩니다.
+// FastAPI 백엔드 호출 헬퍼
 const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string> = {}): Promise<T> => {
   const query = new URLSearchParams(params).toString();
   const url = query ? `${endpoint}?${query}` : endpoint;
   
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Backend Error (${response.status}): ${await response.text()}`);
+    throw new Error(`Backend Error (${response.status})`);
   }
   return await response.json();
 };
 
 export const fetchDailyBoxOffice = async (targetDt: string): Promise<KobisResponse> => {
-  // 백엔드의 /kobis/daily 엔드포인트 호출
   return fetchFromBackend<KobisResponse>('/kobis/daily', { targetDt });
 };
 
@@ -32,9 +30,9 @@ export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | nul
   }
 };
 
+// [개선됨] 백엔드의 집계 API 사용 (속도 최적화)
 export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
   try {
-    // 백엔드의 /kobis/trend 사용 (속도 훨씬 빠름)
     return await fetchFromBackend<TrendDataPoint[]>('/kobis/trend', { movieCd, endDate: endDateStr });
   } catch (e) {
     console.error("Trend Fetch Error:", e);
@@ -42,20 +40,27 @@ export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Prom
   }
 };
 
-// 실시간 예매율 (백엔드 크롤링)
+// [수정됨] 실시간 예매율 (백엔드 크롤러 호출)
 export const fetchRealtimeReservation = async (movieName: string): Promise<ReservationData | null> => {
   try {
-    const response = await fetchFromBackend<{found: boolean, data: ReservationData}>(
-      '/api/reservation', 
-      { movieName } // 자동으로 URL 인코딩 처리됨
-    );
+    // 1. URL 인코딩 적용 (한글 깨짐 방지)
+    const encodedName = encodeURIComponent(movieName);
     
-    if (response.found && response.data) {
-      return response.data;
+    // 2. Vite Proxy -> FastAPI
+    const response = await fetch(`/api/reservation?movieName=${encodedName}`);
+    
+    if (!response.ok) return null;
+
+    const json = await response.json();
+    
+    if (json.found) {
+      return json.data; 
+    } else {
+      console.warn(`[Reservation] '${movieName}' not found in list (Scanned: ${json.scanned}).`);
+      return null;
     }
-    return null;
   } catch (error) {
-    console.warn("[Reservation] Fetch failed:", error);
+    console.error("Reservation Fetch Error:", error);
     return null;
   }
 };
