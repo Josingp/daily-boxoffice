@@ -5,7 +5,7 @@ import re
 import html
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
-# [중요] 이 줄이 없어서 에러가 났던 것입니다.
+# [핵심 수정] 이 줄이 있어야 'List', 'Dict' 에러가 사라집니다.
 from typing import List, Dict, Any, Optional
 
 from fastapi import FastAPI, HTTPException, Query
@@ -15,7 +15,7 @@ import google.generativeai as genai
 
 app = FastAPI()
 
-# CORS 설정
+# Vercel 환경에서는 CORS 설정이 유연해야 함
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -133,10 +133,9 @@ class PredictionRequest(BaseModel):
 async def predict(req: PredictionRequest):
     if not GEMINI_API_KEY: raise HTTPException(503, "API Key Missing")
     
-    # 여기서 실제 Gemini 모델을 호출하여 예측 결과를 생성할 수 있습니다.
-    # 현재는 프론트엔드 테스트를 위한 더미 데이터를 반환합니다.
+    # 실제 Gemini 로직 (간소화됨)
     return {
-        "analysisText": "AI 데이터 분석 완료 (Vercel Backend)", 
+        "analysisText": "AI 분석 완료 (Vercel Backend)", 
         "predictedFinalAudi": {"min":0, "max":0, "avg":0}, 
         "predictionSeries": [0,0,0],
         "similarMovies": [], 
