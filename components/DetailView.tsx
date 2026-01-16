@@ -104,30 +104,58 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
         {reservation ? (
           <div className="bg-gradient-to-br from-violet-600 to-indigo-700 p-5 rounded-2xl text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
              <div className="absolute top-0 right-0 -mt-2 -mr-2 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
-             <div className="flex justify-between items-start mb-3 relative z-10">
+             
+             {/* 헤더 */}
+             <div className="flex justify-between items-start mb-4 relative z-10">
               <div className="flex items-center gap-2">
                 <Ticket size={18} className="text-indigo-200" />
-                <span className="font-bold text-sm tracking-wide">실시간 예매율 (KOBIS)</span>
+                <span className="font-bold text-sm tracking-wide">KOBIS 실시간 예매</span>
               </div>
               <div className="flex items-center gap-1 text-[10px] bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full text-indigo-100">
                 <RefreshCw size={10} />
                 <span>실시간</span>
               </div>
             </div>
-            <div className="flex items-end gap-3 mb-2 relative z-10">
-               <span className="text-4xl font-black tracking-tight">{reservation.rate}</span>
-               <span className="text-sm font-medium text-indigo-200 mb-1.5">전체 {reservation.rank}위</span>
-            </div>
-            <div className="text-xs text-indigo-100 relative z-10">
-              예매 관객수: <span className="font-bold text-white border-b border-white/30">{formatNumber(parseInt(reservation.audiCnt))}명</span>
+
+            {/* 데이터 그리드 */}
+            <div className="grid grid-cols-2 gap-y-4 gap-x-2 relative z-10">
+              {/* 1. 예매율 & 순위 */}
+              <div className="col-span-2 flex items-baseline gap-2 pb-2 border-b border-white/10">
+                 <span className="text-4xl font-black tracking-tight">{reservation.rate}</span>
+                 <span className="text-lg font-medium text-indigo-200">예매 {reservation.rank}위</span>
+              </div>
+
+              {/* 2. 예매 관객수 */}
+              <div>
+                <p className="text-[10px] text-indigo-200 mb-0.5">예매 관객수</p>
+                <p className="font-bold text-lg">{formatNumber(parseInt(reservation.audiCnt.replace(/,/g, '')))}명</p>
+              </div>
+
+              {/* 3. 누적 관객수 */}
+              <div>
+                <p className="text-[10px] text-indigo-200 mb-0.5">누적 관객수</p>
+                <p className="font-bold text-lg">{formatNumber(parseInt(reservation.audiAcc.replace(/,/g, '')))}명</p>
+              </div>
+
+              {/* 4. 예매 매출액 */}
+              <div>
+                <p className="text-[10px] text-indigo-200 mb-0.5">예매 매출액</p>
+                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(parseInt(reservation.salesAmt.replace(/,/g, '')))}원</p>
+              </div>
+
+               {/* 5. 누적 매출액 */}
+               <div>
+                <p className="text-[10px] text-indigo-200 mb-0.5">누적 매출액</p>
+                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(parseInt(reservation.salesAcc.replace(/,/g, '')))}원</p>
+              </div>
             </div>
           </div>
         ) : (
            loading ? (
-             <div className="h-32 bg-slate-100 rounded-2xl animate-pulse"></div>
+             <div className="h-48 bg-slate-100 rounded-2xl animate-pulse"></div>
            ) : (
              <div className="bg-white p-4 rounded-xl border border-slate-100 text-center py-6">
-                <p className="text-xs text-slate-400">실시간 예매 정보를 불러올 수 없습니다.<br/>(TOP 200 진입 대기중)</p>
+                <p className="text-xs text-slate-400">실시간 예매 정보를 불러올 수 없습니다.<br/>(TOP 200 미진입 또는 개봉 전)</p>
              </div>
            )
         )}
