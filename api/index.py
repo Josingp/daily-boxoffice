@@ -1,10 +1,9 @@
 import os
 import requests
 import re
-import html
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
-# [필수] requirements.txt에 beautifulsoup4 추가 필요
+# [필수] HTML 파싱을 위한 도구
 from bs4 import BeautifulSoup 
 
 from fastapi import FastAPI, Query
@@ -28,63 +27,70 @@ KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffi
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 
 def normalize_string(s: str) -> str:
-    # 비교를 위해 특수문자/공백 제거 및 소문자화
+    # 비교 정확도를 위해: 특수문자/공백 제거 + 소문자 변환
+    # 예: "아바타: 불과 재" -> "아바타불과재"
     return re.sub(r'[^0-9a-zA-Z가-힣]', '', s).lower()
 
 @app.get("/")
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
-# --- [로그 강화] 실시간 예매율 크롤러 ---
+# --- [핵심] 실시간 예매율 크롤러 (BeautifulSoup Ver.) ---
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
     url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
     try:
-        # 1. 요청 헤더 (브라우저인 척 속이기)
+        # 1. 요청 보내기 (브라우저처럼 속이기)
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Referer': 'https://www.kobis.or.kr/',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
+        # [중요] 이 데이터가 없으면 빈 화면만 줍니다.
         data = {'dmlMode': 'search'} 
         
-        # 2. 사이트 접속
         resp = requests.post(url, headers=headers, data=data, timeout=15)
+        
         if resp.status_code != 200:
             return {"found": False, "debug_error": f"KOBIS 접속 실패 (HTTP {resp.status_code})"}
 
-        # 3. HTML 파싱
+        # 2. HTML 파싱 (PDF에 나온 방식)
         soup = BeautifulSoup(resp.text, 'html.parser')
+        
+        # 3. 데이터 위치 찾기: <tbody> 안의 <tr>들
         rows = soup.select("tbody tr")
         
         if not rows:
-             return {"found": False, "debug_error": "테이블 데이터(tbody tr)를 찾지 못했습니다. HTML 구조가 변경되었을 수 있습니다."}
+             return {"found": False, "debug_error": "데이터 테이블(tbody)을 찾지 못했습니다. KOBIS 페이지 구조가 변경되었을 수 있습니다."}
 
         target_norm = normalize_string(movieName)
         
-        # [디버깅] 서버가 읽은 영화 제목들을 저장할 리스트
+        # [디버깅] 서버가 실제로 읽은 영화 제목들을 기록 (에러 시 보여줌)
         crawled_log = [] 
 
         for row in rows:
+            # 한 줄(tr)에서 모든 칸(td) 가져오기
             cols = row.find_all("td")
             
-            # 데이터 행이 아니면(컬럼 부족) 스킵
+            # 칸 개수가 부족하면 데이터 행이 아님 (빈 줄 등)
             if len(cols) < 8: continue
             
-            # 데이터 추출
-            rank = cols[0].get_text(strip=True)
-            title = cols[1].get_text(strip=True)
+            # [1]번 칸: 영화 제목 (a 태그 안의 텍스트일 수도, 그냥 텍스트일 수도 있음)
+            # get_text(strip=True)는 태그를 무시하고 순수 글자만 가져옵니다.
+            title_text = cols[1].get_text(strip=True)
+            rank_text = cols[0].get_text(strip=True)
             
-            # 로그에 추가 (화면에 보여줄 데이터)
-            crawled_log.append(f"[{rank}위] {title}")
+            # 로그에 저장 (순위: 제목)
+            crawled_log.append(f"[{rank_text}위] {title_text}")
             
-            # 제목 비교
-            if normalize_string(title) == target_norm:
+            # 4. 제목 비교 (정규화 후 비교)
+            if normalize_string(title_text) == target_norm:
+                # 찾았다! 데이터 추출 (스크린샷 컬럼 인덱스 기준)
                 return {
                     "found": True,
                     "data": {
-                        "rank": rank,
-                        "title": title,
+                        "rank": rank_text,                          # 순위
+                        "title": title_text,                        # 제목
                         "rate": cols[3].get_text(strip=True),       # 예매율
                         "salesAmt": cols[4].get_text(strip=True),   # 예매매출액
                         "salesAcc": cols[5].get_text(strip=True),   # 누적매출액
@@ -93,11 +99,12 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
                     }
                 }
         
-        # 4. 못 찾았을 때: 읽어온 리스트를 보여줌
-        log_msg = ", ".join(crawled_log[:15]) # 상위 15개만 보여줌
+        # 5. 끝까지 찾았는데 없을 때: 디버깅 정보 제공
+        # 읽어온 영화 제목 상위 10개를 에러 메시지로 보여줍니다.
+        log_msg = ", ".join(crawled_log[:10]) 
         return {
             "found": False, 
-            "debug_error": f"'{movieName}' 못 찾음.\n\n[서버가 읽은 목록]\n{log_msg}..."
+            "debug_error": f"'{movieName}'을 찾을 수 없습니다.\n[서버가 읽은 목록]: {log_msg}..."
         }
         
     except Exception as e:
@@ -127,11 +134,7 @@ def get_trend(movieCd: str, endDate: str):
         def fetch(dt):
             try:
                 res = requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={dt}", timeout=3).json()
-                box_res = res.get('boxOfficeResult', {})
-                daily_list = box_res.get('dailyBoxOfficeList', [])
-                if not daily_list: return None
-                
-                movie = next((m for m in daily_list if m['movieCd'] == movieCd), None)
+                movie = next((m for m in res['boxOfficeResult']['dailyBoxOfficeList'] if m['movieCd'] == movieCd), None)
                 if movie:
                     return {
                         "date": dt, "dateDisplay": f"{dt[4:6]}/{dt[6:8]}",
