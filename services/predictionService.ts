@@ -1,6 +1,9 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
-const BACKEND_URL = "http://localhost:8000/predict";
+import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
+
+// [수정] 배포 환경에 맞춰 상대 경로로 변경 (Vercel이 알아서 main.py로 연결해줌)
+const BACKEND_URL = "/predict";
 
 export const getMoviePrediction = async (
   movieName: string,
@@ -9,6 +12,7 @@ export const getMoviePrediction = async (
   currentAudiAcc: string
 ): Promise<PredictionResult | null> => {
   try {
+    // ... (나머지 코드는 그대로 유지)
     // 1. Construct the payload matching the Python Pydantic models
     const payload = {
       movieName: movieName,
