@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/main.py" },
+    { "source": "/kobis/(.*)", "destination": "/main.py" },
+    { "source": "/predict", "destination": "/main.py" }
+  ]
+}
