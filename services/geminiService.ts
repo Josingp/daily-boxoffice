@@ -1,7 +1,7 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
-// [수정] Google 라이브러리 제거! 
-// 이제 브라우저가 아니라, Vercel 백엔드(/predict)에게 대신 물어봅니다.
+// [수정] Google 라이브러리 직접 사용 금지
+// Vercel 백엔드(/predict)로 요청을 보냅니다.
 export const predictMoviePerformance = async (
   movieName: string,
   trendData: TrendDataPoint[],
@@ -12,6 +12,7 @@ export const predictMoviePerformance = async (
   if (!movieInfo) return null;
 
   try {
+    // 422 에러 해결: backend의 Pydantic 모델과 100% 일치시켜야 함
     const payload = {
       movieName: movieName,
       trendData: trendData.map(d => ({
@@ -24,10 +25,12 @@ export const predictMoviePerformance = async (
         openDt: movieInfo.openDt,
         genres: movieInfo.genres.map(g => g.genreNm),
         audiAcc: currentAudiAcc.replace(/,/g, '')
-      }
+      },
+      // [중요] 이 부분이 빠져서 422 에러가 났던 것입니다.
+      currentAudiAcc: currentAudiAcc.replace(/,/g, '') 
     };
 
-    // Vercel 백엔드로 요청 전송
+    // 백엔드로 POST 요청
     const response = await fetch("/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,9 +38,7 @@ export const predictMoviePerformance = async (
     });
 
     if (!response.ok) {
-      // 백엔드 에러 로그 확인
-      const errorText = await response.text();
-      console.error(`Backend Error (${response.status}):`, errorText);
+      console.error(`Backend Error: ${response.status}`);
       return null;
     }
 
