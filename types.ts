@@ -92,9 +92,16 @@ export interface PredictionResult {
 }
 
 // [추가] 실시간 예매 데이터 타입
+// ... 기존 코드 유지 ...
+
+// [수정] ReservationData에 페이지 소스의 필드들 추가
 export interface ReservationData {
   rank: string;
   title: string;
-  rate: string;   // 예매율 (예: 18.5%)
-  audiCnt: string; // 예매 관객수 (예: 1,500)
+  rate: string;      // 예매율
+  salesAmt: string;  // 예매매출액 (New)
+  salesAcc: string;  // 누적매출액 (New)
+  audiCnt: string;   // 예매관객수
+  audiAcc: string;   // 누적관객수 (New)
+}
 }
