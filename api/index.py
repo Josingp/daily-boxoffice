@@ -19,8 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# [보안 수정] 환경 변수에서 키 로드 (없으면 None)
-# 로컬 테스트 시에는 .env 파일을 사용하거나 IDE 환경변수 설정을 이용하세요.
+# [보안] Vercel 환경 변수에서 키를 가져옵니다.
+# 코드가 유출되어도 키는 안전합니다.
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
 NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
 NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
@@ -31,6 +31,7 @@ KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffi
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 
+# 정규식
 MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)['\"]\s*\)")
 
 @app.get("/")
@@ -106,27 +107,31 @@ def fetch_kobis_smartly():
         return resp, payload
     except: return None, None
 
-# [NEW] 네이버 뉴스 API 적용 (가이드 기반)
+# [NEW] 네이버 뉴스 검색 API (환경 변수 사용)
 @app.get("/api/news")
 def get_movie_news(keyword: str = Query(...)):
+    # 키 누락 시 안전하게 에러 처리
+    if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
+        return {
+            "status": "error", 
+            "message": "Server Config Error: Naver API Keys missing."
+        }
+
     try:
-        # 가이드 문서에 명시된 JSON 요청 URL [cite: 63]
         url = "https://openapi.naver.com/v1/search/news.json"
         
-        # 헤더 설정 
         headers = {
             "X-Naver-Client-Id": NAVER_CLIENT_ID,
             "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
         }
         
-        # 영화 관련 뉴스 정확도를 높이기 위해 검색어 보정
+        # 검색어 보정 (정확도 향상)
         query_str = keyword if "영화" in keyword else f"{keyword} 영화"
         
-        # 파라미터 설정 [cite: 70]
         params = {
             "query": query_str,
-            "display": 5,  # 5개 표시
-            "sort": "sim"  # 정확도순
+            "display": 5,
+            "sort": "sim"
         }
         
         resp = requests.get(url, headers=headers, params=params, timeout=5)
@@ -137,13 +142,12 @@ def get_movie_news(keyword: str = Query(...)):
         data = resp.json()
         news_list = []
         
-        # 가이드의 응답 예시(rss/channel/item) 참고 [cite: 89, 93, 117]
         for item in data.get('items', []):
-            # <b> 태그 제거 (정규식)
+            # HTML 태그 제거
             clean_title = re.sub(r'<[^>]+>', '', item['title']).replace("&quot;", '"').replace("&apos;", "'")
             clean_desc = re.sub(r'<[^>]+>', '', item['description']).replace("&quot;", '"').replace("&apos;", "'")
             
-            # pubDate 포맷팅 (예: Mon, 26 Sep 2016...) [cite: 119]
+            # 날짜 포맷팅
             pub_date_str = ""
             try:
                 dt = datetime.strptime(item.get('pubDate', ''), "%a, %d %b %Y %H:%M:%S %z")
@@ -153,10 +157,10 @@ def get_movie_news(keyword: str = Query(...)):
 
             news_list.append({
                 "title": clean_title,
-                "link": item['originallink'] or item['link'], # 원문 링크 우선 [cite: 89]
+                "link": item['originallink'] or item['link'],
                 "desc": clean_desc,
-                "thumb": None, # API는 썸네일 미제공
-                "press": pub_date_str
+                "thumb": None, 
+                "press": pub_date_str 
             })
             
         return {"status": "ok", "items": news_list}
@@ -164,7 +168,6 @@ def get_movie_news(keyword: str = Query(...)):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-# ... (이하 기존 API 유지) ...
 @app.get("/api/realtime")
 def get_realtime_ranking():
     try:
@@ -198,18 +201,22 @@ def get_realtime_reservation(movieName: str = Query(...), movieCd: str = Query(N
 
 @app.get("/kobis/daily")
 def get_daily(targetDt: str):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}").json()
 
 @app.get("/kobis/weekly")
 def get_weekly(targetDt: str, weekGb="1"):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_WEEKLY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}&weekGb={weekGb}").json()
 
 @app.get("/kobis/detail")
 def get_detail(movieCd: str):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_MOVIE_INFO_URL}?key={KOBIS_API_KEY}&movieCd={movieCd}").json()
 
 @app.get("/kobis/trend")
 def get_trend(movieCd: str, endDate: str):
+    if not KOBIS_API_KEY: return []
     try:
         dates = []
         end_dt = datetime.strptime(endDate, "%Y%m%d")
