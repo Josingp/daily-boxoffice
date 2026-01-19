@@ -38,7 +38,7 @@ def extract_movie_data(row):
     cols = row.find_all("td")
     if len(cols) < 8: return None
 
-    # 1. 영화 코드(movieCd) 추출 (가장 중요)
+    # 1. 영화 코드(movieCd) 추출
     movie_cd = None
     a_tag = cols[1].find("a")
     if a_tag and a_tag.has_attr("onclick"):
@@ -52,7 +52,7 @@ def extract_movie_data(row):
     else:
         title_text = cols[1].get_text(strip=True)
 
-    # 3. 데이터 정제 (쉼표 제거)
+    # 3. 데이터 정제
     def clean_num(s):
         return s.replace(',', '').strip()
 
@@ -60,8 +60,6 @@ def extract_movie_data(row):
         "movieCd": movie_cd,
         "rank": cols[0].get_text(strip=True),
         "title": title_text,
-        # KOBIS 표준 테이블 구조: 
-        # 0:순위, 1:제목, 2:개봉일, 3:예매율, 4:예매매출, 5:누적매출, 6:예매관객, 7:누적관객
         "rate": cols[3].get_text(strip=True),     
         "salesAmt": clean_num(cols[4].get_text(strip=True)),
         "salesAcc": clean_num(cols[5].get_text(strip=True)),
@@ -69,63 +67,107 @@ def extract_movie_data(row):
         "audiAcc": clean_num(cols[7].get_text(strip=True))
     }
 
+def get_base_headers():
+    return {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+        'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
+        'Origin': 'https://www.kobis.or.kr',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Upgrade-Insecure-Requests': '1',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+
 def fetch_kobis_smartly():
     """
-    [완전체 크롤러]
-    사용자가 제공한 헤더와 페이로드 구조를 완벽하게 모방합니다.
-    CSRFToken과 allMovieYn 파라미터가 핵심입니다.
+    [하이브리드 크롤링 전략]
+    1. 고정 페이로드(Pattern A) 시도 -> 성공 시 반환
+    2. 실패(데이터 없음) 시 동적 페이로드(Pattern B) 시도 -> 결과 반환
     """
+    session = requests.Session()
+    headers = get_base_headers()
+
+    # ---------------------------------------------------------
+    # [1차 시도] Pattern A: 고정 페이로드 (Fixed)
+    # ---------------------------------------------------------
     try:
-        session = requests.Session()
-        
-        # [Step 1] 헤더 설정 (사용자 제공값 기반)
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
-            'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
-            'Origin': 'https://www.kobis.or.kr',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Upgrade-Insecure-Requests': '1',
-            'Content-Type': 'application/x-www-form-urlencoded'
+        # GET으로 토큰 확보
+        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
+        soup_visit = BeautifulSoup(visit.text, 'html.parser')
+        token_input = soup_visit.find('input', {'name': 'CSRFToken'})
+        csrf_token = token_input.get('value', '') if token_input else ''
+
+        payload_fixed = {
+            'CSRFToken': csrf_token,
+            'loadEnd': '0',
+            'repNationCd': '', 'areaCd': '', 'repNationSelected': '',
+            'totIssuAmtRatioOrder': '', 'totIssuAmtOrder': '', 'addTotIssuAmtOrder': '',
+            'totIssuCntOrder': '', 'totIssuCntRatioOrder': '', 'addTotIssuCntOrder': '',
+            'dmlMode': 'search', 
+            'allMovieYn': 'Y',  # 전체 조회
+            'sMultiChk': ''
         }
 
-        # [Step 2] 페이지 접속 (GET) - 쿠키 및 CSRF 토큰 확보
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_fixed, timeout=20)
+        resp.encoding = 'utf-8'
+
+        # 검증: 데이터가 들어있는지 확인 (행 개수 > 2)
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        rows = soup.find_all("tr")
+        
+        if len(rows) > 2:
+            print("[KOBIS] Pattern A (Fixed) Success")
+            return resp, payload_fixed
+        else:
+            print("[KOBIS] Pattern A Failed (No Data), Switching to Pattern B...")
+
+    except Exception as e:
+        print(f"[KOBIS] Pattern A Error: {e}")
+
+    # ---------------------------------------------------------
+    # [2차 시도] Pattern B: 동적 페이로드 (Dynamic / Fallback)
+    # ---------------------------------------------------------
+    try:
+        # 새 세션으로 시작 (깨끗한 상태)
+        session = requests.Session()
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
-        
-        # [Step 3] Hidden Input (CSRFToken 포함) 긁어오기
         soup_visit = BeautifulSoup(visit.text, 'html.parser')
-        payload = {}
         
+        payload_dynamic = {}
+        
+        # 모든 Input 긁어오기
         for inp in soup_visit.find_all('input'):
             if inp.get('name'):
-                payload[inp.get('name')] = inp.get('value', '')
+                payload_dynamic[inp.get('name')] = inp.get('value', '')
         
-        # Select 태그 값도 수집 (기본값 유지)
+        # 모든 Select 긁어오기
         for sel in soup_visit.find_all('select'):
             name = sel.get('name')
             if not name: continue
             selected_opt = sel.find('option', selected=True)
             if selected_opt:
-                payload[name] = selected_opt.get('value', '')
+                payload_dynamic[name] = selected_opt.get('value', '')
             else:
-                payload[name] = ''
+                first_opt = sel.find('option')
+                payload_dynamic[name] = first_opt.get('value', '') if first_opt else ''
 
-        # [Step 4] 페이로드 강제 주입 (사용자 스크린샷 기반)
-        # 이 부분이 빠져서 데이터가 안 맞거나 적게 나왔던 것입니다.
-        payload.update({
+        # 필수값 강제 덮어쓰기
+        payload_dynamic.update({
             'dmlMode': 'search',
-            'allMovieYn': 'Y',      # [중요] 전체 영화 조회
-            'sMultiChk': ''         # 체크박스 값 초기화
+            'allMovieYn': 'Y',
+            'sMultiChk': ''
         })
 
-        # [Step 5] 데이터 요청 (POST)
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=20)
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_dynamic, timeout=20)
         resp.encoding = 'utf-8'
         
-        return resp, payload
+        print("[KOBIS] Pattern B (Dynamic) Executed")
+        return resp, payload_dynamic
+
     except Exception as e:
-        print(f"Fetch Error: {e}")
+        print(f"[KOBIS] Pattern B Error: {e}")
         return None, None
+
 
 # -----------------------------------------------------------------------------
 # 1. [상세 화면용] 실시간 예매율 조회
@@ -139,17 +181,17 @@ def get_realtime_reservation(
         resp, sent_payload = fetch_kobis_smartly()
 
         if not resp or resp.status_code != 200:
-            return {"found": False, "debug_error": "KOBIS 서버 접속 실패"}
+            return {"found": False, "debug_error": "KOBIS 서버 접속 실패 (All Patterns Failed)"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
         all_rows = soup.find_all("tr")
         
-        # 데이터 없음 체크 (헤더만 있는 경우)
+        # 데이터 없음 체크
         if len(all_rows) <= 2:
              msg = all_rows[1].get_text(strip=True) if len(all_rows) > 1 else "내용 없음"
              return {
                  "found": False, 
-                 "debug_error": f"데이터 로드 실패.\n서버메시지: {msg}\n(CSRFToken 전송됨)"
+                 "debug_error": f"데이터 로드 실패.\n서버메시지: {msg}\n(시도된 Payload: {'Dynamic' if 'allMovieYn' in sent_payload else 'Fixed'})"
              }
 
         debug_list = []
@@ -159,22 +201,21 @@ def get_realtime_reservation(
             data = extract_movie_data(row)
             if not data: continue
             
-            # 디버깅용 상위 10개 기록
             if len(debug_list) < 10:
                 debug_list.append(f"{data['title']}({data['movieCd']})")
 
-            # [매칭 1순위] ID 매칭 (가장 정확)
+            # 1순위: ID 매칭
             if movieCd and data['movieCd'] == movieCd:
                 return {"found": True, "method": "ID_MATCH", "data": data}
 
-            # [매칭 2순위] 이름 매칭
+            # 2순위: 이름 매칭
             row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
             if target_norm in row_norm or row_norm in target_norm:
                  return {"found": True, "method": "NAME_MATCH", "data": data}
 
         return {
             "found": False, 
-            "debug_error": f"매칭 실패 (ID:{movieCd}, Name:{movieName}).\n읽은목록(상위10): {', '.join(debug_list)}..."
+            "debug_error": f"매칭 실패 (ID:{movieCd}).\n목록(상위10): {', '.join(debug_list)}..."
         }
 
     except Exception as e:
@@ -185,13 +226,12 @@ def get_realtime_reservation(
 # -----------------------------------------------------------------------------
 @app.get("/api/composite")
 def get_composite_boxoffice():
-    # 어제 날짜 구하기
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
     
     boxoffice_data = []
     realtime_map = {} 
 
-    # (1) KOBIS API 호출 (일별 박스오피스)
+    # (1) KOBIS API
     try:
         url = f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={yesterday}"
         res = requests.get(url, timeout=5).json()
@@ -199,7 +239,7 @@ def get_composite_boxoffice():
     except Exception as e:
         print(f"API Error: {e}")
 
-    # (2) KOBIS 크롤링 호출 (실시간 예매율)
+    # (2) KOBIS 크롤링 (Hybrid)
     try:
         resp, _ = fetch_kobis_smartly()
         
@@ -210,11 +250,9 @@ def get_composite_boxoffice():
             for row in rows:
                 data = extract_movie_data(row)
                 if data:
-                    # ID 맵핑
                     if data['movieCd']:
                         realtime_map[data['movieCd']] = data
                     
-                    # 이름 맵핑 (백업)
                     norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
                     if norm and norm not in realtime_map:
                         realtime_map[norm] = data
@@ -227,14 +265,12 @@ def get_composite_boxoffice():
         target_cd = movie['movieCd']
         target_nm_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movie['movieNm']).lower()
         
-        # 1. ID로 찾기
         match = realtime_map.get(target_cd)
-        # 2. 이름으로 찾기
         if not match:
             match = realtime_map.get(target_nm_norm)
         
         item = movie.copy()
-        item["realtime"] = match # 매칭된 실시간 정보 (없으면 None)
+        item["realtime"] = match
         merged_list.append(item)
 
     return {"status": "ok", "targetDt": yesterday, "data": merged_list}
