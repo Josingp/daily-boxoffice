@@ -66,9 +66,9 @@ def extract_movie_data(row):
 
 def fetch_kobis_smartly():
     """
-    [스마트 크롤링]
-    1. GET으로 접속해 숨겨진 보안 토큰(hidden input)을 모두 긁어옴
-    2. 그 토큰들과 함께 POST 요청을 보냄 (완벽한 위장)
+    [스마트 크롤링 v2]
+    - input 태그뿐만 아니라 select(드롭다운) 값까지 모두 수집하여 전송
+    - 브라우저 동작을 완벽하게 모방
     """
     try:
         session = requests.Session()
@@ -82,26 +82,43 @@ def fetch_kobis_smartly():
         # [Step 1] 페이지 방문 (GET)
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         
-        # [Step 2] 폼 데이터 자동 수집 (Hidden Value 찾기)
+        # [Step 2] 폼 데이터 정밀 수집 (input + select)
         soup_visit = BeautifulSoup(visit.text, 'html.parser')
         payload = {}
         
-        # 페이지 내 모든 input 태그의 name/value 수집
+        # 1) Input 태그 수집
         for inp in soup_visit.find_all('input'):
             if inp.get('name'):
                 payload[inp.get('name')] = inp.get('value', '')
         
-        # 검색 모드로 강제 설정
+        # 2) Select 태그 수집 (누락되었던 부분!)
+        for sel in soup_visit.find_all('select'):
+            name = sel.get('name')
+            if not name: continue
+            
+            # 선택된 옵션 찾기
+            selected_opt = sel.find('option', selected=True)
+            if selected_opt:
+                payload[name] = selected_opt.get('value', '')
+            else:
+                # 선택된 게 없으면 첫 번째 옵션 값 사용
+                first_opt = sel.find('option')
+                if first_opt:
+                    payload[name] = first_opt.get('value', '')
+                else:
+                    payload[name] = ''
+        
+        # 3) 검색 모드로 강제 설정
         payload['dmlMode'] = 'search' 
 
-        # [Step 3] 수집한 암호표와 함께 데이터 요청 (POST)
+        # [Step 3] 데이터 요청 (POST)
         resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=20)
         resp.encoding = 'utf-8'
         
-        return resp
+        return resp, payload  # 디버깅을 위해 payload도 반환
     except Exception as e:
         print(f"Smart Fetch Error: {e}")
-        return None
+        return None, None
 
 # -----------------------------------------------------------------------------
 # 1. [상세 화면용] 실시간 예매율
@@ -112,23 +129,23 @@ def get_realtime_reservation(
     movieCd: str = Query(None, description="Movie Code")
 ):
     try:
-        resp = fetch_kobis_smartly()
+        resp, sent_payload = fetch_kobis_smartly()
 
         if not resp or resp.status_code != 200:
             return {"found": False, "debug_error": "서버 접속 실패"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # 디버깅 정보: 페이지 크기 확인
-        page_len = len(resp.text)
         all_rows = soup.find_all("tr")
         
-        # 여전히 데이터가 없는지 체크
+        # 데이터 없음 체크
         if len(all_rows) <= 2:
              msg = all_rows[1].get_text(strip=True) if len(all_rows) > 1 else "내용 없음"
+             # 어떤 데이터를 보냈는지 Payload 정보를 에러 메시지에 포함 (디버깅용)
+             keys = list(sent_payload.keys()) if sent_payload else "None"
              return {
                  "found": False, 
-                 "debug_error": f"데이터 로드 실패 (HTML길이: {page_len}).\n서버응답: {msg}"
+                 "debug_error": f"데이터 없음 (서버응답: {msg}).\n보낸파라미터: {keys}"
              }
 
         debug_list = []
@@ -152,7 +169,7 @@ def get_realtime_reservation(
 
         return {
             "found": False, 
-            "debug_error": f"매칭 실패 (ID:{movieCd}).\nHTML길이: {page_len}\n[목록]: {', '.join(debug_list)}..."
+            "debug_error": f"매칭 실패 (ID:{movieCd}).\n목록(상위10): {', '.join(debug_list)}..."
         }
 
     except Exception as e:
@@ -178,7 +195,7 @@ def get_composite_boxoffice():
 
     try:
         # 스마트 크롤링 호출
-        resp = fetch_kobis_smartly()
+        resp, _ = fetch_kobis_smartly()
         
         if resp and resp.status_code == 200:
             soup = BeautifulSoup(resp.text, 'html.parser')
