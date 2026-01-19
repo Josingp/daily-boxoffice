@@ -99,3 +99,20 @@ export interface ReservationData {
   audiAcc: string;
   crawledTime?: string; // 예: "2026/01/19 10:52"
 }
+
+
+// ... (기존 DailyBoxOfficeList 등 유지) ...
+
+// [NEW] 실시간 랭킹용 인터페이스
+export interface RealtimeMovie {
+  movieCd: string;
+  rank: string;
+  title: string;     // 영화 제목
+  rate: string;      // 예매율 (예: "15.5%")
+  salesAmt: string;  // 예매 매출액
+  salesAcc: string;  // 누적 매출액
+  audiCnt: string;   // 예매 관객수
+  audiAcc: string;   // 누적 관객수
+}
+
+// ... (나머지 타입들 유지) ...
