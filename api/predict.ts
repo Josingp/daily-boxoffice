@@ -3,11 +3,13 @@ import { GoogleGenAI } from "@google/genai";
 // ------------------------------------------------------------------
 // [Helper 1] 요일 구하기
 // ------------------------------------------------------------------
-const getDayName = (dateStr) => {
-  if (!dateStr || dateStr.length !== 8) return '';
-  const y = parseInt(dateStr.substring(0, 4));
-  const m = parseInt(dateStr.substring(4, 6)) - 1;
-  const d = parseInt(dateStr.substring(6, 8));
+const getDayName = (dateStr: string) => {
+  if (!dateStr || dateStr.length < 8) return '';
+  // YYYY-MM-DD or YYYYMMDD
+  const cleanStr = dateStr.replace(/-/g, '');
+  const y = parseInt(cleanStr.substring(0, 4));
+  const m = parseInt(cleanStr.substring(4, 6)) - 1;
+  const d = parseInt(cleanStr.substring(6, 8));
   const date = new Date(y, m, d);
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
 };
@@ -15,18 +17,20 @@ const getDayName = (dateStr) => {
 // ------------------------------------------------------------------
 // [Helper 2] 개봉 후 경과일 계산
 // ------------------------------------------------------------------
-const getDaysSinceRelease = (currentDateStr, openDt) => {
+const getDaysSinceRelease = (currentDateStr: string, openDt: string) => {
   if (!currentDateStr || !openDt) return 0;
   
-  const y = parseInt(currentDateStr.substring(0, 4));
-  const m = parseInt(currentDateStr.substring(4, 6)) - 1;
-  const d = parseInt(currentDateStr.substring(6, 8));
-  const current = new Date(y, m, d);
+  const cleanCurr = currentDateStr.replace(/-/g, '');
+  const cleanOpen = openDt.replace(/-/g, '');
 
-  const openStr = openDt.replace(/-/g, '');
-  const oy = parseInt(openStr.substring(0, 4));
-  const om = parseInt(openStr.substring(4, 6)) - 1;
-  const od = parseInt(openStr.substring(6, 8));
+  const cy = parseInt(cleanCurr.substring(0, 4));
+  const cm = parseInt(cleanCurr.substring(4, 6)) - 1;
+  const cd = parseInt(cleanCurr.substring(6, 8));
+  const current = new Date(cy, cm, cd);
+
+  const oy = parseInt(cleanOpen.substring(0, 4));
+  const om = parseInt(cleanOpen.substring(4, 6)) - 1;
+  const od = parseInt(cleanOpen.substring(6, 8));
   const open = new Date(oy, om, od);
 
   const diffTime = current.getTime() - open.getTime();
@@ -57,8 +61,7 @@ export default async function handler(req, res) {
       movieInfo, 
       currentAudiAcc, 
       predictionSeries, 
-      predictedFinalAudi,
-      comparison // 클라이언트에서 보낸 실시간 비교 데이터
+      predictedFinalAudi 
     } = req.body;
 
     const ai = new GoogleGenAI({ apiKey });
@@ -70,11 +73,8 @@ export default async function handler(req, res) {
     const window = trendData.slice(-14);
 
     const enriched = window.map((d, idx) => {
-      // 날짜 문자열 정제 (YYYYMMDD 형식 보장)
-      const rawDate = d.date ? d.date.replace(/-/g, '') : '';
-      
-      const dayName = getDayName(rawDate);
-      const lifecycleDay = getDaysSinceRelease(rawDate, movieInfo.openDt);
+      const dayName = getDayName(d.date);
+      const lifecycleDay = getDaysSinceRelease(d.date, movieInfo.openDt);
 
       const scrn = d.scrnCnt ?? 0;
       const psa = scrn > 0 ? (d.audiCnt / scrn) : 0;
@@ -83,21 +83,27 @@ export default async function handler(req, res) {
       const growth = prev > 0 ? ((d.audiCnt - prev) / prev * 100) : null;
 
       return {
-        date: d.dateDisplay || d.date, // 화면용 날짜 우선
+        date: d.date,
         dow: dayName,
         lifecycleDay,
         audiCnt: d.audiCnt,
         scrnCnt: d.scrnCnt ?? null,
+        // showCnt: d.showCnt ?? null, // 필요 시 추가
         psa: Number(psa.toFixed(1)),
         growthPct: growth === null ? null : Number(growth.toFixed(1))
       };
     });
 
-    const genre = movieInfo.genres?.join(", ") || "Unknown";
+    const genre = movieInfo.genres?.map(g => g.genreNm).join(", ") || "Unknown";
 
     // ---------------------------------------------------------
-    // 2. 프롬프트 구성 (Prompt Engineering)
+    // 2. 프롬프트 구성 (사용자 제공 템플릿)
     // ---------------------------------------------------------
+    // 예측값이 없으면 임시로 생성 (그래프 오류 방지용)
+    const finalSeries = predictionSeries && predictionSeries.length > 0 
+      ? predictionSeries 
+      : [0, 0, 0]; // 데이터가 없을 경우 0으로 채움
+
     const prompt = `
     You are a Korean box office analyst.
 
@@ -107,54 +113,53 @@ export default async function handler(req, res) {
     - If something is missing, say it is uncertain rather than guessing.
 
     TARGET:
-    - Title: ${movieName} (${genre})
-    - Open Date: ${movieInfo.openDt}
-    - Current Total Audience: ${currentAudiAcc}
-    
-    [Real-time Status (Today vs Yesterday)]:
-    ${comparison ? `Today: ${comparison.today} / Yesterday: ${comparison.yesterday} / Diff: ${comparison.diff} (${comparison.rate}%)` : "No real-time data"}
+    - title: ${movieName} (${genre})
+    - openDt: ${movieInfo.openDt}
+    - currentAudiAcc: ${currentAudiAcc}
 
-    RECENT PERFORMANCE (Last 14 days):
-    ${JSON.stringify(enriched, null, 2)}
+    RECENT PERFORMANCE (up to 14 days):
+    ${JSON.stringify(enriched)}
 
     OFFICIAL FORECAST (from deterministic model):
-    - D+1~D+3 audience series: ${JSON.stringify(predictionSeries)}
+    - D+1~D+3 audience series: ${JSON.stringify(finalSeries)}
     - final audience range (optional): ${predictedFinalAudi ? JSON.stringify(predictedFinalAudi) : "N/A"}
 
     Write a concise Korean analysis (3~6 sentences):
-    - Analyze the trend based on PSA (Per Screen Average) and audience growth.
-    - Mention risks related to day-of-week patterns (Weekend vs Weekday).
-    - Comment on the lifecycle stage (opening week, holdover, declining) based on 'lifecycleDay'.
-    - Incorporate the Real-time status if available.
-    
+    - Comment on PSA 수준(가능하면)과 스크린 변화 가능성
+    - 주말/평일 패턴 리스크
+    - 현재가 개봉 몇 주차인지에 따른 감쇠/유지 가능성
     Return plain text only (no JSON, no markdown).
     `;
 
     // ---------------------------------------------------------
-    // 3. Gemini 호출 (gemini-3-flash-preview 적용)
+    // 3. Gemini 호출
     // ---------------------------------------------------------
-    console.log("Calling Gemini 3.0 Flash Preview...");
+    console.log("Calling Gemini Model...");
     
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview", // [주의] 3.0이 아직 불안정하다면 2.0-flash로 자동 폴백하거나 명시
-      // 사용자 요청: gemini-3-flash-preview
-      // 만약 404 에러가 나면 "gemini-1.5-flash" 또는 "gemini-2.0-flash"로 변경해주세요.
-      // 현재 코드는 사용자 요청을 우선 반영합니다.
-      // model: "gemini-3-flash-preview", 
+      model: "gemini-3-flash-preview", 
       contents: { parts: [{ text: prompt }] }
     });
 
-    const text = response.response?.candidates?.[0]?.content?.parts?.[0]?.text;
+    // [중요] 응답 텍스트 추출 방식 개선 (@google/genai 최신 버전 대응)
+    let text = "";
+    if (typeof response.text === 'function') {
+        text = response.text();
+    } else if (response.text) {
+        text = response.text; // 프로퍼티인 경우
+    } else if (response.response?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        text = response.response.candidates[0].content.parts[0].text; // 깊은 구조
+    }
 
     if (!text) {
-      throw new Error("Gemini response was empty.");
+      throw new Error("Gemini response was empty or blocked.");
     }
     
     // 성공 응답
     return res.status(200).json({
       analysisText: text.trim(),
       predictedFinalAudi: predictedFinalAudi || { min: 0, max: 0, avg: 0 },
-      predictionSeries: predictionSeries || [],
+      predictionSeries: finalSeries,
       logicFactors: {},
       similarMovies: []
     });
@@ -162,12 +167,11 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("AI Analysis Error:", error);
     
-    // 에러 상세 내용을 클라이언트로 전달 (디버깅용)
+    // 에러 발생 시에도 프론트엔드가 죽지 않도록 기본 응답 반환
     return res.status(200).json({ 
-      analysisText: `분석 실패: ${error.message}`,
-      // 에러가 나도 그래프는 그려지도록 더미 데이터 전송
+      analysisText: `AI 분석에 실패했습니다. (${error.message})`,
       predictedFinalAudi: { min: 0, max: 0, avg: 0 },
-      predictionSeries: [],
+      predictionSeries: [0, 0, 0],
       error: error.toString()
     });
   }
