@@ -7,7 +7,6 @@ const getDayName = (dateStr: string) => {
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
 };
 
-// JSON 정제 (마크다운 코드블록 제거)
 const cleanJsonString = (str: string) => {
   if (!str) return "{}";
   let cleaned = str.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -26,60 +25,58 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
 
   try {
-    const { movieName, trendData, movieInfo, currentAudiAcc, comparison } = req.body;
+    const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 개봉 여부 판단
-    const todayStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    const openDtStr = movieInfo.openDt.replace(/-/g, "");
-    const isUnreleased = parseInt(openDtStr) > parseInt(todayStr);
-
-    // 데이터 가공
-    const window = trendData.slice(-14);
-    const enriched = window.map((d, idx) => {
-      const scrn = d.scrnCnt ?? 0;
-      const prev = idx > 0 ? window[idx - 1].audiCnt : 0;
-      return {
-        date: d.dateDisplay,
-        day: getDayName(d.date),
-        audi: d.audiCnt,
-        growth: prev > 0 ? ((d.audiCnt - prev) / prev * 100).toFixed(1) + "%" : "0%"
-      };
-    });
-
     const genre = movieInfo.genres?.join(", ") || "Unknown";
-
-    let specificTask = isUnreleased 
-      ? "This movie is unreleased. Focus heavily on 'Pre-release Hype' and reservation trends." 
-      : "Analyze daily trends, weekday/weekend patterns, and drop rates.";
-
-    // [프롬프트 강화] 상세 분석 요청
-    const prompt = `
-    Role: Professional Senior Box Office Analyst.
-    [Target] ${movieName} (${genre}), Open: ${movieInfo.openDt}
-    [Status] Total: ${currentAudiAcc}
-    [Real-time] ${comparison ? `Today: ${comparison.today}, Yest: ${comparison.yesterday}` : "No data"}
-    [Recent Data] ${JSON.stringify(enriched)}
     
-    [Task]
-    ${specificTask}
-    1. Write a **DETAILED** Korean analysis.
-    2. Structure your analysis into clear sections (but return as one string): 
-       - Current Status & Real-time Check.
-       - Trend Analysis (Growth rate, Weekday/Weekend pattern).
-       - Future Outlook (Success potential).
-    3. Length: **At least 8-10 sentences**. Do NOT be concise. Provide deep insights.
-    4. Predict next 3 days audience.
-    5. Extract 2 keywords for news search.
+    let prompt = "";
 
-    [Output Format - JSON ONLY]
-    You MUST return a raw JSON object. NO Markdown.
-    {
-      "analysis": "Write rich text here with \\n for line breaks.",
-      "forecast": [0, 0, 0],
-      "keywords": ["keyword1", "keyword2"]
+    // ----------------------------------------------------------------
+    // [DAILY] 일별 박스오피스 모드: 흥행 성적 집중 분석
+    // ----------------------------------------------------------------
+    if (type === 'DAILY') {
+        const enriched = trendData.slice(-10).map(d => `${d.dateDisplay}: ${d.audiCnt}명`);
+        prompt = `
+        Role: Box Office Analyst.
+        Target: ${movieName} (${genre}), Open: ${movieInfo.openDt}
+        Current Total: ${currentAudiAcc}
+        Recent Trend: ${JSON.stringify(enriched)}
+
+        Task:
+        1. Analyze the box office performance since release.
+        2. Evaluate the trend (Growth/Decline) based on daily audience numbers.
+        3. Predict if it will reach the break-even point or next million milestone.
+        4. Write 3 paragraphs (Current Status, Trend Analysis, Future Outlook) in Korean.
+        5. Predict next 3 days audience.
+
+        Output JSON: { "analysis": "...", "forecast": [0,0,0] }
+        `;
+    } 
+    // ----------------------------------------------------------------
+    // [REALTIME] 실시간 예매율 모드: 예매율 추이 및 기대감 분석
+    // ----------------------------------------------------------------
+    else {
+        // historyData가 있으면 활용 (GitHub에서 가져온 누적 데이터)
+        const historySummary = historyData ? JSON.stringify(historyData.slice(-5)) : "No history yet";
+        
+        prompt = `
+        Role: Real-time Reservation Analyst.
+        Target: ${movieName} (${genre}), Open: ${movieInfo.openDt}
+        Current Reservation Status: High interest expected.
+        Reservation History (Last 5 checks): ${historySummary}
+
+        Task:
+        1. This movie is in the "Real-time Reservation Top 10".
+        2. Analyze the **Reservation Rate Trend**. Is it rising?
+        3. If unreleased, analyze the "Pre-release Hype".
+        4. If released, compare reservation momentum with actual performance.
+        5. Write 3 paragraphs in Korean focused on *Momentum* and *Expectation*.
+        6. Predict next 3 days *Audience* based on this reservation hype.
+
+        Output JSON: { "analysis": "...", "forecast": [0,0,0] }
+        `;
     }
-    `;
     
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash", 
@@ -87,40 +84,24 @@ export default async function handler(req, res) {
       generationConfig: { responseMimeType: "application/json" }
     });
 
-    let text = "";
-    if (typeof response.text === 'function') text = response.text();
-    else if (response.text) text = response.text;
-    else if (response.response?.candidates?.[0]?.content?.parts?.[0]?.text) text = response.response.candidates[0].content.parts[0].text;
-
+    let text = response.response?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     let result;
     try {
-      // 마크다운 제거 후 파싱 시도
       result = JSON.parse(cleanJsonString(text));
     } catch (e) {
-      console.error("JSON Parse Error:", text);
-      // 파싱 실패 시, 정규식으로 'analysis' 부분만이라도 추출 시도
-      const analysisMatch = text.match(/"analysis":\s*"((?:[^"\\]|\\.)*)"/);
-      const cleanAnalysis = analysisMatch ? analysisMatch[1] : "상세 분석 내용을 불러오는 중입니다.";
-      
-      result = {
-        analysis: cleanAnalysis,
-        forecast: [0, 0, 0],
-        keywords: [movieName]
-      };
+      result = { analysis: "분석 데이터를 처리하는 중입니다.", forecast: [0, 0, 0] };
     }
 
     return res.status(200).json({
       analysisText: result.analysis,
       predictionSeries: result.forecast || [0, 0, 0],
-      searchKeywords: result.keywords || [movieName],
       predictedFinalAudi: { min: 0, max: 0, avg: 0 }
     });
 
   } catch (error) {
     return res.status(200).json({ 
-      analysisText: "분석 서버 연결 실패", 
+      analysisText: "분석 실패", 
       predictionSeries: [0, 0, 0],
-      searchKeywords: [movieName],
       error: error.message 
     });
   }
