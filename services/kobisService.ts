@@ -1,19 +1,56 @@
-import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo, RealtimeMovie } from '../types';
+import { KobisResponse, TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
-// ... (기존 코드들 유지) ...
+// [변경] 일별 데이터는 이제 JSON 파일에서 읽어옵니다.
+export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
+  try {
+    // 캐시 방지를 위해 타임스탬프 추가
+    const res = await fetch(`/daily_data.json?t=${Date.now()}`);
+    if (!res.ok) throw new Error("Load Failed");
+    const json = await res.json();
+    return { 
+      boxOfficeResult: { 
+        dailyBoxOfficeList: json.movies 
+      } 
+    };
+  } catch (e) {
+    console.error(e);
+    return { boxOfficeResult: { dailyBoxOfficeList: [] } };
+  }
+};
 
-// [NEW] 뉴스 데이터 타입
-export interface NewsItem {
-  title: string;
-  link: string;
-  desc: string;
-  thumb?: string;
-  press: string;
-}
+// [변경] 실시간 데이터도 JSON 파일에서 최신값만 추출해서 보여줍니다.
+export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], crawledTime: string }> => {
+  try {
+    const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
+    if (!res.ok) throw new Error("Load Failed");
+    const json = await res.json();
+    
+    // JSON({영화명: [이력...]})을 리스트 형태로 변환
+    const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
+      const history = json[title];
+      const latest = history[history.length - 1]; // 가장 최신 데이터
+      return {
+        movieCd: String(idx), // 임시 ID
+        rank: latest.rank,
+        title: title,
+        rate: String(latest.rate) + "%",
+        salesAmt: "0",
+        salesAcc: "0",
+        audiCnt: "0", // 실시간은 예매율 위주로
+        audiAcc: "0"
+      };
+    }).sort((a, b) => Number(a.rank) - Number(b.rank)); // 순위 정렬
 
-// ... (fetchFromBackend 등 기존 함수 유지) ...
+    // 최신 시간 추출
+    const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
 
-// [NEW] 뉴스 검색 함수
+    return { data: list, crawledTime: time };
+  } catch (e) {
+    return { data: [], crawledTime: "" };
+  }
+};
+
+// 뉴스 검색 (서버 경유)
 export const fetchMovieNews = async (keyword: string): Promise<NewsItem[]> => {
   try {
     const response = await fetch(`/api/news?keyword=${encodeURIComponent(keyword)}`);
@@ -25,30 +62,26 @@ export const fetchMovieNews = async (keyword: string): Promise<NewsItem[]> => {
   }
 };
 
-// ... (나머지 export 함수들: fetchDailyBoxOffice, fetchRealtimeRanking 등 유지) ...
-// 기존 파일 내용 전체를 유지하되, 위 fetchMovieNews 와 NewsItem 인터페이스만 추가하면 됩니다.
-// 아래는 편의를 위해 전체 코드를 다시 드립니다.
-
-const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string> = {}): Promise<T> => {
-  const query = new URLSearchParams(params).toString();
-  const url = query ? `${endpoint}?${query}` : endpoint;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Err');
-    return await res.json();
-  } catch (e) { throw e; }
+// 트렌드 데이터 (필요 시 기존 API 사용)
+export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
+    try {
+        const res = await fetch(`/kobis/trend?movieCd=${movieCd}&endDate=${endDateStr}`);
+        if(!res.ok) return [];
+        return await res.json();
+    } catch { return []; }
 };
 
-export const fetchDailyBoxOffice = async (targetDt: string) => fetchFromBackend<KobisResponse>('/kobis/daily', { targetDt });
-export const fetchWeeklyBoxOffice = async (targetDt: string, weekGb="1") => fetchFromBackend<KobisResponse>('/kobis/weekly', { targetDt, weekGb });
-export const fetchMovieDetail = async (movieCd: string) => {
-    try { return (await fetchFromBackend<KobisMovieInfoResponse>('/kobis/detail', { movieCd })).movieInfoResult.movieInfo; }
-    catch { return null; }
+export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | null> => {
+    // 일별 데이터에 이미 detail이 포함되어 있다면 그걸 써야 하지만, 
+    // 구조상 여기선 API를 호출하거나, App.tsx에서 전달받은 데이터를 써야 함.
+    try {
+        const res = await fetch(`/kobis/detail?movieCd=${movieCd}`);
+        const data = await res.json();
+        return data.movieInfoResult.movieInfo;
+    } catch { return null; }
 };
-export const fetchMovieTrend = async (movieCd: string, endDateStr: string) => {
-    try { return await fetchFromBackend<TrendDataPoint[]>('/kobis/trend', { movieCd, endDate: endDateStr }); }
-    catch { return []; }
-};
+
+// 실시간 예약 (상세)
 export const fetchRealtimeReservation = async (movieName: string, movieCd?: string) => {
   try {
     const q = movieCd ? `?movieName=${encodeURIComponent(movieName)}&movieCd=${movieCd}` : `?movieName=${encodeURIComponent(movieName)}`;
@@ -57,12 +90,4 @@ export const fetchRealtimeReservation = async (movieName: string, movieCd?: stri
     if (json.found) return { data: { ...json.data, crawledTime: json.crawledTime } };
     return { data: null, error: json.debug_error };
   } catch (e: any) { return { data: null, error: e.message }; }
-};
-export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], crawledTime: string }> => {
-  try {
-    const res = await fetch('/api/realtime');
-    const json = await res.json();
-    if (json.status === 'ok') return { data: json.data, crawledTime: json.crawledTime };
-    return { data: [], crawledTime: '' };
-  } catch { return { data: [], crawledTime: '' }; }
 };
