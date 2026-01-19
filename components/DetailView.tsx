@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, ReservationData } from '../types';
 import { ExtendedPredictionResult } from '../services/geminiService';
 import { formatNumber } from '../constants';
-import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation, fetchMovieNews, NewsItem } from '../services/kobisService'; // fetchMovieNews 추가
+import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation, fetchMovieNews, NewsItem } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle, ExternalLink, Newspaper } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle, ExternalLink, Newspaper, ChevronRight } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -19,7 +19,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
   const [prediction, setPrediction] = useState<ExtendedPredictionResult | null>(null);
   const [reservation, setReservation] = useState<ReservationData | null>(null);
-  const [newsList, setNewsList] = useState<NewsItem[]>([]); // 뉴스 상태
+  const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [resError, setResError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
@@ -29,7 +29,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setIsVisible(true);
       setPrediction(null);
       setReservation(null);
-      setNewsList([]); // 초기화
+      setNewsList([]); 
       setResError(null);
       loadData(movie);
     } else {
@@ -43,20 +43,25 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setResError(null);
 
     try {
-      // 1. 기본 데이터 로드
       const [trend, info] = await Promise.all([
         fetchMovieTrend(movie.movieCd, targetDate),
         fetchMovieDetail(movie.movieCd)
       ]);
       setMovieDetail(info);
 
-      // 2. 뉴스 로드 (비동기)
-      fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+      // [뉴스 로드] 영화 이름으로 검색
+      fetchMovieNews(movie.movieNm).then(items => {
+          if (items.length === 0) {
+              // 실패 시 '영화' 붙여서 재시도
+              fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+          } else {
+              setNewsList(items);
+          }
+      });
 
       let updatedTrend = [...trend];
       let comparisonInfo = null;
 
-      // 3. 실시간 데이터 로드
       try {
         const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
         if (resResult && resResult.data) {
@@ -83,7 +88,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setTrendData(updatedTrend);
       setLoading(false);
 
-      // 4. AI 분석
       if (info) {
         try {
           const pred = await predictMoviePerformance(movie.movieNm, updatedTrend, info, movie.audiAcc, comparisonInfo);
@@ -103,14 +107,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     const text = `🎬 ${movie.movieNm} AI 분석`;
     if (navigator.share) { try { await navigator.share({ title: movie.movieNm, text }); } catch {} } 
     else { alert('복사되었습니다.'); }
-  };
-
-  const getChangeElement = (val: string) => {
-    const num = Number(val);
-    if (isNaN(num)) return <span className="text-slate-400 text-xs">-</span>;
-    if (num > 0) return <span className="text-red-500 text-xs font-semibold">▲{formatNumber(num)}</span>;
-    if (num < 0) return <span className="text-blue-600 text-xs font-semibold">▼{formatNumber(Math.abs(num))}</span>;
-    return <span className="text-slate-400 text-xs">-</span>;
   };
 
   const safeNum = (val: any): number => {
@@ -182,57 +178,42 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
            ) : (<div className="text-center text-slate-400 text-xs py-2">상세 정보를 불러오는 중...</div>)}
         </div>
 
-        {/* 일별 통계 */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-2 text-slate-500"><TrendingUp size={16} /><span className="text-xs font-semibold">일일 관객수</span></div>
-            <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.audiCnt)}명</div>
-            <div className="mt-1">{getChangeElement(movie.audiInten)}</div>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-2 text-slate-500"><DollarSign size={16} /><span className="text-xs font-semibold">일일 매출액</span></div>
-            <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.salesAmt)}원</div>
-             <div className="mt-1">{getChangeElement(movie.salesInten)}</div>
-          </div>
-        </div>
-
         <TrendChart data={trendData} loading={loading} prediction={prediction} />
 
-        {/* AI 분석 리포트 & 뉴스 */}
+        {/* AI 분석 리포트 */}
         {prediction && !aiLoading && (
           <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm mt-4">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
               <Sparkles size={16} className="text-purple-600"/> 
-              AI 데이터 분석 리포트
+              AI 상세 분석
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep mb-5">
+            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep">
               {prediction.analysisText}
             </p>
-            
-            {/* [NEW] 뉴스 리스트 표시 */}
-            {newsList.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <div className="flex items-center gap-2 mb-3 text-slate-700 font-bold text-xs">
-                  <Newspaper size={14} className="text-blue-500"/> 관련 최신 뉴스
-                </div>
-                <div className="space-y-3">
-                  {newsList.slice(0, 3).map((news, idx) => (
-                    <a key={idx} href={news.link} target="_blank" rel="noopener noreferrer" className="block group">
-                      <div className="flex gap-3">
-                        {news.thumb && (
-                          <img src={news.thumb} alt="" className="w-16 h-16 object-cover rounded-lg bg-slate-100 shrink-0"/>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-xs font-bold text-slate-800 line-clamp-2 group-hover:text-blue-600 transition-colors leading-snug mb-1">{news.title}</h4>
-                          <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed">{news.desc}</p>
-                          <span className="text-[9px] text-slate-400 mt-1 block">{news.press}</span>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
+          </div>
+        )}
+
+        {/* [NEW] 관련 기사 (리스트형) */}
+        {newsList.length > 0 && (
+          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
+            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm">
+              <Newspaper size={16} className="text-blue-500"/> 
+              관련 최신 기사
+            </div>
+            <div className="space-y-3">
+              {newsList.map((news, idx) => (
+                <a key={idx} href={news.link} target="_blank" rel="noopener noreferrer" className="block group">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">{news.title}</h4>
+                      <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-snug">{news.desc}</p>
+                      <span className="text-[10px] text-slate-400 mt-1.5 block">{news.press}</span>
+                    </div>
+                    <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 shrink-0 mt-1 ml-2" />
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         )}
       </div>
