@@ -7,7 +7,6 @@ const getDayName = (dateStr: string) => {
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
 };
 
-// [Helper] JSON 정제 (줄바꿈 문자 처리 등)
 const cleanJsonString = (str: string) => {
   if (!str) return "{}";
   let cleaned = str.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -48,11 +47,12 @@ export default async function handler(req, res) {
     const genre = movieInfo.genres?.join(", ") || "Unknown";
 
     let specificTask = isUnreleased 
-      ? "This movie is unreleased. Focus on 'Pre-release Hype' and reservation trends." 
+      ? "Focus on 'Pre-release Hype' and reservation trends." 
       : "Analyze daily trends, weekday/weekend patterns, and drop rates.";
 
+    // [강화된 프롬프트] 상세 분석 요청
     const prompt = `
-    Role: Senior Box Office Analyst.
+    Role: Professional Senior Box Office Analyst.
     [Target] ${movieName} (${genre}), Open: ${movieInfo.openDt}
     [Status] Total: ${currentAudiAcc}
     [Real-time] ${comparison ? `Today: ${comparison.today}, Yest: ${comparison.yesterday}` : "No data"}
@@ -60,13 +60,18 @@ export default async function handler(req, res) {
     
     [Task]
     ${specificTask}
-    1. Write a Korean analysis (3-5 sentences). Be concise.
-    2. Predict next 3 days audience.
-    3. Extract 2 keywords for news search.
+    1. Write a **DETAILED** Korean analysis.
+    2. Structure: 
+       - Section 1: Current Status & Real-time Check (Today vs Yesterday).
+       - Section 2: Trend Analysis (PSA, Growth rate, Weekday/Weekend pattern).
+       - Section 3: Future Outlook (Success potential).
+    3. Length: **At least 8-10 sentences**. Do NOT be concise. be Insightful.
+    4. Predict next 3 days audience.
+    5. Extract 2 keywords for news search.
 
     [Output Format - JSON ONLY]
     {
-      "analysis": "Analysis text here...",
+      "analysis": "Write rich text here with \\n for line breaks.",
       "forecast": [0, 0, 0],
       "keywords": ["keyword1", "keyword2"]
     }
@@ -87,9 +92,8 @@ export default async function handler(req, res) {
     try {
       result = JSON.parse(cleanJsonString(text));
     } catch (e) {
-      // [핵심 수정] JSON 파싱 실패 시 정규식으로 'analysis' 값만 추출
       const analysisMatch = text.match(/"analysis":\s*"((?:[^"\\]|\\.)*)"/);
-      const cleanAnalysis = analysisMatch ? analysisMatch[1] : "분석 내용을 처리하는 중입니다. (잠시 후 다시 시도해주세요)";
+      const cleanAnalysis = analysisMatch ? analysisMatch[1] : "상세 분석을 생성하는 중입니다.";
       result = {
         analysis: cleanAnalysis,
         forecast: [0, 0, 0],
