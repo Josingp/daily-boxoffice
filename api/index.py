@@ -337,3 +337,39 @@ def get_trend(movieCd: str, endDate: str):
             results = list(ex.map(fetch, dates))
             return [r for r in results if r is not None]
     except: return []
+
+# ... (기존 코드 유지: imports, middleware, extract_movie_data, fetch_kobis_smartly 등) ...
+
+# [NEW] 실시간 예매율 전체 랭킹 API
+@app.get("/api/realtime")
+def get_realtime_ranking():
+    try:
+        # 스마트 크롤링 수행
+        resp, sent_payload = fetch_kobis_smartly()
+
+        if not resp or resp.status_code != 200:
+            return {"status": "error", "message": "KOBIS Connection Failed"}
+
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        
+        # 조회일시 추출
+        crawled_time = extract_crawl_time(soup)
+        
+        # 데이터 파싱
+        all_rows = soup.find_all("tr")
+        data_list = []
+        
+        for row in all_rows:
+            data = extract_movie_data(row)
+            if data:
+                data_list.append(data)
+                
+        return {
+            "status": "ok",
+            "crawledTime": crawled_time,
+            "data": data_list
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# ... (나머지 기존 API들: /api/reservation, /api/composite 등 유지) ...
