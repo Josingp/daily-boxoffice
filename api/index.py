@@ -19,7 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY", "7b6e13eaf7ec8194db097e7ea0bba626")
+# [보안 수정] 환경 변수에서 키 로드 (없으면 None)
+# 로컬 테스트 시에는 .env 파일을 사용하거나 IDE 환경변수 설정을 이용하세요.
+KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
+NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
 
 # URL 정의
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
@@ -33,9 +37,6 @@ MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)
 @app.get("/")
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
-
-# ... (기존 헬퍼 함수들: extract_crawl_time, extract_movie_data, get_base_headers, fetch_kobis_smartly 유지) ...
-# 코드 길이상 중략된 부분은 기존 코드 그대로 두시면 됩니다. 아래에 새 함수를 추가하세요.
 
 def extract_crawl_time(soup):
     try:
@@ -106,58 +107,49 @@ def fetch_kobis_smartly():
         return resp, payload
     except: return None, None
 
-# [NEW] 네이버 뉴스 크롤링 API
 @app.get("/api/news")
 def get_movie_news(keyword: str = Query(...)):
+    if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
+        return {"status": "error", "message": "Server API Key Config Missing"}
+
     try:
-        # 네이버 뉴스 검색 URL
-        search_query = quote(keyword)
-        url = f"https://search.naver.com/search.naver?where=news&query={search_query}&sm=tab_opt&sort=0&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so%3Ar%2Cp%3Aall&is_sug_officeid=0"
-        
+        url = "https://openapi.naver.com/v1/search/news.json"
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            "X-Naver-Client-Id": NAVER_CLIENT_ID,
+            "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
         }
-        
-        resp = requests.get(url, headers=headers, timeout=10)
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        
+        params = {
+            "query": keyword,
+            "display": 5,
+            "sort": "sim"
+        }
+        resp = requests.get(url, headers=headers, params=params, timeout=5)
+        if resp.status_code != 200:
+            return {"status": "error", "message": f"Naver API Error: {resp.status_code}"}
+            
+        data = resp.json()
         news_list = []
-        # 네이버 뉴스 리스트 아이템 (.news_wrap)
-        items = soup.select(".news_wrap")
-        
-        for item in items[:5]: # 상위 5개만
-            title_tag = item.select_one(".news_tit")
-            if not title_tag: continue
-            
-            title = title_tag.get_text()
-            link = title_tag['href']
-            
-            # 썸네일 (있을 수도 있고 없을 수도 있음)
-            img_tag = item.select_one(".dsc_thumb .thumb")
-            thumb = img_tag['src'] if img_tag else None
-            
-            # 요약
-            desc_tag = item.select_one(".news_dsc")
-            desc = desc_tag.get_text().strip() if desc_tag else ""
-            
-            # 언론사
-            press_tag = item.select_one(".info.press")
-            press = press_tag.get_text().strip() if press_tag else ""
+        for item in data.get('items', []):
+            clean_title = re.sub(r'<[^>]+>', '', item['title'])
+            clean_desc = re.sub(r'<[^>]+>', '', item['description'])
+            # 날짜 포맷팅 (Tue, 18 Feb 2025 14:00:00 +0900) -> 간단히 변환
+            try:
+                dt = datetime.strptime(item.get('pubDate', ''), "%a, %d %b %Y %H:%M:%S %z")
+                pub_date_str = dt.strftime("%Y-%m-%d %H:%M")
+            except:
+                pub_date_str = ""
 
             news_list.append({
-                "title": title,
-                "link": link,
-                "desc": desc,
-                "thumb": thumb,
-                "press": press
+                "title": clean_title,
+                "link": item['originallink'] or item['link'],
+                "desc": clean_desc,
+                "thumb": None,
+                "press": pub_date_str 
             })
-            
         return {"status": "ok", "items": news_list}
-        
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-# ... (기존 API들: /api/realtime, /api/reservation, /kobis/* 등 유지) ...
 @app.get("/api/realtime")
 def get_realtime_ranking():
     try:
@@ -191,18 +183,22 @@ def get_realtime_reservation(movieName: str = Query(...), movieCd: str = Query(N
 
 @app.get("/kobis/daily")
 def get_daily(targetDt: str):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}").json()
 
 @app.get("/kobis/weekly")
 def get_weekly(targetDt: str, weekGb="1"):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_WEEKLY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}&weekGb={weekGb}").json()
 
 @app.get("/kobis/detail")
 def get_detail(movieCd: str):
+    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_MOVIE_INFO_URL}?key={KOBIS_API_KEY}&movieCd={movieCd}").json()
 
 @app.get("/kobis/trend")
 def get_trend(movieCd: str, endDate: str):
+    if not KOBIS_API_KEY: return []
     try:
         dates = []
         end_dt = datetime.strptime(endDate, "%Y%m%d")
