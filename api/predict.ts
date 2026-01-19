@@ -1,24 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-// [Helper] 요일 구하기
 const getDayName = (dateStr: string) => {
   if (!dateStr || dateStr.length < 8) return '';
-  const cleanStr = dateStr.replace(/-/g, '');
-  const y = parseInt(cleanStr.substring(0, 4));
-  const m = parseInt(cleanStr.substring(4, 6)) - 1;
-  const d = parseInt(cleanStr.substring(6, 8));
-  const date = new Date(y, m, d);
+  const c = dateStr.replace(/-/g, '');
+  const date = new Date(parseInt(c.substring(0,4)), parseInt(c.substring(4,6))-1, parseInt(c.substring(6,8)));
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
 };
 
-// [Helper] 개봉 경과일
-const getDaysSinceRelease = (currentDateStr: string, openDt: string) => {
-  if (!currentDateStr || !openDt) return 0;
-  const c = currentDateStr.replace(/-/g, '');
-  const o = openDt.replace(/-/g, '');
-  const curr = new Date(parseInt(c.substring(0,4)), parseInt(c.substring(4,6))-1, parseInt(c.substring(6,8)));
-  const open = new Date(parseInt(o.substring(0,4)), parseInt(o.substring(4,6))-1, parseInt(o.substring(6,8)));
-  return Math.floor((curr.getTime() - open.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+// [Helper] JSON 정제 (줄바꿈 문자 처리 등)
+const cleanJsonString = (str: string) => {
+  if (!str) return "{}";
+  let cleaned = str.replace(/```json/g, "").replace(/```/g, "").trim();
+  return cleaned;
 };
 
 export default async function handler(req, res) {
@@ -27,19 +20,19 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const apiKey = process.env.API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "Server API Key Missing" });
+  if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
 
   try {
     const { movieName, trendData, movieInfo, currentAudiAcc, comparison } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 1. 데이터 가공
+    const todayStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const openDtStr = movieInfo.openDt.replace(/-/g, "");
+    const isUnreleased = parseInt(openDtStr) > parseInt(todayStr);
+
     const window = trendData.slice(-14);
     const enriched = window.map((d, idx) => {
       const scrn = d.scrnCnt ?? 0;
@@ -48,69 +41,57 @@ export default async function handler(req, res) {
         date: d.dateDisplay,
         day: getDayName(d.date),
         audi: d.audiCnt,
-        scrn: scrn,
-        psa: scrn > 0 ? (d.audiCnt / scrn).toFixed(1) : "0",
         growth: prev > 0 ? ((d.audiCnt - prev) / prev * 100).toFixed(1) + "%" : "0%"
       };
     });
 
     const genre = movieInfo.genres?.join(", ") || "Unknown";
 
-    // 2. 프롬프트 (JSON 출력 강제)
+    let specificTask = isUnreleased 
+      ? "This movie is unreleased. Focus on 'Pre-release Hype' and reservation trends." 
+      : "Analyze daily trends, weekday/weekend patterns, and drop rates.";
+
     const prompt = `
     Role: Senior Box Office Analyst.
-    Task: Predict future audience numbers and analyze the trend.
-
-    [Target Movie]
-    - Title: ${movieName} (${genre})
-    - Open Date: ${movieInfo.openDt}
-    - Total Audience: ${currentAudiAcc}
+    [Target] ${movieName} (${genre}), Open: ${movieInfo.openDt}
+    [Status] Total: ${currentAudiAcc}
+    [Real-time] ${comparison ? `Today: ${comparison.today}, Yest: ${comparison.yesterday}` : "No data"}
+    [Recent Data] ${JSON.stringify(enriched)}
     
-    [Real-time Status (Today vs Yesterday)]
-    ${comparison ? `Today(Expected): ${comparison.today} / Yesterday: ${comparison.yesterday} / Growth: ${comparison.rate}%` : "No real-time data"}
+    [Task]
+    ${specificTask}
+    1. Write a Korean analysis (3-5 sentences). Be concise.
+    2. Predict next 3 days audience.
+    3. Extract 2 keywords for news search.
 
-    [Recent Performance (Last 14 days)]
-    ${JSON.stringify(enriched)}
-
-    [Requirements]
-    1. Analyze the trend based on PSA, growth rate, and weekday/weekend patterns.
-    2. **Predict specific audience numbers** for the next 3 days (Tomorrow, D+2, D+3).
-       - Consider the 'Real-time Status' heavily. If today shows growth, reflect it.
-       - Consider the day of the week (Weekend usually higher).
-    3. Extract 3 search keywords for finding news about this movie.
-
-    [Output Format]
-    You MUST return a valid JSON object strictly matching this schema. Do not include markdown formatting like \`\`\`json.
+    [Output Format - JSON ONLY]
     {
-      "analysis": "Korean analysis text (3-5 sentences). Mention specific reasons for your forecast.",
-      "forecast": [number, number, number],
-      "keywords": ["keyword1", "keyword2", "keyword3"]
+      "analysis": "Analysis text here...",
+      "forecast": [0, 0, 0],
+      "keywords": ["keyword1", "keyword2"]
     }
     `;
-
-    console.log("Calling Gemini for Prediction...");
     
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", // JSON 모드가 잘 작동하는 모델 권장
+      model: "gemini-2.0-flash", 
       contents: { parts: [{ text: prompt }] },
-      generationConfig: { responseMimeType: "application/json" } // JSON 강제
+      generationConfig: { responseMimeType: "application/json" }
     });
 
-    // 3. 응답 파싱
-    let responseText = "";
-    if (typeof response.text === 'function') responseText = response.text();
-    else if (response.text) responseText = response.text;
-    else if (response.response?.candidates?.[0]?.content?.parts?.[0]?.text) responseText = response.response.candidates[0].content.parts[0].text;
+    let text = "";
+    if (typeof response.text === 'function') text = response.text();
+    else if (response.text) text = response.text;
+    else if (response.response?.candidates?.[0]?.content?.parts?.[0]?.text) text = response.response.candidates[0].content.parts[0].text;
 
-    // JSON 파싱 시도
     let result;
     try {
-      result = JSON.parse(responseText);
+      result = JSON.parse(cleanJsonString(text));
     } catch (e) {
-      console.error("JSON Parse Error:", responseText);
-      // 파싱 실패 시 텍스트만이라도 살려서 보냄
+      // [핵심 수정] JSON 파싱 실패 시 정규식으로 'analysis' 값만 추출
+      const analysisMatch = text.match(/"analysis":\s*"((?:[^"\\]|\\.)*)"/);
+      const cleanAnalysis = analysisMatch ? analysisMatch[1] : "분석 내용을 처리하는 중입니다. (잠시 후 다시 시도해주세요)";
       result = {
-        analysis: responseText.slice(0, 200) + "...",
+        analysis: cleanAnalysis,
         forecast: [0, 0, 0],
         keywords: [movieName]
       };
@@ -118,13 +99,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       analysisText: result.analysis,
-      predictionSeries: result.forecast, // AI가 예측한 수치 사용
-      searchKeywords: result.keywords,   // 뉴스 검색용 키워드
+      predictionSeries: result.forecast || [0, 0, 0],
+      searchKeywords: result.keywords || [movieName],
       predictedFinalAudi: { min: 0, max: 0, avg: 0 }
     });
 
   } catch (error) {
-    console.error("AI Error:", error);
     return res.status(200).json({ 
       analysisText: "분석 서버 연결 실패", 
       predictionSeries: [0, 0, 0],
