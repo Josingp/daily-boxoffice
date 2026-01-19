@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult, ReservationData } from '../types';
-import { formatNumber } from '../constants';
+import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, ReservationData } from '../types';
+import { ExtendedPredictionResult } from '../services/geminiService'; // 타입 import 수정
+import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle, ExternalLink, Newspaper } from 'lucide-react';
-
-interface ExtendedPredictionResult extends PredictionResult {
-  searchKeywords?: string[];
-}
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -94,7 +91,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setTrendData(updatedTrend);
       setLoading(false);
 
-      if (updatedTrend.length > 0 && info) {
+      // AI 분석 (데이터가 없어도, 개봉 전이라도 정보가 있으면 시도)
+      if (info) {
         try {
           const pred = await predictMoviePerformance(
             movie.movieNm, 
@@ -128,12 +126,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     }
   };
 
-  // 뉴스 검색 링크 열기
   const openNewsSearch = (engine: 'naver' | 'google') => {
     if (!movie) return;
-    // AI가 추천한 키워드가 있으면 사용, 없으면 영화 제목 사용
-    const keyword = prediction?.searchKeywords?.[0] || movie.movieNm;
-    const query = encodeURIComponent(`${keyword} 영화 반응 흥행`);
+    // AI 추천 키워드가 있으면 사용, 없으면 영화 제목+반응
+    const keyword = prediction?.searchKeywords?.[0] 
+      ? prediction.searchKeywords.join(" ") 
+      : `${movie.movieNm} 영화 반응 후기`;
+      
+    const query = encodeURIComponent(keyword);
     
     let url = '';
     if (engine === 'naver') {
@@ -142,14 +142,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       url = `https://www.google.com/search?q=${query}&tbm=nws`;
     }
     window.open(url, '_blank');
-  };
-
-  const getChangeElement = (val: string) => {
-    const num = Number(val);
-    if (isNaN(num)) return <span className="text-slate-400 text-xs">-</span>;
-    if (num > 0) return <span className="text-red-500 text-xs font-semibold">▲{formatNumber(num)}</span>;
-    if (num < 0) return <span className="text-blue-600 text-xs font-semibold">▼{formatNumber(Math.abs(num))}</span>;
-    return <span className="text-slate-400 text-xs">-</span>;
   };
 
   const safeNum = (val: any): number => {
@@ -245,46 +237,34 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
            )}
         </div>
 
-        {/* 일별 통계 */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-2 text-slate-500"><TrendingUp size={16} /><span className="text-xs font-semibold">일일 관객수</span></div>
-            <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.audiCnt)}명</div>
-            <div className="mt-1">{getChangeElement(movie.audiInten)}</div>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-2 text-slate-500"><DollarSign size={16} /><span className="text-xs font-semibold">일일 매출액</span></div>
-            <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.salesAmt)}원</div>
-             <div className="mt-1">{getChangeElement(movie.salesInten)}</div>
-          </div>
-        </div>
-
         <TrendChart data={trendData} loading={loading} prediction={prediction} />
 
-        {/* AI 분석 리포트 */}
+        {/* AI 분석 리포트 & 뉴스 검색 */}
         {prediction && !aiLoading && (
-          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
-            <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold text-sm">
+          <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm mt-4">
+            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
               <Sparkles size={16} className="text-purple-600"/> 
               AI 데이터 분석 리포트
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep mb-4">
+            
+            {/* 분석 텍스트 */}
+            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep mb-5">
               {prediction.analysisText}
             </p>
             
-            {/* [NEW] 관련 기사 버튼 */}
-            <div className="flex gap-2 pt-2 border-t border-slate-100">
+            {/* 뉴스 검색 버튼 */}
+            <div className="flex gap-2">
                 <button 
                   onClick={() => openNewsSearch('naver')}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#03C75A] text-white rounded-lg text-xs font-bold hover:bg-[#02b351] transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-[#03C75A] text-white rounded-lg text-xs font-bold hover:bg-[#02b351] transition-all shadow-sm active:scale-95"
                 >
-                  <Newspaper size={14} /> 네이버 뉴스
+                  <Newspaper size={14} /> 네이버 반응 보기
                 </button>
                 <button 
                   onClick={() => openNewsSearch('google')}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600 transition-all shadow-sm active:scale-95"
                 >
-                  <ExternalLink size={14} /> 구글 뉴스
+                  <ExternalLink size={14} /> 구글 뉴스 검색
                 </button>
             </div>
           </div>
