@@ -1,7 +1,7 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
 // [수정] 결과 인터페이스 확장
-interface ExtendedPredictionResult extends PredictionResult {
+export interface ExtendedPredictionResult extends PredictionResult {
   searchKeywords?: string[];
 }
 
@@ -17,7 +17,7 @@ export const predictMoviePerformance = async (
 
   try {
     const payload = {
-      movieName: movieName,
+      movieName,
       trendData: trendData.map(d => ({
         date: d.date,
         dateDisplay: d.dateDisplay,
@@ -31,7 +31,7 @@ export const predictMoviePerformance = async (
         audiAcc: currentAudiAcc.replace(/,/g, '')
       },
       currentAudiAcc: currentAudiAcc.replace(/,/g, ''),
-      comparison: comparison
+      comparison
     };
 
     const response = await fetch("/predict", {
