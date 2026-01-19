@@ -1,7 +1,8 @@
 {
   "rewrites": [
     { "source": "/api/reservation", "destination": "/api/index.py" },
-    { "source": "/api/composite", "destination": "/api/index.py" }, 
+    { "source": "/api/composite", "destination": "/api/index.py" },
+    { "source": "/api/realtime", "destination": "/api/index.py" },
     { "source": "/kobis/(.*)", "destination": "/api/index.py" },
     { "source": "/predict", "destination": "/api/predict.ts" }
   ]
