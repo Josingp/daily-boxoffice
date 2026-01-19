@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, ReservationData } from '../types';
-import { ExtendedPredictionResult } from '../services/geminiService';
+import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation, fetchMovieNews, NewsItem } from '../services/kobisService';
-import { predictMoviePerformance } from '../services/geminiService';
-import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, Monitor, PlayCircle, BarChart3, Newspaper, ChevronRight, ExternalLink } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -20,11 +17,9 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [realtimeHistory, setRealtimeHistory] = useState<any[]>([]);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
-  const [prediction, setPrediction] = useState<ExtendedPredictionResult | null>(null);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [analysis, setAnalysis] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-
+  
   useEffect(() => {
     if (movie) {
       setIsVisible(true);
@@ -35,22 +30,17 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   }, [movie]);
 
   const loadData = async (movie: DailyBoxOfficeList) => {
-    setLoading(true);
     setAnalysis('');
-    setPrediction(null);
     setTrendData([]);
     setRealtimeHistory([]);
     setNewsList([]);
+    setMovieDetail(null);
 
     try {
-      // 1. 상세 정보
-      // JSON에 detail이 있다면 그걸 쓰면 좋지만, 일단 API 호출 (캐싱됨)
       const info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
 
-      // 2. 뉴스 로드
       fetchMovieNews(movie.movieNm).then(items => {
-         // 아이템이 없으면 '영화' 키워드 붙여서 재시도
          if (!items || items.length === 0) {
              fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
          } else {
@@ -61,17 +51,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       if (type === 'DAILY') {
         const trend = await fetchMovieTrend(movie.movieCd, targetDate);
         setTrendData(trend);
-        
-        // AI 분석
         requestAnalysis(movie.movieNm, trend, info, movie.audiAcc, 'DAILY', null);
-
       } else {
-        // [REALTIME] JSON 파일에서 이력 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
-            // 제목으로 매칭
             const history = json[movie.movieNm] || [];
             setRealtimeHistory(history);
             requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
@@ -79,7 +64,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
         } catch {}
       }
     } catch (e) { console.error(e); }
-    finally { setLoading(false); }
   };
 
   const requestAnalysis = async (name: string, trend: any, info: any, total: string, type: string, history: any) => {
@@ -107,8 +91,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   return (
     <div className={`fixed inset-0 z-50 flex flex-col bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
-      
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
         <div>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${type === 'DAILY' ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600'}`}>
@@ -120,15 +102,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
-        
-        {/* 영화 상세 정보 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-xs text-slate-600 space-y-1.5">
-           <div className="flex gap-2"><Film size={14} className="text-slate-400"/> 감독: <span className="text-slate-800">{movieDetail?.directors?.map(d=>d.peopleNm).join(', ') || '-'}</span></div>
-           <div className="flex gap-2"><User size={14} className="text-slate-400"/> 출연: <span className="text-slate-800">{movieDetail?.actors?.slice(0,3).map(a=>a.peopleNm).join(', ') || '-'}</span></div>
+           <div className="flex gap-2"><Film size={14} className="text-slate-400"/> 감독: <span className="text-slate-800">{movieDetail?.directors?.map((d: any)=>d.peopleNm).join(', ') || '-'}</span></div>
+           <div className="flex gap-2"><User size={14} className="text-slate-400"/> 출연: <span className="text-slate-800">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
            <div className="flex gap-2"><CalendarIcon size={14} className="text-slate-400"/> 개봉: <span className="text-slate-800">{movieDetail?.openDt || '-'}</span></div>
         </div>
 
-        {/* [분기] DAILY: 통계 박스 */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -150,7 +129,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
-        {/* [분기] REALTIME: 추이 그래프 */}
         {type === 'REALTIME' && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
              <div className="flex items-center gap-2 mb-4 text-indigo-600 font-bold text-sm">
@@ -176,14 +154,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                </div>
              ) : (
                <div className="h-32 flex flex-col items-center justify-center text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
-                 <span className="text-xs">데이터 수집 중입니다...</span>
+                 <span className="text-xs">데이터 수집 중...</span>
                  <span className="text-[10px] mt-1">(1시간 단위 업데이트)</span>
                </div>
              )}
           </div>
         )}
 
-        {/* AI 분석 리포트 */}
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
               <Sparkles size={16} className="text-purple-600"/> 
@@ -202,7 +179,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             )}
         </div>
 
-        {/* 관련 뉴스 (리스트) */}
         {newsList && newsList.length > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm">
