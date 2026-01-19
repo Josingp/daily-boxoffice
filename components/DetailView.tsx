@@ -49,14 +49,20 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       ]);
       setMovieDetail(info);
 
-      // [뉴스 로드]
-      fetchMovieNews(movie.movieNm).then(items => {
-          if (items.length === 0) {
-              fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
-          } else {
-              setNewsList(items);
-          }
-      });
+      // [뉴스 로드 시도]
+      try {
+        const items = await fetchMovieNews(movie.movieNm);
+        if (items && items.length > 0) {
+            setNewsList(items);
+        } else {
+            // 실패 시 '영화' 키워드 붙여서 재시도
+            const retryItems = await fetchMovieNews(movie.movieNm + " 영화");
+            setNewsList(retryItems || []);
+        }
+      } catch (e) {
+        console.error("News Load Error:", e);
+        setNewsList([]); // 실패 시 빈 배열
+      }
 
       let updatedTrend = [...trend];
       let comparisonInfo = null;
@@ -106,6 +112,16 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     const text = `🎬 ${movie.movieNm} AI 분석`;
     if (navigator.share) { try { await navigator.share({ title: movie.movieNm, text }); } catch {} } 
     else { alert('복사되었습니다.'); }
+  };
+
+  const openNewsSearch = (engine: 'naver' | 'google') => {
+    if (!movie) return;
+    const keyword = prediction?.searchKeywords?.[0] || movie.movieNm;
+    const query = encodeURIComponent(keyword + " 영화 반응");
+    let url = engine === 'naver' 
+      ? `https://search.naver.com/search.naver?where=news&query=${query}`
+      : `https://www.google.com/search?q=${query}&tbm=nws`;
+    window.open(url, '_blank');
   };
 
   const safeNum = (val: any): number => {
@@ -192,8 +208,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
         )}
 
-        {/* [NEW] 관련 기사 (리스트형) */}
-        {newsList.length > 0 && (
+        {/* [NEW] 관련 기사 (리스트형 + 폴백 버튼) */}
+        {newsList.length > 0 ? (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm">
               <Newspaper size={16} className="text-blue-500"/> 
@@ -215,6 +231,22 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
                 </a>
               ))}
             </div>
+          </div>
+        ) : (
+          /* 뉴스가 없거나 실패했을 때 보여줄 버튼 (빈 화면 방지) */
+          <div className="flex gap-2 mt-4">
+             <button 
+               onClick={() => openNewsSearch('naver')}
+               className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-[#03C75A] text-white rounded-lg text-xs font-bold hover:bg-[#02b351] transition-all shadow-sm active:scale-95"
+             >
+               <Newspaper size={14} /> 네이버 검색
+             </button>
+             <button 
+               onClick={() => openNewsSearch('google')}
+               className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600 transition-all shadow-sm active:scale-95"
+             >
+               <ExternalLink size={14} /> 구글 검색
+             </button>
           </div>
         )}
       </div>
