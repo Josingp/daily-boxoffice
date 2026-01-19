@@ -2,8 +2,8 @@ name: Data Scraper
 
 on:
   schedule:
-    - cron: '0 * * * *' # 매 시간 정각 실행
-  workflow_dispatch: # 수동 실행 가능
+    - cron: '*/10 * * * *' # 10분마다 실행 (실시간성 강화)
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,18 +12,14 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Install libs
-        run: pip install requests beautifulsoup4
-
-      - name: Run Script
+      
+      - run: pip install requests beautifulsoup4
+      
+      - name: Run Update Script
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_data.py
@@ -32,7 +28,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          # public 폴더의 모든 json 파일 추가
           git add public/*.json
           # 변경사항이 있을 때만 커밋
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data" && git push)
