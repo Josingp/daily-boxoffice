@@ -27,8 +27,7 @@ KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffi
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 
-# [핵심 수정 1] 정규식 유연화 (띄어쓰기, 따옴표 유연하게 대응)
-# 예: mstView('movie','123') / mstView( 'movie' , "123" ) 모두 통과
+# 정규식: mstView('movie','123') 패턴 추출 (공백/따옴표 유연하게)
 MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)['\"]\s*\)")
 
 @app.get("/")
@@ -38,16 +37,16 @@ def read_root():
 def extract_movie_data(row):
     """HTML 행(tr)에서 데이터 추출"""
     cols = row.find_all("td")
+    # [디버깅 강화] 컬럼 수가 부족해도 일단 내용은 확인하고 싶다면 이 체크를 완화할 수 있으나,
+    # 데이터 정합성을 위해 유지하되, 호출부에서 row 내용을 로깅하도록 함.
     if len(cols) < 8: return None
 
-    # 1. 영화 코드(movieCd) 추출 시도
+    # 1. 영화 코드(movieCd) 추출
     movie_cd = None
     a_tag = cols[1].find("a")
     
-    # onclick 속성이 있는지 확인
     if a_tag and a_tag.has_attr("onclick"):
-        onclick_val = a_tag["onclick"]
-        match = MOVIE_CD_REGEX.search(onclick_val)
+        match = MOVIE_CD_REGEX.search(a_tag["onclick"])
         if match:
             movie_cd = match.group(1)
     
@@ -57,7 +56,7 @@ def extract_movie_data(row):
     else:
         title_text = cols[1].get_text(strip=True)
 
-    # 3. 데이터 정제
+    # 3. 숫자 정제
     def clean_num(s):
         return s.replace(',', '').strip()
 
@@ -73,7 +72,7 @@ def extract_movie_data(row):
     }
 
 # -----------------------------------------------------------------------------
-# 1. [상세 화면용] 실시간 예매율 (ID 우선 -> 실패시 이름 백업)
+# 1. [상세 화면용] 실시간 예매율 (디버깅 강화 버전)
 # -----------------------------------------------------------------------------
 @app.get("/api/reservation")
 def get_realtime_reservation(
@@ -81,51 +80,68 @@ def get_realtime_reservation(
     movieCd: str = Query(None, description="Movie Code")
 ):
     try:
+        # [핵심] Session 사용으로 브라우저 환경 모방 (쿠키 유지)
+        session = requests.Session()
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Referer': 'https://www.kobis.or.kr/',
+            'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
+            'Origin': 'https://www.kobis.or.kr',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        resp = requests.post(KOBIS_REALTIME_URL, headers=headers, data={'dmlMode': 'search'}, timeout=10)
-        resp.encoding = 'utf-8' # 한글 깨짐 방지
+        
+        # 타임아웃 넉넉하게 20초
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data={'dmlMode': 'search'}, timeout=20)
+        resp.encoding = 'utf-8'
 
         if resp.status_code != 200:
-            return {"found": False, "debug_error": f"HTTP {resp.status_code}"}
+            return {"found": False, "debug_error": f"서버 접속 실패 (HTTP {resp.status_code})"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
-        rows = soup.find_all("tr")
         
-        debug_list = []
-
-        # 검색 대상 이름 정규화 (공백/특수문자 제거, 소문자)
+        # [디버깅 정보 수집]
+        page_title = soup.title.string.strip() if soup.title else "제목없음"
+        all_rows = soup.find_all("tr")
+        total_rows = len(all_rows)
+        
+        # 상위 3개 행의 텍스트만 미리보기 (HTML 구조 확인용)
+        preview_rows = []
+        for r in all_rows[:3]:
+            preview_rows.append(r.get_text(strip=True)[:50]) # 50자까지만
+            
+        debug_extracted_list = []
         target_name_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
 
-        for row in rows:
+        for row in all_rows:
             data = extract_movie_data(row)
             if not data: continue
             
-            # 디버깅용 로그 (상위 15개만)
-            if len(debug_list) < 15:
-                debug_list.append(f"{data['title']}(ID:{data['movieCd'] or '?'})")
+            # 디버깅 리스트에 추가 (상위 15개)
+            if len(debug_extracted_list) < 15:
+                # 영화코드와 제목을 같이 기록
+                debug_extracted_list.append(f"{data['title']}({data['movieCd']})")
 
-            # [Logic 1] ID로 매칭 (가장 확실)
-            if movieCd and data['movieCd'] and data['movieCd'] == movieCd:
+            # [Logic 1] ID 매칭
+            if movieCd and data['movieCd'] == movieCd:
                 return {"found": True, "method": "ID_MATCH", "data": data}
 
-            # [Logic 2] 이름으로 매칭 (ID 매칭 실패 시 백업)
-            # 여기서는 movieCd가 있어도, 위에서 리턴 안 됐으면 실행됨
+            # [Logic 2] 이름 매칭 (백업)
             row_title_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
-            
             if target_name_norm in row_title_norm or row_title_norm in target_name_norm:
-                 return {"found": True, "method": "NAME_MATCH_BACKUP", "data": data}
+                 return {"found": True, "method": "NAME_MATCH", "data": data}
 
-        return {
-            "found": False, 
-            "debug_error": f"ID({movieCd}) 또는 이름({movieName}) 미발견.\n[상위 목록 ID확인]: {', '.join(debug_list)}..."
-        }
+        # [최종 실패 시 원인 분석 리포트 리턴]
+        error_report = (
+            f"검색실패.\n"
+            f"- 접속페이지: {page_title}\n"
+            f"- 읽은 TR 개수: {total_rows}개\n"
+            f"- 상위 행 미리보기: {preview_rows}\n"
+            f"- 추출 성공한 목록(상위15): {', '.join(debug_extracted_list)}"
+        )
+        return {"found": False, "debug_error": error_report}
 
     except Exception as e:
-        return {"found": False, "debug_error": f"Server Error: {str(e)}"}
+        return {"found": False, "debug_error": f"Internal Error: {str(e)}"}
 
 # -----------------------------------------------------------------------------
 # 2. [전체 목록용] 박스오피스 + 실시간 예매율 결합
@@ -145,10 +161,16 @@ def get_composite_boxoffice():
     except Exception as e:
         print(f"API Error: {e}")
 
-    # (2) Crawling & Parsing
+    # (2) Crawling
     try:
-        headers = {'User-Agent': 'Mozilla/5.0', 'Content-Type': 'application/x-www-form-urlencoded'}
-        resp = requests.post(KOBIS_REALTIME_URL, headers=headers, data={'dmlMode': 'search'}, timeout=10)
+        # 여기도 Session 및 강화된 헤더 적용
+        session = requests.Session()
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data={'dmlMode': 'search'}, timeout=15)
         resp.encoding = 'utf-8'
         
         soup = BeautifulSoup(resp.text, 'html.parser')
@@ -157,16 +179,13 @@ def get_composite_boxoffice():
         for row in rows:
             data = extract_movie_data(row)
             if data:
-                # ID가 있으면 ID로 맵핑
                 if data['movieCd']:
                     realtime_map[data['movieCd']] = data
-                # ID 추출 실패 시 이름(정규화)으로도 맵핑 (백업)
+                
+                # 이름 매칭 백업용 맵핑
                 norm_title = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
-                if norm_title:
-                    # Key 충돌 방지를 위해 접두어 사용하거나 별도 맵 사용 가능하나, 
-                    # 여기선 단순화를 위해 ID 맵에 우선 저장
-                    if norm_title not in realtime_map: 
-                        realtime_map[norm_title] = data
+                if norm_title and norm_title not in realtime_map:
+                    realtime_map[norm_title] = data
 
     except Exception as e:
         print(f"Crawling Error: {e}")
@@ -177,12 +196,9 @@ def get_composite_boxoffice():
         target_cd = movie['movieCd']
         target_nm_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movie['movieNm']).lower()
         
-        # 1순위: ID 매칭
-        match = realtime_map.get(target_cd)
-        
-        # 2순위: 이름 매칭 (ID 매칭 실패 시)
+        match = realtime_map.get(target_cd) # 1순위: ID
         if not match:
-            match = realtime_map.get(target_nm_norm)
+            match = realtime_map.get(target_nm_norm) # 2순위: 이름
         
         item = movie.copy()
         item["realtime"] = match
