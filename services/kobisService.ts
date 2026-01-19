@@ -1,4 +1,4 @@
-import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo } from '../types';
+import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo, RealtimeMovie } from '../types';
 
 const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string> = {}): Promise<T> => {
   const query = new URLSearchParams(params).toString();
@@ -73,5 +73,24 @@ export const fetchRealtimeReservation = async (movieName: string, movieCd?: stri
     }
   } catch (error: any) {
     return { data: null, error: `Client Error: ${error.message}` };
+  }
+};
+
+// [NEW] 실시간 예매율 랭킹 가져오기
+export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], crawledTime: string }> => {
+  try {
+    const response = await fetch('/api/realtime');
+    if (!response.ok) throw new Error('Network response was not ok');
+    const json = await response.json();
+    
+    if (json.status === 'ok') {
+      return { data: json.data, crawledTime: json.crawledTime };
+    } else {
+      console.error(json.message);
+      return { data: [], crawledTime: '' };
+    }
+  } catch (error) {
+    console.error('Fetch Realtime Error:', error);
+    return { data: [], crawledTime: '' };
   }
 };
