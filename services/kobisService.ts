@@ -56,25 +56,24 @@ export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Prom
 
 // ... (fetchFromBackend 함수 등 기존 코드 상단 유지) ...
 
-// 5. 실시간 예매율 (디버깅용 에러 메시지 포함)
-export const fetchRealtimeReservation = async (movieName: string): Promise<{ data: any, error?: string } | null> => {
+// services/kobisService.ts 수정
+
+// movieCd 파라미터 추가
+export const fetchRealtimeReservation = async (movieName: string, movieCd?: string): Promise<{ data: any, error?: string } | null> => {
   try {
     const encodedName = encodeURIComponent(movieName);
-    const response = await fetch(`/api/reservation?movieName=${encodedName}`);
+    // movieCd가 있으면 URL에 포함
+    const query = movieCd 
+      ? `?movieName=${encodedName}&movieCd=${movieCd}`
+      : `?movieName=${encodedName}`;
+      
+    const response = await fetch(`/api/reservation${query}`);
     
-    // 네트워크 에러 처리
-    if (!response.ok) {
-       return { data: null, error: `Network Error: ${response.status}` };
-    }
-
+    if (!response.ok) return { data: null, error: `Network Error: ${response.status}` };
     const json = await response.json();
     
-    if (json.found) {
-      return { data: json.data }; // 성공
-    } else {
-      // 실패 시 서버가 보낸 구체적인 이유(debug_error) 반환
-      return { data: null, error: json.debug_error || "Unknown Error" };
-    }
+    if (json.found) return { data: json.data };
+    return { data: null, error: json.debug_error || "Unknown Error" };
   } catch (error: any) {
     return { data: null, error: `Client Error: ${error.message}` };
   }
