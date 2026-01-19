@@ -17,7 +17,6 @@ KOBIS_API_KEY = get_env("KOBIS_API_KEY")
 NAVER_ID = get_env("NAVER_CLIENT_ID")
 NAVER_SECRET = get_env("NAVER_CLIENT_SECRET")
 
-# APIs
 @app.get("/")
 def root(): return {"status": "ok"}
 
