@@ -4,6 +4,7 @@ import re
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup 
+from urllib.parse import quote
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,39 +27,33 @@ KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffi
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 
-# 정규식: onclick="mstView('movie','12345678')"
+# 정규식
 MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)['\"]\s*\)")
 
 @app.get("/")
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
+# ... (기존 헬퍼 함수들: extract_crawl_time, extract_movie_data, get_base_headers, fetch_kobis_smartly 유지) ...
+# 코드 길이상 중략된 부분은 기존 코드 그대로 두시면 됩니다. 아래에 새 함수를 추가하세요.
+
 def extract_crawl_time(soup):
-    """전체 텍스트에서 조회일시(YYYY/MM/DD HH:MM) 추출"""
     try:
         full_text = soup.get_text()
         match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", full_text)
         return match.group(1) if match else ""
-    except:
-        return ""
+    except: return ""
 
 def extract_movie_data(row):
     cols = row.find_all("td")
     if len(cols) < 8: return None
-
-    # 1. 영화 코드
     movie_cd = None
     a_tag = cols[1].find("a")
     if a_tag and a_tag.has_attr("onclick"):
         match = MOVIE_CD_REGEX.search(a_tag["onclick"])
-        if match:
-            movie_cd = match.group(1)
-    
-    # 2. 제목
+        if match: movie_cd = match.group(1)
     title_text = a_tag["title"].strip() if (a_tag and a_tag.get("title")) else cols[1].get_text(strip=True)
-
     def clean_num(s): return s.replace(',', '').strip()
-
     return {
         "movieCd": movie_cd,
         "rank": cols[0].get_text(strip=True),
@@ -81,27 +76,21 @@ def get_base_headers():
 def fetch_kobis_smartly():
     session = requests.Session()
     headers = get_base_headers()
-
-    # 1차 시도 (고정값)
     try:
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         soup_visit = BeautifulSoup(visit.text, 'html.parser')
         token = soup_visit.find('input', {'name': 'CSRFToken'})
         csrf = token.get('value', '') if token else ''
-
-        payload = {
+        payload_fixed = {
             'CSRFToken': csrf, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''
         }
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=20)
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_fixed, timeout=20)
         resp.encoding = 'utf-8'
-        
         if len(BeautifulSoup(resp.text, 'html.parser').find_all("tr")) > 2:
-            return resp, payload
+            return resp, payload_fixed
     except: pass
-
-    # 2차 시도 (동적값)
     try:
-        session = requests.Session() # 새 세션
+        session = requests.Session()
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         soup = BeautifulSoup(visit.text, 'html.parser')
         payload = {}
@@ -111,56 +100,95 @@ def fetch_kobis_smartly():
             if sel.get('name'):
                 opt = sel.find('option', selected=True) or sel.find('option')
                 payload[sel.get('name')] = opt.get('value', '') if opt else ''
-        
         payload.update({'dmlMode': 'search', 'allMovieYn': 'Y'})
         resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=20)
         resp.encoding = 'utf-8'
         return resp, payload
     except: return None, None
 
-# [API] 실시간 랭킹 (전체 목록)
+# [NEW] 네이버 뉴스 크롤링 API
+@app.get("/api/news")
+def get_movie_news(keyword: str = Query(...)):
+    try:
+        # 네이버 뉴스 검색 URL
+        search_query = quote(keyword)
+        url = f"https://search.naver.com/search.naver?where=news&query={search_query}&sm=tab_opt&sort=0&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so%3Ar%2Cp%3Aall&is_sug_officeid=0"
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        
+        resp = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        
+        news_list = []
+        # 네이버 뉴스 리스트 아이템 (.news_wrap)
+        items = soup.select(".news_wrap")
+        
+        for item in items[:5]: # 상위 5개만
+            title_tag = item.select_one(".news_tit")
+            if not title_tag: continue
+            
+            title = title_tag.get_text()
+            link = title_tag['href']
+            
+            # 썸네일 (있을 수도 있고 없을 수도 있음)
+            img_tag = item.select_one(".dsc_thumb .thumb")
+            thumb = img_tag['src'] if img_tag else None
+            
+            # 요약
+            desc_tag = item.select_one(".news_dsc")
+            desc = desc_tag.get_text().strip() if desc_tag else ""
+            
+            # 언론사
+            press_tag = item.select_one(".info.press")
+            press = press_tag.get_text().strip() if press_tag else ""
+
+            news_list.append({
+                "title": title,
+                "link": link,
+                "desc": desc,
+                "thumb": thumb,
+                "press": press
+            })
+            
+        return {"status": "ok", "items": news_list}
+        
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# ... (기존 API들: /api/realtime, /api/reservation, /kobis/* 등 유지) ...
 @app.get("/api/realtime")
 def get_realtime_ranking():
     try:
         resp, _ = fetch_kobis_smartly()
-        if not resp or resp.status_code != 200:
-            return {"status": "error", "message": "Connection Failed"}
-        
+        if not resp or resp.status_code != 200: return {"status": "error", "message": "Connection Failed"}
         soup = BeautifulSoup(resp.text, 'html.parser')
         crawled_time = extract_crawl_time(soup)
         data_list = []
         for row in soup.find_all("tr"):
             d = extract_movie_data(row)
             if d: data_list.append(d)
-            
         return {"status": "ok", "crawledTime": crawled_time, "data": data_list}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+    except Exception as e: return {"status": "error", "message": str(e)}
 
-# [API] 상세정보용 예매율 조회
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(...), movieCd: str = Query(None)):
     try:
         resp, _ = fetch_kobis_smartly()
         if not resp: return {"found": False}
-        
         soup = BeautifulSoup(resp.text, 'html.parser')
         crawled_time = extract_crawl_time(soup)
         target_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
-
         for row in soup.find_all("tr"):
             data = extract_movie_data(row)
             if not data: continue
-            
-            # ID 매칭 or 이름 매칭
             row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
             if (movieCd and data['movieCd'] == movieCd) or (target_norm in row_norm):
                 return {"found": True, "crawledTime": crawled_time, "data": data}
-        
         return {"found": False}
     except: return {"found": False}
 
-# [API] 기존 프록시들 (필수)
 @app.get("/kobis/daily")
 def get_daily(targetDt: str):
     return requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}").json()
@@ -180,7 +208,6 @@ def get_trend(movieCd: str, endDate: str):
         end_dt = datetime.strptime(endDate, "%Y%m%d")
         for i in range(27, -1, -1):
             dates.append((end_dt - timedelta(days=i)).strftime("%Y%m%d"))
-        
         def fetch(dt):
             try:
                 res = requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={dt}", timeout=3).json()
@@ -189,7 +216,6 @@ def get_trend(movieCd: str, endDate: str):
                 if m: return {"date": dt, "dateDisplay": f"{dt[4:6]}/{dt[6:8]}", "audiCnt": int(m['audiCnt']), "scrnCnt": int(m['scrnCnt'])}
             except: pass
             return {"date": dt, "dateDisplay": f"{dt[4:6]}/{dt[6:8]}", "audiCnt": 0, "scrnCnt": 0}
-
         with ThreadPoolExecutor(max_workers=10) as ex:
             return [r for r in list(ex.map(fetch, dates)) if r]
     except: return []
