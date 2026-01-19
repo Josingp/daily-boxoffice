@@ -1,12 +1,17 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
+// [수정] 결과 인터페이스 확장
+interface ExtendedPredictionResult extends PredictionResult {
+  searchKeywords?: string[];
+}
+
 export const predictMoviePerformance = async (
   movieName: string,
   trendData: TrendDataPoint[],
   movieInfo?: MovieInfo | null,
   currentAudiAcc: string = "0",
   comparison?: { today: number; yesterday: number; diff: number; rate: string } | null
-): Promise<PredictionResult | null> => {
+): Promise<ExtendedPredictionResult | null> => {
   
   if (!movieInfo) return null;
 
@@ -15,7 +20,7 @@ export const predictMoviePerformance = async (
       movieName: movieName,
       trendData: trendData.map(d => ({
         date: d.date,
-        dateDisplay: d.dateDisplay, // [추가] 오늘/날짜 표시용
+        dateDisplay: d.dateDisplay,
         audiCnt: d.audiCnt,
         scrnCnt: d.scrnCnt || 0
       })),
@@ -26,7 +31,7 @@ export const predictMoviePerformance = async (
         audiAcc: currentAudiAcc.replace(/,/g, '')
       },
       currentAudiAcc: currentAudiAcc.replace(/,/g, ''),
-      comparison: comparison // [NEW] 전일 대비 증감 데이터 전달
+      comparison: comparison
     };
 
     const response = await fetch("/predict", {
@@ -35,12 +40,7 @@ export const predictMoviePerformance = async (
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Backend Error (${response.status}):`, errorText);
-      return null;
-    }
-
+    if (!response.ok) return null;
     return await response.json();
 
   } catch (error) {
