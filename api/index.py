@@ -33,6 +33,26 @@ MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
+def extract_crawl_time(soup):
+    """
+    [NEW] HTML에서 조회일시 추출
+    예: <em><b>조회일시 : 2026/01/19 10:56</b></em>
+    """
+    try:
+        # "조회일시" 텍스트를 포함하는 요소 찾기
+        target = soup.find(string=re.compile("조회일시"))
+        if target:
+            text = target.strip()
+            # 정규식으로 날짜 포맷 (YYYY/MM/DD HH:MM) 추출
+            match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", text)
+            if match:
+                return match.group(1)
+            # 정규식 실패 시 단순 제거 후 반환
+            return text.replace("조회일시", "").replace(":", "").strip()
+    except:
+        pass
+    return ""
+
 def extract_movie_data(row):
     """HTML 행(tr)에서 데이터 추출"""
     cols = row.find_all("td")
@@ -91,7 +111,6 @@ def fetch_kobis_smartly():
     # [1차 시도] Pattern A: 고정 페이로드 (Fixed)
     # ---------------------------------------------------------
     try:
-        # GET으로 토큰 확보
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         soup_visit = BeautifulSoup(visit.text, 'html.parser')
         token_input = soup_visit.find('input', {'name': 'CSRFToken'})
@@ -104,68 +123,52 @@ def fetch_kobis_smartly():
             'totIssuAmtRatioOrder': '', 'totIssuAmtOrder': '', 'addTotIssuAmtOrder': '',
             'totIssuCntOrder': '', 'totIssuCntRatioOrder': '', 'addTotIssuCntOrder': '',
             'dmlMode': 'search', 
-            'allMovieYn': 'Y',  # 전체 조회
+            'allMovieYn': 'Y',
             'sMultiChk': ''
         }
 
         resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_fixed, timeout=20)
         resp.encoding = 'utf-8'
 
-        # 검증: 데이터가 들어있는지 확인 (행 개수 > 2)
         soup = BeautifulSoup(resp.text, 'html.parser')
         rows = soup.find_all("tr")
         
         if len(rows) > 2:
-            print("[KOBIS] Pattern A (Fixed) Success")
             return resp, payload_fixed
         else:
-            print("[KOBIS] Pattern A Failed (No Data), Switching to Pattern B...")
+            print("Pattern A Failed, switching...")
 
-    except Exception as e:
-        print(f"[KOBIS] Pattern A Error: {e}")
+    except Exception:
+        pass
 
     # ---------------------------------------------------------
-    # [2차 시도] Pattern B: 동적 페이로드 (Dynamic / Fallback)
+    # [2차 시도] Pattern B: 동적 페이로드 (Dynamic)
     # ---------------------------------------------------------
     try:
-        # 새 세션으로 시작 (깨끗한 상태)
         session = requests.Session()
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         soup_visit = BeautifulSoup(visit.text, 'html.parser')
         
         payload_dynamic = {}
-        
-        # 모든 Input 긁어오기
         for inp in soup_visit.find_all('input'):
             if inp.get('name'):
                 payload_dynamic[inp.get('name')] = inp.get('value', '')
         
-        # 모든 Select 긁어오기
         for sel in soup_visit.find_all('select'):
             name = sel.get('name')
             if not name: continue
             selected_opt = sel.find('option', selected=True)
-            if selected_opt:
-                payload_dynamic[name] = selected_opt.get('value', '')
-            else:
-                first_opt = sel.find('option')
-                payload_dynamic[name] = first_opt.get('value', '') if first_opt else ''
+            val = selected_opt.get('value', '') if selected_opt else (sel.find('option').get('value', '') if sel.find('option') else '')
+            payload_dynamic[name] = val
 
-        # 필수값 강제 덮어쓰기
-        payload_dynamic.update({
-            'dmlMode': 'search',
-            'allMovieYn': 'Y',
-            'sMultiChk': ''
-        })
+        payload_dynamic.update({'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''})
 
         resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_dynamic, timeout=20)
         resp.encoding = 'utf-8'
-        
-        print("[KOBIS] Pattern B (Dynamic) Executed")
         return resp, payload_dynamic
 
     except Exception as e:
-        print(f"[KOBIS] Pattern B Error: {e}")
+        print(f"Fetch Error: {e}")
         return None, None
 
 
@@ -181,18 +184,17 @@ def get_realtime_reservation(
         resp, sent_payload = fetch_kobis_smartly()
 
         if not resp or resp.status_code != 200:
-            return {"found": False, "debug_error": "KOBIS 서버 접속 실패 (All Patterns Failed)"}
+            return {"found": False, "debug_error": "KOBIS 서버 접속 실패"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
-        all_rows = soup.find_all("tr")
         
-        # 데이터 없음 체크
+        # [NEW] 조회일시 추출
+        crawled_time = extract_crawl_time(soup)
+        
+        all_rows = soup.find_all("tr")
         if len(all_rows) <= 2:
              msg = all_rows[1].get_text(strip=True) if len(all_rows) > 1 else "내용 없음"
-             return {
-                 "found": False, 
-                 "debug_error": f"데이터 로드 실패.\n서버메시지: {msg}\n(시도된 Payload: {'Dynamic' if 'allMovieYn' in sent_payload else 'Fixed'})"
-             }
+             return {"found": False, "debug_error": f"데이터 로드 실패: {msg}"}
 
         debug_list = []
         target_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
@@ -204,18 +206,29 @@ def get_realtime_reservation(
             if len(debug_list) < 10:
                 debug_list.append(f"{data['title']}({data['movieCd']})")
 
-            # 1순위: ID 매칭
+            # 1. ID 매칭
             if movieCd and data['movieCd'] == movieCd:
-                return {"found": True, "method": "ID_MATCH", "data": data}
+                return {
+                    "found": True, 
+                    "method": "ID_MATCH", 
+                    "crawledTime": crawled_time, # 결과에 포함
+                    "data": data
+                }
 
-            # 2순위: 이름 매칭
+            # 2. 이름 매칭
             row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
             if target_norm in row_norm or row_norm in target_norm:
-                 return {"found": True, "method": "NAME_MATCH", "data": data}
+                 return {
+                     "found": True, 
+                     "method": "NAME_MATCH", 
+                     "crawledTime": crawled_time, # 결과에 포함
+                     "data": data
+                 }
 
         return {
             "found": False, 
-            "debug_error": f"매칭 실패 (ID:{movieCd}).\n목록(상위10): {', '.join(debug_list)}..."
+            "crawledTime": crawled_time,
+            "debug_error": f"매칭 실패. 목록(상위10): {', '.join(debug_list)}..."
         }
 
     except Exception as e:
@@ -229,7 +242,8 @@ def get_composite_boxoffice():
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
     
     boxoffice_data = []
-    realtime_map = {} 
+    realtime_map = {}
+    crawled_time = "" # 기본값
 
     # (1) KOBIS API
     try:
@@ -239,27 +253,29 @@ def get_composite_boxoffice():
     except Exception as e:
         print(f"API Error: {e}")
 
-    # (2) KOBIS 크롤링 (Hybrid)
+    # (2) KOBIS Crawling
     try:
         resp, _ = fetch_kobis_smartly()
         
         if resp and resp.status_code == 200:
             soup = BeautifulSoup(resp.text, 'html.parser')
+            
+            # [NEW] 조회일시 추출
+            crawled_time = extract_crawl_time(soup)
+            
             rows = soup.find_all("tr")
-
             for row in rows:
                 data = extract_movie_data(row)
                 if data:
                     if data['movieCd']:
                         realtime_map[data['movieCd']] = data
-                    
                     norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
                     if norm and norm not in realtime_map:
                         realtime_map[norm] = data
     except Exception as e:
         print(f"Crawling Error: {e}")
 
-    # (3) 데이터 병합
+    # (3) Merge
     merged_list = []
     for movie in boxoffice_data:
         target_cd = movie['movieCd']
@@ -273,7 +289,12 @@ def get_composite_boxoffice():
         item["realtime"] = match
         merged_list.append(item)
 
-    return {"status": "ok", "targetDt": yesterday, "data": merged_list}
+    return {
+        "status": "ok", 
+        "targetDt": yesterday, 
+        "crawledTime": crawled_time, # 전체 응답에 시간 포함
+        "data": merged_list
+    }
 
 # -----------------------------------------------------------------------------
 # 3. Proxy Functions
