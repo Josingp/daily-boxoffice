@@ -49,10 +49,9 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       ]);
       setMovieDetail(info);
 
-      // [뉴스 로드] 영화 이름으로 검색
+      // [뉴스 로드]
       fetchMovieNews(movie.movieNm).then(items => {
           if (items.length === 0) {
-              // 실패 시 '영화' 붙여서 재시도
               fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
           } else {
               setNewsList(items);
@@ -198,15 +197,17 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm">
               <Newspaper size={16} className="text-blue-500"/> 
-              관련 최신 기사
+              관련 최신 기사 (네이버)
             </div>
             <div className="space-y-3">
               {newsList.map((news, idx) => (
                 <a key={idx} href={news.link} target="_blank" rel="noopener noreferrer" className="block group">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">{news.title}</h4>
-                      <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-snug">{news.desc}</p>
+                      <h4 className="text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors"
+                          dangerouslySetInnerHTML={{ __html: news.title }} />
+                      <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-snug"
+                         dangerouslySetInnerHTML={{ __html: news.desc }} />
                       <span className="text-[10px] text-slate-400 mt-1.5 block">{news.press}</span>
                     </div>
                     <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 shrink-0 mt-1 ml-2" />
