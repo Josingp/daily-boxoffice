@@ -1,6 +1,7 @@
 import os
 import requests
 import re
+import unicodedata
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup 
@@ -29,10 +30,15 @@ KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealT
 
 def normalize_string(s: str) -> str:
     """
-    문자열 정규화: 공백 제거 및 소문자 변환
-    예: '만약에 우리' -> '만약에우리'
+    [강력한 정규화 함수]
+    1. None 체크
+    2. 유니코드 정규화 (NFC): 자모 분리 현상 해결 (Mac/Web 호환성)
+    3. 특수문자/공백 제거 및 소문자 변환
     """
     if not s: return ""
+    # 1. 유니코드 정규화 (글자 깨짐/분리 방지)
+    s = unicodedata.normalize('NFC', s)
+    # 2. 한글, 영문, 숫자만 남기고 모두 제거
     return re.sub(r'[^0-9a-zA-Z가-힣]', '', s).lower()
 
 @app.get("/")
@@ -40,7 +46,7 @@ def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
 # -----------------------------------------------------------------------------
-# 1. [상세 화면용] 실시간 예매율 개별 검색 (수정됨: 인코딩 문제 해결)
+# 1. [상세 화면용] 실시간 예매율 개별 검색 (매칭 로직 대폭 강화)
 # -----------------------------------------------------------------------------
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(..., description="Movie name")):
@@ -54,21 +60,20 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
         data = {'dmlMode': 'search'} 
         
         resp = requests.post(url, headers=headers, data=data, timeout=15)
-        
-        # [핵심 수정] 한글 깨짐 방지를 위해 인코딩 강제 설정
-        resp.encoding = 'utf-8'
+        resp.encoding = 'utf-8' # 한글 강제 설정
         
         if resp.status_code != 200:
             return {"found": False, "debug_error": f"HTTP {resp.status_code}"}
 
         soup = BeautifulSoup(resp.text, 'html.parser')
-        rows = soup.find_all("tr")
         
+        # [수정] tbody 안의 tr만 정확하게 타겟팅
+        rows = soup.select("tbody tr")
         if not rows:
-             return {"found": False, "debug_error": "HTML 테이블(tr)을 찾을 수 없습니다."}
+             rows = soup.find_all("tr") # fallback
 
         target_norm = normalize_string(movieName)
-        crawled_list = [] 
+        debug_list = [] # 디버깅용 로그
 
         for row in rows:
             cols = row.find_all("td")
@@ -81,12 +86,15 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
             else:
                 title_text = cols[1].get_text(strip=True)
             
-            # 디버깅용 리스트에 추가 (상위 15개)
-            if len(crawled_list) < 15:
-                crawled_list.append(title_text)
+            # 비교용 정규화 제목
+            row_norm = normalize_string(title_text)
             
-            # 비교 로직 (정규화 후 비교)
-            if normalize_string(title_text) == target_norm:
+            # 디버깅 리스트에 추가 (상위 20개만)
+            if len(debug_list) < 20:
+                debug_list.append(f"{title_text}({row_norm})")
+
+            # [핵심 수정] 포함 관계 비교 ('만약에우리' in '만약에우리2025' 등 유연하게)
+            if target_norm in row_norm or row_norm in target_norm:
                 return {
                     "found": True,
                     "data": {
@@ -100,18 +108,18 @@ def get_realtime_reservation(movieName: str = Query(..., description="Movie name
                     }
                 }
         
-        # 못 찾았을 경우 읽은 목록 반환 (디버깅용)
-        log_msg = ", ".join(crawled_list) 
+        # 못 찾았을 때 상세 디버그 정보 반환
+        log_msg = "\n".join(debug_list)
         return {
             "found": False, 
-            "debug_error": f"'{movieName}' 미발견.\n[읽은 목록(상위15)]: {log_msg}..."
+            "debug_error": f"찾는 제목: '{movieName}' -> 정규화: '{target_norm}'\n[크롤링된 목록(원본/정규화)]:\n{log_msg}"
         }
         
     except Exception as e:
         return {"found": False, "debug_error": f"Server Error: {str(e)}"}
 
 # -----------------------------------------------------------------------------
-# 2. [전체 목록용] 박스오피스 + 실시간 예매율 결합 (수정됨: 인코딩 문제 해결)
+# 2. [전체 목록용] 박스오피스 + 실시간 예매율 결합
 # -----------------------------------------------------------------------------
 @app.get("/api/composite")
 def get_composite_boxoffice():
@@ -140,9 +148,7 @@ def get_composite_boxoffice():
         }
         data = {'dmlMode': 'search'}
         resp = requests.post(KOBIS_REALTIME_URL, headers=headers, data=data, timeout=10)
-        
-        # [핵심 수정] 인코딩 강제 설정
-        resp.encoding = 'utf-8'
+        resp.encoding = 'utf-8' # 한글 강제 설정
 
         if resp.status_code == 200:
             soup = BeautifulSoup(resp.text, 'html.parser')
@@ -157,6 +163,7 @@ def get_composite_boxoffice():
                 else:
                     title_text = cols[1].get_text(strip=True)
                 
+                # 유니코드 정규화 적용
                 norm_title = normalize_string(title_text)
                 
                 realtime_map[norm_title] = {
@@ -172,7 +179,18 @@ def get_composite_boxoffice():
     merged_list = []
     for movie in boxoffice_data:
         norm_title = normalize_string(movie['movieNm'])
-        match = realtime_map.get(norm_title)
+        # 포함 관계 체크 (정확도 향상을 위해 양방향 체크)
+        match = None
+        
+        # 1차 시도: 정확한 키 매칭
+        if norm_title in realtime_map:
+            match = realtime_map[norm_title]
+        else:
+            # 2차 시도: 유사 매칭 (Loop search)
+            for k, v in realtime_map.items():
+                if norm_title in k or k in norm_title:
+                    match = v
+                    break
         
         item = movie.copy()
         item["realtime"] = match if match else None
@@ -181,7 +199,7 @@ def get_composite_boxoffice():
     return {"status": "ok", "targetDt": yesterday, "data": merged_list}
 
 # -----------------------------------------------------------------------------
-# 3. KOBIS API Proxies (유지)
+# 3. KOBIS API Proxies
 # -----------------------------------------------------------------------------
 @app.get("/kobis/daily")
 def get_daily(targetDt: str):
