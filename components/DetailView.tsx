@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult, ReservationData } from '../types';
-import { formatNumber } from '../constants'; // formatKoreanNumber 제거
+import { formatNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
@@ -40,15 +40,49 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setResError(null);
 
     try {
-      const trend = await fetchMovieTrend(movie.movieCd, targetDate);
-      const info = await fetchMovieDetail(movie.movieCd);
-      setTrendData(trend);
+      // 1. 과거 데이터 및 상세정보 병렬 호출
+      const [trend, info] = await Promise.all([
+        fetchMovieTrend(movie.movieCd, targetDate),
+        fetchMovieDetail(movie.movieCd)
+      ]);
+      
       setMovieDetail(info);
+
+      // 2. 실시간 데이터 호출
+      let updatedTrend = [...trend];
+      let comparisonInfo = null;
 
       try {
         const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
+        
         if (resResult && resResult.data) {
-          setReservation(resResult.data);
+          const resData = resResult.data;
+          setReservation(resData);
+
+          // [핵심] 실시간 데이터를 '오늘' 데이터로 추가
+          const todayAudi = parseInt(resData.audiCnt.replace(/,/g, ''), 10) || 0;
+          const todayDate = new Date().toISOString().slice(0,10).replace(/-/g,"");
+          
+          updatedTrend.push({
+            date: todayDate,
+            dateDisplay: '오늘', // 차트에 표시될 라벨
+            audiCnt: todayAudi,
+            scrnCnt: 0
+          });
+
+          // [핵심] 전일 대비 증감 계산
+          if (trend.length > 0) {
+            const yesterdayAudi = trend[trend.length - 1].audiCnt;
+            const diff = todayAudi - yesterdayAudi;
+            const rate = yesterdayAudi > 0 ? ((diff / yesterdayAudi) * 100).toFixed(1) : "0";
+            
+            comparisonInfo = {
+                today: todayAudi,
+                yesterday: yesterdayAudi,
+                diff: diff,
+                rate: rate
+            };
+          }
         } else {
           setReservation(null);
           setResError(resResult?.error || "데이터 없음");
@@ -58,11 +92,19 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
         setResError("예매 정보 로드 중 에러");
       }
       
+      setTrendData(updatedTrend); // 차트에 반영
       setLoading(false);
 
-      if (trend.length > 0 && info) {
+      // 3. AI 분석 요청 (비교 데이터 포함)
+      if (updatedTrend.length > 0 && info) {
         try {
-          const pred = await predictMoviePerformance(movie.movieNm, trend, info, movie.audiAcc);
+          const pred = await predictMoviePerformance(
+            movie.movieNm, 
+            updatedTrend, 
+            info, 
+            movie.audiAcc, 
+            comparisonInfo // 비교 데이터 전달
+          );
           setPrediction(pred);
         } catch (err) {
           console.error("AI Error:", err);
@@ -134,9 +176,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
               <div className="flex items-center gap-1 text-[10px] bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full text-indigo-100">
                 <RefreshCw size={10} />
                 <span>
-                  {reservation.crawledTime 
-                    ? `${reservation.crawledTime} 기준` 
-                    : '실시간'}
+                  {reservation.crawledTime ? `${reservation.crawledTime} 기준` : '실시간'}
                 </span>
               </div>
             </div>
@@ -156,12 +196,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
               </div>
               <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">예매 매출액</p>
-                {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
                 <p className="font-medium text-sm text-indigo-100">{formatNumber(safeNum(reservation.salesAmt))}원</p>
               </div>
                <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">누적 매출액</p>
-                {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
                 <p className="font-medium text-sm text-indigo-100">{formatNumber(safeNum(reservation.salesAcc))}원</p>
               </div>
             </div>
@@ -202,9 +240,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-slate-500"><DollarSign size={16} /><span className="text-xs font-semibold">일일 매출액</span></div>
-            {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
             <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.salesAmt)}원</div>
-             {/* [수정] Math.floor 제거 -> 데이터 그대로 사용 */}
              <div className="mt-1">{getChangeElement(movie.salesInten)}</div>
           </div>
         </div>
