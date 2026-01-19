@@ -46,7 +46,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setMovieDetail(info);
 
       try {
-        const resResult = await fetchRealtimeReservation(movie.movieNm);
+        const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
         if (resResult && resResult.data) {
           setReservation(resResult.data);
         } else {
