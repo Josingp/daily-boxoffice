@@ -4,7 +4,11 @@ import { formatNumber } from '../constants';
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, Ticket, RefreshCw, AlertTriangle, ExternalLink, Newspaper } from 'lucide-react';
+
+interface ExtendedPredictionResult extends PredictionResult {
+  searchKeywords?: string[];
+}
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -16,7 +20,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
   const [isVisible, setIsVisible] = useState(false);
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
-  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [prediction, setPrediction] = useState<ExtendedPredictionResult | null>(null);
   const [reservation, setReservation] = useState<ReservationData | null>(null);
   const [resError, setResError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -40,7 +44,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
     setResError(null);
 
     try {
-      // 1. 과거 데이터 및 상세정보 병렬 호출
       const [trend, info] = await Promise.all([
         fetchMovieTrend(movie.movieCd, targetDate),
         fetchMovieDetail(movie.movieCd)
@@ -48,29 +51,25 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       
       setMovieDetail(info);
 
-      // 2. 실시간 데이터 호출
       let updatedTrend = [...trend];
       let comparisonInfo = null;
 
       try {
         const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
-        
         if (resResult && resResult.data) {
           const resData = resResult.data;
           setReservation(resData);
 
-          // [핵심] 실시간 데이터를 '오늘' 데이터로 추가
           const todayAudi = parseInt(resData.audiCnt.replace(/,/g, ''), 10) || 0;
           const todayDate = new Date().toISOString().slice(0,10).replace(/-/g,"");
           
           updatedTrend.push({
             date: todayDate,
-            dateDisplay: '오늘', // 차트에 표시될 라벨
+            dateDisplay: '오늘',
             audiCnt: todayAudi,
             scrnCnt: 0
           });
 
-          // [핵심] 전일 대비 증감 계산
           if (trend.length > 0) {
             const yesterdayAudi = trend[trend.length - 1].audiCnt;
             const diff = todayAudi - yesterdayAudi;
@@ -92,10 +91,9 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
         setResError("예매 정보 로드 중 에러");
       }
       
-      setTrendData(updatedTrend); // 차트에 반영
+      setTrendData(updatedTrend);
       setLoading(false);
 
-      // 3. AI 분석 요청 (비교 데이터 포함)
       if (updatedTrend.length > 0 && info) {
         try {
           const pred = await predictMoviePerformance(
@@ -103,7 +101,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
             updatedTrend, 
             info, 
             movie.audiAcc, 
-            comparisonInfo // 비교 데이터 전달
+            comparisonInfo
           );
           setPrediction(pred);
         } catch (err) {
@@ -128,6 +126,22 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       navigator.clipboard.writeText(text);
       alert('복사되었습니다.');
     }
+  };
+
+  // 뉴스 검색 링크 열기
+  const openNewsSearch = (engine: 'naver' | 'google') => {
+    if (!movie) return;
+    // AI가 추천한 키워드가 있으면 사용, 없으면 영화 제목 사용
+    const keyword = prediction?.searchKeywords?.[0] || movie.movieNm;
+    const query = encodeURIComponent(`${keyword} 영화 반응 흥행`);
+    
+    let url = '';
+    if (engine === 'naver') {
+      url = `https://search.naver.com/search.naver?where=news&query=${query}`;
+    } else {
+      url = `https://www.google.com/search?q=${query}&tbm=nws`;
+    }
+    window.open(url, '_blank');
   };
 
   const getChangeElement = (val: string) => {
@@ -254,9 +268,25 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
               <Sparkles size={16} className="text-purple-600"/> 
               AI 데이터 분석 리포트
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep">
+            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep mb-4">
               {prediction.analysisText}
             </p>
+            
+            {/* [NEW] 관련 기사 버튼 */}
+            <div className="flex gap-2 pt-2 border-t border-slate-100">
+                <button 
+                  onClick={() => openNewsSearch('naver')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#03C75A] text-white rounded-lg text-xs font-bold hover:bg-[#02b351] transition-colors"
+                >
+                  <Newspaper size={14} /> 네이버 뉴스
+                </button>
+                <button 
+                  onClick={() => openNewsSearch('google')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600 transition-colors"
+                >
+                  <ExternalLink size={14} /> 구글 뉴스
+                </button>
+            </div>
           </div>
         )}
       </div>
