@@ -19,8 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# [보안 & 안전장치] 환경 변수 로드 및 공백 제거
-# 실수로 복사된 공백이 있어도 자동으로 잘라냅니다.
+# [환경변수 로드]
 def get_env_var(key):
     val = os.environ.get(key)
     return val.strip() if val else None
@@ -29,7 +28,7 @@ KOBIS_API_KEY = get_env_var("KOBIS_API_KEY")
 NAVER_CLIENT_ID = get_env_var("NAVER_CLIENT_ID")
 NAVER_CLIENT_SECRET = get_env_var("NAVER_CLIENT_SECRET")
 
-# URL 정의
+# URL 상수
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
 KOBIS_WEEKLY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
 KOBIS_MOVIE_INFO_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
@@ -42,6 +41,7 @@ MOVIE_CD_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)
 def read_root():
     return {"status": "ok", "service": "BoxOffice Pro Backend"}
 
+# [헬퍼 함수]
 def extract_crawl_time(soup):
     try:
         full_text = soup.get_text()
@@ -70,113 +70,44 @@ def extract_movie_data(row):
         "audiAcc": clean_num(cols[7].get_text(strip=True))
     }
 
-def get_base_headers():
-    return {
+def fetch_kobis_smartly():
+    # 간단 크롤링 (세션/헤더 설정)
+    session = requests.Session()
+    headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
-        'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
-        'Origin': 'https://www.kobis.or.kr',
+        'Referer': 'https://www.kobis.or.kr/',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-
-def fetch_kobis_smartly():
-    session = requests.Session()
-    headers = get_base_headers()
     try:
-        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
-        soup_visit = BeautifulSoup(visit.text, 'html.parser')
-        token = soup_visit.find('input', {'name': 'CSRFToken'})
-        csrf = token.get('value', '') if token else ''
-        payload_fixed = {
-            'CSRFToken': csrf, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''
-        }
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload_fixed, timeout=20)
-        resp.encoding = 'utf-8'
-        if len(BeautifulSoup(resp.text, 'html.parser').find_all("tr")) > 2:
-            return resp, payload_fixed
-    except: pass
-    try:
-        session = requests.Session()
-        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
-        soup = BeautifulSoup(visit.text, 'html.parser')
-        payload = {}
-        for inp in soup.find_all('input'):
-            if inp.get('name'): payload[inp.get('name')] = inp.get('value', '')
-        for sel in soup.find_all('select'):
-            if sel.get('name'):
-                opt = sel.find('option', selected=True) or sel.find('option')
-                payload[sel.get('name')] = opt.get('value', '') if opt else ''
-        payload.update({'dmlMode': 'search', 'allMovieYn': 'Y'})
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=20)
-        resp.encoding = 'utf-8'
-        return resp, payload
+        data = {'dmlMode': 'search', 'allMovieYn': 'Y'}
+        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=data, timeout=10)
+        return resp, data
     except: return None, None
 
-# [API] 네이버 뉴스 (안전장치 적용)
+# [API 1] 네이버 뉴스
 @app.get("/api/news")
 def get_movie_news(keyword: str = Query(...)):
-    # 키 존재 여부 확인
     if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
-        return {
-            "status": "error", 
-            "message": "Server Config Error: Naver API Keys missing in Vercel Env."
-        }
-
+        return {"status": "error", "message": "API Key Config Missing"}
     try:
         url = "https://openapi.naver.com/v1/search/news.json"
-        
-        headers = {
-            "X-Naver-Client-Id": NAVER_CLIENT_ID,
-            "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-        }
-        
+        headers = {"X-Naver-Client-Id": NAVER_CLIENT_ID, "X-Naver-Client-Secret": NAVER_CLIENT_SECRET}
         # 검색어 보정
         query_str = keyword if "영화" in keyword else f"{keyword} 영화"
+        resp = requests.get(url, headers=headers, params={"query": query_str, "display": 5, "sort": "sim"}, timeout=5)
         
-        params = {
-            "query": query_str,
-            "display": 5,
-            "sort": "sim"
-        }
+        if resp.status_code != 200: return {"status": "error", "message": f"Naver Error: {resp.status_code}"}
         
-        resp = requests.get(url, headers=headers, params=params, timeout=5)
-        
-        # 401 에러 상세 처리
-        if resp.status_code == 401:
-            return {
-                "status": "error", 
-                "message": "Naver API Error: 401 Unauthorized. (Check Client ID/Secret in Vercel Env)"
-            }
-        
-        if resp.status_code != 200:
-            return {"status": "error", "message": f"Naver API Error: {resp.status_code}"}
-            
-        data = resp.json()
-        news_list = []
-        
-        for item in data.get('items', []):
+        items = []
+        for item in resp.json().get('items', []):
             clean_title = re.sub(r'<[^>]+>', '', item['title']).replace("&quot;", '"').replace("&apos;", "'")
             clean_desc = re.sub(r'<[^>]+>', '', item['description']).replace("&quot;", '"').replace("&apos;", "'")
-            
-            pub_date_str = ""
-            try:
-                dt = datetime.strptime(item.get('pubDate', ''), "%a, %d %b %Y %H:%M:%S %z")
-                pub_date_str = dt.strftime("%Y-%m-%d %H:%M")
-            except:
-                pub_date_str = item.get('pubDate', '')[:16]
+            pub = item.get('pubDate', '')[:16]
+            items.append({"title": clean_title, "link": item['originallink'] or item['link'], "desc": clean_desc, "press": pub})
+        return {"status": "ok", "items": items}
+    except Exception as e: return {"status": "error", "message": str(e)}
 
-            news_list.append({
-                "title": clean_title,
-                "link": item['originallink'] or item['link'],
-                "desc": clean_desc,
-                "thumb": None, 
-                "press": pub_date_str 
-            })
-            
-        return {"status": "ok", "items": news_list}
-        
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
+# [API 2] 실시간 랭킹 (Fallback용)
 @app.get("/api/realtime")
 def get_realtime_ranking():
     try:
@@ -191,6 +122,7 @@ def get_realtime_ranking():
         return {"status": "ok", "crawledTime": crawled_time, "data": data_list}
     except Exception as e: return {"status": "error", "message": str(e)}
 
+# [API 3] 예약 상세 (Fallback용)
 @app.get("/api/reservation")
 def get_realtime_reservation(movieName: str = Query(...), movieCd: str = Query(None)):
     try:
@@ -208,15 +140,11 @@ def get_realtime_reservation(movieName: str = Query(...), movieCd: str = Query(N
         return {"found": False}
     except: return {"found": False}
 
+# [API 4] KOBIS Proxy (일별, 상세, 트렌드)
 @app.get("/kobis/daily")
 def get_daily(targetDt: str):
     if not KOBIS_API_KEY: return {"error": "API Key Missing"}
     return requests.get(f"{KOBIS_DAILY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}").json()
-
-@app.get("/kobis/weekly")
-def get_weekly(targetDt: str, weekGb="1"):
-    if not KOBIS_API_KEY: return {"error": "API Key Missing"}
-    return requests.get(f"{KOBIS_WEEKLY_URL}?key={KOBIS_API_KEY}&targetDt={targetDt}&weekGb={weekGb}").json()
 
 @app.get("/kobis/detail")
 def get_detail(movieCd: str):
