@@ -1,21 +1,21 @@
 import { TrendDataPoint, MovieInfo, PredictionResult } from "../types";
 
-// [수정] Vercel 백엔드(/predict)로 요청을 보냅니다.
 export const predictMoviePerformance = async (
   movieName: string,
   trendData: TrendDataPoint[],
   movieInfo?: MovieInfo | null,
-  currentAudiAcc: string = "0"
+  currentAudiAcc: string = "0",
+  comparison?: { today: number; yesterday: number; diff: number; rate: string } | null
 ): Promise<PredictionResult | null> => {
   
   if (!movieInfo) return null;
 
   try {
-    // 422 에러 해결: backend의 Pydantic 모델과 필드를 정확히 일치시켜야 함
     const payload = {
       movieName: movieName,
       trendData: trendData.map(d => ({
         date: d.date,
+        dateDisplay: d.dateDisplay, // [추가] 오늘/날짜 표시용
         audiCnt: d.audiCnt,
         scrnCnt: d.scrnCnt || 0
       })),
@@ -25,11 +25,10 @@ export const predictMoviePerformance = async (
         genres: movieInfo.genres.map(g => g.genreNm),
         audiAcc: currentAudiAcc.replace(/,/g, '')
       },
-      // [!!!중요!!!] 이 줄이 빠져서 422 에러가 났던 것입니다. 꼭 넣어주세요.
-      currentAudiAcc: currentAudiAcc.replace(/,/g, '') 
+      currentAudiAcc: currentAudiAcc.replace(/,/g, ''),
+      comparison: comparison // [NEW] 전일 대비 증감 데이터 전달
     };
 
-    // 백엔드로 POST 요청
     const response = await fetch("/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
