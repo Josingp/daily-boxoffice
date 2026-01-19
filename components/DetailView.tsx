@@ -46,6 +46,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setMovieDetail(info);
 
       try {
+        // [수정] movieCd를 함께 전달하여 정확한 매칭 유도
         const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
         if (resResult && resResult.data) {
           setReservation(resResult.data);
@@ -131,9 +132,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
                 <Ticket size={18} className="text-indigo-200" />
                 <span className="font-bold text-sm tracking-wide">KOBIS 실시간 예매</span>
               </div>
+              {/* [수정] 시간을 표시하는 부분 */}
               <div className="flex items-center gap-1 text-[10px] bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full text-indigo-100">
                 <RefreshCw size={10} />
-                <span>실시간</span>
+                <span>
+                  {reservation.crawledTime 
+                    ? `${reservation.crawledTime} 기준` 
+                    : '실시간'}
+                </span>
               </div>
             </div>
 
