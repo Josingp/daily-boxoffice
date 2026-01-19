@@ -1,24 +1,24 @@
-import { KobisResponse, TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
+import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
-// [공통] 하이브리드 로딩 (JSON 파일 -> API)
+// [핵심] JSON 파일 우선 -> 실패 시 실시간 API 호출
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
   transformFn?: (json: any) => T
 ): Promise<T | null> => {
   try {
-    // 1. JSON 파일 시도
+    // 1. JSON 파일 시도 (캐시 방지)
     const jsonRes = await fetch(`${jsonUrl}?t=${Date.now()}`);
     if (jsonRes.ok) {
       const data = await jsonRes.json();
       return transformFn ? transformFn(data) : data;
     }
   } catch (e) {
-    console.warn(`File load failed: ${jsonUrl}`);
+    console.warn(`File not found: ${jsonUrl}, trying API...`);
   }
 
   try {
-    // 2. API 시도
+    // 2. API 시도 (첫 실행이거나 파일 없을 때)
     const apiRes = await fetch(apiUrl);
     if (!apiRes.ok) throw new Error('API Error');
     return await apiRes.json();
@@ -27,10 +27,9 @@ const fetchWithFallback = async <T>(
   }
 };
 
-// [수정] 파일명: daily.json
 export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
   const data = await fetchWithFallback(
-    '/daily.json', 
+    '/daily_data.json',
     `/kobis/daily?targetDt=${targetDt}`,
     (json) => {
       if (json.movies) return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
@@ -40,15 +39,15 @@ export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
   return data || { boxOfficeResult: { dailyBoxOfficeList: [] } };
 };
 
-// [수정] 파일명: realtime.json
 export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], crawledTime: string }> => {
   const result = await fetchWithFallback(
-    '/realtime.json', 
+    '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      if (json.status === 'ok') return json; // API 응답인 경우
+      // API 응답 구조인 경우
+      if (json.status === 'ok') return json;
 
-      // JSON 파일(History)인 경우 최신값 추출
+      // History 파일 구조인 경우 (최신값 추출)
       if (!json || Object.keys(json).length === 0) return null;
       
       const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
@@ -74,29 +73,25 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
   return (result && result.status === 'ok') ? result : { data: [], crawledTime: "" };
 };
 
-// ... (fetchMovieNews, fetchMovieDetail 등 기존 유지) ...
+// ... (뉴스, 상세정보 등 기존 유지)
 export const fetchMovieNews = async (keyword: string): Promise<NewsItem[]> => {
   try {
     const res = await fetch(`/api/news?keyword=${encodeURIComponent(keyword)}`);
-    if (!res.ok) return [];
-    const json = await res.json();
-    return json.status === 'ok' ? json.items : [];
+    return res.ok ? (await res.json()).items : [];
   } catch { return []; }
 };
 
 export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | null> => {
   try {
     const res = await fetch(`/kobis/detail?movieCd=${movieCd}`);
-    const data = await res.json();
-    return data.movieInfoResult.movieInfo;
+    return (await res.json()).movieInfoResult.movieInfo;
   } catch { return null; }
 };
 
 export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
   try {
     const res = await fetch(`/kobis/trend?movieCd=${movieCd}&endDate=${endDateStr}`);
-    if (!res.ok) return [];
-    return await res.json();
+    return res.ok ? await res.json() : [];
   } catch { return []; }
 };
 
