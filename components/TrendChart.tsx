@@ -1,12 +1,11 @@
 import React, { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ReferenceLine } from 'recharts';
-import { TrendDataPoint, PredictionResult, MovieInfo } from '../types';
+import { TrendDataPoint, PredictionResult } from '../types';
 
 interface TrendChartProps {
   data: TrendDataPoint[];
   loading: boolean;
   prediction?: PredictionResult | null;
-  movieInfo?: MovieInfo | null;
 }
 
 const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) => {
@@ -14,28 +13,24 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
   const chartData = useMemo(() => {
     if (!data.length) return [];
 
-    // 1. 과거 데이터
-    const baseData = data.map((item) => ({
+    // [핵심] "오늘"을 기준으로 그래프 중심을 맞추기 위해
+    // 과거 데이터 중 최근 7일치만 잘라서 보여줌
+    const recentData = data.slice(-8).map((item) => ({
       ...item,
       predictCnt: null as number | null,
       isFuture: false,
+      isToday: item.dateDisplay === '오늘' // 오늘 여부 플래그
     }));
 
-    if (!prediction || !prediction.predictionSeries) return baseData;
+    if (!prediction || !prediction.predictionSeries) return recentData;
 
-    // 2. 미래 예측 데이터
-    const lastDateStr = data[data.length - 1].date;
+    // 미래 예측 데이터 생성
     const futureData = [];
-    
-    const lastDate = new Date(
-      parseInt(lastDateStr.substring(0, 4)),
-      parseInt(lastDateStr.substring(4, 6)) - 1,
-      parseInt(lastDateStr.substring(6, 8))
-    );
+    const today = new Date(); // 오늘부터 시작
 
     for (let i = 0; i < prediction.predictionSeries.length; i++) {
-      const nextDate = new Date(lastDate);
-      nextDate.setDate(lastDate.getDate() + (i + 1));
+      const nextDate = new Date(today);
+      nextDate.setDate(today.getDate() + (i + 1));
       
       const m = (nextDate.getMonth() + 1).toString().padStart(2, '0');
       const d = nextDate.getDate().toString().padStart(2, '0');
@@ -47,10 +42,12 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
         scrnCnt: 0,
         predictCnt: prediction.predictionSeries[i],
         isFuture: true,
+        isToday: false
       });
     }
 
-    return [...baseData, ...futureData];
+    // 과거(7일) + 오늘 + 미래(3일) 연결
+    return [...recentData, ...futureData];
   }, [data, prediction]);
 
   if (loading) {
@@ -72,9 +69,8 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
   return (
     <div className="w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm mt-4">
       <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-        📊 관객수 추이 및 예측
+        📊 관객수 추이 및 예측 (Today 중심)
       </h3>
-      {/* [수정] style 속성을 사용하여 높이를 명시적으로 지정 (Recharts 에러 방지) */}
       <div style={{ width: '100%', height: '220px' }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -97,13 +93,13 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
             />
             <Tooltip 
               contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-              labelStyle={{ color: '#64748b', marginBottom: '4px', fontSize: '12px' }}
               formatter={(value: number, name: string) => {
                 if (value === null) return [];
                 const label = name === 'predictCnt' ? 'AI 예측' : '관객수';
                 return [`${value.toLocaleString()}명`, label];
               }}
             />
+            {/* 실제 데이터 영역 */}
             <Area 
               type="monotone" 
               dataKey="audiCnt" 
@@ -112,6 +108,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
               fillOpacity={1} 
               fill="url(#colorAudi)" 
             />
+            {/* 미래 예측 라인 */}
             {prediction && (
                <Line 
                 type="monotone" 
@@ -123,25 +120,11 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, loading, prediction }) =>
                 connectNulls
               />
             )}
-            {prediction && (
-              <ReferenceLine x={data[data.length - 1]?.dateDisplay} stroke="#cbd5e1" strokeDasharray="3 3" />
-            )}
+            {/* 오늘 날짜 표시선 */}
+            <ReferenceLine x="오늘" stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Today', fill: '#ef4444', fontSize: 10 }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      
-      {prediction && (
-        <div className="mt-3 flex justify-center gap-4 text-[10px] text-slate-500">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 bg-indigo-500/30 border border-indigo-500 rounded-sm"></div>
-            <span>실제 추이</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-4 h-0.5 bg-emerald-500 border-t-2 border-emerald-500 border-dashed"></div>
-            <span>AI 예측</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
