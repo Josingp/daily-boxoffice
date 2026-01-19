@@ -19,11 +19,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# [보안] Vercel 환경 변수에서 키를 가져옵니다.
-# 코드가 유출되어도 키는 안전합니다.
-KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
-NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
-NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
+# [보안 & 안전장치] 환경 변수 로드 및 공백 제거
+# 실수로 복사된 공백이 있어도 자동으로 잘라냅니다.
+def get_env_var(key):
+    val = os.environ.get(key)
+    return val.strip() if val else None
+
+KOBIS_API_KEY = get_env_var("KOBIS_API_KEY")
+NAVER_CLIENT_ID = get_env_var("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = get_env_var("NAVER_CLIENT_SECRET")
 
 # URL 정의
 KOBIS_DAILY_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
@@ -107,14 +111,14 @@ def fetch_kobis_smartly():
         return resp, payload
     except: return None, None
 
-# [NEW] 네이버 뉴스 검색 API (환경 변수 사용)
+# [API] 네이버 뉴스 (안전장치 적용)
 @app.get("/api/news")
 def get_movie_news(keyword: str = Query(...)):
-    # 키 누락 시 안전하게 에러 처리
+    # 키 존재 여부 확인
     if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
         return {
             "status": "error", 
-            "message": "Server Config Error: Naver API Keys missing."
+            "message": "Server Config Error: Naver API Keys missing in Vercel Env."
         }
 
     try:
@@ -125,7 +129,7 @@ def get_movie_news(keyword: str = Query(...)):
             "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
         }
         
-        # 검색어 보정 (정확도 향상)
+        # 검색어 보정
         query_str = keyword if "영화" in keyword else f"{keyword} 영화"
         
         params = {
@@ -136,6 +140,13 @@ def get_movie_news(keyword: str = Query(...)):
         
         resp = requests.get(url, headers=headers, params=params, timeout=5)
         
+        # 401 에러 상세 처리
+        if resp.status_code == 401:
+            return {
+                "status": "error", 
+                "message": "Naver API Error: 401 Unauthorized. (Check Client ID/Secret in Vercel Env)"
+            }
+        
         if resp.status_code != 200:
             return {"status": "error", "message": f"Naver API Error: {resp.status_code}"}
             
@@ -143,11 +154,9 @@ def get_movie_news(keyword: str = Query(...)):
         news_list = []
         
         for item in data.get('items', []):
-            # HTML 태그 제거
             clean_title = re.sub(r'<[^>]+>', '', item['title']).replace("&quot;", '"').replace("&apos;", "'")
             clean_desc = re.sub(r'<[^>]+>', '', item['description']).replace("&quot;", '"').replace("&apos;", "'")
             
-            # 날짜 포맷팅
             pub_date_str = ""
             try:
                 dt = datetime.strptime(item.get('pubDate', ''), "%a, %d %b %Y %H:%M:%S %z")
