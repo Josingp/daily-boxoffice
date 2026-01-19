@@ -35,60 +35,30 @@ export interface TrendDataPoint {
   dateDisplay: string;
   audiCnt: number;
   scrnCnt?: number;
-  similarCnt?: number;
-  predictCnt?: number;
 }
 
 export interface MovieInfo {
   movieCd: string;
   movieNm: string;
-  movieNmEn: string;
-  showTm: string;
   openDt: string;
-  prdtStatNm: string;
-  typeNm: string;
-  nations: { nationNm: string }[];
   genres: { genreNm: string }[];
-  directors: { peopleNm: string; peopleNmEn: string }[];
-  actors: { peopleNm: string; peopleNmEn: string }[];
-  audits: { watchGradeNm: string }[];
-  companys: { companyNm: string }[];
-}
-
-export interface MovieInfoResult {
-  movieInfo: MovieInfo;
+  directors: { peopleNm: string }[];
+  actors: { peopleNm: string }[];
 }
 
 export interface KobisMovieInfoResponse {
-  movieInfoResult: MovieInfoResult;
-}
-
-export interface SimilarMovieScenario {
-  name: string;
-  finalAudi: string;
-  similarityReason: string;
-  comparisonMetric: string;
-  matchType: 'OPTIMISTIC' | 'REALISTIC' | 'PESSIMISTIC';
+  movieInfoResult: {
+    movieInfo: MovieInfo;
+  };
 }
 
 export interface PredictionResult {
   analysisText: string;
-  predictedFinalAudi: {
-    min: number;
-    max: number;
-    avg: number;
-  };
-  logicFactors: {
-    decayFactor: string;
-    seasonalityScore: string;
-    momentum: string;
-  };
-  similarMovies: SimilarMovieScenario[];
-  similarMovieSeries: number[];
+  predictedFinalAudi: { min: number; max: number; avg: number };
   predictionSeries: number[];
 }
 
-// [수정됨] crawledTime 필드 추가
+// [수정] 시간 정보 포함
 export interface ReservationData {
   rank: string;
   title: string;
@@ -97,22 +67,17 @@ export interface ReservationData {
   salesAcc: string;
   audiCnt: string;
   audiAcc: string;
-  crawledTime?: string; // 예: "2026/01/19 10:52"
+  crawledTime?: string;
 }
-
-
-// ... (기존 DailyBoxOfficeList 등 유지) ...
 
 // [NEW] 실시간 랭킹용 인터페이스
 export interface RealtimeMovie {
   movieCd: string;
   rank: string;
-  title: string;     // 영화 제목
-  rate: string;      // 예매율 (예: "15.5%")
-  salesAmt: string;  // 예매 매출액
-  salesAcc: string;  // 누적 매출액
-  audiCnt: string;   // 예매 관객수
-  audiAcc: string;   // 누적 관객수
+  title: string;
+  rate: string;
+  salesAmt: string;
+  salesAcc: string;
+  audiCnt: string;
+  audiAcc: string;
 }
-
-// ... (나머지 타입들 유지) ...
