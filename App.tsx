@@ -29,13 +29,11 @@ const App: React.FC = () => {
 
       try {
         if (boxOfficeType === 'DAILY') {
-          // 일별 데이터 로드
           const data = await fetchDailyBoxOffice(targetDate);
           if (data.boxOfficeResult && data.boxOfficeResult.dailyBoxOfficeList) {
             setMovieList(data.boxOfficeResult.dailyBoxOfficeList);
           }
         } else {
-          // 실시간 데이터 로드
           const { data, crawledTime } = await fetchRealtimeRanking();
           setMovieList(data);
           setCrawledTime(crawledTime);
@@ -60,7 +58,6 @@ const App: React.FC = () => {
     if ('movieNm' in movie) {
       setSelectedMovie(movie);
     } else {
-      // 실시간 데이터를 상세보기가 가능한 형태(DailyBoxOfficeList)로 변환
       const converted: DailyBoxOfficeList = {
         rnum: movie.rank, rank: movie.rank, rankInten: '0', rankOldAndNew: 'OLD',
         movieCd: movie.movieCd, movieNm: movie.title, openDt: '',
@@ -79,7 +76,6 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex justify-center">
       <div className="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col">
         
-        {/* Header */}
         <header className="bg-white px-5 pt-6 pb-4 sticky top-0 z-10 border-b border-slate-100">
           <div className="flex justify-between items-end mb-4">
             <div>
@@ -110,7 +106,6 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* 탭 버튼 */}
           <div className="flex p-1 bg-slate-100 rounded-xl mb-4">
             <button 
               className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
@@ -133,7 +128,6 @@ const App: React.FC = () => {
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </header>
 
-        {/* 목록 */}
         <main className="flex-1 p-4 bg-slate-50/50">
           {loading ? (
              <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -148,7 +142,7 @@ const App: React.FC = () => {
                 <MovieListItem 
                   key={movie.movieCd} 
                   movie={movie} 
-                  type={boxOfficeType} // [중요] 타입 전달
+                  type={boxOfficeType}
                   onClick={handleMovieClick} 
                 />
               ))}
@@ -160,7 +154,13 @@ const App: React.FC = () => {
           데이터 출처: 영화진흥위원회(KOBIS)<br/>Copyright © BoxOffice Pro
         </div>
 
-        <DetailView movie={selectedMovie} targetDate={targetDate} onClose={() => setSelectedMovie(null)} />
+        {/* [수정] type을 전달하여 DetailView가 모드를 알 수 있게 함 */}
+        <DetailView 
+          movie={selectedMovie} 
+          targetDate={targetDate} 
+          type={boxOfficeType}
+          onClose={() => setSelectedMovie(null)} 
+        />
       </div>
     </div>
   );
