@@ -23,7 +23,7 @@ export interface BoxOfficeResult {
   boxofficeType: string;
   showRange: string;
   dailyBoxOfficeList?: DailyBoxOfficeList[];
-  weeklyBoxOfficeList?: DailyBoxOfficeList[]; // Weekly uses same structure for items
+  weeklyBoxOfficeList?: DailyBoxOfficeList[];
 }
 
 export interface KobisResponse {
@@ -34,13 +34,11 @@ export interface TrendDataPoint {
   date: string;
   dateDisplay: string;
   audiCnt: number;
-  scrnCnt?: number; // Added for analysis
-  // Optional fields for chart merging
+  scrnCnt?: number;
   similarCnt?: number;
   predictCnt?: number;
 }
 
-// Movie Detail Types
 export interface MovieInfo {
   movieCd: string;
   movieNm: string;
@@ -69,7 +67,7 @@ export interface SimilarMovieScenario {
   name: string;
   finalAudi: string;
   similarityReason: string;
-  comparisonMetric: string; // Specific data point (e.g. "Opening Score 98% match")
+  comparisonMetric: string;
   matchType: 'OPTIMISTIC' | 'REALISTIC' | 'PESSIMISTIC';
 }
 
@@ -80,25 +78,24 @@ export interface PredictionResult {
     max: number;
     avg: number;
   };
-  // Algorithm factors to display in UI
   logicFactors: {
-    decayFactor: string; // e.g., "-15% (Week 3)"
-    seasonalityScore: string; // e.g., "High (Saturday Approaching)"
-    momentum: string; // e.g., "Stable"
+    decayFactor: string;
+    seasonalityScore: string;
+    momentum: string;
   };
   similarMovies: SimilarMovieScenario[];
-  similarMovieSeries: number[]; // Trend of the most realistic match
-  predictionSeries: number[]; // Next 3 days prediction
+  similarMovieSeries: number[];
+  predictionSeries: number[];
 }
 
-
-// [수정] ReservationData에 페이지 소스의 필드들 추가
+// [수정됨] crawledTime 필드 추가
 export interface ReservationData {
   rank: string;
   title: string;
-  rate: string;      // 예매율
-  salesAmt: string;  // 예매매출액 (New)
-  salesAcc: string;  // 누적매출액 (New)
-  audiCnt: string;   // 예매관객수
-  audiAcc: string;   // 누적관객수 (New)
+  rate: string;
+  salesAmt: string;
+  salesAcc: string;
+  audiCnt: string;
+  audiAcc: string;
+  crawledTime?: string; // 예: "2026/01/19 10:52"
 }
