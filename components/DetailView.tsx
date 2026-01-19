@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult, ReservationData } from '../types';
-import { formatNumber, formatKoreanNumber } from '../constants';
+import { formatNumber } from '../constants'; // formatKoreanNumber 제거
 import { fetchMovieTrend, fetchMovieDetail, fetchRealtimeReservation } from '../services/kobisService';
 import { predictMoviePerformance } from '../services/geminiService';
 import TrendChart from './TrendChart';
@@ -46,7 +46,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
       setMovieDetail(info);
 
       try {
-        // [수정] movieCd를 함께 전달하여 정확한 매칭 유도
         const resResult = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
         if (resResult && resResult.data) {
           setReservation(resResult.data);
@@ -132,7 +131,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
                 <Ticket size={18} className="text-indigo-200" />
                 <span className="font-bold text-sm tracking-wide">KOBIS 실시간 예매</span>
               </div>
-              {/* [수정] 시간을 표시하는 부분 */}
               <div className="flex items-center gap-1 text-[10px] bg-black/20 backdrop-blur-sm px-2 py-1 rounded-full text-indigo-100">
                 <RefreshCw size={10} />
                 <span>
@@ -158,11 +156,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
               </div>
               <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">예매 매출액</p>
-                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(safeNum(reservation.salesAmt))}원</p>
+                {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
+                <p className="font-medium text-sm text-indigo-100">{formatNumber(safeNum(reservation.salesAmt))}원</p>
               </div>
                <div>
                 <p className="text-[10px] text-indigo-200 mb-0.5">누적 매출액</p>
-                <p className="font-medium text-sm text-indigo-100">{formatKoreanNumber(safeNum(reservation.salesAcc))}원</p>
+                {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
+                <p className="font-medium text-sm text-indigo-100">{formatNumber(safeNum(reservation.salesAcc))}원</p>
               </div>
             </div>
           </div>
@@ -202,8 +202,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, onClose }) =
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-slate-500"><DollarSign size={16} /><span className="text-xs font-semibold">일일 매출액</span></div>
-            <div className="text-xl font-black text-slate-800 tracking-tight">{formatKoreanNumber(movie.salesAmt)}원</div>
-             <div className="mt-1">{getChangeElement(String(Math.floor(Number(movie.salesInten))))}</div>
+            {/* [수정] formatKoreanNumber 제거 -> formatNumber 사용 */}
+            <div className="text-xl font-black text-slate-800 tracking-tight">{formatNumber(movie.salesAmt)}원</div>
+             {/* [수정] Math.floor 제거 -> 데이터 그대로 사용 */}
+             <div className="mt-1">{getChangeElement(movie.salesInten)}</div>
           </div>
         </div>
 
