@@ -1,11 +1,11 @@
 import React from 'react';
 import { DailyBoxOfficeList, RealtimeMovie } from '../types';
 import { formatNumber } from '../constants';
-import { ChevronRight, Ticket, Users } from 'lucide-react';
+import { ChevronRight, Ticket, Users, BarChart2 } from 'lucide-react';
 
 interface MovieListItemProps {
   movie: DailyBoxOfficeList | RealtimeMovie;
-  type: 'DAILY' | 'REALTIME'; // [중요] 이게 있어야 박스오피스인지 실시간인지 구분함
+  type: 'DAILY' | 'REALTIME';
   onClick: (movie: any) => void;
 }
 
@@ -13,10 +13,7 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, type, onClick }) =
   const rank = Number(movie.rank);
   const isTop3 = rank <= 3;
   
-  // 데이터 타입 가드
   const isDaily = (m: any): m is DailyBoxOfficeList => type === 'DAILY';
-
-  // [핵심 수정] 일별이면 movieNm, 실시간이면 title 사용
   const title = isDaily(movie) ? movie.movieNm : movie.title;
   const isNew = isDaily(movie) ? movie.rankOldAndNew === 'NEW' : false;
 
@@ -40,20 +37,29 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, type, onClick }) =
           )}
         </div>
         
-        <div className="text-xs text-slate-500 flex items-center gap-3">
+        <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-3 gap-y-1">
           {isDaily(movie) ? (
-            // [일별 박스오피스] 관객수 + 점유율
+            // [수정] 일별 모드: 일일 관객 + 누적 관객 표시
             <>
-              <span className="flex items-center gap-1"><Users size={12}/> 일일 {formatNumber(movie.audiCnt)}명</span>
+              <span className="flex items-center gap-1 font-medium text-slate-600">
+                <Users size={12}/> {formatNumber(movie.audiCnt)}명
+              </span>
               <span className="w-px h-3 bg-slate-200"></span>
-              <span className="text-blue-600 font-medium">점유율 {movie.salesShare}%</span>
+              <span className="text-slate-400">누적 {formatNumber(movie.audiAcc)}명</span>
             </>
           ) : (
-            // [실시간 예매율] 예매율 + 예매관객수
+            // [수정] 실시간 모드: 예매율 강조
             <>
-              <span className="flex items-center gap-1 text-indigo-600 font-bold"><Ticket size={12}/> 예매율 {movie.rate}</span>
-              <span className="w-px h-3 bg-slate-200"></span>
-              <span>예매 {formatNumber(movie.audiCnt)}명</span>
+              <span className="flex items-center gap-1 text-indigo-600 font-bold">
+                <Ticket size={12}/> 예매율 {movie.rate}
+              </span>
+              {/* 예매 관객수가 있으면 표시 */}
+              {movie.audiCnt !== "0" && (
+                <>
+                  <span className="w-px h-3 bg-slate-200"></span>
+                  <span>예매 {formatNumber(movie.audiCnt)}명</span>
+                </>
+              )}
             </>
           )}
         </div>
