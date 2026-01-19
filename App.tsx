@@ -5,7 +5,7 @@ import { DailyBoxOfficeList, RealtimeMovie } from './types';
 import MovieListItem from './components/MovieListItem';
 import DetailView from './components/DetailView';
 import SearchBar from './components/SearchBar';
-import { Calendar, AlertCircle, Clock } from 'lucide-react';
+import { Calendar, Clock, RotateCw } from 'lucide-react';
 
 type BoxOfficeType = 'DAILY' | 'REALTIME';
 
@@ -17,33 +17,32 @@ const App: React.FC = () => {
   const [crawledTime, setCrawledTime] = useState<string>('');
   
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMovie, setSelectedMovie] = useState<DailyBoxOfficeList | null>(null);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      setError(null);
-      setMovieList([]);
+  const loadData = async () => {
+    setLoading(true);
+    setMovieList([]);
 
-      try {
-        if (boxOfficeType === 'DAILY') {
-          const data = await fetchDailyBoxOffice(targetDate);
-          if (data.boxOfficeResult && data.boxOfficeResult.dailyBoxOfficeList) {
-            setMovieList(data.boxOfficeResult.dailyBoxOfficeList);
-          }
-        } else {
-          const { data, crawledTime } = await fetchRealtimeRanking();
-          setMovieList(data);
-          setCrawledTime(crawledTime);
+    try {
+      if (boxOfficeType === 'DAILY') {
+        const data = await fetchDailyBoxOffice(targetDate);
+        if (data.boxOfficeResult && data.boxOfficeResult.dailyBoxOfficeList) {
+          setMovieList(data.boxOfficeResult.dailyBoxOfficeList);
         }
-      } catch (err) {
-        setError('데이터를 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
+      } else {
+        const { data, crawledTime } = await fetchRealtimeRanking();
+        setMovieList(data);
+        setCrawledTime(crawledTime);
       }
-    };
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadData();
   }, [targetDate, boxOfficeType]);
 
@@ -73,7 +72,7 @@ const App: React.FC = () => {
   const dateInputValue = `${targetDate.substring(0, 4)}-${targetDate.substring(4, 6)}-${targetDate.substring(6, 8)}`;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center">
+    <div className="min-h-screen bg-slate-50 flex justify-center font-sans text-slate-900">
       <div className="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col">
         
         <header className="bg-white px-5 pt-6 pb-4 sticky top-0 z-10 border-b border-slate-100">
@@ -87,9 +86,9 @@ const App: React.FC = () => {
             
             {boxOfficeType === 'DAILY' && (
               <div className="relative">
-                <label htmlFor="date-picker" className="flex items-center gap-2 text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-blue-100">
+                <label htmlFor="date-picker" className="flex items-center gap-2 text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
                   <Calendar size={16} />
-                  {dateInputValue}
+                  {formatDateDisplay(targetDate)}
                 </label>
                 <input id="date-picker" type="date" className="absolute inset-0 opacity-0 cursor-pointer"
                   value={dateInputValue} max={new Date().toISOString().split('T')[0]}
@@ -98,10 +97,10 @@ const App: React.FC = () => {
               </div>
             )}
             
-            {boxOfficeType === 'REALTIME' && crawledTime && (
+            {boxOfficeType === 'REALTIME' && (
                <div className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-1.5 rounded-lg border border-indigo-100">
                  <Clock size={14} />
-                 <span>{crawledTime} 기준</span>
+                 <span>{crawledTime ? `${crawledTime} 기준` : '실시간'}</span>
                </div>
             )}
           </div>
@@ -109,7 +108,7 @@ const App: React.FC = () => {
           <div className="flex p-1 bg-slate-100 rounded-xl mb-4">
             <button 
               className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                boxOfficeType === 'DAILY' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'
+                boxOfficeType === 'DAILY' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
               onClick={() => setBoxOfficeType('DAILY')}
             >
@@ -117,7 +116,7 @@ const App: React.FC = () => {
             </button>
             <button 
               className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                boxOfficeType === 'REALTIME' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'
+                boxOfficeType === 'REALTIME' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
               onClick={() => setBoxOfficeType('REALTIME')}
             >
@@ -132,10 +131,15 @@ const App: React.FC = () => {
           {loading ? (
              <div className="flex flex-col items-center justify-center py-20 gap-4">
                <div className={`w-10 h-10 border-4 ${boxOfficeType === 'DAILY' ? 'border-blue-500' : 'border-indigo-500'} border-t-transparent rounded-full animate-spin`}></div>
-               <p className="text-slate-400 text-sm font-medium">데이터를 불러오는 중...</p>
+               <p className="text-slate-400 text-sm font-medium">데이터 불러오는 중...</p>
              </div>
           ) : filteredList.length === 0 ? (
-            <div className="text-center py-20 text-slate-400"><p>데이터가 없습니다.</p></div>
+            <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
+              <p>데이터가 없습니다.</p>
+              <button onClick={loadData} className="flex items-center gap-2 text-sm text-blue-500 hover:underline">
+                <RotateCw size={16}/> 다시 시도
+              </button>
+            </div>
           ) : (
             <ul className="pb-10">
               {filteredList.map((movie) => (
@@ -154,7 +158,6 @@ const App: React.FC = () => {
           데이터 출처: 영화진흥위원회(KOBIS)<br/>Copyright © BoxOffice Pro
         </div>
 
-        {/* [수정] type을 전달하여 DetailView가 모드를 알 수 있게 함 */}
         <DetailView 
           movie={selectedMovie} 
           targetDate={targetDate} 
