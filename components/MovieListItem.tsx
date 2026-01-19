@@ -1,16 +1,24 @@
 import React from 'react';
-import { DailyBoxOfficeList } from '../types';
+import { DailyBoxOfficeList, RealtimeMovie } from '../types';
 import { formatNumber } from '../constants';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Ticket, Users } from 'lucide-react';
 
 interface MovieListItemProps {
-  movie: DailyBoxOfficeList;
-  onClick: (movie: DailyBoxOfficeList) => void;
+  movie: DailyBoxOfficeList | RealtimeMovie;
+  type: 'DAILY' | 'REALTIME'; // 타입 구분용 prop 추가
+  onClick: (movie: any) => void;
 }
 
-const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
+const MovieListItem: React.FC<MovieListItemProps> = ({ movie, type, onClick }) => {
   const rank = Number(movie.rank);
   const isTop3 = rank <= 3;
+  
+  // 타입 가드 함수
+  const isDaily = (m: any): m is DailyBoxOfficeList => type === 'DAILY';
+
+  // 표시할 데이터 준비
+  const title = isDaily(movie) ? movie.movieNm : movie.title;
+  const isNew = isDaily(movie) ? movie.rankOldAndNew === 'NEW' : false;
 
   return (
     <li 
@@ -26,15 +34,28 @@ const MovieListItem: React.FC<MovieListItemProps> = ({ movie, onClick }) => {
       
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-base font-bold text-slate-800 truncate">{movie.movieNm}</span>
-          {movie.rankOldAndNew === 'NEW' && (
+          <span className="text-base font-bold text-slate-800 truncate">{title}</span>
+          {isNew && (
             <span className="text-[10px] font-bold text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">NEW</span>
           )}
         </div>
-        <div className="text-xs text-slate-500 flex items-center gap-2">
-            <span>일일 {formatNumber(movie.audiCnt)}명</span>
-            <span className="w-0.5 h-3 bg-slate-300"></span>
-            <span>예매율 {movie.salesShare}%</span>
+        
+        <div className="text-xs text-slate-500 flex items-center gap-3">
+          {isDaily(movie) ? (
+            // [일별 박스오피스 모드]
+            <>
+              <span className="flex items-center gap-1"><Users size={12}/> 일일 {formatNumber(movie.audiCnt)}명</span>
+              <span className="w-px h-3 bg-slate-200"></span>
+              <span className="text-blue-600 font-medium">점유율 {movie.salesShare}%</span>
+            </>
+          ) : (
+            // [실시간 예매율 모드]
+            <>
+              <span className="flex items-center gap-1 text-indigo-600 font-bold"><Ticket size={12}/> 예매율 {movie.rate}</span>
+              <span className="w-px h-3 bg-slate-200"></span>
+              <span>예매 {formatNumber(movie.audiCnt)}명</span>
+            </>
+          )}
         </div>
       </div>
 
