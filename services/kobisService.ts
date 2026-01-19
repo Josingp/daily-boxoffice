@@ -3,94 +3,39 @@ import { KobisResponse, TrendDataPoint, KobisMovieInfoResponse, MovieInfo, Realt
 const fetchFromBackend = async <T>(endpoint: string, params: Record<string, string> = {}): Promise<T> => {
   const query = new URLSearchParams(params).toString();
   const url = query ? `${endpoint}?${query}` : endpoint;
-  
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Backend Error [${endpoint}]:`, errorText);
-      throw new Error(`Server Error (${response.status})`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(`Network Error [${endpoint}]:`, error);
-    throw error;
-  }
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Network Err');
+    return await res.json();
+  } catch (e) { throw e; }
 };
 
-export const fetchDailyBoxOffice = async (targetDt: string): Promise<KobisResponse> => {
-  return fetchFromBackend<KobisResponse>('/kobis/daily', { targetDt });
+export const fetchDailyBoxOffice = async (targetDt: string) => fetchFromBackend<KobisResponse>('/kobis/daily', { targetDt });
+export const fetchMovieDetail = async (movieCd: string) => {
+    try { return (await fetchFromBackend<KobisMovieInfoResponse>('/kobis/detail', { movieCd })).movieInfoResult.movieInfo; }
+    catch { return null; }
+};
+export const fetchMovieTrend = async (movieCd: string, endDateStr: string) => {
+    try { return await fetchFromBackend<TrendDataPoint[]>('/kobis/trend', { movieCd, endDate: endDateStr }); }
+    catch { return []; }
 };
 
-export const fetchWeeklyBoxOffice = async (targetDt: string, weekGb = "1"): Promise<KobisResponse> => {
-  return fetchFromBackend<KobisResponse>('/kobis/weekly', { targetDt, weekGb });
-};
-
-export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | null> => {
+export const fetchRealtimeReservation = async (movieName: string, movieCd?: string) => {
   try {
-    const data = await fetchFromBackend<KobisMovieInfoResponse>('/kobis/detail', { movieCd });
-    return data.movieInfoResult.movieInfo;
-  } catch {
-    return null;
-  }
+    const q = movieCd ? `?movieName=${encodeURIComponent(movieName)}&movieCd=${movieCd}` : `?movieName=${encodeURIComponent(movieName)}`;
+    const res = await fetch(`/api/reservation${q}`);
+    const json = await res.json();
+    if (json.found) return { data: { ...json.data, crawledTime: json.crawledTime } };
+    return { data: null, error: json.debug_error };
+  } catch (e: any) { return { data: null, error: e.message }; }
 };
 
-export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
-  try {
-    return await fetchFromBackend<TrendDataPoint[]>('/kobis/trend', { movieCd, endDate: endDateStr });
-  } catch {
-    return [];
-  }
-};
-
-// [수정됨] 시간 정보(crawledTime) 병합 및 movieCd 지원
-export const fetchRealtimeReservation = async (movieName: string, movieCd?: string): Promise<{ data: any, error?: string } | null> => {
-  try {
-    const encodedName = encodeURIComponent(movieName);
-    // movieCd가 있으면 URL에 포함
-    const query = movieCd 
-      ? `?movieName=${encodedName}&movieCd=${movieCd}`
-      : `?movieName=${encodedName}`;
-
-    const response = await fetch(`/api/reservation${query}`);
-    
-    if (!response.ok) {
-       return { data: null, error: `Network Error: ${response.status}` };
-    }
-
-    const json = await response.json();
-    
-    if (json.found) {
-      // 백엔드에서 받은 crawledTime을 데이터 객체에 병합하여 반환
-      return { 
-        data: {
-          ...json.data,
-          crawledTime: json.crawledTime 
-        } 
-      }; 
-    } else {
-      return { data: null, error: json.debug_error || "Unknown Error" };
-    }
-  } catch (error: any) {
-    return { data: null, error: `Client Error: ${error.message}` };
-  }
-};
-
-// [NEW] 실시간 예매율 랭킹 가져오기
+// [NEW] 실시간 랭킹 전체 호출
 export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], crawledTime: string }> => {
   try {
-    const response = await fetch('/api/realtime');
-    if (!response.ok) throw new Error('Network response was not ok');
-    const json = await response.json();
-    
-    if (json.status === 'ok') {
-      return { data: json.data, crawledTime: json.crawledTime };
-    } else {
-      console.error(json.message);
-      return { data: [], crawledTime: '' };
-    }
-  } catch (error) {
-    console.error('Fetch Realtime Error:', error);
+    const res = await fetch('/api/realtime');
+    const json = await res.json();
+    if (json.status === 'ok') return { data: json.data, crawledTime: json.crawledTime };
     return { data: [], crawledTime: '' };
-  }
+  } catch { return { data: [], crawledTime: '' }; }
 };
