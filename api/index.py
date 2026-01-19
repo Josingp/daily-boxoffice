@@ -35,23 +35,25 @@ def read_root():
 
 def extract_crawl_time(soup):
     """
-    [NEW] HTML에서 조회일시 추출
-    예: <em><b>조회일시 : 2026/01/19 10:56</b></em>
+    [강력한 조회일시 추출]
+    HTML 구조에 의존하지 않고, 전체 텍스트에서 날짜 패턴(YYYY/MM/DD HH:MM)을 찾아냅니다.
     """
     try:
-        # "조회일시" 텍스트를 포함하는 요소 찾기
-        target = soup.find(string=re.compile("조회일시"))
-        if target:
-            text = target.strip()
-            # 정규식으로 날짜 포맷 (YYYY/MM/DD HH:MM) 추출
-            match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", text)
-            if match:
-                return match.group(1)
-            # 정규식 실패 시 단순 제거 후 반환
-            return text.replace("조회일시", "").replace(":", "").strip()
+        # 1. 전체 텍스트 추출 (태그 무시)
+        full_text = soup.get_text()
+        
+        # 2. 날짜 패턴 검색 (예: 2026/01/19 10:52)
+        # \d{4} : 연도 4자리
+        # / : 구분자
+        # \d{2} : 월/일/시/분 2자리
+        match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", full_text)
+        
+        if match:
+            return match.group(1)
+            
+        return ""
     except:
-        pass
-    return ""
+        return ""
 
 def extract_movie_data(row):
     """HTML 행(tr)에서 데이터 추출"""
@@ -101,14 +103,13 @@ def get_base_headers():
 def fetch_kobis_smartly():
     """
     [하이브리드 크롤링 전략]
-    1. 고정 페이로드(Pattern A) 시도 -> 성공 시 반환
-    2. 실패(데이터 없음) 시 동적 페이로드(Pattern B) 시도 -> 결과 반환
+    Pattern A(Fixed) -> Pattern B(Dynamic)
     """
     session = requests.Session()
     headers = get_base_headers()
 
     # ---------------------------------------------------------
-    # [1차 시도] Pattern A: 고정 페이로드 (Fixed)
+    # [1차 시도] Pattern A: 고정 페이로드
     # ---------------------------------------------------------
     try:
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
@@ -136,13 +137,13 @@ def fetch_kobis_smartly():
         if len(rows) > 2:
             return resp, payload_fixed
         else:
-            print("Pattern A Failed, switching...")
+            print("Pattern A Failed (No Rows), switching...")
 
     except Exception:
         pass
 
     # ---------------------------------------------------------
-    # [2차 시도] Pattern B: 동적 페이로드 (Dynamic)
+    # [2차 시도] Pattern B: 동적 페이로드
     # ---------------------------------------------------------
     try:
         session = requests.Session()
@@ -188,7 +189,7 @@ def get_realtime_reservation(
 
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [NEW] 조회일시 추출
+        # [NEW] 조회일시 추출 (전체 텍스트 스캔)
         crawled_time = extract_crawl_time(soup)
         
         all_rows = soup.find_all("tr")
@@ -211,7 +212,7 @@ def get_realtime_reservation(
                 return {
                     "found": True, 
                     "method": "ID_MATCH", 
-                    "crawledTime": crawled_time, # 결과에 포함
+                    "crawledTime": crawled_time, 
                     "data": data
                 }
 
@@ -221,7 +222,7 @@ def get_realtime_reservation(
                  return {
                      "found": True, 
                      "method": "NAME_MATCH", 
-                     "crawledTime": crawled_time, # 결과에 포함
+                     "crawledTime": crawled_time, 
                      "data": data
                  }
 
@@ -243,7 +244,7 @@ def get_composite_boxoffice():
     
     boxoffice_data = []
     realtime_map = {}
-    crawled_time = "" # 기본값
+    crawled_time = "" 
 
     # (1) KOBIS API
     try:
@@ -292,7 +293,7 @@ def get_composite_boxoffice():
     return {
         "status": "ok", 
         "targetDt": yesterday, 
-        "crawledTime": crawled_time, # 전체 응답에 시간 포함
+        "crawledTime": crawled_time, 
         "data": merged_list
     }
 
