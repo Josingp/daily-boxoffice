@@ -1,36 +1,46 @@
-name: Update Realtime DB
+name: Data Updater
 
 on:
   schedule:
-    - cron: '0 * * * *' # 매 시간 0분에 실행
+    # 1. 일별 업데이트: UTC 01:00 (KST 10:00)
+    - cron: '0 1 * * *'
+    # 2. 실시간 업데이트: 매 시간 정각
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
+          
       - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run Scripts
+        env:
+          KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: |
-          pip install requests beautifulsoup4
+          # 현재 시간이 01시(KST 10시) 대라면 일별 업데이트 실행
+          HOUR=$(date -u +%H)
+          if [ "$HOUR" == "01" ] || [ ! -f public/daily_data.json ]; then
+            python scripts/update_daily.py
+          fi
+          
+          # 실시간은 항상 실행
+          python scripts/update_realtime.py
 
-      - name: Run Scraper
-        run: python scripts/update_data.py
-
-      - name: Commit and Push changes
+      - name: Commit & Push
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add public/history.json
-          # 변경사항이 있을 때만 커밋
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Realtime Data" && git push)
+          git add public/*.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data" && git push)
