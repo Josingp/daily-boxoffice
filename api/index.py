@@ -16,126 +16,12 @@ def get_env(k): return os.environ.get(k, "").strip()
 KOBIS_API_KEY = get_env("KOBIS_API_KEY")
 NAVER_ID = get_env("NAVER_CLIENT_ID")
 NAVER_SECRET = get_env("NAVER_CLIENT_SECRET")
-KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 
-# [헬퍼] 데이터 추출
-def extract_movie_data(row):
-    cols = row.find_all("td")
-    if len(cols) < 8: return None
-    
-    # 영화 코드 (onclick 이벤트 파싱)
-    movie_cd = None
-    a_tag = cols[1].find("a")
-    if a_tag and a_tag.has_attr("onclick"):
-        match = re.search(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)['\"]\s*\)", a_tag["onclick"])
-        if match: movie_cd = match.group(1)
-        
-    title = a_tag["title"].strip() if (a_tag and a_tag.get("title")) else cols[1].get_text(strip=True)
-    def clean(s): return s.replace(',', '').strip()
-    
-    return {
-        "movieCd": movie_cd,
-        "rank": cols[0].get_text(strip=True),
-        "title": title,
-        "rate": cols[3].get_text(strip=True),
-        "salesAmt": clean(cols[4].get_text(strip=True)),
-        "salesAcc": clean(cols[5].get_text(strip=True)),
-        "audiCnt": clean(cols[6].get_text(strip=True)),
-        "audiAcc": clean(cols[7].get_text(strip=True))
-    }
-
-# [핵심] 스마트 크롤링 (백엔드용)
-def fetch_kobis_smartly():
-    session = requests.Session()
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
-        'Referer': KOBIS_REALTIME_URL,
-        'Origin': 'https://www.kobis.or.kr',
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    
-    # 1차 시도
-    try:
-        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=5)
-        soup = BeautifulSoup(visit.text, 'html.parser')
-        token = soup.find('input', {'name': 'CSRFToken'})
-        csrf = token.get('value', '') if token else ''
-        payload = {'CSRFToken': csrf, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''}
-        
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=10)
-        if len(BeautifulSoup(resp.text, 'html.parser').find_all("tr")) > 2: return resp
-    except: pass
-
-    # 2차 시도
-    try:
-        session = requests.Session()
-        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=5)
-        soup = BeautifulSoup(visit.text, 'html.parser')
-        payload = {}
-        for inp in soup.find_all('input'):
-            if inp.get('name'): payload[inp.get('name')] = inp.get('value', '')
-        for sel in soup.find_all('select'):
-            if sel.get('name'):
-                opt = sel.find('option', selected=True) or sel.find('option')
-                payload[sel.get('name')] = opt.get('value', '') if opt else ''
-        payload.update({'dmlMode': 'search', 'allMovieYn': 'Y'})
-        return session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=10)
-    except: return None
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 
 @app.get("/")
 def root(): return {"status": "ok"}
 
-# [실시간] 스마트 로직 적용
-@app.get("/api/realtime")
-def realtime():
-    try:
-        resp = fetch_kobis_smartly()
-        if not resp or resp.status_code != 200: return {"status": "error"}
-        
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        data = []
-        for row in soup.find_all("tr"):
-            d = extract_movie_data(row)
-            if d: data.append(d)
-            
-        # 크롤링 시간 추출
-        time_text = ""
-        try:
-            match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
-            if match: time_text = match.group(1)
-        except: pass
-            
-        return {"status": "ok", "data": data, "crawledTime": time_text}
-    except: return {"status": "error"}
-
-@app.get("/api/reservation")
-def reservation(movieName: str = Query(...), movieCd: str = Query(None)):
-    try:
-        resp = fetch_kobis_smartly()
-        if not resp: return {"found": False}
-        
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        target_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
-        
-        for row in soup.find_all("tr"):
-            data = extract_movie_data(row)
-            if not data: continue
-            
-            row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
-            if (movieCd and data['movieCd'] == movieCd) or (target_norm in row_norm):
-                # 시간 정보도 같이 반환
-                time_text = ""
-                try:
-                    match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
-                    if match: time_text = match.group(1)
-                except: pass
-                
-                return {"found": True, "data": data, "crawledTime": time_text}
-                
-        return {"found": False}
-    except: return {"found": False}
-
-# ... (뉴스, 포스터, KOBIS Proxy 등 나머지 기존 API 유지) ...
 @app.get("/api/news")
 def news(keyword: str = Query(...)):
     if not NAVER_ID or not NAVER_SECRET: return {"status":"error"}
@@ -164,6 +50,23 @@ def poster(movieName: str = Query(...)):
             items = res.json().get('items', [])
             if items: return {"status":"ok", "url": items[0]['link']}
         return {"status":"ok", "url": ""}
+    except: return {"status":"error"}
+
+@app.get("/api/realtime")
+def realtime():
+    try:
+        res = requests.post("https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do", headers=HEADERS, data={'dmlMode':'search','allMovieYn':'Y'}, timeout=10)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        data = []
+        for r in soup.find_all("tr"):
+            c = r.find_all("td")
+            if len(c)<8: continue
+            t = c[1].find("a")["title"].strip() if c[1].find("a") else c[1].get_text(strip=True)
+            data.append({
+                "rank": c[0].get_text(strip=True), "title": t, "rate": c[3].get_text(strip=True),
+                "audiCnt": c[6].get_text(strip=True).replace(',',''), "audiAcc": c[7].get_text(strip=True).replace(',','')
+            })
+        return {"status":"ok", "data":data}
     except: return {"status":"error"}
 
 @app.get("/kobis/daily")
