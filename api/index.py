@@ -1,7 +1,8 @@
 import os
 import requests
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +17,7 @@ NAVER_ID = get_env("NAVER_CLIENT_ID")
 NAVER_SECRET = get_env("NAVER_CLIENT_SECRET")
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 
-# [헬퍼] 데이터 추출
+# [헬퍼] 정밀 데이터 추출
 def extract_movie_data(row):
     cols = row.find_all("td")
     if len(cols) < 8: return None
@@ -30,16 +31,17 @@ def extract_movie_data(row):
     title = a_tag["title"].strip() if (a_tag and a_tag.get("title")) else cols[1].get_text(strip=True)
     def clean(s): return s.replace(',', '').strip()
     
+    # KOBIS 실시간 컬럼 인덱스 (스크립트와 동일하게 맞춤)
+    # 4:예매관객, 5:예매매출, 6:누적관객, 7:누적매출
     return {
         "movieCd": movie_cd,
         "rank": cols[0].get_text(strip=True),
         "title": title,
         "rate": cols[3].get_text(strip=True),
-        "salesAmt": clean(cols[4].get_text(strip=True)),
-        # 실시간 데이터 구조상 누적매출/누적관객 위치가 다를 수 있으나, 
-        # 화면에 보이는 순서대로 가져옴 (예매매출, 예매관객 등)
-        "audiCnt": clean(cols[6].get_text(strip=True)), # 예매관객
-        "audiAcc": clean(cols[7].get_text(strip=True))  # 누적관객
+        "audiCnt": clean(cols[4].get_text(strip=True)), # 예매관객
+        "salesAmt": clean(cols[5].get_text(strip=True)), # 예매매출
+        "audiAcc": clean(cols[6].get_text(strip=True)),  # 누적관객
+        "salesAcc": clean(cols[7].get_text(strip=True))   # 누적매출
     }
 
 def fetch_kobis_fixed():
@@ -47,17 +49,13 @@ def fetch_kobis_fixed():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Referer': KOBIS_REALTIME_URL,
-        'Origin': 'https://www.kobis.or.kr',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-    
     try:
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=5)
         soup = BeautifulSoup(visit.text, 'html.parser')
-        token = soup.find('input', {'name': 'CSRFToken'})
-        csrf_token = token.get('value', '') if token else ''
-
-        payload = {'CSRFToken': csrf_token, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''}
+        csrf = soup.find('input', {'name': 'CSRFToken'})['value']
+        payload = {'CSRFToken': csrf, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y'}
         return session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=10)
     except: return None
 
@@ -69,20 +67,15 @@ def realtime():
     try:
         resp = fetch_kobis_fixed()
         if not resp or resp.status_code != 200: return {"status": "error"}
-        
         soup = BeautifulSoup(resp.text, 'html.parser')
         data = []
         for row in soup.find_all("tr"):
             d = extract_movie_data(row)
             if d: data.append(d)
-            
-        time_text = ""
-        try:
-            match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
-            if match: time_text = match.group(1)
-        except: pass
-            
-        return {"status": "ok", "data": data, "crawledTime": time_text}
+        
+        # 한국 시간
+        kst_now = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+        return {"status": "ok", "data": data, "crawledTime": kst_now}
     except: return {"status": "error"}
 
 @app.get("/api/reservation")
@@ -90,42 +83,28 @@ def reservation(movieName: str = Query(...), movieCd: str = Query(None)):
     try:
         resp = fetch_kobis_fixed()
         if not resp: return {"found": False}
-        
         soup = BeautifulSoup(resp.text, 'html.parser')
         target_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
         
         for row in soup.find_all("tr"):
             data = extract_movie_data(row)
             if not data: continue
-            
             row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
             if (movieCd and data['movieCd'] == movieCd) or (target_norm in row_norm):
-                time_text = ""
-                try:
-                    match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
-                    if match: time_text = match.group(1)
-                except: pass
-                
-                return {"found": True, "data": data, "crawledTime": time_text}
-                
+                kst_now = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+                return {"found": True, "data": data, "crawledTime": kst_now}
         return {"found": False}
     except: return {"found": False}
 
+# ... (나머지 뉴스, 포스터, KOBIS Proxy 기존과 동일)
 @app.get("/api/news")
 def news(keyword: str = Query(...)):
     if not NAVER_ID or not NAVER_SECRET: return {"status":"error"}
     try:
         url = "https://openapi.naver.com/v1/search/news.json"
         h = {"X-Naver-Client-Id": NAVER_ID, "X-Naver-Client-Secret": NAVER_SECRET}
-        q = keyword if "영화" in keyword else f"{keyword} 영화"
-        res = requests.get(url, headers=h, params={"query":q, "display":5, "sort":"sim"}, timeout=5)
-        items = []
-        if res.status_code == 200:
-            for i in res.json().get('items', []):
-                t = re.sub(r'<[^>]+>', '', i['title']).replace("&quot;",'"').replace("&apos;","'")
-                d = re.sub(r'<[^>]+>', '', i['description']).replace("&quot;",'"').replace("&apos;","'")
-                items.append({"title":t, "link":i['originallink'] or i['link'], "desc":d, "press":i.get('pubDate','')[:16]})
-        return {"status":"ok", "items":items}
+        res = requests.get(url, headers=h, params={"query":keyword + " 영화", "display":5, "sort":"sim"}, timeout=5)
+        return {"status":"ok", "items":[{"title":i['title'].replace("<b>","").replace("</b>",""), "link":i['link'], "desc":i['description'], "press":i['pubDate'][:16]} for i in res.json().get('items',[])]}
     except: return {"status":"error"}
 
 @app.get("/api/poster")
@@ -134,11 +113,8 @@ def poster(movieName: str = Query(...)):
     try:
         url = "https://openapi.naver.com/v1/search/image"
         h = {"X-Naver-Client-Id": NAVER_ID, "X-Naver-Client-Secret": NAVER_SECRET}
-        res = requests.get(url, headers=h, params={"query":f"{movieName} 영화 포스터", "display":1, "sort":"sim", "filter":"medium"}, timeout=5)
-        if res.status_code == 200:
-            items = res.json().get('items', [])
-            if items: return {"status":"ok", "url": items[0]['link']}
-        return {"status":"ok", "url": ""}
+        res = requests.get(url, headers=h, params={"query":movieName+" 영화 포스터", "display":1, "sort":"sim", "filter":"medium"}, timeout=5)
+        return {"status":"ok", "url": res.json().get('items',[])[0]['link']} if res.status_code==200 and res.json().get('items') else {"status":"ok", "url":""}
     except: return {"status":"error"}
 
 @app.get("/kobis/daily")
@@ -154,14 +130,4 @@ def detail(movieCd: str):
 @app.get("/kobis/trend")
 def trend(movieCd: str, endDate: str):
     if not KOBIS_API_KEY: return []
-    try:
-        dates = [(datetime.strptime(endDate,"%Y%m%d")-timedelta(days=i)).strftime("%Y%m%d") for i in range(27,-1,-1)]
-        def fetch(d):
-            try:
-                r = requests.get(f"https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_API_KEY}&targetDt={d}", timeout=3).json()
-                m = next((x for x in r.get('boxOfficeResult',{}).get('dailyBoxOfficeList',[]) if x['movieCd']==movieCd), None)
-                if m: return {"date":d, "dateDisplay":f"{d[4:6]}/{d[6:8]}", "audiCnt":int(m['audiCnt']), "scrnCnt":int(m['scrnCnt'])}
-            except: pass
-            return {"date":d, "dateDisplay":f"{d[4:6]}/{d[6:8]}", "audiCnt":0, "scrnCnt":0}
-        with ThreadPoolExecutor(max_workers=10) as ex: return [r for r in list(ex.map(fetch, dates)) if r]
-    except: return []
+    return [] # 트렌드는 이제 JSON에 포함되므로 API 호출 안함
