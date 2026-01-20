@@ -1,24 +1,19 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
-// [핵심] JSON 파일 우선 -> 실패 시 실시간 API 호출
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
   transformFn?: (json: any) => T
 ): Promise<T | null> => {
   try {
-    // 1. JSON 파일 시도 (캐시 방지)
     const jsonRes = await fetch(`${jsonUrl}?t=${Date.now()}`);
     if (jsonRes.ok) {
       const data = await jsonRes.json();
       return transformFn ? transformFn(data) : data;
     }
-  } catch (e) {
-    console.warn(`File not found: ${jsonUrl}, trying API...`);
-  }
+  } catch (e) {}
 
   try {
-    // 2. API 시도 (첫 실행이거나 파일 없을 때)
     const apiRes = await fetch(apiUrl);
     if (!apiRes.ok) throw new Error('API Error');
     return await apiRes.json();
@@ -32,6 +27,7 @@ export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
     '/daily_data.json',
     `/kobis/daily?targetDt=${targetDt}`,
     (json) => {
+      // JSON 파일이든 API 응답이든 구조를 통일
       if (json.movies) return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
       return json;
     }
@@ -44,41 +40,48 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
     '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      // API 응답 구조인 경우
-      if (json.status === 'ok') return json;
+      // 1. API 응답 형식 ({ status: "ok", data: [...] })
+      if (json.status === 'ok' && Array.isArray(json.data)) return json;
 
-      // History 파일 구조인 경우 (최신값 추출)
-      if (!json || Object.keys(json).length === 0) return null;
+      // 2. History 파일 형식 ({ "영화제목": [...] })
+      if (!json || Object.keys(json).length === 0 || json.status === 'error') return null;
       
-      const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
-        const history = json[title];
-        if (!history || history.length === 0) return null;
-        const latest = history[history.length - 1];
-        return {
-          movieCd: String(idx),
-          rank: String(latest.rank),
-          title: title,
-          rate: String(latest.rate) + "%",
-          salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
-        };
-      }).filter(Boolean) as RealtimeMovie[];
+      try {
+        const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
+          const history = json[title];
+          if (!Array.isArray(history) || history.length === 0) return null;
+          const latest = history[history.length - 1];
+          return {
+            movieCd: String(idx),
+            rank: String(latest.rank),
+            title: title,
+            rate: String(latest.rate) + "%",
+            salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
+          };
+        }).filter(Boolean) as RealtimeMovie[];
 
-      list.sort((a, b) => Number(a.rank) - Number(b.rank));
-      const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
-      
-      return { status: "ok", data: list, crawledTime: time };
+        list.sort((a, b) => Number(a.rank) - Number(b.rank));
+        const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
+        return { status: "ok", data: list, crawledTime: time };
+      } catch { return null; }
     }
   );
 
   return (result && result.status === 'ok') ? result : { data: [], crawledTime: "" };
 };
 
-// ... (뉴스, 상세정보 등 기존 유지)
 export const fetchMovieNews = async (keyword: string): Promise<NewsItem[]> => {
   try {
     const res = await fetch(`/api/news?keyword=${encodeURIComponent(keyword)}`);
     return res.ok ? (await res.json()).items : [];
   } catch { return []; }
+};
+
+export const fetchMoviePoster = async (movieName: string): Promise<string> => {
+  try {
+    const res = await fetch(`/api/poster?movieName=${encodeURIComponent(movieName)}`);
+    return res.ok ? (await res.json()).url : "";
+  } catch { return ""; }
 };
 
 export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | null> => {
@@ -99,8 +102,6 @@ export const fetchRealtimeReservation = async (movieName: string, movieCd?: stri
   try {
     const q = movieCd ? `?movieName=${encodeURIComponent(movieName)}&movieCd=${movieCd}` : `?movieName=${encodeURIComponent(movieName)}`;
     const res = await fetch(`/api/reservation${q}`);
-    const json = await res.json();
-    if (json.found) return { data: { ...json.data, crawledTime: json.crawledTime } };
-    return { data: null, error: json.debug_error };
-  } catch (e: any) { return { data: null, error: e.message }; }
+    return res.ok ? await res.json() : { data: null };
+  } catch { return { data: null }; }
 };
