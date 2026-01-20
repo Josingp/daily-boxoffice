@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const cleanJsonString = (str: string) => {
   if (!str) return "{}";
+  // 마크다운 코드 블록 제거
   return str.replace(/```json/g, "").replace(/```/g, "").trim();
 };
 
@@ -21,69 +22,74 @@ export default async function handler(req, res) {
     const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 실시간 분석일 경우 historyData 활용하여 증감 계산
-    let trendAnalysis = "";
-    if (type === 'REALTIME' && historyData && historyData.length > 1) {
-        const last = historyData[historyData.length-1];
-        const prev = historyData[historyData.length-2];
-        const diff = (last.val_audi || 0) - (prev.val_audi || 0);
-        trendAnalysis = `Compared to ${prev.time}, reservations changed by ${diff > 0 ? '+' : ''}${diff} people.`;
-    }
+    // 데이터 전처리: 최근 7일(또는 7개 포인트) 데이터만 추출하여 분석 효율성 증대
+    const recentTrend = trendData ? trendData.slice(-7) : [];
+    const recentHistory = historyData ? historyData.slice(-12) : []; // 최근 1시간(5분*12)
 
-    const prompt = `
-    Role: Box Office Analyst.
-    Target: ${movieName} (${type}).
-    Status: Total ${currentAudiAcc}.
-    ${trendAnalysis}
-    
-    Task:
-    1. Analyze the trend (${type}). Mention specific numbers (increase/decrease).
-    2. Write a 3-paragraph Korean report (Status, Analysis, Outlook).
-    3. Predict 3-day numbers. Provide 2 keywords.
+    // AI에게 부여할 역할 및 알고리즘 명세
+    const systemInstruction = `
+    You are an expert Data Scientist specializing in Box Office prediction.
+    Your goal is to analyze the given time-series data and forecast future audience numbers using statistical reasoning.
 
-    Output JSON ONLY:
+    [Input Data]
+    - Movie: ${movieName}
+    - Type: ${type} (DAILY = Daily Audience, REALTIME = Realtime Reservations)
+    - Current Total Audience: ${currentAudiAcc}
+    - Recent Trend Data: ${JSON.stringify(type === 'DAILY' ? recentTrend : recentHistory)}
+    - Movie Info: ${JSON.stringify(movieInfo || {})}
+
+    [Prediction Algorithm]
+    1. **Trend Analysis**: Calculate the recent growth rate (CAGR or linear slope).
+    2. **Seasonality/Day Factor**: 
+       - If DAILY: Apply weighted multipliers for weekends (Fri: 1.2x, Sat: 2.0x, Sun: 1.8x vs Weekdays).
+       - If REALTIME: Consider the time of day (evening peaks).
+    3. **Momentum**: If 'rate' (reservation rate) is increasing, apply a positive bias.
+
+    [Task]
+    1. Predict the audience count for the **next 3 time points** (Next 3 days for DAILY, Next 3 time slots for REALTIME).
+    2. Write a professional report in **Korean** (3 paragraphs):
+       - **현황 분석 (Status)**: Analyze the current trajectory based on the data.
+       - **예측 모델링 (Forecast)**: Explain the logic used for prediction (e.g., "Due to the weekend effect...").
+       - **미래 전망 (Outlook)**: Suggest strategic insights.
+
+    [Output Format - JSON Only]
     {
-      "analysis": "Korean text...",
-      "forecast": [0,0,0],
-      "keywords": ["a", "b"]
+      "analysis": "Korean report text...",
+      "forecast": [1000, 1500, 2000], // Numbers only, no strings
+      "keywords": ["Keyword1", "Keyword2"]
     }
     `;
-    
-    // [수정 1] SDK 버전에 맞는 파라미터 구조 (config 사용)
+
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash", 
-      contents: [{ parts: [{ text: prompt }] }], // contents는 배열이어야 안전함
-      config: { responseMimeType: "application/json" } // generationConfig -> config
+      contents: [{ parts: [{ text: systemInstruction }] }],
+      config: { responseMimeType: "application/json" }
     });
 
-    // [수정 2] 응답 객체 구조 변경 대응 (response.response 제거)
-    // 최신 SDK에서는 response 자체가 결과를 담고 있거나 candidates에 바로 접근합니다.
     let text = "{}";
     if (response.candidates && response.candidates.length > 0) {
         text = response.candidates[0].content?.parts?.[0]?.text || "{}";
-    } else if (typeof response.text === 'function') {
-        text = response.text() || "{}";
     }
 
     let result;
     try {
       result = JSON.parse(cleanJsonString(text));
-    } catch {
-      result = { analysis: "분석 데이터를 생성하는 중입니다.", forecast: [0, 0, 0] };
+    } catch (e) {
+      console.error("JSON Parse Error:", text);
+      result = { analysis: "분석 데이터를 처리하는 중 오류가 발생했습니다.", forecast: [0, 0, 0] };
     }
 
     return res.status(200).json({
       analysisText: result.analysis,
       predictionSeries: result.forecast || [0, 0, 0],
-      searchKeywords: result.keywords || [movieName],
-      predictedFinalAudi: { min: 0, max: 0, avg: 0 }
+      searchKeywords: result.keywords || [movieName]
     });
 
   } catch (error: any) {
-    console.error("AI Error:", error);
+    console.error("AI Service Error:", error);
     return res.status(200).json({ 
-      analysisText: `분석 실패: ${error.message || "알 수 없는 오류"}`, 
-      predictionSeries: [0, 0, 0]
+      analysisText: `분석 실패: ${error.message}`, 
+      predictionSeries: [0, 0, 0] 
     });
   }
 }
