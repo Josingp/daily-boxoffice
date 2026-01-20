@@ -12,10 +12,8 @@ type BoxOfficeType = 'DAILY' | 'REALTIME';
 const App: React.FC = () => {
   const [targetDate, setTargetDate] = useState<string>(getYesterdayStr());
   const [boxOfficeType, setBoxOfficeType] = useState<BoxOfficeType>('DAILY');
-  
   const [movieList, setMovieList] = useState<(DailyBoxOfficeList | RealtimeMovie)[]>([]);
-  const [crawledTime, setCrawledTime] = useState<string>(''); // 메인 화면이 알고 있는 "진짜 조회일시"
-  
+  const [crawledTime, setCrawledTime] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMovie, setSelectedMovie] = useState<DailyBoxOfficeList | null>(null);
@@ -23,29 +21,22 @@ const App: React.FC = () => {
   const loadData = async () => {
     setLoading(true);
     setMovieList([]);
-
     try {
       if (boxOfficeType === 'DAILY') {
         const data = await fetchDailyBoxOffice(targetDate);
-        if (data.boxOfficeResult && data.boxOfficeResult.dailyBoxOfficeList) {
+        if (data.boxOfficeResult?.dailyBoxOfficeList) {
           setMovieList(data.boxOfficeResult.dailyBoxOfficeList);
         }
       } else {
         const { data, crawledTime } = await fetchRealtimeRanking();
         setMovieList(data);
-        // 여기서 KOBIS HTML에서 긁어온 "진짜 시간"을 저장함
         setCrawledTime(crawledTime);
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err); } 
+    finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    loadData();
-  }, [targetDate, boxOfficeType]);
+  useEffect(() => { loadData(); }, [targetDate, boxOfficeType]);
 
   const filteredList = useMemo(() => {
     return movieList.filter(m => {
@@ -56,43 +47,29 @@ const App: React.FC = () => {
 
   const handleMovieClick = (movie: DailyBoxOfficeList | RealtimeMovie) => {
     if ('movieNm' in movie) {
-      // [일별 박스오피스]인 경우
+      // [일별] 선택 시: DetailView 내부에서 fetchRealtimeReservation을 통해 시간을 가져옵니다.
       setSelectedMovie(movie);
     } else {
-      // [실시간 예매율]인 경우 -> 여기가 중요!
-      // RealtimeMovie 타입을 DailyBoxOfficeList 타입으로 변환하면서
-      // 메인 화면에 있던 'crawledTime'을 'realtime' 객체 안에 심어서 보냅니다.
+      // [실시간] 선택 시: 메인 화면의 시간(crawledTime)을 주입
+      // + JSON에 저장된 detail 정보도 넘겨줌 (API 호출 최소화)
       const converted: DailyBoxOfficeList = {
-        rnum: movie.rank, 
-        rank: movie.rank, 
-        rankInten: '0', 
-        rankOldAndNew: 'OLD',
-        movieCd: movie.movieCd, 
-        movieNm: movie.title, 
-        openDt: '',
-        salesAmt: movie.salesAmt, 
-        salesShare: movie.rate.replace('%', ''),
-        salesInten: '0', 
-        salesChange: '0', 
-        salesAcc: movie.salesAcc,
-        audiCnt: movie.audiCnt, 
-        audiInten: '0', 
-        audiChange: '0', 
-        audiAcc: movie.audiAcc,
-        scrnCnt: '0', 
-        showCnt: '0',
-        // [핵심 수정] 여기에 메인 화면의 시간을 넣어줍니다.
-        // DetailView는 이 정보를 보고 "아, 데이터가 있네?" 하고 API 호출을 안 하게 됩니다.
+        rnum: movie.rank, rank: movie.rank, rankInten: '0', rankOldAndNew: 'OLD',
+        movieCd: movie.movieCd, movieNm: movie.title, openDt: '',
+        salesAmt: movie.salesAmt, salesShare: movie.rate.replace('%', ''),
+        salesInten: '0', salesChange: '0', salesAcc: movie.salesAcc,
+        audiCnt: movie.audiCnt, audiInten: '0', audiChange: '0', audiAcc: movie.audiAcc,
+        scrnCnt: '0', showCnt: '0',
         realtime: {
-            rank: movie.rank,
-            rate: movie.rate,
-            audiCnt: movie.audiCnt,
-            salesAmt: movie.salesAmt,
-            audiAcc: movie.audiAcc,
-            salesAcc: movie.salesAcc,
-            crawledTime: crawledTime // <-- 이 값이 상세 화면의 "실시간 기준" 텍스트가 됨
+            rank: movie.rank, rate: movie.rate,
+            audiCnt: movie.audiCnt, salesAmt: movie.salesAmt,
+            audiAcc: movie.audiAcc, salesAcc: movie.salesAcc,
+            crawledTime: crawledTime // [핵심] 시간 전달
         }
       };
+      // 상세정보가 있으면 병합 (포스터 등 즉시 표시)
+      if ((movie as any).detail) {
+          converted['detail'] = (movie as any).detail;
+      }
       setSelectedMovie(converted);
     }
   };
@@ -102,7 +79,6 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center font-sans text-slate-900">
       <div className="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col">
-        
         <header className="bg-white px-5 pt-6 pb-4 sticky top-0 z-10 border-b border-slate-100">
           <div className="flex justify-between items-end mb-4">
             <div>
@@ -111,12 +87,10 @@ const App: React.FC = () => {
                 {boxOfficeType === 'DAILY' ? '일별 박스오피스 리포트' : 'KOBIS 실시간 예매율'}
               </p>
             </div>
-            
             {boxOfficeType === 'DAILY' && (
               <div className="relative">
                 <label htmlFor="date-picker" className="flex items-center gap-2 text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                  <Calendar size={16} />
-                  {formatDateDisplay(targetDate)}
+                  <Calendar size={16} />{formatDateDisplay(targetDate)}
                 </label>
                 <input id="date-picker" type="date" className="absolute inset-0 opacity-0 cursor-pointer"
                   value={dateInputValue} max={new Date().toISOString().split('T')[0]}
@@ -124,38 +98,18 @@ const App: React.FC = () => {
                 />
               </div>
             )}
-            
             {boxOfficeType === 'REALTIME' && (
                <div className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-1.5 rounded-lg border border-indigo-100">
-                 <Clock size={14} />
-                 {/* 여기가 메인 화면의 시간 표시 부분 */}
-                 <span>{crawledTime ? `${crawledTime} 기준` : '실시간'}</span>
+                 <Clock size={14} /><span>{crawledTime ? `${crawledTime} 기준` : '실시간'}</span>
                </div>
             )}
           </div>
-
           <div className="flex p-1 bg-slate-100 rounded-xl mb-4">
-            <button 
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                boxOfficeType === 'DAILY' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-              }`}
-              onClick={() => setBoxOfficeType('DAILY')}
-            >
-              일별 박스오피스
-            </button>
-            <button 
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                boxOfficeType === 'REALTIME' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-              }`}
-              onClick={() => setBoxOfficeType('REALTIME')}
-            >
-              실시간 예매율
-            </button>
+            <button className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${boxOfficeType === 'DAILY' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`} onClick={() => setBoxOfficeType('DAILY')}>일별 박스오피스</button>
+            <button className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${boxOfficeType === 'REALTIME' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`} onClick={() => setBoxOfficeType('REALTIME')}>실시간 예매율</button>
           </div>
-          
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </header>
-
         <main className="flex-1 p-4 bg-slate-50/50">
           {loading ? (
              <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -165,37 +119,20 @@ const App: React.FC = () => {
           ) : filteredList.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
               <p>데이터가 없습니다.</p>
-              <button onClick={loadData} className="flex items-center gap-2 text-sm text-blue-500 hover:underline">
-                <RotateCw size={16}/> 다시 시도
-              </button>
+              <button onClick={loadData} className="flex items-center gap-2 text-sm text-blue-500 hover:underline"><RotateCw size={16}/> 다시 시도</button>
             </div>
           ) : (
             <ul className="pb-10">
               {filteredList.map((movie) => (
-                <MovieListItem 
-                  key={movie.movieCd} 
-                  movie={movie} 
-                  type={boxOfficeType}
-                  onClick={handleMovieClick} 
-                />
+                <MovieListItem key={movie.movieCd} movie={movie} type={boxOfficeType} onClick={handleMovieClick} />
               ))}
             </ul>
           )}
         </main>
-        
-        <div className="text-center py-6 bg-slate-50 text-[10px] text-slate-400 border-t border-slate-100">
-          데이터 출처: 영화진흥위원회(KOBIS)<br/>Copyright © BoxOffice Pro
-        </div>
-
-        <DetailView 
-          movie={selectedMovie} 
-          targetDate={targetDate} 
-          type={boxOfficeType}
-          onClose={() => setSelectedMovie(null)} 
-        />
+        <div className="text-center py-6 bg-slate-50 text-[10px] text-slate-400 border-t border-slate-100">데이터 출처: 영화진흥위원회(KOBIS)<br/>Copyright © BoxOffice Pro</div>
+        <DetailView movie={selectedMovie} targetDate={targetDate} type={boxOfficeType} onClose={() => setSelectedMovie(null)} />
       </div>
     </div>
   );
 };
-
 export default App;
