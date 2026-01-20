@@ -2,8 +2,8 @@ name: Data Scraper
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # 5분마다 실행 (가장 빠름)
-  workflow_dispatch:      # 수동 실행 버튼
+    - cron: '*/5 * * * *' # 5분마다 실행 (실시간 데이터용)
+  workflow_dispatch:      # 수동 실행 버튼 (일별 데이터 강제 업데이트용)
 
 permissions:
   contents: write
@@ -22,25 +22,27 @@ jobs:
       
       - run: pip install requests beautifulsoup4
       
-      # 1. 실시간 데이터 업데이트
+      # 1. 실시간 데이터 업데이트 (항상 실행)
       - name: Update Realtime
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_realtime.py
 
-      # 2. 일별 데이터 업데이트 (오전 9시 = UTC 0시)
+      # 2. 일별 데이터 업데이트 (조건 수정됨)
+      # [변경점] 수동으로 실행했거나(workflow_dispatch), 한국 시간 오전 9시(UTC 00)라면 실행
       - name: Update Daily
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: |
-          # UTC 시간 구하기
           HOUR=$(date -u +%H)
-          # UTC 00시 (한국 오전 9시)에만 실행
-          if [ "$HOUR" == "00" ]; then
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "$HOUR" == "00" ]; then
+            echo "Running update_daily.py..."
             python scripts/update_daily.py
+          else
+            echo "Skipping daily update (Current hour: $HOUR UTC, Event: ${{ github.event_name }})"
           fi
 
-      # 3. 변경 사항 저장 (충돌 방지 로직 추가)
+      # 3. 변경 사항 저장 (충돌 방지 로직 포함)
       - name: Commit
         run: |
           git config --global user.name "GitHub Action"
@@ -52,7 +54,7 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update Data"
-            # [핵심] 리모트 변경사항 당겨오기 (충돌 해결)
+            # 리모트 변경사항 당겨와서 합침 (충돌 방지)
             git pull --rebase origin main
             git push
           fi
