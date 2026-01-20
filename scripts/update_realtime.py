@@ -26,27 +26,27 @@ def fetch_movie_detail(movie_cd):
     try:
         url = f"{KOBIS_DETAIL_URL}?key={KOBIS_API_KEY}&movieCd={movie_cd}"
         res = requests.get(url, timeout=3)
-        return res.json().get("movieInfoResult", {}).get("movieInfo")
+        info = res.json().get("movieInfoResult", {}).get("movieInfo")
+        return info
     except: return None
 
-# [NEW] 데이터 변화 감지 함수
-def is_same_data(last_entry, new_entry):
-    if not last_entry: return False
-    # 순위, 예매율, 관객수, 매출액 등이 모두 같으면 '변화 없음'으로 판단
+# 데이터 변화 감지 (중복 저장 방지)
+def is_same_data(last, new):
+    if not last: return False
     return (
-        last_entry['rank'] == new_entry['rank'] and
-        last_entry['rate'] == new_entry['rate'] and
-        last_entry['audiCnt'] == new_entry['audiCnt'] and
-        last_entry['salesAmt'] == new_entry['salesAmt'] and
-        last_entry['audiAcc'] == new_entry['audiAcc']
+        last['rank'] == new['rank'] and
+        last['rate'] == new['rate'] and
+        last['audiCnt'] == new['audiCnt'] and
+        last['salesAmt'] == new['salesAmt']
     )
 
 def update_realtime():
-    print("Updating Realtime Data (Smart Mode)...")
+    print("Running Smart Update...")
     
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
     
+    # 1. 일별 데이터에서 상세정보 미리 캐싱 (API 절약)
     detail_cache = {}
     if "movies" in daily_data:
         for m in daily_data["movies"]:
@@ -57,6 +57,7 @@ def update_realtime():
     headers = {'User-Agent': 'Mozilla/5.0'}
     
     try:
+        # KOBIS 크롤링
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
         soup = BeautifulSoup(visit.text, 'html.parser')
         csrf = soup.find('input', {'name': 'CSRFToken'})['value']
@@ -71,12 +72,10 @@ def update_realtime():
         crawled_time = ""
         try:
             txt = soup.get_text()
+            # "조회일시 : 2026/01/20 18:52" 패턴 찾기
             match = re.search(r"조회일시\s*:\s*(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", txt)
             if match:
                 crawled_time = match.group(1).replace("/", "-")
-            else:
-                match = re.search(r"조회일시\s*:\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})", txt)
-                if match: crawled_time = match.group(1)
         except: pass
         
         if not crawled_time:
@@ -85,6 +84,7 @@ def update_realtime():
         rows = soup.find_all("tr")
         count = 0
         
+        # 메타데이터 저장소 준비
         if "meta" not in realtime_data: realtime_data["meta"] = {}
 
         for row in rows:
@@ -94,6 +94,7 @@ def update_realtime():
             rank = cols[0].get_text(strip=True)
             if not rank.isdigit(): continue
             
+            # 영화 정보 추출
             target_link = row.find("a", onclick=MSTVIEW_REGEX.search)
             title = ""
             movie_cd = ""
@@ -107,27 +108,30 @@ def update_realtime():
             
             if not title: continue
             
+            # 2. [DB 활용] 상세정보가 없으면 찾아오기
+            if title not in realtime_data["meta"]:
+                if movie_cd and movie_cd in detail_cache:
+                    # Case A: 일별 데이터(daily_data.json)에 정보가 있다! -> 가져옴
+                    print(f"[Cache Hit] Found details for {title}")
+                    realtime_data["meta"][title] = detail_cache[movie_cd]
+                elif movie_cd and int(rank) <= 30: 
+                    # Case B: 어디에도 없다 -> API 호출 (상위 30위만)
+                    print(f"[API Call] Fetching details for {title}...")
+                    detail = fetch_movie_detail(movie_cd)
+                    if detail: 
+                        realtime_data["meta"][title] = detail
+                        time.sleep(0.1) # API 보호
+
+            # 데이터 값 추출
             rate = cols[3].get_text(strip=True).replace('%', '')
             audi_cnt_raw = cols[6].get_text(strip=True)
             sales_amt_raw = cols[4].get_text(strip=True)
             audi_acc_raw = cols[7].get_text(strip=True)
             sales_acc_raw = cols[5].get_text(strip=True)
 
-            # 상세정보 확보
-            if movie_cd and title not in realtime_data["meta"]:
-                if movie_cd in detail_cache:
-                    realtime_data["meta"][title] = detail_cache[movie_cd]
-                elif int(rank) <= 20: # 상위 20개만 API 호출
-                    detail = fetch_movie_detail(movie_cd)
-                    if detail: 
-                        realtime_data["meta"][title] = detail
-                        time.sleep(0.1)
-
-            # 히스토리 데이터 처리
             if title not in realtime_data: realtime_data[title] = []
             
-            last_entry = realtime_data[title][-1] if realtime_data[title] else None
-            
+            # 스마트 업데이트 (변화가 있을 때만 저장)
             new_entry = {
                 "time": crawled_time,
                 "rank": int(rank),
@@ -139,16 +143,15 @@ def update_realtime():
                 "val_audi": int(audi_cnt_raw.replace(',', '')) if audi_cnt_raw.replace(',', '').isdigit() else 0,
                 "val_rate": float(rate) if rate else 0
             }
-
+            
+            last_entry = realtime_data[title][-1] if realtime_data[title] else None
+            
             if is_same_data(last_entry, new_entry):
-                # [변한 게 없음] -> 기존 마지막 데이터의 시간만 최신으로 업데이트 (덮어쓰기)
-                # 이렇게 하면 그래프에서 선이 평행하게 쭉 이어집니다.
-                realtime_data[title][-1]['time'] = crawled_time
+                realtime_data[title][-1]['time'] = crawled_time # 시간만 갱신
             else:
-                # [변한 게 있음] -> 새로운 데이터 추가
-                realtime_data[title].append(new_entry)
+                realtime_data[title].append(new_entry) # 새 데이터 추가
 
-            # 데이터가 너무 많이 쌓이지 않게 관리 (최근 288개 = 5분단위 시 하루치, 1시간 단위 시 12일치)
+            # 최근 데이터만 유지 (최적화)
             if len(realtime_data[title]) > 288:
                 realtime_data[title] = realtime_data[title][-288:]
             
@@ -161,7 +164,7 @@ def update_realtime():
             print(f"Updated {count} movies at {crawled_time}")
 
     except Exception as e:
-        print(f"Realtime Update Failed: {e}")
+        print(f"Update Failed: {e}")
 
 if __name__ == "__main__":
     update_realtime()
