@@ -20,14 +20,14 @@ export default async function handler(req, res) {
     const { movieName, trendData, movieInfo, currentAudiAcc, type } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // [중요 수정] 모델명 gemini-2.0-flash 사용
+    // [중요] 2.0 Flash 모델 사용
     const prompt = `
     Role: Box Office Analyst.
     Target: ${movieName} (${type}).
     Status: Total ${currentAudiAcc}.
     
     Task:
-    Analyze current trend and write 3-paragraph Korean report.
+    Analyze trend & write 3-para Korean report.
     Predict 3-day numbers. Provide 2 keywords.
 
     Output JSON ONLY:
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     try {
       result = JSON.parse(cleanJsonString(text));
     } catch {
-      result = { analysis: "분석 데이터를 생성하는 중입니다.", forecast: [0, 0, 0] };
+      result = { analysis: "분석 데이터를 처리하는 중입니다.", forecast: [0, 0, 0] };
     }
 
     return res.status(200).json({
