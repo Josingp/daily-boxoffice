@@ -1,54 +1,64 @@
 import os
 import json
 import requests
+import re
 import datetime
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
-# [설정] 프론트엔드가 찾는 파일명과 100% 일치
 DAILY_FILE = "public/daily_data.json"
 REALTIME_FILE = "public/realtime_data.json"
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
-
-# [핵심] 차단 방지 헤더
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Referer': 'https://www.kobis.or.kr/',
-    'Content-Type': 'application/x-www-form-urlencoded'
-}
+KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
+MSTVIEW_REGEX = re.compile(r"mstView\s*\(\s*['\"]movie['\"]\s*,\s*['\"]([0-9]+)['\"]\s*\)")
 
 def ensure_dir():
     if not os.path.exists("public"):
         os.makedirs("public")
 
+def fetch_robust():
+    session = requests.Session()
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': KOBIS_REALTIME_URL
+    }
+    try:
+        visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=10)
+        soup = BeautifulSoup(visit.text, 'html.parser')
+        csrf = soup.find('input', {'name': 'CSRFToken'})['value']
+        
+        return session.post(KOBIS_REALTIME_URL, headers=headers, data={
+            'CSRFToken': csrf, 'dmlMode': 'search', 'allMovieYn': 'Y', 'loadEnd': '0'
+        }, timeout=20)
+    except: return None
+
 def update_realtime():
     print("Updating Realtime Data...")
-    url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
     try:
-        # 헤더 포함 요청
-        resp = requests.post(url, headers=HEADERS, data={'dmlMode': 'search', 'allMovieYn': 'Y'}, timeout=20)
+        resp = fetch_robust()
+        if not resp: return
+
         soup = BeautifulSoup(resp.text, 'html.parser')
-        
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         history = {}
 
-        # 기존 데이터 로드
         if os.path.exists(REALTIME_FILE):
             with open(REALTIME_FILE, 'r', encoding='utf-8') as f:
                 try: history = json.load(f)
                 except: pass
 
         rows = soup.find_all("tr")
-        if len(rows) < 2: return
-
+        count = 0
         for row in rows:
+            # 정밀 파싱
+            target_link = row.find("a", onclick=MSTVIEW_REGEX.search)
+            if not target_link: continue
+            
+            title = target_link.get("title", "").strip() or target_link.get_text(strip=True)
             cols = row.find_all("td")
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if not rank.isdigit() or int(rank) > 10: continue
-            
-            title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             rate = cols[3].get_text(strip=True).replace('%', '')
             
             if title not in history: history[title] = []
@@ -59,13 +69,13 @@ def update_realtime():
                     "rate": float(rate) if rate else 0,
                     "rank": int(rank)
                 })
-                # 24시간(10분 간격 * 144) 데이터 유지
-                if len(history[title]) > 144:
-                    history[title] = history[title][-144:]
+                if len(history[title]) > 144: history[title] = history[title][-144:]
+            count += 1
 
-        with open(REALTIME_FILE, 'w', encoding='utf-8') as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
-        print("Realtime Data Saved.")
+        if count > 0:
+            with open(REALTIME_FILE, 'w', encoding='utf-8') as f:
+                json.dump(history, f, ensure_ascii=False, indent=2)
+            print(f"Realtime Data Saved ({count} movies).")
         
     except Exception as e:
         print(f"Realtime Update Failed: {e}")
@@ -76,7 +86,6 @@ def update_daily():
 
     url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
     detail_url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
-    
     yesterday = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
     
     try:
@@ -111,6 +120,5 @@ def update_daily():
 if __name__ == "__main__":
     ensure_dir()
     update_realtime()
-    # UTC 1시(한국 10시) 또는 파일 없을 때 실행
     if not os.path.exists(DAILY_FILE) or datetime.datetime.utcnow().hour == 1:
         update_daily()
