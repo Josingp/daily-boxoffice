@@ -354,14 +354,6 @@
           "showCnt": 800
         },
         {
-          "date": "20260107",
-          "dateDisplay": "01/07",
-          "audiCnt": 11929,
-          "salesAmt": 110968100,
-          "scrnCnt": 507,
-          "showCnt": 819
-        },
-        {
           "date": "20260108",
           "dateDisplay": "01/08",
           "audiCnt": 15293,
@@ -386,20 +378,20 @@
           "showCnt": 1088
         },
         {
+          "date": "20260112",
+          "dateDisplay": "01/12",
+          "audiCnt": 16112,
+          "salesAmt": 150356140,
+          "scrnCnt": 547,
+          "showCnt": 1086
+        },
+        {
           "date": "20260113",
           "dateDisplay": "01/13",
           "audiCnt": 16048,
           "salesAmt": 151664760,
           "scrnCnt": 567,
           "showCnt": 1102
-        },
-        {
-          "date": "20260114",
-          "dateDisplay": "01/14",
-          "audiCnt": 12554,
-          "salesAmt": 117214550,
-          "scrnCnt": 524,
-          "showCnt": 970
         },
         {
           "date": "20260115",
@@ -410,22 +402,6 @@
           "showCnt": 1060
         },
         {
-          "date": "20260117",
-          "dateDisplay": "01/17",
-          "audiCnt": 45983,
-          "salesAmt": 458373360,
-          "scrnCnt": 734,
-          "showCnt": 1450
-        },
-        {
-          "date": "20260118",
-          "dateDisplay": "01/18",
-          "audiCnt": 49330,
-          "salesAmt": 498765010,
-          "scrnCnt": 740,
-          "showCnt": 1406
-        },
-        {
           "date": "20260119",
           "dateDisplay": "01/19",
           "audiCnt": 24177,
@@ -434,8 +410,8 @@
           "showCnt": 1373
         }
       ],
-      "scrnInten": -135,
-      "showInten": -33,
+      "scrnInten": 26,
+      "showInten": 313,
       "detail": {}
     },
     {
@@ -459,12 +435,20 @@
       "showCnt": "2095",
       "trend": [
         {
-          "date": "20251218",
-          "dateDisplay": "12/18",
-          "audiCnt": 179034,
-          "salesAmt": 2048696550,
-          "scrnCnt": 2535,
-          "showCnt": 7819
+          "date": "20251227",
+          "dateDisplay": "12/27",
+          "audiCnt": 416651,
+          "salesAmt": 4882594660,
+          "scrnCnt": 2001,
+          "showCnt": 6478
+        },
+        {
+          "date": "20251228",
+          "dateDisplay": "12/28",
+          "audiCnt": 364963,
+          "salesAmt": 4243646380,
+          "scrnCnt": 1976,
+          "showCnt": 6201
         },
         {
           "date": "20251230",
@@ -473,6 +457,22 @@
           "salesAmt": 1573424620,
           "scrnCnt": 1897,
           "showCnt": 5732
+        },
+        {
+          "date": "20251231",
+          "dateDisplay": "12/31",
+          "audiCnt": 255811,
+          "salesAmt": 2528548820,
+          "scrnCnt": 1857,
+          "showCnt": 5445
+        },
+        {
+          "date": "20260101",
+          "dateDisplay": "01/01",
+          "audiCnt": 358005,
+          "salesAmt": 4207700560,
+          "scrnCnt": 1752,
+          "showCnt": 5425
         },
         {
           "date": "20260102",
@@ -539,6 +539,22 @@
           "showCnt": 4147
         },
         {
+          "date": "20260110",
+          "dateDisplay": "01/10",
+          "audiCnt": 135341,
+          "salesAmt": 1697567980,
+          "scrnCnt": 1486,
+          "showCnt": 4307
+        },
+        {
+          "date": "20260111",
+          "dateDisplay": "01/11",
+          "audiCnt": 122869,
+          "salesAmt": 1521034770,
+          "scrnCnt": 1453,
+          "showCnt": 4052
+        },
+        {
           "date": "20260112",
           "dateDisplay": "01/12",
           "audiCnt": 35410,
@@ -571,192 +587,41 @@
           "showCnt": 2324
         },
         {
+          "date": "20260116",
+          "dateDisplay": "01/16",
+          "audiCnt": 32556,
+          "salesAmt": 416704960,
+          "scrnCnt": 1044,
+          "showCnt": 2448
+        },
+        {
           "date": "20260117",
           "dateDisplay": "01/17",
           "audiCnt": 77511,
           "salesAmt": 974040540,
           "scrnCnt": 1048,
           "showCnt": 2584
+        },
+        {
+          "date": "20260118",
+          "dateDisplay": "01/18",
+          "audiCnt": 66977,
+          "salesAmt": 830440780,
+          "scrnCnt": 1036,
+          "showCnt": 2467
+        },
+        {
+          "date": "20260119",
+          "dateDisplay": "01/19",
+          "audiCnt": 19814,
+          "salesAmt": 236580550,
+          "scrnCnt": 959,
+          "showCnt": 2095
         }
       ],
-      "scrnInten": 1,
-      "showInten": 260,
-      "detail": {
-        "movieCd": "20256396",
-        "movieNm": "아바타: 불과 재",
-        "movieNmEn": "Avatar: Fire and Ash",
-        "movieNmOg": "",
-        "showTm": "197",
-        "prdtYear": "2025",
-        "openDt": "20251217",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "미국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "SF"
-          },
-          {
-            "genreNm": "액션"
-          },
-          {
-            "genreNm": "어드벤처"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "제임스 카메론",
-            "peopleNmEn": "James Cameron"
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "샘 워싱턴",
-            "peopleNmEn": "Sam Worthington",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "조 샐다나",
-            "peopleNmEn": "Zoe Saldana",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "시고니 위버",
-            "peopleNmEn": "Sigourney Weaver",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "스티븐 랭",
-            "peopleNmEn": "Stephen Lang",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "케이트 윈슬렛",
-            "peopleNmEn": "Kate Winslet",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "클리프 커티스",
-            "peopleNmEn": "Cliff Curtis",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "조엘 무어",
-            "peopleNmEn": "Joel Moore",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "지오바니 리비시",
-            "peopleNmEn": "Giovanni Ribisi",
-            "cast": "",
-            "castEn": ""
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          },
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털 4K"
-          },
-          {
-            "showTypeGroupNm": "3D",
-            "showTypeNm": "3D HFR"
-          },
-          {
-            "showTypeGroupNm": "3D",
-            "showTypeNm": "3D 디지털"
-          },
-          {
-            "showTypeGroupNm": "4D",
-            "showTypeNm": "4D"
-          },
-          {
-            "showTypeGroupNm": "IMAX",
-            "showTypeNm": "IMAX"
-          },
-          {
-            "showTypeGroupNm": "IMAX",
-            "showTypeNm": "IMAX HFR"
-          },
-          {
-            "showTypeGroupNm": "IMAX",
-            "showTypeNm": "IMAX 3D"
-          },
-          {
-            "showTypeGroupNm": "ScreenX",
-            "showTypeNm": "ScreenX"
-          },
-          {
-            "showTypeGroupNm": "DOLBYCINEMA",
-            "showTypeNm": "DOLBYCINEMA"
-          },
-          {
-            "showTypeGroupNm": "DOLBYCINEMA",
-            "showTypeNm": "DOLBYCINEMA 3D"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20161801",
-            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
-            "companyNmEn": "The Walt Disney Company Korea",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20161801",
-            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
-            "companyNmEn": "The Walt Disney Company Korea",
-            "companyPartNm": "수입사"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03273",
-            "watchGradeNm": "12세이상관람가"
-          }
-        ],
-        "staffs": [
-          {
-            "peopleNm": "제임스 카메론",
-            "peopleNmEn": "James Cameron",
-            "staffRoleNm": "제작"
-          },
-          {
-            "peopleNm": "아만다 실버",
-            "peopleNmEn": "Amanda Silver",
-            "staffRoleNm": "시나리오(각본)"
-          },
-          {
-            "peopleNm": "제임스 카메론",
-            "peopleNmEn": "James Cameron",
-            "staffRoleNm": "편집"
-          },
-          {
-            "peopleNm": "제임스 카메론",
-            "peopleNmEn": "James Cameron",
-            "staffRoleNm": "시나리오(각본)"
-          },
-          {
-            "peopleNm": "쉐인 샐러노",
-            "peopleNmEn": "Shane Salerno",
-            "staffRoleNm": "시나리오(각본)"
-          }
-        ]
-      }
+      "scrnInten": -77,
+      "showInten": -372,
+      "detail": {}
     },
     {
       "rnum": "4",
@@ -809,10 +674,26 @@
           "salesAmt": 435868540,
           "scrnCnt": 820,
           "showCnt": 2710
+        },
+        {
+          "date": "20260118",
+          "dateDisplay": "01/18",
+          "audiCnt": 38886,
+          "salesAmt": 366913360,
+          "scrnCnt": 808,
+          "showCnt": 2507
+        },
+        {
+          "date": "20260119",
+          "dateDisplay": "01/19",
+          "audiCnt": 11730,
+          "salesAmt": 107668200,
+          "scrnCnt": 683,
+          "showCnt": 2026
         }
       ],
-      "scrnInten": 6,
-      "showInten": 10,
+      "scrnInten": -125,
+      "showInten": -481,
       "detail": {
         "movieCd": "20250188",
         "movieNm": "하트맨",
@@ -939,6 +820,14 @@
       "showCnt": "1075",
       "trend": [
         {
+          "date": "20251126",
+          "dateDisplay": "11/26",
+          "audiCnt": 309168,
+          "salesAmt": 2491089050,
+          "scrnCnt": 2084,
+          "showCnt": 8027
+        },
+        {
           "date": "20251127",
           "dateDisplay": "11/27",
           "audiCnt": 172048,
@@ -953,6 +842,14 @@
           "salesAmt": 2587554610,
           "scrnCnt": 2047,
           "showCnt": 8490
+        },
+        {
+          "date": "20251129",
+          "dateDisplay": "11/29",
+          "audiCnt": 700790,
+          "salesAmt": 6897143360,
+          "scrnCnt": 2383,
+          "showCnt": 10719
         },
         {
           "date": "20251130",
@@ -971,60 +868,12 @@
           "showCnt": 7839
         },
         {
-          "date": "20251202",
-          "dateDisplay": "12/02",
-          "audiCnt": 141447,
-          "salesAmt": 1338676570,
-          "scrnCnt": 1919,
-          "showCnt": 7842
-        },
-        {
-          "date": "20251203",
-          "dateDisplay": "12/03",
-          "audiCnt": 149236,
-          "salesAmt": 1406321030,
-          "scrnCnt": 1626,
-          "showCnt": 6352
-        },
-        {
-          "date": "20251204",
-          "dateDisplay": "12/04",
-          "audiCnt": 128427,
-          "salesAmt": 1207486370,
-          "scrnCnt": 1675,
-          "showCnt": 6399
-        },
-        {
-          "date": "20251205",
-          "dateDisplay": "12/05",
-          "audiCnt": 189916,
-          "salesAmt": 1868754350,
-          "scrnCnt": 1771,
-          "showCnt": 7335
-        },
-        {
-          "date": "20251206",
-          "dateDisplay": "12/06",
-          "audiCnt": 563535,
-          "salesAmt": 5529134680,
-          "scrnCnt": 2282,
-          "showCnt": 10308
-        },
-        {
           "date": "20251212",
           "dateDisplay": "12/12",
           "audiCnt": 180122,
           "salesAmt": 1782957350,
           "scrnCnt": 1800,
           "showCnt": 7357
-        },
-        {
-          "date": "20251213",
-          "dateDisplay": "12/13",
-          "audiCnt": 427384,
-          "salesAmt": 4212118870,
-          "scrnCnt": 2114,
-          "showCnt": 9545
         },
         {
           "date": "20251214",
@@ -1035,12 +884,28 @@
           "showCnt": 9102
         },
         {
+          "date": "20251218",
+          "dateDisplay": "12/18",
+          "audiCnt": 82280,
+          "salesAmt": 760728140,
+          "scrnCnt": 1124,
+          "showCnt": 3063
+        },
+        {
           "date": "20251219",
           "dateDisplay": "12/19",
           "audiCnt": 115388,
           "salesAmt": 1123036410,
           "scrnCnt": 1181,
           "showCnt": 3411
+        },
+        {
+          "date": "20251220",
+          "dateDisplay": "12/20",
+          "audiCnt": 258091,
+          "salesAmt": 2507849770,
+          "scrnCnt": 1332,
+          "showCnt": 4597
         },
         {
           "date": "20251221",
@@ -1067,12 +932,36 @@
           "showCnt": 3716
         },
         {
-          "date": "20251227",
-          "dateDisplay": "12/27",
-          "audiCnt": 182036,
-          "salesAmt": 1779922550,
-          "scrnCnt": 1237,
-          "showCnt": 4424
+          "date": "20251224",
+          "dateDisplay": "12/24",
+          "audiCnt": 131302,
+          "salesAmt": 1229918420,
+          "scrnCnt": 1265,
+          "showCnt": 4336
+        },
+        {
+          "date": "20251225",
+          "dateDisplay": "12/25",
+          "audiCnt": 431302,
+          "salesAmt": 4220061110,
+          "scrnCnt": 1356,
+          "showCnt": 5050
+        },
+        {
+          "date": "20251226",
+          "dateDisplay": "12/26",
+          "audiCnt": 108312,
+          "salesAmt": 1041885560,
+          "scrnCnt": 1235,
+          "showCnt": 4139
+        },
+        {
+          "date": "20251229",
+          "dateDisplay": "12/29",
+          "audiCnt": 59887,
+          "salesAmt": 560483890,
+          "scrnCnt": 1046,
+          "showCnt": 3523
         },
         {
           "date": "20251230",
@@ -1091,28 +980,12 @@
           "showCnt": 2839
         },
         {
-          "date": "20260101",
-          "dateDisplay": "01/01",
-          "audiCnt": 137413,
-          "salesAmt": 1340436480,
-          "scrnCnt": 986,
-          "showCnt": 2876
-        },
-        {
-          "date": "20260105",
-          "dateDisplay": "01/05",
-          "audiCnt": 23959,
-          "salesAmt": 227374110,
-          "scrnCnt": 786,
-          "showCnt": 2250
-        },
-        {
-          "date": "20260106",
-          "dateDisplay": "01/06",
-          "audiCnt": 22717,
-          "salesAmt": 213535900,
-          "scrnCnt": 801,
-          "showCnt": 2207
+          "date": "20260102",
+          "dateDisplay": "01/02",
+          "audiCnt": 65880,
+          "salesAmt": 637877960,
+          "scrnCnt": 920,
+          "showCnt": 2696
         },
         {
           "date": "20260107",
@@ -1129,14 +1002,6 @@
           "salesAmt": 207739540,
           "scrnCnt": 778,
           "showCnt": 2057
-        },
-        {
-          "date": "20260109",
-          "dateDisplay": "01/09",
-          "audiCnt": 25685,
-          "salesAmt": 246648440,
-          "scrnCnt": 801,
-          "showCnt": 2110
         },
         {
           "date": "20260110",
@@ -1171,6 +1036,14 @@
           "showCnt": 1166
         },
         {
+          "date": "20260116",
+          "dateDisplay": "01/16",
+          "audiCnt": 14118,
+          "salesAmt": 135949090,
+          "scrnCnt": 664,
+          "showCnt": 1204
+        },
+        {
           "date": "20260117",
           "dateDisplay": "01/17",
           "audiCnt": 30639,
@@ -1179,9 +1052,114 @@
           "showCnt": 1394
         }
       ],
-      "scrnInten": 103,
-      "showInten": 228,
-      "detail": {}
+      "scrnInten": 64,
+      "showInten": 190,
+      "detail": {
+        "movieCd": "20252432",
+        "movieNm": "주토피아 2",
+        "movieNmEn": "Zootopia 2",
+        "movieNmOg": "",
+        "showTm": "108",
+        "prdtYear": "2025",
+        "openDt": "20251126",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "미국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "애니메이션"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "재러드 부시",
+            "peopleNmEn": "Jared Bush"
+          },
+          {
+            "peopleNm": "바이론 하워드",
+            "peopleNmEn": "Byron Howard"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "지니퍼 굿윈",
+            "peopleNmEn": "Ginnifer Goodwin",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "제이슨 베이트먼",
+            "peopleNmEn": "Jason Bateman",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "키 호이 콴",
+            "peopleNmEn": "Ke Huy-Quan",
+            "cast": "",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          },
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털 영문자막"
+          },
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털 더빙"
+          },
+          {
+            "showTypeGroupNm": "4D",
+            "showTypeNm": "4D 더빙"
+          },
+          {
+            "showTypeGroupNm": "4D",
+            "showTypeNm": "4D"
+          },
+          {
+            "showTypeGroupNm": "IMAX",
+            "showTypeNm": "IMAX"
+          },
+          {
+            "showTypeGroupNm": "ScreenX",
+            "showTypeNm": "ScreenX"
+          },
+          {
+            "showTypeGroupNm": "DOLBYCINEMA",
+            "showTypeNm": "DOLBYCINEMA"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20161801",
+            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
+            "companyNmEn": "The Walt Disney Company Korea",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20161801",
+            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
+            "companyNmEn": "The Walt Disney Company Korea",
+            "companyPartNm": "수입사"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03006",
+            "watchGradeNm": "전체관람가"
+          }
+        ],
+        "staffs": []
+      }
     },
     {
       "rnum": "6",
@@ -1212,6 +1190,14 @@
           "showCnt": 1033
         },
         {
+          "date": "20260115",
+          "dateDisplay": "01/15",
+          "audiCnt": 14547,
+          "salesAmt": 124920060,
+          "scrnCnt": 709,
+          "showCnt": 1147
+        },
+        {
           "date": "20260116",
           "dateDisplay": "01/16",
           "audiCnt": 13473,
@@ -1238,7 +1224,86 @@
       ],
       "scrnInten": -11,
       "showInten": -21,
-      "detail": {}
+      "detail": {
+        "movieCd": "20250482",
+        "movieNm": "신비아파트 10주년 극장판: 한 번 더, 소환",
+        "movieNmEn": "Shinbi's Haunted House: One More Summon",
+        "movieNmOg": "",
+        "showTm": "86",
+        "prdtYear": "2025",
+        "openDt": "20260114",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "애니메이션"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "최우석",
+            "peopleNmEn": ""
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "김영은",
+            "peopleNmEn": "",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "조현정",
+            "peopleNmEn": "",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "신용우",
+            "peopleNmEn": "SHIN Yong-woo",
+            "cast": "",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "제공"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03363",
+            "watchGradeNm": "전체관람가"
+          }
+        ],
+        "staffs": []
+      }
     },
     {
       "rnum": "7",
@@ -1260,14 +1325,6 @@
       "scrnCnt": "363",
       "showCnt": "574",
       "trend": [
-        {
-          "date": "20251224",
-          "dateDisplay": "12/24",
-          "audiCnt": 63921,
-          "salesAmt": 613681160,
-          "scrnCnt": 755,
-          "showCnt": 1855
-        },
         {
           "date": "20251225",
           "dateDisplay": "12/25",
@@ -1309,30 +1366,6 @@
           "showCnt": 2010
         },
         {
-          "date": "20251230",
-          "dateDisplay": "12/30",
-          "audiCnt": 36791,
-          "salesAmt": 346528680,
-          "scrnCnt": 808,
-          "showCnt": 2047
-        },
-        {
-          "date": "20251231",
-          "dateDisplay": "12/31",
-          "audiCnt": 53323,
-          "salesAmt": 422350700,
-          "scrnCnt": 781,
-          "showCnt": 1622
-        },
-        {
-          "date": "20260101",
-          "dateDisplay": "01/01",
-          "audiCnt": 53427,
-          "salesAmt": 537611600,
-          "scrnCnt": 743,
-          "showCnt": 1469
-        },
-        {
           "date": "20260102",
           "dateDisplay": "01/02",
           "audiCnt": 28817,
@@ -1365,38 +1398,6 @@
           "showCnt": 1353
         },
         {
-          "date": "20260106",
-          "dateDisplay": "01/06",
-          "audiCnt": 14325,
-          "salesAmt": 134528700,
-          "scrnCnt": 680,
-          "showCnt": 1338
-        },
-        {
-          "date": "20260107",
-          "dateDisplay": "01/07",
-          "audiCnt": 13453,
-          "salesAmt": 128883820,
-          "scrnCnt": 632,
-          "showCnt": 1161
-        },
-        {
-          "date": "20260108",
-          "dateDisplay": "01/08",
-          "audiCnt": 13825,
-          "salesAmt": 130884320,
-          "scrnCnt": 641,
-          "showCnt": 1170
-        },
-        {
-          "date": "20260109",
-          "dateDisplay": "01/09",
-          "audiCnt": 16298,
-          "salesAmt": 161301550,
-          "scrnCnt": 658,
-          "showCnt": 1211
-        },
-        {
           "date": "20260110",
           "dateDisplay": "01/10",
           "audiCnt": 24595,
@@ -1413,28 +1414,12 @@
           "showCnt": 1085
         },
         {
-          "date": "20260112",
-          "dateDisplay": "01/12",
-          "audiCnt": 8772,
-          "salesAmt": 84365370,
-          "scrnCnt": 562,
-          "showCnt": 1029
-        },
-        {
           "date": "20260113",
           "dateDisplay": "01/13",
           "audiCnt": 8974,
           "salesAmt": 85799620,
           "scrnCnt": 585,
           "showCnt": 1067
-        },
-        {
-          "date": "20260116",
-          "dateDisplay": "01/16",
-          "audiCnt": 6030,
-          "salesAmt": 60431960,
-          "scrnCnt": 405,
-          "showCnt": 619
         },
         {
           "date": "20260117",
@@ -1455,128 +1440,7 @@
       ],
       "scrnInten": -6,
       "showInten": -29,
-      "detail": {
-        "movieCd": "20254219",
-        "movieNm": "오늘 밤, 세계에서 이 사랑이 사라진다 해도",
-        "movieNmEn": "",
-        "movieNmOg": "",
-        "showTm": "105",
-        "prdtYear": "2025",
-        "openDt": "20251224",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "한국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "멜로/로맨스"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "김혜영",
-            "peopleNmEn": ""
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "추영우",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "신시아",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "조유정",
-            "peopleNmEn": "",
-            "cast": "최지민",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "진호은",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "조원식",
-            "peopleNmEn": "Cho Won sik",
-            "cast": "2학년 학생 5",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "김동휘",
-            "peopleNmEn": "",
-            "cast": "2학년 5반 학생 1",
-            "castEn": ""
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20254720",
-            "companyNm": "블루파이어스튜디오 주식회사",
-            "companyNmEn": "BLUEFIRESTUDIO",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20229461",
-            "companyNm": "(주)바이포엠스튜디오",
-            "companyNmEn": "BY4MSTUDIO",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20229461",
-            "companyNm": "(주)바이포엠스튜디오",
-            "companyNmEn": "BY4MSTUDIO",
-            "companyPartNm": "제공"
-          },
-          {
-            "companyCd": "20229581",
-            "companyNm": "(주)레드아이스 엔터테인먼트",
-            "companyNmEn": "",
-            "companyPartNm": "공동제공"
-          },
-          {
-            "companyCd": "20255021",
-            "companyNm": "주식회사 오팬하우스",
-            "companyNmEn": "O'FAN HOUSE Co.,Ltd.",
-            "companyPartNm": "공동제공"
-          },
-          {
-            "companyCd": "20100819",
-            "companyNm": "가도가와픽쳐스",
-            "companyNmEn": "Kadokawa Pictures, INC. ",
-            "companyPartNm": "공동제공"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03279",
-            "watchGradeNm": "12세이상관람가"
-          }
-        ],
-        "staffs": [
-          {
-            "peopleNm": "이한",
-            "peopleNmEn": "",
-            "staffRoleNm": "연출팀"
-          }
-        ]
-      }
+      "detail": {}
     },
     {
       "rnum": "8",
@@ -1597,10 +1461,741 @@
       "audiAcc": "2302",
       "scrnCnt": "10",
       "showCnt": "10",
-      "trend": [],
+      "trend": [
+        {
+          "date": "20260119",
+          "dateDisplay": "01/19",
+          "audiCnt": 2084,
+          "salesAmt": 18756000,
+          "scrnCnt": 10,
+          "showCnt": 10
+        }
+      ],
       "scrnInten": 0,
       "showInten": 0,
-      "detail": {}
+      "detail": {
+        "movieCd": "20240400",
+        "movieNm": "슈가",
+        "movieNmEn": "SUGAR",
+        "movieNmOg": "",
+        "showTm": "105",
+        "prdtYear": "2025",
+        "openDt": "20260121",
+        "prdtStatNm": "개봉예정",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "드라마"
+          },
+          {
+            "genreNm": "가족"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "최신춘",
+            "peopleNmEn": "CHOI Shin-choon"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "최지우",
+            "peopleNmEn": "CHOI Ji-woo",
+            "cast": "김미라",
+            "castEn": "KIM Mi-ra"
+          },
+          {
+            "peopleNm": "민진웅",
+            "peopleNmEn": "MIN Jin-woong",
+            "cast": "정준우",
+            "castEn": "JUNG Jun-woo"
+          },
+          {
+            "peopleNm": "고동하",
+            "peopleNmEn": "",
+            "cast": "정동명",
+            "castEn": "JUNG Dong-myung"
+          },
+          {
+            "peopleNm": "김영성",
+            "peopleNmEn": "KIM Young-sung",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "김선영",
+            "peopleNmEn": "KIM Sunyoung",
+            "cast": "",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20253652",
+            "companyNm": "호랑이기운",
+            "companyNmEn": "STUDIO FEARLESS",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20174781",
+            "companyNm": "(주)메시지필름",
+            "companyNmEn": "",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20231121",
+            "companyNm": "스튜디오타겟(주)",
+            "companyNmEn": "STUDIO TARGET",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20188721",
+            "companyNm": "(주)삼백상회",
+            "companyNmEn": "300 & Co.",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20203405",
+            "companyNm": "(주)영화사벌집",
+            "companyNmEn": "Hive Filmworks Inc.",
+            "companyPartNm": "해외세일즈사"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF02988",
+            "watchGradeNm": "전체관람가"
+          }
+        ],
+        "staffs": [
+          {
+            "peopleNm": "신창환",
+            "peopleNmEn": "SHIN Chang-hwan",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "최신춘",
+            "peopleNmEn": "CHOI Shin-choon",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "김동균",
+            "peopleNmEn": "",
+            "staffRoleNm": "프로듀서"
+          },
+          {
+            "peopleNm": "임성희",
+            "peopleNmEn": "",
+            "staffRoleNm": "프로듀서"
+          },
+          {
+            "peopleNm": "공지영",
+            "peopleNmEn": "KONG Ji-young",
+            "staffRoleNm": "프로듀서"
+          },
+          {
+            "peopleNm": "신창환",
+            "peopleNmEn": "SHIN Chang-hwan",
+            "staffRoleNm": "프로듀서"
+          },
+          {
+            "peopleNm": "이정훈",
+            "peopleNmEn": "",
+            "staffRoleNm": "라인프로듀서"
+          },
+          {
+            "peopleNm": "최재원",
+            "peopleNmEn": "James",
+            "staffRoleNm": "제작팀"
+          },
+          {
+            "peopleNm": "오원식",
+            "peopleNmEn": "",
+            "staffRoleNm": "제작팀"
+          },
+          {
+            "peopleNm": "배연우",
+            "peopleNmEn": "BAE Yeon-woo",
+            "staffRoleNm": "데이타매니저"
+          },
+          {
+            "peopleNm": "김민우",
+            "peopleNmEn": "",
+            "staffRoleNm": "데이타매니저"
+          },
+          {
+            "peopleNm": "최신춘",
+            "peopleNmEn": "CHOI Shin-choon",
+            "staffRoleNm": "시나리오(각본)"
+          },
+          {
+            "peopleNm": "오세인",
+            "peopleNmEn": "OH Se-in",
+            "staffRoleNm": "조감독"
+          },
+          {
+            "peopleNm": "정해령",
+            "peopleNmEn": "JEONG Hae Lyeong",
+            "staffRoleNm": "연출팀"
+          },
+          {
+            "peopleNm": "조윤선",
+            "peopleNmEn": "CHO Yoon-sun",
+            "staffRoleNm": "연출팀"
+          },
+          {
+            "peopleNm": "최린",
+            "peopleNmEn": "",
+            "staffRoleNm": "스크립터"
+          },
+          {
+            "peopleNm": "한시은",
+            "peopleNmEn": "",
+            "staffRoleNm": "스크립터"
+          },
+          {
+            "peopleNm": "이정환",
+            "peopleNmEn": "LEE Jung-hwan",
+            "staffRoleNm": "현장편집"
+          },
+          {
+            "peopleNm": "장명공",
+            "peopleNmEn": "CHANG Myeonggong",
+            "staffRoleNm": "촬영"
+          },
+          {
+            "peopleNm": "최은진",
+            "peopleNmEn": "",
+            "staffRoleNm": "카메라오퍼레이터"
+          },
+          {
+            "peopleNm": "한상규",
+            "peopleNmEn": "",
+            "staffRoleNm": "카메라오퍼레이터"
+          },
+          {
+            "peopleNm": "김승우",
+            "peopleNmEn": "",
+            "staffRoleNm": "카메라오퍼레이터"
+          },
+          {
+            "peopleNm": "박정빈",
+            "peopleNmEn": "Park Jung Bin",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "김홍목",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "박준하",
+            "peopleNmEn": "Park joon ha",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "이영주",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "김인엽",
+            "peopleNmEn": "Kim in youb",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "손현목",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "양주호",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "박병춘",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "심승보",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "김관성",
+            "peopleNmEn": "",
+            "staffRoleNm": "촬영팀"
+          },
+          {
+            "peopleNm": "김시원",
+            "peopleNmEn": "",
+            "staffRoleNm": "그립"
+          },
+          {
+            "peopleNm": "김진영",
+            "peopleNmEn": "",
+            "staffRoleNm": "그립"
+          },
+          {
+            "peopleNm": "박찬희",
+            "peopleNmEn": "PAK Chan-hui",
+            "staffRoleNm": "그립"
+          },
+          {
+            "peopleNm": "김현일",
+            "peopleNmEn": "",
+            "staffRoleNm": "특수촬영"
+          },
+          {
+            "peopleNm": "남기혁",
+            "peopleNmEn": "",
+            "staffRoleNm": "특수촬영"
+          },
+          {
+            "peopleNm": "강경근",
+            "peopleNmEn": "KANG Kyoung-geun",
+            "staffRoleNm": "조명"
+          },
+          {
+            "peopleNm": "어윤철",
+            "peopleNmEn": "",
+            "staffRoleNm": "조명"
+          },
+          {
+            "peopleNm": "이준승",
+            "peopleNmEn": "",
+            "staffRoleNm": "조명팀"
+          },
+          {
+            "peopleNm": "현예빈",
+            "peopleNmEn": "",
+            "staffRoleNm": "조명팀"
+          },
+          {
+            "peopleNm": "장엄일",
+            "peopleNmEn": "",
+            "staffRoleNm": "조명팀"
+          },
+          {
+            "peopleNm": "이상우",
+            "peopleNmEn": "",
+            "staffRoleNm": "조명팀"
+          },
+          {
+            "peopleNm": "이윤진",
+            "peopleNmEn": "",
+            "staffRoleNm": "미술/프로덕션 디자인"
+          },
+          {
+            "peopleNm": "남효준",
+            "peopleNmEn": "",
+            "staffRoleNm": "미술팀"
+          },
+          {
+            "peopleNm": "김지현",
+            "peopleNmEn": "",
+            "staffRoleNm": "미술팀"
+          },
+          {
+            "peopleNm": "이규하",
+            "peopleNmEn": "",
+            "staffRoleNm": "동시녹음"
+          },
+          {
+            "peopleNm": "박관현",
+            "peopleNmEn": "",
+            "staffRoleNm": "붐오퍼레이터"
+          },
+          {
+            "peopleNm": "김규연",
+            "peopleNmEn": "",
+            "staffRoleNm": "붐오퍼레이터"
+          },
+          {
+            "peopleNm": "김보경",
+            "peopleNmEn": "",
+            "staffRoleNm": "의상팀"
+          },
+          {
+            "peopleNm": "박소영",
+            "peopleNmEn": "",
+            "staffRoleNm": "의상팀"
+          },
+          {
+            "peopleNm": "이한솔",
+            "peopleNmEn": "",
+            "staffRoleNm": "분장"
+          },
+          {
+            "peopleNm": "이영화",
+            "peopleNmEn": "LEE Young-wha",
+            "staffRoleNm": "분장"
+          },
+          {
+            "peopleNm": "김소림",
+            "peopleNmEn": "",
+            "staffRoleNm": "분장팀"
+          },
+          {
+            "peopleNm": "이영화",
+            "peopleNmEn": "LEE Young-wha",
+            "staffRoleNm": "헤어"
+          },
+          {
+            "peopleNm": "이정환",
+            "peopleNmEn": "LEE Jung-hwan",
+            "staffRoleNm": "편집"
+          },
+          {
+            "peopleNm": "이수연",
+            "peopleNmEn": "LEE SOOYEON",
+            "staffRoleNm": "음악"
+          },
+          {
+            "peopleNm": "구본춘",
+            "peopleNmEn": "KOO Bon-chun",
+            "staffRoleNm": "음악"
+          },
+          {
+            "peopleNm": "김경주",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "이지선",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "박가영",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "노현주",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "손아롱",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "정덕근",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "정동윤",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "고태영",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "강민구",
+            "peopleNmEn": "",
+            "staffRoleNm": "음악진행"
+          },
+          {
+            "peopleNm": "정혜빈",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "심희진",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "이윤지",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "서창석",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "안도경",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "박이슬",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "오지은",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "이수연",
+            "peopleNmEn": "LEE SOOYEON",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "박승천",
+            "peopleNmEn": "Park Seung-cheon",
+            "staffRoleNm": "음악 믹싱/레코딩"
+          },
+          {
+            "peopleNm": "김수현",
+            "peopleNmEn": "KIM Soo-hyun",
+            "staffRoleNm": "사운드"
+          },
+          {
+            "peopleNm": "이지윤",
+            "peopleNmEn": "",
+            "staffRoleNm": "사운드디자이너"
+          },
+          {
+            "peopleNm": "김수현",
+            "peopleNmEn": "KIM Soo-hyun",
+            "staffRoleNm": "사운드디자이너"
+          },
+          {
+            "peopleNm": "이지윤",
+            "peopleNmEn": "",
+            "staffRoleNm": "대사"
+          },
+          {
+            "peopleNm": "이지윤",
+            "peopleNmEn": "",
+            "staffRoleNm": "사운드효과"
+          },
+          {
+            "peopleNm": "김우현",
+            "peopleNmEn": "",
+            "staffRoleNm": "사운드효과"
+          },
+          {
+            "peopleNm": "이성의",
+            "peopleNmEn": "",
+            "staffRoleNm": "폴리"
+          },
+          {
+            "peopleNm": "이용진",
+            "peopleNmEn": "",
+            "staffRoleNm": "폴리"
+          },
+          {
+            "peopleNm": "이용진",
+            "peopleNmEn": "",
+            "staffRoleNm": "사운드팀"
+          },
+          {
+            "peopleNm": "최신춘",
+            "peopleNmEn": "CHOI Shin-choon",
+            "staffRoleNm": "기획"
+          },
+          {
+            "peopleNm": "김도연",
+            "peopleNmEn": "julid dy kim",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "임민수",
+            "peopleNmEn": "",
+            "staffRoleNm": "VFX 아티스트"
+          },
+          {
+            "peopleNm": "이명훈",
+            "peopleNmEn": "LEE MYUNG-HOON",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "함종민",
+            "peopleNmEn": "",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "김제연",
+            "peopleNmEn": "",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "서중권",
+            "peopleNmEn": "SEO Joong-kwon",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "김린하",
+            "peopleNmEn": "Kim Lynha",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "손민경",
+            "peopleNmEn": "",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "추창우",
+            "peopleNmEn": "",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "강솔이",
+            "peopleNmEn": "",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "엄태식",
+            "peopleNmEn": "UM Tae-sik",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "조희대",
+            "peopleNmEn": "CHO Hee-dae",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "엄태식",
+            "peopleNmEn": "UM Tae-sik",
+            "staffRoleNm": "DI팀"
+          },
+          {
+            "peopleNm": "김보영",
+            "peopleNmEn": "kim boyeong",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "장문경",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "류승화",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "한욱",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "조인주",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "김민정",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "김나정",
+            "peopleNmEn": "",
+            "staffRoleNm": "홍보/마케팅 진행"
+          },
+          {
+            "peopleNm": "김은광",
+            "peopleNmEn": "",
+            "staffRoleNm": "온라인마케팅"
+          },
+          {
+            "peopleNm": "주찬혁",
+            "peopleNmEn": "",
+            "staffRoleNm": "온라인마케팅"
+          },
+          {
+            "peopleNm": "김회준",
+            "peopleNmEn": "",
+            "staffRoleNm": "온라인마케팅"
+          },
+          {
+            "peopleNm": "장승민",
+            "peopleNmEn": "",
+            "staffRoleNm": "광고디자인"
+          },
+          {
+            "peopleNm": "김하나",
+            "peopleNmEn": "",
+            "staffRoleNm": "예고편"
+          },
+          {
+            "peopleNm": "강진경",
+            "peopleNmEn": "",
+            "staffRoleNm": "예고편"
+          },
+          {
+            "peopleNm": "서병환",
+            "peopleNmEn": "",
+            "staffRoleNm": "예고편"
+          },
+          {
+            "peopleNm": "황정현",
+            "peopleNmEn": "HWANG JUNG HYUN",
+            "staffRoleNm": "예고편"
+          },
+          {
+            "peopleNm": "김민서",
+            "peopleNmEn": "KIM Minseo",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "김동현",
+            "peopleNmEn": "Paul D. KIM",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "박선영",
+            "peopleNmEn": "",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "임성지",
+            "peopleNmEn": "",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "신설희",
+            "peopleNmEn": "",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "유현일",
+            "peopleNmEn": "YOO HYUN-IL",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "윤혜진",
+            "peopleNmEn": "YOON Hye-jin",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "주윤호",
+            "peopleNmEn": "",
+            "staffRoleNm": "배급진행"
+          },
+          {
+            "peopleNm": "김문기",
+            "peopleNmEn": "",
+            "staffRoleNm": "시각효과"
+          }
+        ]
+      }
     },
     {
       "rnum": "9",
@@ -1622,6 +2217,14 @@
       "scrnCnt": "167",
       "showCnt": "192",
       "trend": [
+        {
+          "date": "20251224",
+          "dateDisplay": "12/24",
+          "audiCnt": 39535,
+          "salesAmt": 372193470,
+          "scrnCnt": 747,
+          "showCnt": 1652
+        },
         {
           "date": "20251225",
           "dateDisplay": "12/25",
@@ -1695,28 +2298,12 @@
           "showCnt": 724
         },
         {
-          "date": "20260103",
-          "dateDisplay": "01/03",
-          "audiCnt": 20177,
-          "salesAmt": 191127400,
-          "scrnCnt": 536,
-          "showCnt": 749
-        },
-        {
           "date": "20260104",
           "dateDisplay": "01/04",
           "audiCnt": 18578,
           "salesAmt": 175591140,
           "scrnCnt": 540,
           "showCnt": 734
-        },
-        {
-          "date": "20260105",
-          "dateDisplay": "01/05",
-          "audiCnt": 5216,
-          "salesAmt": 49390150,
-          "scrnCnt": 440,
-          "showCnt": 581
         },
         {
           "date": "20260106",
@@ -1735,28 +2322,28 @@
           "showCnt": 491
         },
         {
-          "date": "20260109",
-          "dateDisplay": "01/09",
-          "audiCnt": 5650,
-          "salesAmt": 54767300,
-          "scrnCnt": 421,
-          "showCnt": 523
+          "date": "20260108",
+          "dateDisplay": "01/08",
+          "audiCnt": 5704,
+          "salesAmt": 52192200,
+          "scrnCnt": 424,
+          "showCnt": 520
         },
         {
-          "date": "20260110",
-          "dateDisplay": "01/10",
-          "audiCnt": 10840,
-          "salesAmt": 102110560,
-          "scrnCnt": 434,
-          "showCnt": 550
+          "date": "20260112",
+          "dateDisplay": "01/12",
+          "audiCnt": 3538,
+          "salesAmt": 33485980,
+          "scrnCnt": 346,
+          "showCnt": 424
         },
         {
-          "date": "20260111",
-          "dateDisplay": "01/11",
-          "audiCnt": 11379,
-          "salesAmt": 108342230,
-          "scrnCnt": 434,
-          "showCnt": 545
+          "date": "20260113",
+          "dateDisplay": "01/13",
+          "audiCnt": 3629,
+          "salesAmt": 33452730,
+          "scrnCnt": 364,
+          "showCnt": 441
         },
         {
           "date": "20260115",
@@ -1781,10 +2368,18 @@
           "salesAmt": 35617880,
           "scrnCnt": 211,
           "showCnt": 230
+        },
+        {
+          "date": "20260119",
+          "dateDisplay": "01/19",
+          "audiCnt": 1410,
+          "salesAmt": 13592100,
+          "scrnCnt": 167,
+          "showCnt": 192
         }
       ],
-      "scrnInten": 25,
-      "showInten": 25,
+      "scrnInten": -44,
+      "showInten": -38,
       "detail": {
         "movieCd": "20259383",
         "movieNm": "극장판 짱구는 못말려: 초화려! 작열하는 떡잎마을 댄서즈",
@@ -1891,14 +2486,6 @@
           "showCnt": 147
         },
         {
-          "date": "20260116",
-          "dateDisplay": "01/16",
-          "audiCnt": 2049,
-          "salesAmt": 28615900,
-          "scrnCnt": 57,
-          "showCnt": 137
-        },
-        {
           "date": "20260117",
           "dateDisplay": "01/17",
           "audiCnt": 2741,
@@ -1913,18 +2500,10 @@
           "salesAmt": 35910800,
           "scrnCnt": 58,
           "showCnt": 125
-        },
-        {
-          "date": "20260119",
-          "dateDisplay": "01/19",
-          "audiCnt": 1061,
-          "salesAmt": 14492000,
-          "scrnCnt": 58,
-          "showCnt": 127
         }
       ],
-      "scrnInten": 0,
-      "showInten": 2,
+      "scrnInten": 1,
+      "showInten": -8,
       "detail": {}
     }
   ]
