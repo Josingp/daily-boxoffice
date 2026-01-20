@@ -35,21 +35,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     }
   }, [movie]);
 
-  const getDDay = (openDt: string) => {
-      if (!openDt) return '';
-      const start = new Date(openDt.replace(/-/g, '/'));
-      const now = new Date();
-      const diff = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      return diff >= 0 ? `(개봉 ${diff + 1}일차)` : `(D-${Math.abs(diff)})`;
-  };
-
   const loadData = async (movie: DailyBoxOfficeList) => {
     setLoading(true);
     setAnalysis('');
     setPredictionSeries([]);
-    setTrendData(movie.trend || []); // 미리 로드된 트렌드 있으면 즉시 적용
+    setTrendData(movie.trend || []);
     setRealtimeHistory([]);
-    // JSON에 있는 실시간 정보 우선 사용
     setRealtimeInfo(movie.realtime || null);
     setNewsList([]);
     setPosterUrl('');
@@ -57,54 +48,57 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setChartMetric('audi');
 
     try {
-      const infoPromise = fetchMovieDetail(movie.movieCd);
-      const posterPromise = fetchMoviePoster(movie.movieNm);
-      const newsPromise = fetchMovieNews(movie.movieNm);
-
-      const [info, poster, news] = await Promise.all([infoPromise, posterPromise, newsPromise]);
+      const info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
-      setPosterUrl(poster);
-      if (news.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
-      else setNewsList(news);
+      fetchMoviePoster(movie.movieNm).then(setPosterUrl);
+      fetchMovieNews(movie.movieNm).then(items => {
+         if (!items || items.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+         else setNewsList(items);
+      });
 
-      // 실시간 정보 없으면 API 호출 (보완)
-      if (!movie.realtime) {
+      // 실시간 정보 없으면 즉시 크롤링
+      let currentRt = movie.realtime;
+      if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
           if (live.data) {
-              const newData = {
+              currentRt = {
                   rank: live.data.rank,
-                  rate: live.data.rate,
+                  rate: live.data.rate, // 이미 % 포함됨? 확인 필요. 보통 12.5 형태면 뒤에 붙여야함
                   audiCnt: live.data.audiCnt,
                   salesAmt: live.data.salesAmt,
                   audiAcc: live.data.audiAcc,
                   salesAcc: live.data.salesAcc,
                   crawledTime: live.crawledTime
               };
-              setRealtimeInfo(newData);
-              
-              // 실시간 탭이면 히스토리용 점 하나 찍기
-              if (type === 'REALTIME') {
-                  setRealtimeHistory([{ 
-                      time: live.crawledTime || 'Now', 
-                      rate: parseFloat(live.data.rate.replace('%','')), 
-                      rank: parseInt(live.data.rank) 
-                  }]);
-              }
+              setRealtimeInfo(currentRt);
           }
       }
 
+      // [분기] Daily vs Realtime
       if (type === 'DAILY') {
-        if (movie.trend) {
-            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', movie.realtime);
+        // Daily: JSON에 있는 풀 데이터(trend) 사용
+        if (movie.trend && movie.trend.length > 0) {
+            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', currentRt);
         }
       } else {
-        // Realtime History 로드
+        // Realtime: JSON 히스토리 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
             const history = json[movie.movieNm] || [];
+            
+            // 데이터가 없으면 현재값으로 채움
+            if (history.length === 0 && currentRt) {
+                history.push({
+                    time: currentRt.crawledTime || 'Now',
+                    rate: parseFloat(currentRt.rate.replace('%','')),
+                    audiCnt: parseInt(currentRt.audiCnt.replace(/,/g,'')),
+                    rank: parseInt(currentRt.rank)
+                });
+            }
             setRealtimeHistory(history);
+            // AI에게 히스토리 전체 전달
             requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
           }
         } catch {}
@@ -134,6 +128,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
 
+  // [수정] 서식 적용 (쉼표, 색상)
   const IntenBadge = ({ val }: { val?: string | number }) => {
       const v = typeof val === 'string' ? parseInt(val) : (val || 0);
       if (v === 0) return <span className="text-slate-400 text-[10px]">-</span>;
@@ -147,8 +142,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   return (
     <div className={`fixed inset-0 z-50 flex flex-col bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
-      
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
         <div>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${type === 'DAILY' ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600'}`}>
@@ -160,8 +153,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
-        
-        {/* 1. 영화 정보 & 포스터 */}
+        {/* 상단 정보 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
            <div className="w-24 h-36 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
              {posterUrl ? <img src={posterUrl} alt={movie.movieNm} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1"><Film size={24} /><span className="text-[10px]">No Poster</span></div>}
@@ -170,79 +162,55 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
              <div className="flex gap-2"><Film size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-1">{movieDetail?.directors?.map((d: any)=>d.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2"><User size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-2">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2"><CalendarIcon size={14} className="text-slate-400 shrink-0"/> 
-               <span className="text-slate-800">{movieDetail?.openDt || '-'} <span className="text-orange-500 font-bold ml-1">{getDDay(movie.openDt)}</span></span>
+               <span className="text-slate-800">{movieDetail?.openDt || '-'}</span>
              </div>
              <div className="flex gap-2 font-bold text-blue-600 pt-2 mt-auto border-t border-slate-50"><Users size={14}/> 누적: {formatNumber(movie.audiAcc)}명</div>
            </div>
         </div>
 
-        {/* 2. 일일 통계 (Daily 모드: 리스트에서 받은 movie 데이터 즉시 표시) */}
+        {/* [DAILY] 통계 박스 (API에서 못가져왔으면 0 처리하되 쉼표 표기) */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><TrendingUp size={14}/><span className="text-xs">일일 관객</span></div>
-                    <IntenBadge val={movie.audiInten} />
-                </div>
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><TrendingUp size={14}/><span className="text-xs">일일 관객</span></div><IntenBadge val={movie.audiInten} /></div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.audiCnt)}명</div>
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><DollarSign size={14}/><span className="text-xs">매출액</span></div>
-                    <IntenBadge val={movie.salesInten} />
-                </div>
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><DollarSign size={14}/><span className="text-xs">매출액</span></div><IntenBadge val={movie.salesInten} /></div>
                 <div className="text-lg font-bold text-slate-800">{formatKoreanNumber(movie.salesAmt)}원</div>
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><Monitor size={14}/><span className="text-xs">스크린수</span></div>
-                    <IntenBadge val={movie.scrnInten} />
-                </div>
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><Monitor size={14}/><span className="text-xs">스크린수</span></div><IntenBadge val={movie.scrnInten} /></div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.scrnCnt)}개</div>
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영횟수</span></div>
-                    <IntenBadge val={movie.showInten} />
-                </div>
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영횟수</span></div><IntenBadge val={movie.showInten} /></div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.showCnt)}회</div>
             </div>
           </div>
         )}
 
-        {/* 3. 보라색 실시간 카드 (정보 꽉 채움) */}
+        {/* [REALTIME] 보라색 카드 (출처 시간, 쉼표, % 완벽 적용) */}
         {realtimeInfo && (
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간</span>
-                    {realtimeInfo.crawledTime && <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime.split(' ')[1]} 기준</span>}
+                    <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> 실시간 예매</span>
+                    {realtimeInfo.crawledTime && <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime} 기준</span>}
                 </div>
                 <div className="flex items-end gap-2 mb-4">
-                    <span className="text-4xl font-black">{realtimeInfo.rate}</span>
+                    <span className="text-4xl font-black">{realtimeInfo.rate.includes('%') ? realtimeInfo.rate : `${realtimeInfo.rate}%`}</span>
                     <span className="text-sm font-medium opacity-80 mb-1">예매율 {realtimeInfo.rank}위</span>
                 </div>
                 <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
-                    <div>
-                        <div className="opacity-70 mb-0.5">예매 관객수</div>
-                        <div className="font-bold text-sm">{realtimeInfo.audiCnt}명</div>
-                    </div>
-                    <div>
-                        <div className="opacity-70 mb-0.5">누적 관객수</div>
-                        <div className="font-bold text-sm">{realtimeInfo.audiAcc}명</div>
-                    </div>
-                    <div>
-                        <div className="opacity-70 mb-0.5">예매 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div>
-                    </div>
-                    <div>
-                        <div className="opacity-70 mb-0.5">누적 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div>
-                    </div>
+                    <div><div className="opacity-70 mb-0.5">예매 관객</div><div className="font-bold text-sm">{formatNumber(realtimeInfo.audiCnt.replace(/,/g,''))}명</div></div>
+                    <div><div className="opacity-70 mb-0.5">누적 관객</div><div className="font-bold text-sm">{formatNumber(realtimeInfo.audiAcc.replace(/,/g,''))}명</div></div>
+                    <div><div className="opacity-70 mb-0.5">예매 매출</div><div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div></div>
+                    <div><div className="opacity-70 mb-0.5">누적 매출</div><div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div></div>
                 </div>
             </div>
         )}
 
-        {/* 4. 그래프 */}
+        {/* 그래프 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             {type === 'DAILY' && (
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
@@ -260,19 +228,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             />
         </div>
 
-        {/* 5. AI 분석 */}
+        {/* AI 분석 */}
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
-              <Sparkles size={16} className="text-purple-600"/> AI 분석 리포트
-            </div>
-            {analysis ? (
-              <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep">{analysis}</p>
-            ) : (
-              <div className="space-y-2 animate-pulse"><div className="h-4 bg-slate-100 rounded w-3/4"></div><div className="h-4 bg-slate-100 rounded w-full"></div></div>
-            )}
+            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2"><Sparkles size={16} className="text-purple-600"/> AI 분석 리포트</div>
+            {analysis ? <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep">{analysis}</p> : <div className="space-y-2 animate-pulse"><div className="h-4 bg-slate-100 rounded w-3/4"></div><div className="h-4 bg-slate-100 rounded w-full"></div></div>}
         </div>
 
-        {/* 6. 뉴스 */}
+        {/* 뉴스 */}
         {newsList.length > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm"><Newspaper size={16} className="text-blue-500"/> 관련 최신 기사</div>
