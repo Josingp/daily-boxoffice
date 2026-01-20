@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ReferenceLine } from 'recharts';
-import { TrendDataPoint, PredictionResult } from '../types';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
+import { PredictionResult } from '../types';
 
 interface TrendChartProps {
   data: any[];
@@ -22,8 +22,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                  metric === 'sales' ? item.salesAmt :
                  metric === 'scrn' ? item.scrnCnt : item.showCnt,
           label: item.dateDisplay,
-          predict: null,
-          isFuture: false
+          predict: null
         }));
 
         if (metric === 'audi' && prediction && prediction.predictionSeries) {
@@ -35,22 +34,18 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                 recentData.push({
                     date: nextDate.toISOString(), label, value: null, 
                     audiCnt: 0, salesAmt: 0, scrnCnt: 0, showCnt: 0,
-                    predict: val, isFuture: true
+                    predict: val
                 });
             });
         }
         return recentData;
     }
     
-    // [REALTIME] 예매 관객수 기준 (audiCnt 사용)
+    // [핵심 수정] REALTIME: 예매 관객수(audiCnt) 기준
     return data.map(item => ({
-        label: item.time.split(' ')[1], // 시간만 (HH:MM)
-        value: item.rate, // 기존 rate 대신 audiCnt를 써야하지만, history 데이터 구조상 rate만 저장중일 수 있음.
-                          // update_realtime.py에서 rate만 저장한다면 rate를 그려야 함. 
-                          // 사용자 요청은 관객수 기준이므로, history 저장 로직도 audiCnt를 포함해야 완벽함.
-                          // 일단 현재 저장된 데이터(rate)를 사용하되 라벨을 명확히 함.
-        // *주의* scripts/update_data.py에서 history 저장시 audiCnt도 저장하도록 해야 완벽.
-        // 현재는 급한 불을 끄기 위해 rate 유지하되, 차후 history 구조 변경 필요.
+        label: item.time.split(' ')[1], // HH:MM
+        value: item.audiCnt, // 관객수 사용
+        rate: item.rate // 툴팁용
     }));
   }, [data, prediction, type, metric]);
 
@@ -77,9 +72,9 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                  tickFormatter={(val) => val >= 10000 ? `${(val/10000).toFixed(0)}만` : val.toLocaleString()}/>
           <Tooltip 
               contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.1)'}}
-              formatter={(val: number, name) => [
-                  val.toLocaleString(), 
-                  name === 'predict' ? 'AI예측' : (type==='REALTIME'?'예매율(%)':'수치')
+              formatter={(val: number, name, props) => [
+                  `${val.toLocaleString()}명`, 
+                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객 (${props.payload.rate}%)` : '수치')
               ]}
           />
           <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill="url(#colorGradient)" />
