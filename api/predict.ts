@@ -40,8 +40,9 @@ export default async function handler(req, res) {
     }
     `;
     
+    // [수정] 가장 안정적인 모델명 사용 (2.0이 안되면 1.5로)
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash", // [수정] 최신 안정 버전 사용 (3.0은 API 미지원)
+      model: "gemini-2.0-flash", 
       contents: { parts: [{ text: prompt }] },
       generationConfig: { responseMimeType: "application/json" }
     });
