@@ -32,21 +32,20 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [핵심] 조회일시 파싱 (사이트 텍스트 기준)
+        # [핵심] 조회일시 파싱 (HTML 텍스트에서 추출)
         crawled_time = ""
         try:
-            # "조회일시" 텍스트가 포함된 모든 태그 검색
+            # "조회일시 :" 텍스트가 포함된 태그 찾기
             time_tag = soup.find(string=re.compile("조회일시"))
             if time_tag:
-                # 숫자와 / : 공백 패턴 추출
+                # 2026/01/20 15:39 형태 추출
                 match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_tag)
                 if match: 
                     crawled_time = match.group(1).replace("/", "-")
         except: pass
         
-        # 실패 시 시스템 시간 (KST 보정)
         if not crawled_time:
-            crawled_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+            crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         history = {}
         if os.path.exists(REALTIME_FILE):
@@ -56,18 +55,22 @@ def update_realtime():
 
         rows = soup.find_all("tr")
         count = 0
+        
         for row in rows:
             cols = row.find_all("td")
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if not rank.isdigit() or int(rank) > 200: continue
+            if not rank.isdigit() or int(rank) > 200: continue # 상위 200위
             
             title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             
-            # 데이터 추출 (쉼표, % 제거)
-            rate = cols[3].get_text(strip=True).replace('%', '')
-            audiCnt = cols[6].get_text(strip=True).replace(',', '')
+            # [수정] 데이터 원본 그대로 추출 (쉼표, % 포함)
+            rate_str = cols[3].get_text(strip=True) # "12.7%"
+            res_sales = cols[4].get_text(strip=True) # "502,840,240"
+            acc_sales = cols[5].get_text(strip=True) # "74,577,278,660"
+            res_audi = cols[6].get_text(strip=True)  # "29,205"
+            acc_audi = cols[7].get_text(strip=True)  # "6,398,660"
             
             if title not in history: history[title] = []
             
@@ -75,12 +78,18 @@ def update_realtime():
             if not history[title] or history[title][-1]['time'] != crawled_time:
                 history[title].append({
                     "time": crawled_time,
-                    "rate": float(rate) if rate else 0,
-                    "audiCnt": int(audiCnt) if audiCnt.isdigit() else 0,
-                    "rank": int(rank)
+                    "rank": int(rank),
+                    "rate": rate_str, # 문자열 그대로 ("12.7%")
+                    "audiCnt": res_audi, # 문자열 그대로 ("29,205")
+                    "salesAmt": res_sales,
+                    "audiAcc": acc_audi,
+                    "salesAcc": acc_sales,
+                    # 그래프용 숫자 변환 값
+                    "val_rate": float(rate_str.replace('%','')) if rate_str else 0,
+                    "val_audi": int(res_audi.replace(',','')) if res_audi.replace(',','').isdigit() else 0
                 })
-                # 24시간분 유지
-                if len(history[title]) > 144: history[title] = history[title][-144:]
+                # 최근 100개 유지
+                if len(history[title]) > 100: history[title] = history[title][-100:]
             count += 1
 
         if count > 0:
