@@ -23,6 +23,7 @@ def fetch_movie_detail(movie_cd):
         return res.json().get("movieInfoResult", {}).get("movieInfo", {})
     except: return {}
 
+# [실시간 데이터 가져오기]
 def fetch_realtime_data():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -35,19 +36,18 @@ def fetch_realtime_data():
         soup = BeautifulSoup(visit.text, 'html.parser')
         csrf = soup.find('input', {'name': 'CSRFToken'})['value']
         
-        # 조회 시간 파싱
+        # 시간 파싱
         crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         try:
-            time_tag = soup.find(string=lambda t: t and "조회일시" in t)
+            time_tag = soup.find(string=re.compile("조회일시"))
             if time_tag:
-                import re
                 match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_tag)
                 if match: crawled_time = match.group(1).replace("/", "-")
         except: pass
 
         resp = session.post(KOBIS_REALTIME_URL, headers=headers, data={
             'CSRFToken': csrf, 'dmlMode': 'search', 'allMovieYn': 'Y', 'loadEnd': '0'
-        }, timeout=15)
+        }, timeout=20)
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         result = {}
@@ -56,13 +56,14 @@ def fetch_realtime_data():
             if len(cols) < 8: continue
             
             title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
+            # 인덱스: 3(율), 4(예매매출), 5(누적매출), 6(예매관객), 7(누적관객)
             result[title] = {
                 "rank": cols[0].get_text(strip=True),
                 "rate": cols[3].get_text(strip=True),
-                "audiCnt": cols[6].get_text(strip=True).replace(',', ''), # 예매관객 (인덱스 주의)
-                "salesAmt": cols[4].get_text(strip=True).replace(',', ''), # 예매매출
-                "audiAcc": cols[7].get_text(strip=True).replace(',', ''),  # 누적관객
-                "salesAcc": cols[5].get_text(strip=True).replace(',', ''), # 누적매출
+                "salesAmt": cols[4].get_text(strip=True),
+                "salesAcc": cols[5].get_text(strip=True),
+                "audiCnt": cols[6].get_text(strip=True),
+                "audiAcc": cols[7].get_text(strip=True),
                 "crawledTime": crawled_time
             }
         return result
@@ -74,48 +75,46 @@ def main():
     today = datetime.datetime.now()
     yesterday = (today - datetime.timedelta(days=1)).strftime("%Y%m%d")
     
-    print(f"Target: {yesterday}")
+    print(f"Target Date: {yesterday}")
 
-    # 1. 어제자 박스오피스 리스트 확보
+    # 1. 어제 기준 박스오피스 리스트
     target_list = fetch_api_list(yesterday)
     realtime_map = fetch_realtime_data()
-    
     final_movies = []
 
-    # 2. 각 영화별로 '개봉일 ~ 어제' 전체 데이터 수집 (병렬 처리)
+    # 2. 각 영화별 과거 데이터 풀 스캔 (병렬)
     with ThreadPoolExecutor(max_workers=5) as executor:
         for movie in target_list:
             movie_cd = movie['movieCd']
-            open_dt_str = movie['openDt'].replace('-', '')
+            open_dt = movie['openDt'].replace("-", "")
             
-            # 개봉일이 없거나 미래면 최근 7일만
-            if not open_dt_str or open_dt_str > yesterday:
-                start_date = (today - datetime.timedelta(days=7)).strftime("%Y%m%d")
+            # 개봉일이 유효하면 개봉일부터, 아니면 최근 30일
+            if open_dt and open_dt <= yesterday:
+                start_date = open_dt
             else:
-                start_date = open_dt_str
-
-            # 날짜 리스트 생성 (개봉일 ~ 어제)
-            date_range = []
+                start_date = (today - datetime.timedelta(days=30)).strftime("%Y%m%d")
+            
+            # 날짜 리스트 생성
+            date_list = []
             curr = datetime.datetime.strptime(start_date, "%Y%m%d")
             end = datetime.datetime.strptime(yesterday, "%Y%m%d")
             while curr <= end:
-                date_range.append(curr.strftime("%Y%m%d"))
+                date_list.append(curr.strftime("%Y%m%d"))
                 curr += datetime.timedelta(days=1)
             
-            # 너무 많으면 최근 60일로 제한 (API 보호)
-            if len(date_range) > 60: date_range = date_range[-60:]
-
-            print(f"Fetching history for {movie['movieNm']} ({len(date_range)} days)...")
-
-            # 일별 데이터 병렬 수집
-            trend_data = []
-            futures = {executor.submit(fetch_api_list, d): d for d in date_range}
+            # 너무 많으면 최근 60일로 자름 (API 보호)
+            if len(date_list) > 60: date_list = date_list[-60:]
             
+            print(f"Fetching {movie['movieNm']}: {len(date_list)} days")
+
+            # 병렬 호출
+            trend_data = []
+            futures = {executor.submit(fetch_api_list, d): d for d in date_list}
             for f in futures:
                 d_key = futures[f]
                 try:
-                    d_list = f.result()
-                    found = next((m for m in d_list if m['movieCd'] == movie_cd), None)
+                    d_data = f.result()
+                    found = next((m for m in d_data if m['movieCd'] == movie_cd), None)
                     if found:
                         trend_data.append({
                             "date": d_key,
@@ -127,25 +126,22 @@ def main():
                         })
                 except: pass
             
-            # 날짜순 정렬
             trend_data.sort(key=lambda x: x['date'])
             movie['trend'] = trend_data
 
-            # 전일 대비 증감 (trend 마지막 2개 비교)
+            # 전일 대비 증감
             if len(trend_data) >= 2:
-                last = trend_data[-1]
-                prev = trend_data[-2]
-                movie['scrnInten'] = last['scrnCnt'] - prev['scrnCnt']
-                movie['showInten'] = last['showCnt'] - prev['showCnt']
+                movie['scrnInten'] = trend_data[-1]['scrnCnt'] - trend_data[-2]['scrnCnt']
+                movie['showInten'] = trend_data[-1]['showCnt'] - trend_data[-2]['showCnt']
             else:
                 movie['scrnInten'] = 0
                 movie['showInten'] = 0
 
             # 실시간 데이터 병합
-            clean_name = movie['movieNm'].replace(" ", "").strip()
-            for rt_title, rt_data in realtime_map.items():
-                if clean_name in rt_title.replace(" ", ""):
-                    movie['realtime'] = rt_data
+            clean_nm = movie['movieNm'].replace(" ", "")
+            for rt_title, rt_val in realtime_map.items():
+                if clean_nm in rt_title.replace(" ", ""):
+                    movie['realtime'] = rt_val
                     break
             
             final_movies.append(movie)
@@ -156,7 +152,7 @@ def main():
     with open(DAILY_FILE, 'w', encoding='utf-8') as f:
         json.dump({"date": yesterday, "movies": final_movies}, f, ensure_ascii=False, indent=2)
     
-    print(f"Saved {len(final_movies)} movies with FULL history.")
+    print(f"Saved {len(final_movies)} movies.")
 
 if __name__ == "__main__":
     main()
