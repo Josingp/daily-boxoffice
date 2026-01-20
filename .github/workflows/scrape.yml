@@ -37,4 +37,13 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add public/*.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data" && git push)
+          
+          # 변경사항이 있는지 확인
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Data"
+            # [핵심] 원격 저장소의 최신 변경사항을 가져와서 합침 (충돌 방지)
+            git pull --rebase origin main
+            git push
+          fi
