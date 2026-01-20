@@ -1,5 +1,6 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
+// [공통] 하이브리드 로딩 (JSON -> API)
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
@@ -27,7 +28,6 @@ export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
     '/daily_data.json',
     `/kobis/daily?targetDt=${targetDt}`,
     (json) => {
-      // JSON 파일이든 API 응답이든 구조를 통일
       if (json.movies) return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
       return json;
     }
@@ -40,30 +40,28 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
     '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      // 1. API 응답 형식 ({ status: "ok", data: [...] })
-      if (json.status === 'ok' && Array.isArray(json.data)) return json;
+      if (json.status === 'ok') return json; // API 응답인 경우
 
-      // 2. History 파일 형식 ({ "영화제목": [...] })
-      if (!json || Object.keys(json).length === 0 || json.status === 'error') return null;
+      // History 파일 형식인 경우 변환
+      if (!json || Object.keys(json).length === 0) return null;
       
-      try {
-        const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
-          const history = json[title];
-          if (!Array.isArray(history) || history.length === 0) return null;
-          const latest = history[history.length - 1];
-          return {
-            movieCd: String(idx),
-            rank: String(latest.rank),
-            title: title,
-            rate: String(latest.rate) + "%",
-            salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
-          };
-        }).filter(Boolean) as RealtimeMovie[];
+      const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
+        const history = json[title];
+        if (!Array.isArray(history) || history.length === 0) return null;
+        const latest = history[history.length - 1];
+        return {
+          movieCd: String(idx),
+          rank: String(latest.rank),
+          title: title,
+          rate: String(latest.rate) + "%",
+          salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
+        };
+      }).filter(Boolean) as RealtimeMovie[];
 
-        list.sort((a, b) => Number(a.rank) - Number(b.rank));
-        const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
-        return { status: "ok", data: list, crawledTime: time };
-      } catch { return null; }
+      list.sort((a, b) => Number(a.rank) - Number(b.rank));
+      const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
+      
+      return { status: "ok", data: list, crawledTime: time };
     }
   );
 
@@ -102,6 +100,7 @@ export const fetchRealtimeReservation = async (movieName: string, movieCd?: stri
   try {
     const q = movieCd ? `?movieName=${encodeURIComponent(movieName)}&movieCd=${movieCd}` : `?movieName=${encodeURIComponent(movieName)}`;
     const res = await fetch(`/api/reservation${q}`);
-    return res.ok ? await res.json() : { data: null };
+    const json = await res.json();
+    return json.found ? { data: { ...json.data, crawledTime: json.crawledTime } } : { data: null };
   } catch { return { data: null }; }
 };
