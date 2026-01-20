@@ -32,23 +32,14 @@ def fetch_movie_detail(movie_cd):
 def update_realtime():
     print("Updating Realtime Data...")
     
-    # 1. 기존 데이터 로드
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
     
-    # 2. 일별 데이터에서 상세정보 캐싱 (API 절약)
     detail_cache = {}
     if "movies" in daily_data:
         for m in daily_data["movies"]:
             if "movieCd" in m and "detail" in m:
                 detail_cache[m["movieCd"]] = m["detail"]
-    
-    # "meta" 키가 있으면 기존 상세정보 로드
-    if "meta" in realtime_data:
-        for m_title, m_detail in realtime_data["meta"].items():
-             # 제목을 키로 쓰거나 movieCd를 키로 쓸 수 있음. 여기선 단순화를 위해 제목 사용 고려했지만
-             # 정확성을 위해 movieCd가 낫지만, 구조상 제목으로 매칭하는게 편함
-             pass
 
     session = requests.Session()
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -64,21 +55,29 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # 날짜 파싱
+        # [수정] 조회일시 파싱 (제공해주신 HTML 구조 반영)
+        # 예: 조회일시 : 2026/01/20 18:52
         crawled_time = ""
         try:
+            # 전체 텍스트에서 날짜 패턴 검색 (가장 안전함)
             txt = soup.get_text()
-            match = re.search(r"조회일시\s*:\s*(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", txt)
-            if match: crawled_time = match.group(1).replace("/", "-")
+            # YYYY/MM/DD HH:MM 패턴
+            match = re.search(r"조회일시\s*:\s*(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", txt)
+            if match:
+                crawled_time = match.group(1).replace("/", "-")
+            else:
+                # 대안 패턴 (YYYY-MM-DD)
+                match = re.search(r"조회일시\s*:\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})", txt)
+                if match: crawled_time = match.group(1)
         except: pass
         
+        # 파싱 실패 시 현재 시간 (Fallback)
         if not crawled_time:
             crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         rows = soup.find_all("tr")
         count = 0
         
-        # 메타데이터 저장소 (영화 제목 -> 상세정보)
         if "meta" not in realtime_data: realtime_data["meta"] = {}
 
         for row in rows:
@@ -88,7 +87,6 @@ def update_realtime():
             rank = cols[0].get_text(strip=True)
             if not rank.isdigit(): continue
             
-            # 영화 정보 추출
             target_link = row.find("a", onclick=MSTVIEW_REGEX.search)
             title = ""
             movie_cd = ""
@@ -102,48 +100,40 @@ def update_realtime():
             
             if not title: continue
             
-            # [중요] 0원 0명 오류 수정: 인덱스 확인
-            # KOBIS 실시간 예매율 표: 순위(0), 영화명(1), 개봉일(2), 예매율(3), 예매매출액(4), 예매매출누적(5), 예매관객수(6), 예매관객누적(7)
-            # 따라서 cols[6]이 예매관객수, cols[4]가 예매매출액 맞음.
-            # 데이터가 비어있거나 이상한 경우 0 처리
-            
+            # 데이터 추출
             rate = cols[3].get_text(strip=True).replace('%', '')
-            audi_cnt_str = cols[6].get_text(strip=True).replace(',', '')
-            sales_amt_str = cols[4].get_text(strip=True).replace(',', '')
-            audi_acc_str = cols[7].get_text(strip=True).replace(',', '')
-            sales_acc_str = cols[5].get_text(strip=True).replace(',', '')
+            audi_cnt_raw = cols[6].get_text(strip=True) # "37,355"
+            sales_amt_raw = cols[4].get_text(strip=True)
+            audi_acc_raw = cols[7].get_text(strip=True)
+            sales_acc_raw = cols[5].get_text(strip=True)
 
-            # 상세정보 확보 (캐시 -> API)
+            # 상세정보 확보
             if movie_cd and title not in realtime_data["meta"]:
                 if movie_cd in detail_cache:
                     realtime_data["meta"][title] = detail_cache[movie_cd]
-                else:
-                    # 상위 20위까지만 API 호출 (속도 조절)
-                    if int(rank) <= 20:
-                        print(f"Fetching detail for {title}...")
-                        detail = fetch_movie_detail(movie_cd)
-                        if detail: 
-                            realtime_data["meta"][title] = detail
-                            time.sleep(0.1) # API 보호
+                elif int(rank) <= 20:
+                    detail = fetch_movie_detail(movie_cd)
+                    if detail: 
+                        realtime_data["meta"][title] = detail
+                        time.sleep(0.1)
 
-            # 히스토리 데이터 저장
+            # 히스토리 데이터
             if title not in realtime_data: realtime_data[title] = []
             
-            # 중복 방지: 마지막 데이터 시간과 다를 때만 추가
             if not realtime_data[title] or realtime_data[title][-1]['time'] != crawled_time:
                 realtime_data[title].append({
                     "time": crawled_time,
                     "rank": int(rank),
                     "rate": float(rate) if rate else 0,
-                    "audiCnt": cols[6].get_text(strip=True), # 원본 문자열 (콤마 포함)
-                    "salesAmt": cols[4].get_text(strip=True),
-                    "audiAcc": cols[7].get_text(strip=True),
-                    "salesAcc": cols[5].get_text(strip=True),
-                    # 그래프용 숫자값
-                    "val_audi": int(audi_cnt_str) if audi_cnt_str.isdigit() else 0,
+                    "audiCnt": audi_cnt_raw, 
+                    "salesAmt": sales_amt_raw,
+                    "audiAcc": audi_acc_raw,
+                    "salesAcc": sales_acc_raw,
+                    # 그래프용 숫자값 (콤마 제거)
+                    "val_audi": int(audi_cnt_raw.replace(',', '')) if audi_cnt_raw.replace(',', '').isdigit() else 0,
                     "val_rate": float(rate) if rate else 0
                 })
-                if len(realtime_data[title]) > 288: # 하루치 유지
+                if len(realtime_data[title]) > 288:
                     realtime_data[title] = realtime_data[title][-288:]
             
             count += 1
@@ -152,7 +142,7 @@ def update_realtime():
             os.makedirs("public", exist_ok=True)
             with open(REALTIME_FILE, 'w', encoding='utf-8') as f:
                 json.dump(realtime_data, f, ensure_ascii=False, indent=2)
-            print(f"Updated {count} movies. Details cached: {len(realtime_data['meta'])}")
+            print(f"Updated {count} movies at {crawled_time}")
 
     except Exception as e:
         print(f"Realtime Update Failed: {e}")
