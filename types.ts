@@ -17,6 +17,17 @@ export interface DailyBoxOfficeList {
   audiAcc: string;
   scrnCnt: string;
   showCnt: string;
+  // [NEW] 확장 필드
+  scrnInten?: number; // 스크린 수 변동
+  showInten?: number; // 상영 횟수 변동
+  realtime?: {        // 실시간 예매 데이터 병합
+    rank: string;
+    rate: string;
+    audiCnt: string;
+    audiAcc: string;
+    salesAmt: string;
+    salesAcc: string;
+  };
 }
 
 export interface BoxOfficeResult {
@@ -46,31 +57,12 @@ export interface MovieInfo {
   actors: { peopleNm: string }[];
 }
 
-export interface KobisMovieInfoResponse {
-  movieInfoResult: {
-    movieInfo: MovieInfo;
-  };
-}
-
 export interface PredictionResult {
   analysisText: string;
   predictedFinalAudi: { min: number; max: number; avg: number };
   predictionSeries: number[];
 }
 
-// [수정] 시간 정보 포함
-export interface ReservationData {
-  rank: string;
-  title: string;
-  rate: string;
-  salesAmt: string;
-  salesAcc: string;
-  audiCnt: string;
-  audiAcc: string;
-  crawledTime?: string;
-}
-
-// [NEW] 실시간 랭킹용 인터페이스
 export interface RealtimeMovie {
   movieCd: string;
   rank: string;
@@ -80,4 +72,11 @@ export interface RealtimeMovie {
   salesAcc: string;
   audiCnt: string;
   audiAcc: string;
+}
+
+export interface NewsItem {
+  title: string;
+  link: string;
+  desc: string;
+  press: string;
 }
