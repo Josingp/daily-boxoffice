@@ -2,8 +2,8 @@ name: Data Scraper
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # 5분마다 실행 (실시간 데이터용)
-  workflow_dispatch:      # 수동 실행 버튼 (일별 데이터 강제 업데이트용)
+    - cron: '*/5 * * * *' # 5분마다 실행
+  workflow_dispatch:      # 수동 실행
 
 permissions:
   contents: write
@@ -14,7 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # 히스토리 충돌 방지를 위해 전체 기록 가져오기
+          fetch-depth: 0
+
+      # [중요] 스크립트 실행 전 최신 코드/데이터 가져오기 (충돌 방지)
+      - name: Pull latest changes
+        run: git pull origin main
 
       - uses: actions/setup-python@v4
         with:
@@ -22,14 +26,13 @@ jobs:
       
       - run: pip install requests beautifulsoup4
       
-      # 1. 실시간 데이터 업데이트 (항상 실행)
+      # 1. 실시간 데이터 업데이트
       - name: Update Realtime
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_realtime.py
 
-      # 2. 일별 데이터 업데이트 (조건 수정됨)
-      # [변경점] 수동으로 실행했거나(workflow_dispatch), 한국 시간 오전 9시(UTC 00)라면 실행
+      # 2. 일별 데이터 업데이트 (수동 실행 or 한국시간 오전 9시)
       - name: Update Daily
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
@@ -39,22 +42,21 @@ jobs:
             echo "Running update_daily.py..."
             python scripts/update_daily.py
           else
-            echo "Skipping daily update (Current hour: $HOUR UTC, Event: ${{ github.event_name }})"
+            echo "Skipping daily update (Current hour: $HOUR UTC)"
           fi
 
-      # 3. 변경 사항 저장 (충돌 방지 로직 포함)
+      # 3. 변경 사항 저장 (실패 시 재시도 로직 포함)
       - name: Commit
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add public/*.json
           
-          # 변경사항이 없으면 종료, 있으면 커밋 후 푸시
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Update Data"
-            # 리모트 변경사항 당겨와서 합침 (충돌 방지)
+            # 혹시 그 사이 또 변경되었을 경우를 대비해 pull --rebase 후 push
             git pull --rebase origin main
             git push
           fi
