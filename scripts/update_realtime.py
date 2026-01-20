@@ -32,12 +32,12 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [수정] 조회일시 추출
+        # [수정] 사이트상의 조회일시 파싱 (YYYY/MM/DD HH:MM)
         crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         try:
-            time_tag = soup.find(string=re.compile("조회일시"))
-            if time_tag:
-                match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_tag)
+            time_text = soup.find(string=lambda t: t and "조회일시" in t)
+            if time_text:
+                match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_text)
                 if match: crawled_time = match.group(1).replace("/", "-")
         except: pass
 
@@ -54,11 +54,11 @@ def update_realtime():
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if not rank.isdigit() or int(rank) > 10: continue # Top 10
+            if not rank.isdigit() or int(rank) > 200: continue # 상위 200개까지
             
             title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             
-            # [수정] 정확한 인덱스: 3(예매율), 6(예매관객)
+            # [수정] 정확한 값 추출 (쉼표 제거, % 제거)
             rate = cols[3].get_text(strip=True).replace('%', '')
             audiCnt = cols[6].get_text(strip=True).replace(',', '')
             
@@ -69,19 +69,20 @@ def update_realtime():
                 history[title].append({
                     "time": crawled_time,
                     "rate": float(rate) if rate else 0,
-                    "audiCnt": int(audiCnt) if audiCnt.isdigit() else 0, # 관객수도 저장
+                    "audiCnt": int(audiCnt) if audiCnt.isdigit() else 0,
                     "rank": int(rank)
                 })
-                if len(history[title]) > 144: history[title] = history[title][-144:]
+                # 최근 72개(약 6시간~12시간 분량) 유지
+                if len(history[title]) > 72: history[title] = history[title][-72:]
             count += 1
 
         if count > 0:
             with open(REALTIME_FILE, 'w', encoding='utf-8') as f:
                 json.dump(history, f, ensure_ascii=False, indent=2)
-            print(f"Realtime Data Saved ({count} movies). Time: {crawled_time}")
+            print(f"Saved {count} movies at {crawled_time}")
         
     except Exception as e:
-        print(f"Realtime Update Failed: {e}")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     ensure_dir()
