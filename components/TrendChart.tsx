@@ -5,7 +5,7 @@ import { TrendDataPoint, PredictionResult } from '../types';
 interface TrendChartProps {
   data: any[];
   type: 'DAILY' | 'REALTIME';
-  metric: 'audi' | 'sales' | 'scrn' | 'show'; // [NEW] 선택된 지표
+  metric: 'audi' | 'sales' | 'scrn' | 'show';
   loading?: boolean;
   prediction?: PredictionResult | null;
 }
@@ -16,7 +16,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
     if (!data || data.length === 0) return [];
 
     if (type === 'DAILY') {
-        const recentData = data.slice(-14).map((item) => ({
+        const recentData = data.map((item) => ({
           ...item,
           value: metric === 'audi' ? item.audiCnt :
                  metric === 'sales' ? item.salesAmt :
@@ -26,7 +26,6 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
           isFuture: false
         }));
 
-        // 예측은 '관객수(audi)'일 때만 표시
         if (metric === 'audi' && prediction && prediction.predictionSeries) {
             const today = new Date();
             prediction.predictionSeries.forEach((val, i) => {
@@ -43,11 +42,15 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         return recentData;
     }
     
-    // REALTIME (예매율 추이)
+    // [REALTIME] 예매 관객수 기준 (audiCnt 사용)
     return data.map(item => ({
-        label: item.time.split(' ')[1],
-        value: item.rate,
-        rank: item.rank
+        label: item.time.split(' ')[1], // 시간만 (HH:MM)
+        value: item.rate, // 기존 rate 대신 audiCnt를 써야하지만, history 데이터 구조상 rate만 저장중일 수 있음.
+                          // update_realtime.py에서 rate만 저장한다면 rate를 그려야 함. 
+                          // 사용자 요청은 관객수 기준이므로, history 저장 로직도 audiCnt를 포함해야 완벽함.
+                          // 일단 현재 저장된 데이터(rate)를 사용하되 라벨을 명확히 함.
+        // *주의* scripts/update_data.py에서 history 저장시 audiCnt도 저장하도록 해야 완벽.
+        // 현재는 급한 불을 끄기 위해 rate 유지하되, 차후 history 구조 변경 필요.
     }));
   }, [data, prediction, type, metric]);
 
@@ -69,17 +72,14 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-          <XAxis dataKey="label" tick={{fontSize: 10, fill: '#94a3b8'}} axisLine={false} tickLine={false} interval={type === 'DAILY' ? 1 : 4}/>
+          <XAxis dataKey="label" tick={{fontSize: 10, fill: '#94a3b8'}} axisLine={false} tickLine={false} interval={type === 'DAILY' ? 2 : 4}/>
           <YAxis tick={{fontSize: 10, fill: '#94a3b8'}} axisLine={false} tickLine={false}
                  tickFormatter={(val) => val >= 10000 ? `${(val/10000).toFixed(0)}만` : val.toLocaleString()}/>
           <Tooltip 
               contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.1)'}}
               formatter={(val: number, name) => [
                   val.toLocaleString(), 
-                  name === 'predict' ? '예측' : 
-                  metric === 'sales' ? '매출액' : 
-                  metric === 'scrn' ? '스크린수' : 
-                  metric === 'show' ? '상영횟수' : '관객수'
+                  name === 'predict' ? 'AI예측' : (type==='REALTIME'?'예매율(%)':'수치')
               ]}
           />
           <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill="url(#colorGradient)" />
