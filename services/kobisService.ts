@@ -56,11 +56,16 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
           const history = json[title];
           if (!Array.isArray(history) || history.length === 0) return null;
           const latest = history[history.length - 1];
+          
+          // [수정] 퍼센트(%) 중복 방지 로직 추가
+          const rawRate = String(latest.rate);
+          const formattedRate = rawRate.includes('%') ? rawRate : `${rawRate}%`;
+
           return {
             movieCd: String(idx),
             rank: String(latest.rank),
             title: title,
-            rate: String(latest.rate) + "%",
+            rate: formattedRate, // 수정된 부분
             salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
           };
         }).filter(Boolean) as RealtimeMovie[];
