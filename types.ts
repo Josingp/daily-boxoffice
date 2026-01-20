@@ -9,11 +9,12 @@ export interface TrendDataPoint {
 
 export interface RealtimeData {
   rank: string;
-  rate: string;
-  audiCnt: string; // 예매 관객
-  audiAcc: string; // 누적 관객 (크롤링 데이터엔 없을 수도 있음)
-  salesAmt: string; // 예매 매출
-  salesAcc: string; // 누적 매출
+  rate: string;       // 예매율
+  audiCnt: string;    // 예매관객수 (그래프 기준)
+  salesAmt: string;   // 예매매출액
+  audiAcc: string;    // 누적관객수
+  salesAcc: string;   // 누적매출액
+  crawledTime?: string; // 업데이트 기준 시간
 }
 
 export interface DailyBoxOfficeList {
@@ -35,17 +36,13 @@ export interface DailyBoxOfficeList {
   audiAcc: string;
   scrnCnt: string;
   showCnt: string;
-  // [NEW] 확장 데이터 (미리 저장됨)
-  trend?: TrendDataPoint[]; 
+  
+  // 확장 데이터
+  scrnInten?: number; 
+  showInten?: number;
+  trend?: TrendDataPoint[];
   realtime?: RealtimeData;
   posterUrl?: string;
-  plot?: string;
-}
-
-export interface BoxOfficeResult {
-  boxofficeType: string;
-  showRange: string;
-  dailyBoxOfficeList?: DailyBoxOfficeList[];
 }
 
 export interface RealtimeMovie {
@@ -55,13 +52,8 @@ export interface RealtimeMovie {
   rate: string;
   audiCnt: string;
   salesAmt: string;
-}
-
-export interface NewsItem {
-  title: string;
-  link: string;
-  desc: string;
-  press: string;
+  audiAcc: string;
+  salesAcc: string;
 }
 
 export interface MovieInfo {
@@ -77,4 +69,11 @@ export interface PredictionResult {
   analysisText: string;
   predictedFinalAudi: { min: number; max: number; avg: number };
   predictionSeries: number[];
+}
+
+export interface NewsItem {
+  title: string;
+  link: string;
+  desc: string;
+  press: string;
 }
