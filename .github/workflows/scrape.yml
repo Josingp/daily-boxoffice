@@ -16,10 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # [중요] 스크립트 실행 전 최신 코드/데이터 가져오기 (충돌 방지)
-      - name: Pull latest changes
-        run: git pull origin main
-
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -32,7 +28,7 @@ jobs:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_realtime.py
 
-      # 2. 일별 데이터 업데이트 (수동 실행 or 한국시간 오전 9시)
+      # 2. 일별 데이터 업데이트 (수동 or 한국 09:00)
       - name: Update Daily
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
@@ -42,21 +38,27 @@ jobs:
             echo "Running update_daily.py..."
             python scripts/update_daily.py
           else
-            echo "Skipping daily update (Current hour: $HOUR UTC)"
+            echo "Skipping daily update"
           fi
 
-      # 3. 변경 사항 저장 (실패 시 재시도 로직 포함)
-      - name: Commit
+      # 3. 변경 사항 저장 (충돌 방지: Reset 전략)
+      - name: Commit and Push
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
+          
+          # 현재 변경사항(새로 만든 JSON)을 잠시 보관(Stash)하진 않고,
+          # 원격의 최신 상태를 가져와서 HEAD를 맞춥니다.
+          git fetch origin main
+          git reset --soft origin/main
+          
+          # 이제 변경된 파일들을 다시 스테이징합니다.
           git add public/*.json
           
+          # 변경사항이 있으면 커밋하고 푸시
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Update Data"
-            # 혹시 그 사이 또 변경되었을 경우를 대비해 pull --rebase 후 push
-            git pull --rebase origin main
-            git push
+            git push origin main
           fi
