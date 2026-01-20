@@ -2,7 +2,7 @@ name: Data Scraper
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # 5분마다 실행
+    - cron: '0 * * * *' # 1시간마다 (정각) 실행
   workflow_dispatch:      # 수동 실행
 
 permissions:
@@ -22,13 +22,13 @@ jobs:
       
       - run: pip install requests beautifulsoup4
       
-      # 1. 실시간 데이터 업데이트
+      # 1. 실시간 데이터 업데이트 (스마트 저장 방식 적용)
       - name: Update Realtime
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_realtime.py
 
-      # 2. 일별 데이터 업데이트 (수동 or 한국 09:00)
+      # 2. 일별 데이터 업데이트 (수동 or 한국 09:00 / UTC 00:00)
       - name: Update Daily
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
@@ -47,18 +47,14 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # 현재 변경사항(새로 만든 JSON)을 잠시 보관(Stash)하진 않고,
-          # 원격의 최신 상태를 가져와서 HEAD를 맞춥니다.
           git fetch origin main
           git reset --soft origin/main
           
-          # 이제 변경된 파일들을 다시 스테이징합니다.
           git add public/*.json
           
-          # 변경사항이 있으면 커밋하고 푸시
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update Data"
+            git commit -m "Update Data (Smart Sync)"
             git push origin main
           fi
