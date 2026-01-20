@@ -43,12 +43,12 @@ def extract_movie_data(row):
         "audiAcc": clean(cols[7].get_text(strip=True))
     }
 
-# [핵심] 고정 Payload 방식 (가장 확실한 방법)
+# [핵심] 고정 Payload 방식 (사용자 요청 반영)
 def fetch_kobis_fixed():
     session = requests.Session()
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do',
+        'Referer': KOBIS_REALTIME_URL,
         'Origin': 'https://www.kobis.or.kr',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -88,7 +88,6 @@ def realtime():
             d = extract_movie_data(row)
             if d: data.append(d)
             
-        # 시간 추출
         time_text = ""
         try:
             match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
@@ -113,7 +112,6 @@ def reservation(movieName: str = Query(...), movieCd: str = Query(None)):
             
             row_norm = re.sub(r'[^0-9a-zA-Z가-힣]', '', data['title']).lower()
             if (movieCd and data['movieCd'] == movieCd) or (target_norm in row_norm):
-                # 시간 정보 추출
                 time_text = ""
                 try:
                     match = re.search(r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", soup.get_text())
