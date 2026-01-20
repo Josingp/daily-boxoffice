@@ -1,37 +1,29 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
-// [핵심] JSON 파일 우선 -> 실패하거나 비어있으면 실시간 API 호출
+// [핵심] JSON 파일 -> 실패/빈값이면 API 자동 전환
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
-  transformFn?: (json: any) => T | null
+  transformFn?: (json: any) => T
 ): Promise<T | null> => {
-  // 1. JSON 파일 시도
   try {
     const jsonRes = await fetch(`${jsonUrl}?t=${Date.now()}`);
     if (jsonRes.ok) {
       const data = await jsonRes.json();
-      // 변환 함수 실행
-      const result = transformFn ? transformFn(data) : data;
-      
-      // [중요] 결과가 유효하면 반환, 아니면(null) API로 넘어감
-      if (result) return result; 
-      console.warn(`Data in ${jsonUrl} is invalid or empty. Switching to API...`);
-    } else {
-      console.warn(`File not found: ${jsonUrl} (${jsonRes.status}). Switching to API...`);
+      if (data && Object.keys(data).length > 0) { // 데이터가 비어있지 않아야 함
+          return transformFn ? transformFn(data) : data;
+      }
     }
   } catch (e) {
-    console.warn(`JSON Fetch Error: ${e}. Switching to API...`);
+    console.warn(`Fallback to API for ${jsonUrl}`);
   }
 
-  // 2. API 시도 (파일 실패/비어있음/404일 때 실행)
+  // 파일 실패 시 API 호출
   try {
-    console.log(`Fetching from API fallback: ${apiUrl}`);
     const apiRes = await fetch(apiUrl);
-    if (!apiRes.ok) throw new Error(`API Error ${apiRes.status}`);
+    if (!apiRes.ok) throw new Error('API Error');
     return await apiRes.json();
   } catch (e) {
-    console.error(`All fetch methods failed for ${apiUrl}`, e);
     return null;
   }
 };
@@ -41,11 +33,8 @@ export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
     '/daily_data.json',
     `/kobis/daily?targetDt=${targetDt}`,
     (json) => {
-      // 데이터 유효성 검사
-      if (json && json.movies && json.movies.length > 0) {
-        return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
-      }
-      return null; // 비어있으면 API 호출 유도
+      if (json.movies) return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
+      return json;
     }
   );
   return data || { boxOfficeResult: { dailyBoxOfficeList: [] } };
@@ -56,11 +45,11 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
     '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      // 1. API 응답 형식 ({ status: "ok", data: [...] })
-      if (json.status === 'ok' && Array.isArray(json.data) && json.data.length > 0) return json;
+      // 1. API 응답 형식 (즉시 크롤링 결과)
+      if (json.status === 'ok') return json;
 
-      // 2. History 파일 형식 ({ "영화제목": [...] })
-      if (!json || Object.keys(json).length === 0) return null; // 빈 객체면 null 반환 -> API 호출
+      // 2. JSON 파일 형식 (누적 데이터)
+      if (!json || Object.keys(json).length === 0) return null;
       
       try {
         const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
@@ -76,16 +65,8 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
           };
         }).filter(Boolean) as RealtimeMovie[];
 
-        if (list.length === 0) return null;
-
         list.sort((a, b) => Number(a.rank) - Number(b.rank));
-        
-        // 시간 정보 추출 (안전하게)
-        let time = "";
-        const firstKey = Object.keys(json)[0];
-        if (firstKey && json[firstKey].length > 0) {
-            time = json[firstKey].slice(-1)[0].time;
-        }
+        const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
         
         return { status: "ok", data: list, crawledTime: time };
       } catch { return null; }
