@@ -7,7 +7,7 @@ import DetailView from './components/DetailView';
 import SearchBar from './components/SearchBar';
 import { Calendar, Clock, RotateCw } from 'lucide-react';
 
-type BoxOfficeType = 'DAILY' | 'REALTIME';;
+type BoxOfficeType = 'DAILY' | 'REALTIME';
 
 const App: React.FC = () => {
   const [targetDate, setTargetDate] = useState<string>(getYesterdayStr());
