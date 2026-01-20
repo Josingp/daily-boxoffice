@@ -3,7 +3,7 @@ import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -17,7 +17,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [chartMetric, setChartMetric] = useState<'audi' | 'sales' | 'scrn' | 'show'>('audi');
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [realtimeHistory, setRealtimeHistory] = useState<any[]>([]);
-  const [realtimeInfo, setRealtimeInfo] = useState<any>(null); // 실시간 정보 (카드용)
+  const [realtimeInfo, setRealtimeInfo] = useState<any>(null);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [posterUrl, setPosterUrl] = useState<string>('');
@@ -35,72 +35,79 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     }
   }, [movie]);
 
+  const getDDay = (openDt: string) => {
+      if (!openDt) return '';
+      const start = new Date(openDt.replace(/-/g, '/'));
+      const now = new Date();
+      const diff = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+      return diff >= 0 ? `(개봉 ${diff + 1}일차)` : `(D-${Math.abs(diff)})`;
+  };
+
   const loadData = async (movie: DailyBoxOfficeList) => {
     setLoading(true);
     setAnalysis('');
     setPredictionSeries([]);
-    setTrendData([]);
+    setTrendData(movie.trend || []); // 미리 로드된 트렌드 있으면 즉시 적용
     setRealtimeHistory([]);
-    setRealtimeInfo(null);
+    // JSON에 있는 실시간 정보 우선 사용
+    setRealtimeInfo(movie.realtime || null);
     setNewsList([]);
     setPosterUrl('');
     setMovieDetail(null);
     setChartMetric('audi');
 
     try {
-      // 1. 기본 정보 로드
-      const info = await fetchMovieDetail(movie.movieCd);
-      setMovieDetail(info);
-      fetchMoviePoster(movie.movieNm).then(setPosterUrl);
-      fetchMovieNews(movie.movieNm).then(items => {
-         if (!items || items.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
-         else setNewsList(items);
-      });
+      const infoPromise = fetchMovieDetail(movie.movieCd);
+      const posterPromise = fetchMoviePoster(movie.movieNm);
+      const newsPromise = fetchMovieNews(movie.movieNm);
 
-      // 2. 실시간 정보 확보 (Daily탭이어도 실시간 정보 있으면 가져옴)
-      let rtData = movie.realtime; 
-      
-      // JSON에 없으면 API로 긁어오기 시도
-      if (!rtData) {
+      const [info, poster, news] = await Promise.all([infoPromise, posterPromise, newsPromise]);
+      setMovieDetail(info);
+      setPosterUrl(poster);
+      if (news.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+      else setNewsList(news);
+
+      // 실시간 정보 없으면 API 호출 (보완)
+      if (!movie.realtime) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
           if (live.data) {
-              rtData = {
+              const newData = {
                   rank: live.data.rank,
                   rate: live.data.rate,
                   audiCnt: live.data.audiCnt,
                   salesAmt: live.data.salesAmt,
                   audiAcc: live.data.audiAcc,
-                  salesAcc: live.data.salesAcc
+                  salesAcc: live.data.salesAcc,
+                  crawledTime: live.crawledTime
               };
+              setRealtimeInfo(newData);
+              
+              // 실시간 탭이면 히스토리용 점 하나 찍기
+              if (type === 'REALTIME') {
+                  setRealtimeHistory([{ 
+                      time: live.crawledTime || 'Now', 
+                      rate: parseFloat(live.data.rate.replace('%','')), 
+                      rank: parseInt(live.data.rank) 
+                  }]);
+              }
           }
       }
-      setRealtimeInfo(rtData);
 
-      // 3. 그래프 데이터 및 분석 요청
       if (type === 'DAILY') {
-        if (movie.trend && movie.trend.length > 0) {
-            setTrendData(movie.trend);
-            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', rtData);
+        if (movie.trend) {
+            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', movie.realtime);
         }
       } else {
-        // 실시간 탭
+        // Realtime History 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
             const history = json[movie.movieNm] || [];
-            // 히스토리가 없으면 현재 데이터로 점 찍기
-            if (history.length === 0 && rtData) {
-                history.push({ 
-                    time: new Date().toISOString().slice(0,16).replace('T',' '), 
-                    rate: parseFloat(rtData.rate.replace('%','')), 
-                    rank: parseInt(rtData.rank) 
-                });
-            }
             setRealtimeHistory(history);
             requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
           }
-        } catch { }
+        } catch {}
       }
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -121,13 +128,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   const handleShare = async () => {
     if (!movie) return;
-    const text = `[BoxOffice Pro] ${movie.movieNm}\n관객수: ${formatNumber(movie.audiCnt)}명\n${analysis.slice(0,50)}...`;
+    const text = `[BoxOffice Pro] ${movie.movieNm}\n누적관객: ${formatNumber(movie.audiAcc)}명\n${analysis.slice(0,50)}...`;
     try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(()=>setCopied(false),2000); } catch {}
   };
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
 
-  // 증감 배지 컴포넌트
   const IntenBadge = ({ val }: { val?: string | number }) => {
       const v = typeof val === 'string' ? parseInt(val) : (val || 0);
       if (v === 0) return <span className="text-slate-400 text-[10px]">-</span>;
@@ -164,13 +170,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
              <div className="flex gap-2"><Film size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-1">{movieDetail?.directors?.map((d: any)=>d.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2"><User size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-2">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2"><CalendarIcon size={14} className="text-slate-400 shrink-0"/> 
-               <span className="text-slate-800">{movieDetail?.openDt || '-'}</span>
+               <span className="text-slate-800">{movieDetail?.openDt || '-'} <span className="text-orange-500 font-bold ml-1">{getDDay(movie.openDt)}</span></span>
              </div>
              <div className="flex gap-2 font-bold text-blue-600 pt-2 mt-auto border-t border-slate-50"><Users size={14}/> 누적: {formatNumber(movie.audiAcc)}명</div>
            </div>
         </div>
 
-        {/* 2. 일일 통계 (DAILY 모드일 때만 표시) */}
+        {/* 2. 일일 통계 (Daily 모드: 리스트에서 받은 movie 데이터 즉시 표시) */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -189,14 +195,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
                 <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><Monitor size={14}/><span className="text-xs">스크린</span></div>
+                    <div className="flex items-center gap-1.5 text-slate-500"><Monitor size={14}/><span className="text-xs">스크린수</span></div>
                     <IntenBadge val={movie.scrnInten} />
                 </div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.scrnCnt)}개</div>
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
                 <div className="flex justify-between items-start mb-1">
-                    <div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영</span></div>
+                    <div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영횟수</span></div>
                     <IntenBadge val={movie.showInten} />
                 </div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.showCnt)}회</div>
@@ -204,48 +210,47 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
-        {/* 3. 보라색 실시간 예매 카드 (데이터가 있으면 무조건 표시) */}
+        {/* 3. 보라색 실시간 카드 (정보 꽉 채움) */}
         {realtimeInfo && (
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간 예매</span>
-                    <span className="text-xs opacity-80">{realtimeInfo.rank}위</span>
+                    <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간</span>
+                    {realtimeInfo.crawledTime && <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime.split(' ')[1]} 기준</span>}
                 </div>
                 <div className="flex items-end gap-2 mb-4">
                     <span className="text-4xl font-black">{realtimeInfo.rate}</span>
-                    <span className="text-sm font-medium opacity-80 mb-1">예매율</span>
+                    <span className="text-sm font-medium opacity-80 mb-1">예매율 {realtimeInfo.rank}위</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4 text-xs border-t border-white/20 pt-3">
+                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
                     <div>
-                        <div className="opacity-70 mb-0.5">예매 관객</div>
-                        <div className="font-bold text-base">{realtimeInfo.audiCnt}명</div>
+                        <div className="opacity-70 mb-0.5">예매 관객수</div>
+                        <div className="font-bold text-sm">{realtimeInfo.audiCnt}명</div>
                     </div>
                     <div>
-                        <div className="opacity-70 mb-0.5">예매 매출</div>
-                        <div className="font-bold text-base">{formatKoreanNumber(realtimeInfo.salesAmt)}원</div>
+                        <div className="opacity-70 mb-0.5">누적 관객수</div>
+                        <div className="font-bold text-sm">{realtimeInfo.audiAcc}명</div>
+                    </div>
+                    <div>
+                        <div className="opacity-70 mb-0.5">예매 매출액</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div>
+                    </div>
+                    <div>
+                        <div className="opacity-70 mb-0.5">누적 매출액</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div>
                     </div>
                 </div>
             </div>
         )}
 
-        {/* 4. 그래프 (DAILY는 선택형, REALTIME은 추이형) */}
+        {/* 4. 그래프 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             {type === 'DAILY' && (
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-                    {[
-                        { id: 'audi', label: '관객수' },
-                        { id: 'sales', label: '매출액' },
-                        { id: 'scrn', label: '스크린' },
-                        { id: 'show', label: '상영수' }
-                    ].map((m) => (
-                        <button key={m.id} onClick={() => setChartMetric(m.id as any)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${chartMetric === m.id ? 'bg-blue-100 text-blue-600' : 'bg-slate-50 text-slate-500'}`}>
-                            {m.label}
-                        </button>
+                    {[{id:'audi',l:'관객수'},{id:'sales',l:'매출액'},{id:'scrn',l:'스크린'},{id:'show',l:'상영수'}].map(m=>(
+                        <button key={m.id} onClick={()=>setChartMetric(m.id as any)} className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap ${chartMetric===m.id?'bg-blue-100 text-blue-600':'bg-slate-50 text-slate-500'}`}>{m.l}</button>
                     ))}
                 </div>
             )}
-            
             <TrendChart 
                 data={type === 'DAILY' ? trendData : realtimeHistory} 
                 type={type} 
