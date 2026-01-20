@@ -12,8 +12,11 @@ type BoxOfficeType = 'DAILY' | 'REALTIME';
 const App: React.FC = () => {
   const [targetDate, setTargetDate] = useState<string>(getYesterdayStr());
   const [boxOfficeType, setBoxOfficeType] = useState<BoxOfficeType>('DAILY');
+  
   const [movieList, setMovieList] = useState<(DailyBoxOfficeList | RealtimeMovie)[]>([]);
+  const [realtimeMap, setRealtimeMap] = useState<Map<string, any>>(new Map()); // [NEW] 실시간 데이터 검색용 맵
   const [crawledTime, setCrawledTime] = useState<string>('');
+  
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMovie, setSelectedMovie] = useState<DailyBoxOfficeList | null>(null);
@@ -21,16 +24,29 @@ const App: React.FC = () => {
   const loadData = async () => {
     setLoading(true);
     setMovieList([]);
+
     try {
+      // 1. 실시간 데이터를 먼저 가져와서 맵으로 만듦 (일별 탭에서도 쓰기 위해)
+      const rtResult = await fetchRealtimeRanking();
+      const rtMap = new Map();
+      if (rtResult.data) {
+        rtResult.data.forEach(m => {
+          // 영화 제목을 키로 사용하여 매핑 (공백 제거 등 정규화)
+          const key = m.title.replace(/\s+/g, '').toLowerCase();
+          rtMap.set(key, m);
+        });
+        setCrawledTime(rtResult.crawledTime);
+        setRealtimeMap(rtMap);
+      }
+
+      // 2. 탭에 따라 리스트 설정
       if (boxOfficeType === 'DAILY') {
         const data = await fetchDailyBoxOffice(targetDate);
         if (data.boxOfficeResult?.dailyBoxOfficeList) {
           setMovieList(data.boxOfficeResult.dailyBoxOfficeList);
         }
       } else {
-        const { data, crawledTime } = await fetchRealtimeRanking();
-        setMovieList(data);
-        setCrawledTime(crawledTime);
+        setMovieList(rtResult.data);
       }
     } catch (err) { console.error(err); } 
     finally { setLoading(false); }
@@ -47,11 +63,27 @@ const App: React.FC = () => {
 
   const handleMovieClick = (movie: DailyBoxOfficeList | RealtimeMovie) => {
     if ('movieNm' in movie) {
-      // [일별] 선택 시: DetailView 내부에서 fetchRealtimeReservation을 통해 시간을 가져옵니다.
-      setSelectedMovie(movie);
+      // [일별 탭] 클릭 시: 실시간 맵에서 해당 영화 정보를 찾아 주입!
+      const key = movie.movieNm.replace(/\s+/g, '').toLowerCase();
+      const rtInfo = realtimeMap.get(key);
+      
+      const enrichedMovie = { ...movie };
+      
+      // 실시간 정보가 있으면 넣어줌 (보라색 카드 활성화됨)
+      if (rtInfo) {
+        enrichedMovie.realtime = {
+            rank: rtInfo.rank,
+            rate: rtInfo.rate,
+            audiCnt: rtInfo.audiCnt,
+            salesAmt: rtInfo.salesAmt,
+            audiAcc: rtInfo.audiAcc,
+            salesAcc: rtInfo.salesAcc,
+            crawledTime: crawledTime // 시간 정보 전달
+        };
+      }
+      setSelectedMovie(enrichedMovie);
     } else {
-      // [실시간] 선택 시: 메인 화면의 시간(crawledTime)을 주입
-      // + JSON에 저장된 detail 정보도 넘겨줌 (API 호출 최소화)
+      // [실시간 탭] 클릭 시
       const converted: DailyBoxOfficeList = {
         rnum: movie.rank, rank: movie.rank, rankInten: '0', rankOldAndNew: 'OLD',
         movieCd: movie.movieCd, movieNm: movie.title, openDt: '',
@@ -63,10 +95,10 @@ const App: React.FC = () => {
             rank: movie.rank, rate: movie.rate,
             audiCnt: movie.audiCnt, salesAmt: movie.salesAmt,
             audiAcc: movie.audiAcc, salesAcc: movie.salesAcc,
-            crawledTime: crawledTime // [핵심] 시간 전달
+            crawledTime: crawledTime
         }
       };
-      // 상세정보가 있으면 병합 (포스터 등 즉시 표시)
+      // 상세정보가 있으면 병합
       if ((movie as any).detail) {
           converted['detail'] = (movie as any).detail;
       }
