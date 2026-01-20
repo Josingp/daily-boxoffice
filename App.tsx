@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const [boxOfficeType, setBoxOfficeType] = useState<BoxOfficeType>('DAILY');
   
   const [movieList, setMovieList] = useState<(DailyBoxOfficeList | RealtimeMovie)[]>([]);
-  const [crawledTime, setCrawledTime] = useState<string>('');
+  const [crawledTime, setCrawledTime] = useState<string>(''); // 메인 화면이 알고 있는 "진짜 조회일시"
   
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -33,6 +33,7 @@ const App: React.FC = () => {
       } else {
         const { data, crawledTime } = await fetchRealtimeRanking();
         setMovieList(data);
+        // 여기서 KOBIS HTML에서 긁어온 "진짜 시간"을 저장함
         setCrawledTime(crawledTime);
       }
     } catch (err) {
@@ -55,15 +56,42 @@ const App: React.FC = () => {
 
   const handleMovieClick = (movie: DailyBoxOfficeList | RealtimeMovie) => {
     if ('movieNm' in movie) {
+      // [일별 박스오피스]인 경우
       setSelectedMovie(movie);
     } else {
+      // [실시간 예매율]인 경우 -> 여기가 중요!
+      // RealtimeMovie 타입을 DailyBoxOfficeList 타입으로 변환하면서
+      // 메인 화면에 있던 'crawledTime'을 'realtime' 객체 안에 심어서 보냅니다.
       const converted: DailyBoxOfficeList = {
-        rnum: movie.rank, rank: movie.rank, rankInten: '0', rankOldAndNew: 'OLD',
-        movieCd: movie.movieCd, movieNm: movie.title, openDt: '',
-        salesAmt: movie.salesAmt, salesShare: movie.rate.replace('%', ''),
-        salesInten: '0', salesChange: '0', salesAcc: movie.salesAcc,
-        audiCnt: movie.audiCnt, audiInten: '0', audiChange: '0', audiAcc: movie.audiAcc,
-        scrnCnt: '0', showCnt: '0'
+        rnum: movie.rank, 
+        rank: movie.rank, 
+        rankInten: '0', 
+        rankOldAndNew: 'OLD',
+        movieCd: movie.movieCd, 
+        movieNm: movie.title, 
+        openDt: '',
+        salesAmt: movie.salesAmt, 
+        salesShare: movie.rate.replace('%', ''),
+        salesInten: '0', 
+        salesChange: '0', 
+        salesAcc: movie.salesAcc,
+        audiCnt: movie.audiCnt, 
+        audiInten: '0', 
+        audiChange: '0', 
+        audiAcc: movie.audiAcc,
+        scrnCnt: '0', 
+        showCnt: '0',
+        // [핵심 수정] 여기에 메인 화면의 시간을 넣어줍니다.
+        // DetailView는 이 정보를 보고 "아, 데이터가 있네?" 하고 API 호출을 안 하게 됩니다.
+        realtime: {
+            rank: movie.rank,
+            rate: movie.rate,
+            audiCnt: movie.audiCnt,
+            salesAmt: movie.salesAmt,
+            audiAcc: movie.audiAcc,
+            salesAcc: movie.salesAcc,
+            crawledTime: crawledTime // <-- 이 값이 상세 화면의 "실시간 기준" 텍스트가 됨
+        }
       };
       setSelectedMovie(converted);
     }
@@ -100,6 +128,7 @@ const App: React.FC = () => {
             {boxOfficeType === 'REALTIME' && (
                <div className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-1.5 rounded-lg border border-indigo-100">
                  <Clock size={14} />
+                 {/* 여기가 메인 화면의 시간 표시 부분 */}
                  <span>{crawledTime ? `${crawledTime} 기준` : '실시간'}</span>
                </div>
             )}
