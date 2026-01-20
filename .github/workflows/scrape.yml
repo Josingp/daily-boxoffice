@@ -2,7 +2,7 @@ name: Data Scraper
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # 10분마다 실행 (실시간성 강화)
+    - cron: '*/10 * * * *' # 10분마다 실행
   workflow_dispatch:
 
 permissions:
@@ -13,10 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      
+          
       - run: pip install requests beautifulsoup4
       
       - name: Run Update Script
