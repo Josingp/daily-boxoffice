@@ -29,8 +29,20 @@ def fetch_movie_detail(movie_cd):
         return res.json().get("movieInfoResult", {}).get("movieInfo")
     except: return None
 
+# [NEW] 데이터 변화 감지 함수
+def is_same_data(last_entry, new_entry):
+    if not last_entry: return False
+    # 순위, 예매율, 관객수, 매출액 등이 모두 같으면 '변화 없음'으로 판단
+    return (
+        last_entry['rank'] == new_entry['rank'] and
+        last_entry['rate'] == new_entry['rate'] and
+        last_entry['audiCnt'] == new_entry['audiCnt'] and
+        last_entry['salesAmt'] == new_entry['salesAmt'] and
+        last_entry['audiAcc'] == new_entry['audiAcc']
+    )
+
 def update_realtime():
-    print("Updating Realtime Data...")
+    print("Updating Realtime Data (Smart Mode)...")
     
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
@@ -55,23 +67,18 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [수정] 조회일시 파싱 (제공해주신 HTML 구조 반영)
-        # 예: 조회일시 : 2026/01/20 18:52
+        # 조회 시간 파싱
         crawled_time = ""
         try:
-            # 전체 텍스트에서 날짜 패턴 검색 (가장 안전함)
             txt = soup.get_text()
-            # YYYY/MM/DD HH:MM 패턴
-            match = re.search(r"조회일시\s*:\s*(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2})", txt)
+            match = re.search(r"조회일시\s*:\s*(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", txt)
             if match:
                 crawled_time = match.group(1).replace("/", "-")
             else:
-                # 대안 패턴 (YYYY-MM-DD)
                 match = re.search(r"조회일시\s*:\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})", txt)
                 if match: crawled_time = match.group(1)
         except: pass
         
-        # 파싱 실패 시 현재 시간 (Fallback)
         if not crawled_time:
             crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -100,9 +107,8 @@ def update_realtime():
             
             if not title: continue
             
-            # 데이터 추출
             rate = cols[3].get_text(strip=True).replace('%', '')
-            audi_cnt_raw = cols[6].get_text(strip=True) # "37,355"
+            audi_cnt_raw = cols[6].get_text(strip=True)
             sales_amt_raw = cols[4].get_text(strip=True)
             audi_acc_raw = cols[7].get_text(strip=True)
             sales_acc_raw = cols[5].get_text(strip=True)
@@ -111,30 +117,40 @@ def update_realtime():
             if movie_cd and title not in realtime_data["meta"]:
                 if movie_cd in detail_cache:
                     realtime_data["meta"][title] = detail_cache[movie_cd]
-                elif int(rank) <= 20:
+                elif int(rank) <= 20: # 상위 20개만 API 호출
                     detail = fetch_movie_detail(movie_cd)
                     if detail: 
                         realtime_data["meta"][title] = detail
                         time.sleep(0.1)
 
-            # 히스토리 데이터
+            # 히스토리 데이터 처리
             if title not in realtime_data: realtime_data[title] = []
             
-            if not realtime_data[title] or realtime_data[title][-1]['time'] != crawled_time:
-                realtime_data[title].append({
-                    "time": crawled_time,
-                    "rank": int(rank),
-                    "rate": float(rate) if rate else 0,
-                    "audiCnt": audi_cnt_raw, 
-                    "salesAmt": sales_amt_raw,
-                    "audiAcc": audi_acc_raw,
-                    "salesAcc": sales_acc_raw,
-                    # 그래프용 숫자값 (콤마 제거)
-                    "val_audi": int(audi_cnt_raw.replace(',', '')) if audi_cnt_raw.replace(',', '').isdigit() else 0,
-                    "val_rate": float(rate) if rate else 0
-                })
-                if len(realtime_data[title]) > 288:
-                    realtime_data[title] = realtime_data[title][-288:]
+            last_entry = realtime_data[title][-1] if realtime_data[title] else None
+            
+            new_entry = {
+                "time": crawled_time,
+                "rank": int(rank),
+                "rate": float(rate) if rate else 0,
+                "audiCnt": audi_cnt_raw,
+                "salesAmt": sales_amt_raw,
+                "audiAcc": audi_acc_raw,
+                "salesAcc": sales_acc_raw,
+                "val_audi": int(audi_cnt_raw.replace(',', '')) if audi_cnt_raw.replace(',', '').isdigit() else 0,
+                "val_rate": float(rate) if rate else 0
+            }
+
+            if is_same_data(last_entry, new_entry):
+                # [변한 게 없음] -> 기존 마지막 데이터의 시간만 최신으로 업데이트 (덮어쓰기)
+                # 이렇게 하면 그래프에서 선이 평행하게 쭉 이어집니다.
+                realtime_data[title][-1]['time'] = crawled_time
+            else:
+                # [변한 게 있음] -> 새로운 데이터 추가
+                realtime_data[title].append(new_entry)
+
+            # 데이터가 너무 많이 쌓이지 않게 관리 (최근 288개 = 5분단위 시 하루치, 1시간 단위 시 12일치)
+            if len(realtime_data[title]) > 288:
+                realtime_data[title] = realtime_data[title][-288:]
             
             count += 1
 
