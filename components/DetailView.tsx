@@ -48,62 +48,53 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setChartMetric('audi');
 
     try {
-      const infoPromise = fetchMovieDetail(movie.movieCd);
-      const posterPromise = fetchMoviePoster(movie.movieNm);
-      const newsPromise = fetchMovieNews(movie.movieNm);
-
-      const [info, poster, news] = await Promise.all([infoPromise, posterPromise, newsPromise]);
+      const info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
-      setPosterUrl(poster);
-      if (news.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
-      else setNewsList(news);
+      fetchMoviePoster(movie.movieNm).then(setPosterUrl);
+      fetchMovieNews(movie.movieNm).then(items => {
+         if (!items || items.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+         else setNewsList(items);
+      });
 
-      // [핵심] 실시간 정보가 없거나 갱신 필요 시 API 호출
-      if (!movie.realtime) {
+      // 실시간 정보 없으면 즉시 크롤링 (API 사용)
+      let currentRt = movie.realtime;
+      if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
           if (live.data) {
-              const newData = {
+              currentRt = {
                   rank: live.data.rank,
                   rate: live.data.rate,
                   audiCnt: live.data.audiCnt,
                   salesAmt: live.data.salesAmt,
                   audiAcc: live.data.audiAcc,
                   salesAcc: live.data.salesAcc,
-                  crawledTime: live.crawledTime // 여기서 시간 가져옴
+                  crawledTime: live.crawledTime
               };
-              setRealtimeInfo(newData);
-              
-              // 실시간 탭이면 그래프 데이터용 배열 생성
-              if (type === 'REALTIME') {
-                  setRealtimeHistory([{ 
-                      time: live.crawledTime || 'Now', 
-                      rate: parseFloat(live.data.rate.replace('%','')), 
-                      audiCnt: parseInt(live.data.audiCnt.replace(/,/g,'')),
-                      rank: parseInt(live.data.rank) 
-                  }]);
-              }
+              setRealtimeInfo(currentRt);
           }
       }
 
+      // [그래프 및 AI 분석]
       if (type === 'DAILY') {
-        if (movie.trend) {
-            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', realtimeInfo);
+        if (movie.trend && movie.trend.length > 0) {
+            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', currentRt);
         }
       } else {
-        // [REALTIME 탭] 히스토리 로드
+        // [실시간 모드] 히스토리 데이터 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
             const history = json[movie.movieNm] || [];
             
-            // 데이터 없으면 현재값으로 채움
-            if (history.length === 0 && realtimeInfo) {
+            // 데이터가 없으면 현재값으로 점 하나 찍기
+            if (history.length === 0 && currentRt) {
                 history.push({
-                    time: realtimeInfo.crawledTime || 'Now',
-                    rate: parseFloat(realtimeInfo.rate.replace('%','')),
-                    audiCnt: parseInt(realtimeInfo.audiCnt.replace(/,/g,'')),
-                    rank: parseInt(realtimeInfo.rank)
+                    time: currentRt.crawledTime || 'Now',
+                    rate: currentRt.rate, // 문자열 그대로
+                    audiCnt: currentRt.audiCnt, // 문자열 그대로
+                    val_audi: parseInt(currentRt.audiCnt.replace(/,/g,'')), // 그래프용 숫자
+                    rank: parseInt(currentRt.rank)
                 });
             }
             setRealtimeHistory(history);
@@ -128,8 +119,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     } catch(e) {}
   };
 
-  // ... (handleShare, openNewsLink, IntenBadge는 기존 동일)
-  const handleShare = async () => { if(!movie) return; const t = `[BoxOffice Pro] ${movie.movieNm}\n${analysis.slice(0,50)}...`; try { await navigator.clipboard.writeText(t); setCopied(true); setTimeout(()=>setCopied(false),2000); } catch {} };
+  const handleShare = async () => { if(!movie) return; const t = `[BoxOffice Pro] ${movie.movieNm}\n누적관객: ${formatNumber(movie.audiAcc)}명\n${analysis.slice(0,50)}...`; try { await navigator.clipboard.writeText(t); setCopied(true); setTimeout(()=>setCopied(false),2000); } catch {} };
   const openNewsLink = (url: string) => window.open(url, '_blank');
   const IntenBadge = ({ val }: { val?: string | number }) => { const v = typeof val === 'string' ? parseInt(val) : (val || 0); if (v === 0) return <span className="text-slate-400 text-[10px]">-</span>; const isUp = v > 0; return <span className={`text-[10px] ${isUp ? 'text-red-500' : 'text-blue-500'} font-medium`}>{isUp ? '▲' : '▼'} {Math.abs(v).toLocaleString()}</span>; };
 
@@ -151,7 +141,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
         
-        {/* 1. 정보 & 포스터 */}
+        {/* 1. 영화 정보 & 포스터 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
            <div className="w-24 h-36 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
              {posterUrl ? <img src={posterUrl} alt={movie.movieNm} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1"><Film size={24} /><span className="text-[10px]">No Poster</span></div>}
@@ -164,7 +154,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            </div>
         </div>
 
-        {/* 2. 일일 통계 (Daily only) */}
+        {/* 2. 일일 통계 (Daily 모드만) */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -186,40 +176,40 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
-        {/* 3. 보라색 실시간 카드 (데이터 있으면 무조건 표시) */}
+        {/* 3. 보라색 실시간 카드 (시간/출처/서식 완벽 적용) */}
         {realtimeInfo && (
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
                 <div className="flex justify-between items-center mb-2">
                     <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간 예매</span>
-                    {/* 시간 표시 */}
+                    {/* 조회일시 표시 */}
                     {realtimeInfo.crawledTime && <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime} 기준</span>}
                 </div>
                 <div className="flex items-end gap-2 mb-4">
-                    <span className="text-4xl font-black">{realtimeInfo.rate.includes('%') ? realtimeInfo.rate : `${realtimeInfo.rate}%`}</span>
+                    <span className="text-4xl font-black">{realtimeInfo.rate}</span>
                     <span className="text-sm font-medium opacity-80 mb-1">예매율 {realtimeInfo.rank}위</span>
                 </div>
                 <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
                     <div>
                         <div className="opacity-70 mb-0.5">예매 관객수</div>
-                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiCnt.replace(/,/g,''))}명</div>
+                        <div className="font-bold text-sm">{realtimeInfo.audiCnt}명</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">누적 관객수</div>
-                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiAcc.replace(/,/g,''))}명</div>
+                        <div className="font-bold text-sm">{realtimeInfo.audiAcc}명</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">예매 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div>
+                        <div className="font-bold text-sm">{realtimeInfo.salesAmt}원</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">누적 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div>
+                        <div className="font-bold text-sm">{realtimeInfo.salesAcc}원</div>
                     </div>
                 </div>
             </div>
         )}
 
-        {/* 4. 그래프 */}
+        {/* 4. 그래프 (실시간은 관객수 기준) */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             {type === 'DAILY' && (
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
@@ -264,13 +254,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             </div>
           </div>
         )}
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-100 pb-8">
-        <button onClick={handleShare} className={`w-full ${copied ? 'bg-green-500 text-white' : 'bg-[#FEE500] text-[#3c1e1e] hover:bg-[#FDD835]'} font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all duration-200 active:scale-[0.98]`}>
-          {copied ? <Check size={18} /> : <Share2 size={18} />}
-          <span>{copied ? '리포트 복사 완료!' : '리포트 공유하기'}</span>
-        </button>
       </div>
     </div>
   );
