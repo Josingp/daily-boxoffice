@@ -4073,6 +4073,17 @@
       "salesAcc": "5,670,000",
       "val_audi": 37532,
       "val_rate": 12.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 1,
+      "rate": 11.8,
+      "audiCnt": "37,588",
+      "salesAmt": "528,831,040",
+      "audiAcc": "378",
+      "salesAcc": "5,670,000",
+      "val_audi": 37588,
+      "val_rate": 11.8
     }
   ],
   "프로젝트 Y": [
@@ -4108,6 +4119,17 @@
       "salesAcc": "21,139,000",
       "val_audi": 35340,
       "val_rate": 11.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 2,
+      "rate": 11.2,
+      "audiCnt": "35,653",
+      "salesAmt": "354,834,580",
+      "audiAcc": "2,153",
+      "salesAcc": "21,139,000",
+      "val_audi": 35653,
+      "val_rate": 11.2
     }
   ],
   "왕과 사는 남자": [
@@ -4143,6 +4165,17 @@
       "salesAcc": "3,141,000",
       "val_audi": 31342,
       "val_rate": 10.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 5,
+      "rate": 9.9,
+      "audiCnt": "31,384",
+      "salesAmt": "355,094,910",
+      "audiAcc": "349",
+      "salesAcc": "3,141,000",
+      "val_audi": 31384,
+      "val_rate": 9.9
     }
   ],
   "아바타: 불과 재": [
@@ -4178,6 +4211,17 @@
       "salesAcc": "74,577,278,660",
       "val_audi": 31230,
       "val_rate": 10.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 3,
+      "rate": 10.1,
+      "audiCnt": "32,119",
+      "salesAmt": "543,838,290",
+      "audiAcc": "6,398,660",
+      "salesAcc": "74,577,278,660",
+      "val_audi": 32119,
+      "val_rate": 10.1
     }
   ],
   "만약에 우리": [
@@ -4213,6 +4257,17 @@
       "salesAcc": "15,830,139,090",
       "val_audi": 30283,
       "val_rate": 9.7
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 4,
+      "rate": 10.1,
+      "audiCnt": "32,065",
+      "salesAmt": "315,873,860",
+      "audiAcc": "1,621,870",
+      "salesAcc": "15,830,139,090",
+      "val_audi": 32065,
+      "val_rate": 10.1
     }
   ],
   "천공의 성 라퓨타": [
@@ -4247,6 +4302,17 @@
       "audiAcc": "21,969",
       "salesAcc": "135,615,500",
       "val_audi": 19729,
+      "val_rate": 6.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 6,
+      "rate": 6.3,
+      "audiCnt": "19,914",
+      "salesAmt": "214,251,130",
+      "audiAcc": "21,969",
+      "salesAcc": "135,615,500",
+      "val_audi": 19914,
       "val_rate": 6.3
     }
   ],
@@ -4283,6 +4349,17 @@
       "salesAcc": "4,408,094,560",
       "val_audi": 17382,
       "val_rate": 5.6
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 7,
+      "rate": 5.8,
+      "audiCnt": "18,346",
+      "salesAmt": "177,966,300",
+      "audiAcc": "460,069",
+      "salesAcc": "4,408,094,560",
+      "val_audi": 18346,
+      "val_rate": 5.8
     }
   ],
   "반지의 제왕 : 왕의 귀환": [
@@ -4318,6 +4395,17 @@
       "salesAcc": "4,683,332,390",
       "val_audi": 12099,
       "val_rate": 3.9
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 8,
+      "rate": 3.8,
+      "audiCnt": "12,122",
+      "salesAmt": "187,818,350",
+      "audiAcc": "727,061",
+      "salesAcc": "4,683,332,390",
+      "val_audi": 12122,
+      "val_rate": 3.8
     }
   ],
   "731": [
@@ -4353,6 +4441,17 @@
       "salesAcc": "0",
       "val_audi": 11407,
       "val_rate": 3.7
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 9,
+      "rate": 3.6,
+      "audiCnt": "11,486",
+      "salesAmt": "95,734,500",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 11486,
+      "val_rate": 3.6
     }
   ],
   "시라트": [
@@ -4387,6 +4486,17 @@
       "audiAcc": "2,603",
       "salesAcc": "29,933,500",
       "val_audi": 10700,
+      "val_rate": 3.4
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 10,
+      "rate": 3.4,
+      "audiCnt": "10,812",
+      "salesAmt": "102,113,270",
+      "audiAcc": "2,603",
+      "salesAcc": "29,933,500",
+      "val_audi": 10812,
       "val_rate": 3.4
     }
   ],
@@ -4423,6 +4533,17 @@
       "salesAcc": "1,583,366,020",
       "val_audi": 9112,
       "val_rate": 2.9
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 11,
+      "rate": 2.9,
+      "audiCnt": "9,254",
+      "salesAmt": "92,806,970",
+      "audiAcc": "169,958",
+      "salesAcc": "1,583,366,020",
+      "val_audi": 9254,
+      "val_rate": 2.9
     }
   ],
   "시스터": [
@@ -4457,6 +4578,17 @@
       "audiAcc": "1,071",
       "salesAcc": "9,639,000",
       "val_audi": 7943,
+      "val_rate": 2.5
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 12,
+      "rate": 2.5,
+      "audiCnt": "7,962",
+      "salesAmt": "44,923,000",
+      "audiAcc": "1,071",
+      "salesAcc": "9,639,000",
+      "val_audi": 7962,
       "val_rate": 2.5
     }
   ],
@@ -4493,6 +4625,17 @@
       "salesAcc": "2,659,000",
       "val_audi": 7246,
       "val_rate": 2.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 13,
+      "rate": 2.3,
+      "audiCnt": "7,350",
+      "salesAmt": "58,909,400",
+      "audiAcc": "291",
+      "salesAcc": "2,659,000",
+      "val_audi": 7350,
+      "val_rate": 2.3
     }
   ],
   "신비아파트 10주년 극장판: 한 번 더, 소환": [
@@ -4528,6 +4671,17 @@
       "salesAcc": "1,496,808,490",
       "val_audi": 6229,
       "val_rate": 2.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 14,
+      "rate": 2.1,
+      "audiCnt": "6,563",
+      "salesAmt": "59,738,240",
+      "audiAcc": "167,275",
+      "salesAcc": "1,496,808,490",
+      "val_audi": 6563,
+      "val_rate": 2.1
     }
   ],
   "이터널 선샤인": [
@@ -4562,6 +4716,17 @@
       "audiAcc": "553,065",
       "salesAcc": "4,276,424,992",
       "val_audi": 5367,
+      "val_rate": 1.7
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 15,
+      "rate": 1.7,
+      "audiCnt": "5,540",
+      "salesAmt": "56,806,200",
+      "audiAcc": "553,065",
+      "salesAcc": "4,276,424,992",
+      "val_audi": 5540,
       "val_rate": 1.7
     }
   ],
@@ -4598,6 +4763,17 @@
       "salesAcc": "72,751,917",
       "val_audi": 3771,
       "val_rate": 1.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 17,
+      "rate": 1.2,
+      "audiCnt": "3,813",
+      "salesAmt": "42,271,700",
+      "audiAcc": "6,978",
+      "salesAcc": "72,751,917",
+      "val_audi": 3813,
+      "val_rate": 1.2
     }
   ],
   "슈가": [
@@ -4632,6 +4808,17 @@
       "audiAcc": "2,302",
       "salesAcc": "20,718,000",
       "val_audi": 3505,
+      "val_rate": 1.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 18,
+      "rate": 1.1,
+      "audiCnt": "3,544",
+      "salesAmt": "29,983,700",
+      "audiAcc": "2,302",
+      "salesAcc": "20,718,000",
+      "val_audi": 3544,
       "val_rate": 1.1
     }
   ],
@@ -4668,6 +4855,17 @@
       "salesAcc": "81,307,372,360",
       "val_audi": 3944,
       "val_rate": 1.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 16,
+      "rate": 1.3,
+      "audiCnt": "4,224",
+      "salesAmt": "39,154,280",
+      "audiAcc": "8,448,352",
+      "salesAcc": "81,307,372,360",
+      "val_audi": 4224,
+      "val_rate": 1.3
     }
   ],
   "국보": [
@@ -4703,6 +4901,17 @@
       "salesAcc": "1,944,505,940",
       "val_audi": 1555,
       "val_rate": 0.5
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 20,
+      "rate": 0.5,
+      "audiCnt": "1,571",
+      "salesAmt": "19,556,400",
+      "audiAcc": "204,772",
+      "salesAcc": "1,944,505,940",
+      "val_audi": 1571,
+      "val_rate": 0.5
     }
   ],
   "노 머시: 90분": [
@@ -4718,7 +4927,7 @@
       "val_rate": 0.5
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 19,
       "rate": 0.5,
       "audiCnt": "1,616",
@@ -4762,6 +4971,17 @@
       "salesAcc": "441,375,552",
       "val_audi": 1247,
       "val_rate": 0.4
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 22,
+      "rate": 0.4,
+      "audiCnt": "1,264",
+      "salesAmt": "12,051,000",
+      "audiAcc": "43,865",
+      "salesAcc": "441,375,552",
+      "val_audi": 1264,
+      "val_rate": 0.4
     }
   ],
   "고고다이노 극장판: 곤충세계 대모험": [
@@ -4797,6 +5017,17 @@
       "salesAcc": "191,789,800",
       "val_audi": 1269,
       "val_rate": 0.4
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 21,
+      "rate": 0.4,
+      "audiCnt": "1,308",
+      "salesAmt": "13,353,800",
+      "audiAcc": "21,279",
+      "salesAcc": "191,789,800",
+      "val_audi": 1308,
+      "val_rate": 0.4
     }
   ],
   "세계의 주인": [
@@ -4821,6 +5052,17 @@
       "salesAcc": "1,887,250,800",
       "val_audi": 1126,
       "val_rate": 0.4
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 23,
+      "rate": 0.4,
+      "audiCnt": "1,128",
+      "salesAmt": "12,919,800",
+      "audiAcc": "195,844",
+      "salesAcc": "1,887,250,800",
+      "val_audi": 1128,
+      "val_rate": 0.4
     }
   ],
   "하우스메이드": [
@@ -4836,7 +5078,7 @@
       "val_rate": 0.3
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 24,
       "rate": 0.3,
       "audiCnt": "1,035",
@@ -4880,6 +5122,17 @@
       "salesAcc": "8,128,823,240",
       "val_audi": 889,
       "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 25,
+      "rate": 0.3,
+      "audiCnt": "963",
+      "salesAmt": "9,127,840",
+      "audiAcc": "839,403",
+      "salesAcc": "8,128,823,240",
+      "val_audi": 963,
+      "val_rate": 0.3
     }
   ],
   "멀홀랜드 드라이브": [
@@ -4914,6 +5167,17 @@
       "audiAcc": "29,238",
       "salesAcc": "263,072,182",
       "val_audi": 820,
+      "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 26,
+      "rate": 0.3,
+      "audiCnt": "828",
+      "salesAmt": "9,723,900",
+      "audiAcc": "29,238",
+      "salesAcc": "263,072,182",
+      "val_audi": 828,
       "val_rate": 0.3
     }
   ],
@@ -4950,6 +5214,17 @@
       "salesAcc": "308,398,060",
       "val_audi": 757,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 27,
+      "rate": 0.2,
+      "audiCnt": "771",
+      "salesAmt": "7,615,000",
+      "audiAcc": "33,441",
+      "salesAcc": "308,398,060",
+      "val_audi": 771,
+      "val_rate": 0.2
     }
   ],
   "부흥": [
@@ -4984,6 +5259,17 @@
       "audiAcc": "19,443",
       "salesAcc": "202,354,640",
       "val_audi": 747,
+      "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 28,
+      "rate": 0.2,
+      "audiCnt": "762",
+      "salesAmt": "8,137,300",
+      "audiAcc": "19,443",
+      "salesAcc": "202,354,640",
+      "val_audi": 762,
       "val_rate": 0.2
     }
   ],
@@ -5020,6 +5306,17 @@
       "salesAcc": "94,731,120",
       "val_audi": 154,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 67,
+      "rate": 0.0,
+      "audiCnt": "153",
+      "salesAmt": "1,958,500",
+      "audiAcc": "11,257",
+      "salesAcc": "94,731,120",
+      "val_audi": 153,
+      "val_rate": 0.0
     }
   ],
   "리틀 아멜리": [
@@ -5054,6 +5351,17 @@
       "audiAcc": "5,670",
       "salesAcc": "60,281,200",
       "val_audi": 644,
+      "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 29,
+      "rate": 0.2,
+      "audiCnt": "661",
+      "salesAmt": "8,453,200",
+      "audiAcc": "5,670",
+      "salesAcc": "60,281,200",
+      "val_audi": 661,
       "val_rate": 0.2
     }
   ],
@@ -5090,6 +5398,17 @@
       "salesAcc": "326,965,195",
       "val_audi": 609,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 30,
+      "rate": 0.2,
+      "audiCnt": "616",
+      "salesAmt": "6,432,700",
+      "audiAcc": "32,705",
+      "salesAcc": "326,965,195",
+      "val_audi": 616,
+      "val_rate": 0.2
     }
   ],
   "엘리펀트 맨": [
@@ -5124,6 +5443,17 @@
       "audiAcc": "930",
       "salesAcc": "10,342,800",
       "val_audi": 465,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 33,
+      "rate": 0.1,
+      "audiCnt": "471",
+      "salesAmt": "5,311,900",
+      "audiAcc": "930",
+      "salesAcc": "10,342,800",
+      "val_audi": 471,
       "val_rate": 0.1
     }
   ],
@@ -5160,6 +5490,17 @@
       "salesAcc": "33,453,122",
       "val_audi": 444,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 35,
+      "rate": 0.1,
+      "audiCnt": "445",
+      "salesAmt": "4,706,000",
+      "audiAcc": "3,753",
+      "salesAcc": "33,453,122",
+      "val_audi": 445,
+      "val_rate": 0.1
     }
   ],
   "직장상사 길들이기": [
@@ -5194,6 +5535,17 @@
       "audiAcc": "166",
       "salesAcc": "1,660,000",
       "val_audi": 482,
+      "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 32,
+      "rate": 0.2,
+      "audiCnt": "504",
+      "salesAmt": "5,254,000",
+      "audiAcc": "166",
+      "salesAcc": "1,660,000",
+      "val_audi": 504,
       "val_rate": 0.2
     }
   ],
@@ -5230,6 +5582,17 @@
       "salesAcc": "143,671,770",
       "val_audi": 459,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 34,
+      "rate": 0.1,
+      "audiCnt": "465",
+      "salesAmt": "5,044,700",
+      "audiAcc": "14,802",
+      "salesAcc": "143,671,770",
+      "val_audi": 465,
+      "val_rate": 0.1
     }
   ],
   "마이 선샤인": [
@@ -5264,6 +5627,17 @@
       "audiAcc": "14,072",
       "salesAcc": "133,476,100",
       "val_audi": 429,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 36,
+      "rate": 0.1,
+      "audiCnt": "428",
+      "salesAmt": "4,966,200",
+      "audiAcc": "14,072",
+      "salesAcc": "133,476,100",
+      "val_audi": 428,
       "val_rate": 0.1
     }
   ],
@@ -5300,6 +5674,17 @@
       "salesAcc": "4,508,873,260",
       "val_audi": 507,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 31,
+      "rate": 0.2,
+      "audiCnt": "535",
+      "salesAmt": "5,408,900",
+      "audiAcc": "474,600",
+      "salesAcc": "4,508,873,260",
+      "val_audi": 535,
+      "val_rate": 0.2
     }
   ],
   "척의 일생": [
@@ -5334,6 +5719,17 @@
       "audiAcc": "26,146",
       "salesAcc": "252,745,260",
       "val_audi": 389,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 37,
+      "rate": 0.1,
+      "audiCnt": "386",
+      "salesAmt": "5,575,500",
+      "audiAcc": "26,146",
+      "salesAcc": "252,745,260",
+      "val_audi": 386,
       "val_rate": 0.1
     }
   ],
@@ -5370,6 +5766,17 @@
       "salesAcc": "81,534,300",
       "val_audi": 261,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 44,
+      "rate": 0.1,
+      "audiCnt": "264",
+      "salesAmt": "2,708,600",
+      "audiAcc": "9,767",
+      "salesAcc": "81,534,300",
+      "val_audi": 264,
+      "val_rate": 0.1
     }
   ],
   "직사각형, 삼각형": [
@@ -5404,6 +5811,17 @@
       "audiAcc": "0",
       "salesAcc": "0",
       "val_audi": 338,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 38,
+      "rate": 0.1,
+      "audiCnt": "341",
+      "salesAmt": "2,355,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 341,
       "val_rate": 0.1
     }
   ],
@@ -5440,6 +5858,17 @@
       "salesAcc": "39,483,630",
       "val_audi": 308,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 40,
+      "rate": 0.1,
+      "audiCnt": "309",
+      "salesAmt": "2,159,400",
+      "audiAcc": "4,619",
+      "salesAcc": "39,483,630",
+      "val_audi": 309,
+      "val_rate": 0.1
     }
   ],
   "판결": [
@@ -5475,6 +5904,17 @@
       "salesAcc": "15,338,000",
       "val_audi": 306,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 41,
+      "rate": 0.1,
+      "audiCnt": "306",
+      "salesAmt": "2,754,000",
+      "audiAcc": "1,639",
+      "salesAcc": "15,338,000",
+      "val_audi": 306,
+      "val_rate": 0.1
     }
   ],
   "인랜드 엠파이어": [
@@ -5498,6 +5938,17 @@
       "audiAcc": "5,867",
       "salesAcc": "42,437,500",
       "val_audi": 301,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 42,
+      "rate": 0.1,
+      "audiCnt": "302",
+      "salesAmt": "3,231,000",
+      "audiAcc": "5,867",
+      "salesAcc": "42,437,500",
+      "val_audi": 302,
       "val_rate": 0.1
     }
   ],
@@ -5534,6 +5985,17 @@
       "salesAcc": "11,375,556",
       "val_audi": 276,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 43,
+      "rate": 0.1,
+      "audiCnt": "280",
+      "salesAmt": "2,954,800",
+      "audiAcc": "1,484",
+      "salesAcc": "11,375,556",
+      "val_audi": 280,
+      "val_rate": 0.1
     }
   ],
   "멜라니아": [
@@ -5557,6 +6019,17 @@
       "audiAcc": "0",
       "salesAcc": "0",
       "val_audi": 255,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 39,
+      "rate": 0.1,
+      "audiCnt": "340",
+      "salesAmt": "2,040,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 340,
       "val_rate": 0.1
     }
   ],
@@ -5593,6 +6066,17 @@
       "salesAcc": "27,059,400",
       "val_audi": 254,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 46,
+      "rate": 0.1,
+      "audiCnt": "258",
+      "salesAmt": "2,896,500",
+      "audiAcc": "2,916",
+      "salesAcc": "27,059,400",
+      "val_audi": 258,
+      "val_rate": 0.1
     }
   ],
   "물의 연대기": [
@@ -5608,7 +6092,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 47,
       "rate": 0.1,
       "audiCnt": "240",
@@ -5652,6 +6136,17 @@
       "salesAcc": "221,833,970",
       "val_audi": 228,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 49,
+      "rate": 0.1,
+      "audiCnt": "228",
+      "salesAmt": "2,144,000",
+      "audiAcc": "25,248",
+      "salesAcc": "221,833,970",
+      "val_audi": 228,
+      "val_rate": 0.1
     }
   ],
   "허밍": [
@@ -5676,6 +6171,17 @@
       "salesAcc": "2,596,000",
       "val_audi": 218,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 51,
+      "rate": 0.1,
+      "audiCnt": "218",
+      "salesAmt": "1,962,000",
+      "audiAcc": "262",
+      "salesAcc": "2,596,000",
+      "val_audi": 218,
+      "val_rate": 0.1
     }
   ],
   "얼음 여왕": [
@@ -5693,6 +6199,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 50,
+      "rate": 0.1,
+      "audiCnt": "218",
+      "salesAmt": "1,526,000",
+      "audiAcc": "218",
+      "salesAcc": "1,526,000",
+      "val_audi": 218,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 51,
       "rate": 0.1,
       "audiCnt": "218",
       "salesAmt": "1,526,000",
@@ -5735,6 +6252,17 @@
       "salesAcc": "61,385,722,750",
       "val_audi": 245,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 45,
+      "rate": 0.1,
+      "audiCnt": "262",
+      "salesAmt": "2,625,400",
+      "audiAcc": "5,698,498",
+      "salesAcc": "61,385,722,750",
+      "val_audi": 262,
+      "val_rate": 0.1
     }
   ],
   "고독의 오후": [
@@ -5763,6 +6291,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 53,
+      "rate": 0.1,
+      "audiCnt": "213",
+      "salesAmt": "2,369,000",
+      "audiAcc": "252",
+      "salesAcc": "2,278,500",
+      "val_audi": 213,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 54,
       "rate": 0.1,
       "audiCnt": "213",
       "salesAmt": "2,369,000",
@@ -5805,6 +6344,17 @@
       "salesAcc": "578,705,771",
       "val_audi": 223,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 48,
+      "rate": 0.1,
+      "audiCnt": "231",
+      "salesAmt": "2,132,000",
+      "audiAcc": "60,453",
+      "salesAcc": "578,705,771",
+      "val_audi": 231,
+      "val_rate": 0.1
     }
   ],
   "누벨바그": [
@@ -5839,6 +6389,17 @@
       "audiAcc": "21,273",
       "salesAcc": "167,544,330",
       "val_audi": 215,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 50,
+      "rate": 0.1,
+      "audiCnt": "224",
+      "salesAmt": "2,365,500",
+      "audiAcc": "21,273",
+      "salesAcc": "167,544,330",
+      "val_audi": 224,
       "val_rate": 0.1
     }
   ],
@@ -5875,6 +6436,17 @@
       "salesAcc": "0",
       "val_audi": 207,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 53,
+      "rate": 0.1,
+      "audiCnt": "217",
+      "salesAmt": "2,147,450",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 217,
+      "val_rate": 0.1
     }
   ],
   "트윈 픽스": [
@@ -5909,6 +6481,17 @@
       "audiAcc": "3,052",
       "salesAcc": "29,311,982",
       "val_audi": 188,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 56,
+      "rate": 0.1,
+      "audiCnt": "190",
+      "salesAmt": "2,115,300",
+      "audiAcc": "3,052",
+      "salesAcc": "29,311,982",
+      "val_audi": 190,
       "val_rate": 0.1
     }
   ],
@@ -5945,12 +6528,34 @@
       "salesAcc": "1,413,000",
       "val_audi": 188,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 55,
+      "rate": 0.1,
+      "audiCnt": "192",
+      "salesAmt": "2,427,000",
+      "audiAcc": "169",
+      "salesAcc": "1,413,000",
+      "val_audi": 192,
+      "val_rate": 0.1
     }
   ],
   "비기너스": [
     {
       "time": "2026-01-20 21:59",
       "rank": 58,
+      "rate": 0.1,
+      "audiCnt": "176",
+      "salesAmt": "1,825,000",
+      "audiAcc": "18,620",
+      "salesAcc": "147,388,000",
+      "val_audi": 176,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 60,
       "rate": 0.1,
       "audiCnt": "176",
       "salesAmt": "1,825,000",
@@ -5993,6 +6598,17 @@
       "salesAcc": "93,527,800",
       "val_audi": 171,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 58,
+      "rate": 0.1,
+      "audiCnt": "181",
+      "salesAmt": "1,498,000",
+      "audiAcc": "12,236",
+      "salesAcc": "93,527,800",
+      "val_audi": 181,
+      "val_rate": 0.1
     }
   ],
   "더 퍼스트 슬램덩크": [
@@ -6028,6 +6644,17 @@
       "salesAcc": "51,535,245,505",
       "val_audi": 137,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 70,
+      "rate": 0.0,
+      "audiCnt": "146",
+      "salesAmt": "1,463,500",
+      "audiAcc": "4,919,536",
+      "salesAcc": "51,535,245,505",
+      "val_audi": 146,
+      "val_rate": 0.0
     }
   ],
   "퍼시픽션": [
@@ -6054,7 +6681,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 62,
       "rate": 0.1,
       "audiCnt": "162",
@@ -6089,7 +6716,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 62,
       "rate": 0.1,
       "audiCnt": "162",
@@ -6133,6 +6760,17 @@
       "salesAcc": "612,000",
       "val_audi": 177,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 58,
+      "rate": 0.1,
+      "audiCnt": "181",
+      "salesAmt": "543,000",
+      "audiAcc": "204",
+      "salesAcc": "612,000",
+      "val_audi": 181,
+      "val_rate": 0.1
     }
   ],
   "극장판 체인소 맨: 레제편": [
@@ -6168,6 +6806,17 @@
       "salesAcc": "36,139,561,190",
       "val_audi": 173,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 57,
+      "rate": 0.1,
+      "audiCnt": "182",
+      "salesAmt": "2,206,360",
+      "audiAcc": "3,438,351",
+      "salesAcc": "36,139,561,190",
+      "val_audi": 182,
+      "val_rate": 0.1
     }
   ],
   "희생": [
@@ -6194,7 +6843,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 61,
       "rate": 0.1,
       "audiCnt": "167",
@@ -6229,7 +6878,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 64,
       "rate": 0.1,
       "audiCnt": "160",
@@ -6273,6 +6922,17 @@
       "salesAcc": "191,949,524",
       "val_audi": 151,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 64,
+      "rate": 0.1,
+      "audiCnt": "160",
+      "salesAmt": "1,512,500",
+      "audiAcc": "18,318",
+      "salesAcc": "191,949,524",
+      "val_audi": 160,
+      "val_rate": 0.1
     }
   ],
   "마스터": [
@@ -6299,7 +6959,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 84,
       "rate": 0.0,
       "audiCnt": "120",
@@ -6343,6 +7003,17 @@
       "salesAcc": "22,982,900",
       "val_audi": 155,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 66,
+      "rate": 0.0,
+      "audiCnt": "156",
+      "salesAmt": "5,034,900",
+      "audiAcc": "726",
+      "salesAcc": "22,982,900",
+      "val_audi": 156,
+      "val_rate": 0.0
     }
   ],
   "스폰지밥 무비: 네모바지를 찾아서": [
@@ -6369,7 +7040,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 69,
       "rate": 0.0,
       "audiCnt": "149",
@@ -6393,7 +7064,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 70,
       "rate": 0.0,
       "audiCnt": "146",
@@ -6437,6 +7108,17 @@
       "salesAcc": "10,403,000",
       "val_audi": 139,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 74,
+      "rate": 0.0,
+      "audiCnt": "141",
+      "salesAmt": "1,446,000",
+      "audiAcc": "1,075",
+      "salesAcc": "10,403,000",
+      "val_audi": 141,
+      "val_rate": 0.0
     }
   ],
   "네 멋대로 해라": [
@@ -6472,6 +7154,17 @@
       "salesAcc": "34,615,670",
       "val_audi": 150,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 68,
+      "rate": 0.0,
+      "audiCnt": "151",
+      "salesAmt": "1,534,400",
+      "audiAcc": "5,736",
+      "salesAcc": "34,615,670",
+      "val_audi": 151,
+      "val_rate": 0.0
     }
   ],
   "임사": [
@@ -6496,6 +7189,17 @@
       "salesAcc": "224,000",
       "val_audi": 141,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 72,
+      "rate": 0.0,
+      "audiCnt": "142",
+      "salesAmt": "882,000",
+      "audiAcc": "36",
+      "salesAcc": "224,000",
+      "val_audi": 142,
+      "val_rate": 0.0
     }
   ],
   "분노의 총잡이": [
@@ -6513,6 +7217,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 72,
+      "rate": 0.0,
+      "audiCnt": "141",
+      "salesAmt": "846,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 141,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 74,
       "rate": 0.0,
       "audiCnt": "141",
       "salesAmt": "846,000",
@@ -6555,6 +7270,17 @@
       "salesAcc": "3,952,500",
       "val_audi": 142,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 72,
+      "rate": 0.0,
+      "audiCnt": "142",
+      "salesAmt": "1,497,000",
+      "audiAcc": "546",
+      "salesAcc": "3,952,500",
+      "val_audi": 142,
+      "val_rate": 0.0
     }
   ],
   "담뽀뽀": [
@@ -6578,6 +7304,17 @@
       "audiAcc": "6,229",
       "salesAcc": "60,340,576",
       "val_audi": 132,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 80,
+      "rate": 0.0,
+      "audiCnt": "128",
+      "salesAmt": "1,705,000",
+      "audiAcc": "6,229",
+      "salesAcc": "60,340,576",
+      "val_audi": 128,
       "val_rate": 0.0
     }
   ],
@@ -6614,6 +7351,17 @@
       "salesAcc": "1,339,014,658",
       "val_audi": 129,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 77,
+      "rate": 0.0,
+      "audiCnt": "131",
+      "salesAmt": "1,290,000",
+      "audiAcc": "136,843",
+      "salesAcc": "1,339,014,658",
+      "val_audi": 131,
+      "val_rate": 0.0
     }
   ],
   "피렌체": [
@@ -6642,6 +7390,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 77,
+      "rate": 0.0,
+      "audiCnt": "130",
+      "salesAmt": "1,201,500",
+      "audiAcc": "20,616",
+      "salesAcc": "184,396,640",
+      "val_audi": 130,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 78,
       "rate": 0.0,
       "audiCnt": "130",
       "salesAmt": "1,201,500",
@@ -6684,6 +7443,17 @@
       "salesAcc": "0",
       "val_audi": 126,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 82,
+      "rate": 0.0,
+      "audiCnt": "126",
+      "salesAmt": "1,134,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 126,
+      "val_rate": 0.0
     }
   ],
   "2026 제4회 문화영상제": [
@@ -6701,6 +7471,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 82,
+      "rate": 0.0,
+      "audiCnt": "123",
+      "salesAmt": "1,845,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 123,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 83,
       "rate": 0.0,
       "audiCnt": "123",
       "salesAmt": "1,845,000",
@@ -6743,6 +7524,17 @@
       "salesAcc": "2,227,154,130",
       "val_audi": 129,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 76,
+      "rate": 0.0,
+      "audiCnt": "132",
+      "salesAmt": "929,800",
+      "audiAcc": "255,246",
+      "salesAcc": "2,227,154,130",
+      "val_audi": 132,
+      "val_rate": 0.0
     }
   ],
   "마술피리": [
@@ -6766,6 +7558,17 @@
       "audiAcc": "99",
       "salesAcc": "2,932,700",
       "val_audi": 119,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 84,
+      "rate": 0.0,
+      "audiCnt": "120",
+      "salesAmt": "3,521,900",
+      "audiAcc": "99",
+      "salesAcc": "2,932,700",
+      "val_audi": 120,
       "val_rate": 0.0
     }
   ],
@@ -6802,6 +7605,17 @@
       "salesAcc": "41,792,600",
       "val_audi": 126,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 81,
+      "rate": 0.0,
+      "audiCnt": "127",
+      "salesAmt": "1,285,400",
+      "audiAcc": "4,100",
+      "salesAcc": "41,792,600",
+      "val_audi": 127,
+      "val_rate": 0.0
     }
   ],
   "그녀의 연기": [
@@ -6837,12 +7651,34 @@
       "salesAcc": "8,935,775",
       "val_audi": 123,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 78,
+      "rate": 0.0,
+      "audiCnt": "130",
+      "salesAmt": "376,000",
+      "audiAcc": "2,086",
+      "salesAcc": "8,935,775",
+      "val_audi": 130,
+      "val_rate": 0.0
     }
   ],
   "아침바다 갈매기는": [
     {
       "time": "2026-01-20 21:59",
       "rank": 86,
+      "rate": 0.0,
+      "audiCnt": "104",
+      "salesAmt": "1,057,000",
+      "audiAcc": "11,079",
+      "salesAcc": "96,934,100",
+      "val_audi": 104,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 88,
       "rate": 0.0,
       "audiCnt": "104",
       "salesAmt": "1,057,000",
@@ -6873,6 +7709,17 @@
       "audiAcc": "102,345",
       "salesAcc": "832,587,200",
       "val_audi": 104,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 86,
+      "rate": 0.0,
+      "audiCnt": "106",
+      "salesAmt": "1,117,000",
+      "audiAcc": "102,345",
+      "salesAcc": "832,587,200",
+      "val_audi": 106,
       "val_rate": 0.0
     }
   ],
@@ -6909,6 +7756,17 @@
       "salesAcc": "0",
       "val_audi": 104,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 86,
+      "rate": 0.0,
+      "audiCnt": "106",
+      "salesAmt": "1,166,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 106,
+      "val_rate": 0.0
     }
   ],
   "잊혀진 대통령: 김영삼의 개혁시대": [
@@ -6924,7 +7782,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 90,
       "rate": 0.0,
       "audiCnt": "99",
@@ -6968,6 +7826,17 @@
       "salesAcc": "578,428,708",
       "val_audi": 101,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 89,
+      "rate": 0.0,
+      "audiCnt": "102",
+      "salesAmt": "1,020,000",
+      "audiAcc": "70,045",
+      "salesAcc": "578,428,708",
+      "val_audi": 102,
+      "val_rate": 0.0
     }
   ],
   "사운드 오브 폴링": [
@@ -6994,7 +7863,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 91,
       "rate": 0.0,
       "audiCnt": "95",
@@ -7038,6 +7907,17 @@
       "salesAcc": "0",
       "val_audi": 92,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 92,
+      "rate": 0.0,
+      "audiCnt": "94",
+      "salesAmt": "1,208,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 94,
+      "val_rate": 0.0
     }
   ],
   "유레카": [
@@ -7053,7 +7933,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 93,
       "rate": 0.0,
       "audiCnt": "85",
@@ -7077,7 +7957,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 93,
       "rate": 0.0,
       "audiCnt": "85",
@@ -7101,7 +7981,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 93,
       "rate": 0.0,
       "audiCnt": "85",
@@ -7134,6 +8014,17 @@
       "salesAcc": "660,000",
       "val_audi": 83,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 98,
+      "rate": 0.0,
+      "audiCnt": "80",
+      "salesAmt": "921,500",
+      "audiAcc": "132",
+      "salesAcc": "660,000",
+      "val_audi": 80,
+      "val_rate": 0.0
     }
   ],
   "3학년 2학기": [
@@ -7149,7 +8040,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 93,
       "rate": 0.0,
       "audiCnt": "85",
@@ -7193,12 +8084,34 @@
       "salesAcc": "19,799,698,678",
       "val_audi": 81,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 97,
+      "rate": 0.0,
+      "audiCnt": "82",
+      "salesAmt": "815,000",
+      "audiAcc": "1,910,277",
+      "salesAcc": "19,799,698,678",
+      "val_audi": 82,
+      "val_rate": 0.0
     }
   ],
   "괴물": [
     {
       "time": "2026-01-20 21:59",
       "rank": 99,
+      "rate": 0.0,
+      "audiCnt": "80",
+      "salesAmt": "811,000",
+      "audiAcc": "570,364",
+      "salesAcc": "5,625,179,787",
+      "val_audi": 80,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 98,
       "rate": 0.0,
       "audiCnt": "80",
       "salesAmt": "811,000",
@@ -7241,6 +8154,17 @@
       "salesAcc": "3,741,032,530",
       "val_audi": 42,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 126,
+      "rate": 0.0,
+      "audiCnt": "45",
+      "salesAmt": "503,600",
+      "audiAcc": "368,843",
+      "salesAcc": "3,741,032,530",
+      "val_audi": 45,
+      "val_rate": 0.0
     }
   ],
   "더 폴: 디렉터스 컷": [
@@ -7267,7 +8191,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 101,
       "rate": 0.0,
       "audiCnt": "74",
@@ -7302,7 +8226,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 104,
       "rate": 0.0,
       "audiCnt": "71",
@@ -7337,7 +8261,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 105,
       "rate": 0.0,
       "audiCnt": "70",
@@ -7381,6 +8305,17 @@
       "salesAcc": "41,414,500",
       "val_audi": 72,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 103,
+      "rate": 0.0,
+      "audiCnt": "73",
+      "salesAmt": "965,000",
+      "audiAcc": "3,690",
+      "salesAcc": "41,414,500",
+      "val_audi": 73,
+      "val_rate": 0.0
     }
   ],
   "퐁네프의 연인들": [
@@ -7416,11 +8351,22 @@
       "salesAcc": "86,179,608",
       "val_audi": 73,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 101,
+      "rate": 0.0,
+      "audiCnt": "74",
+      "salesAmt": "626,000",
+      "audiAcc": "10,678",
+      "salesAcc": "86,179,608",
+      "val_audi": 74,
+      "val_rate": 0.0
     }
   ],
   "클라이밍: 더 사운드": [
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 106,
       "rate": 0.0,
       "audiCnt": "63",
@@ -7446,6 +8392,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 107,
+      "rate": 0.0,
+      "audiCnt": "59",
+      "salesAmt": "599,000",
+      "audiAcc": "378,505",
+      "salesAcc": "3,089,400,644",
+      "val_audi": 59,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 109,
       "rate": 0.0,
       "audiCnt": "59",
       "salesAmt": "599,000",
@@ -7488,6 +8445,17 @@
       "salesAcc": "1,359,000",
       "val_audi": 78,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 100,
+      "rate": 0.0,
+      "audiCnt": "76",
+      "salesAmt": "798,500",
+      "audiAcc": "151",
+      "salesAcc": "1,359,000",
+      "val_audi": 76,
+      "val_rate": 0.0
     }
   ],
   "시네마 천국": [
@@ -7512,6 +8480,17 @@
       "salesAcc": "674,062,200",
       "val_audi": 56,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 110,
+      "rate": 0.0,
+      "audiCnt": "57",
+      "salesAmt": "502,000",
+      "audiAcc": "91,894",
+      "salesAcc": "674,062,200",
+      "val_audi": 57,
+      "val_rate": 0.0
     }
   ],
   "오늘 하늘이 가장 좋아,라고 아직 말할 수 없는 나는": [
@@ -7535,6 +8514,17 @@
       "audiAcc": "3,705",
       "salesAcc": "38,825,250",
       "val_audi": 56,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 110,
+      "rate": 0.0,
+      "audiCnt": "57",
+      "salesAmt": "341,000",
+      "audiAcc": "3,705",
+      "salesAcc": "38,825,250",
+      "val_audi": 57,
       "val_rate": 0.0
     }
   ],
@@ -7564,6 +8554,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 112,
+      "rate": 0.0,
+      "audiCnt": "54",
+      "salesAmt": "643,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 54,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 113,
       "rate": 0.0,
       "audiCnt": "54",
       "salesAmt": "643,000",
@@ -7606,6 +8607,17 @@
       "salesAcc": "1,074,486,100",
       "val_audi": 52,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 117,
+      "rate": 0.0,
+      "audiCnt": "52",
+      "salesAmt": "52",
+      "audiAcc": "142,609",
+      "salesAcc": "1,074,486,100",
+      "val_audi": 52,
+      "val_rate": 0.0
     }
   ],
   "고백하지마": [
@@ -7640,6 +8652,17 @@
       "audiAcc": "3,299",
       "salesAcc": "34,353,500",
       "val_audi": 52,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 114,
+      "rate": 0.0,
+      "audiCnt": "53",
+      "salesAmt": "669,000",
+      "audiAcc": "3,299",
+      "salesAcc": "34,353,500",
+      "val_audi": 53,
       "val_rate": 0.0
     }
   ],
@@ -7676,6 +8699,17 @@
       "salesAcc": "485,000",
       "val_audi": 51,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 114,
+      "rate": 0.0,
+      "audiCnt": "53",
+      "salesAmt": "597,000",
+      "audiAcc": "97",
+      "salesAcc": "485,000",
+      "val_audi": 53,
+      "val_rate": 0.0
     }
   ],
   "데몬 프린스": [
@@ -7710,6 +8744,17 @@
       "audiAcc": "0",
       "salesAcc": "0",
       "val_audi": 58,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 107,
+      "rate": 0.0,
+      "audiCnt": "62",
+      "salesAmt": "762,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 62,
       "val_rate": 0.0
     }
   ],
@@ -7746,6 +8791,17 @@
       "salesAcc": "10,678,400",
       "val_audi": 58,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 107,
+      "rate": 0.0,
+      "audiCnt": "62",
+      "salesAmt": "611,000",
+      "audiAcc": "1,376",
+      "salesAcc": "10,678,400",
+      "val_audi": 62,
+      "val_rate": 0.0
     }
   ],
   "너와 나": [
@@ -7772,7 +8828,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 120,
       "rate": 0.0,
       "audiCnt": "49",
@@ -7816,6 +8872,17 @@
       "salesAcc": "0",
       "val_audi": 48,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 123,
+      "rate": 0.0,
+      "audiCnt": "48",
+      "salesAmt": "720,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 48,
+      "val_rate": 0.0
     }
   ],
   "친숙한 손길": [
@@ -7836,6 +8903,17 @@
       "rate": 0.0,
       "audiCnt": "47",
       "salesAmt": "497,000",
+      "audiAcc": "326",
+      "salesAcc": "1,977,100",
+      "val_audi": 47,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 124,
+      "rate": 0.0,
+      "audiCnt": "47",
+      "salesAmt": "492,000",
       "audiAcc": "326",
       "salesAcc": "1,977,100",
       "val_audi": 47,
@@ -7875,6 +8953,17 @@
       "salesAcc": "98,663,000",
       "val_audi": 52,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 112,
+      "rate": 0.0,
+      "audiCnt": "56",
+      "salesAmt": "447,000",
+      "audiAcc": "14,835",
+      "salesAcc": "98,663,000",
+      "val_audi": 56,
+      "val_rate": 0.0
     }
   ],
   "시각 장애인": [
@@ -7901,7 +8990,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 120,
       "rate": 0.0,
       "audiCnt": "49",
@@ -7945,6 +9034,17 @@
       "salesAcc": "25,938,231,000",
       "val_audi": 50,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 117,
+      "rate": 0.0,
+      "audiCnt": "52",
+      "salesAmt": "52",
+      "audiAcc": "3,460,227",
+      "salesAcc": "25,938,231,000",
+      "val_audi": 52,
+      "val_rate": 0.0
     }
   ],
   "원 배틀 애프터 어나더": [
@@ -7980,6 +9080,17 @@
       "salesAcc": "5,669,057,610",
       "val_audi": 53,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 119,
+      "rate": 0.0,
+      "audiCnt": "51",
+      "salesAmt": "491,000",
+      "audiAcc": "534,162",
+      "salesAcc": "5,669,057,610",
+      "val_audi": 51,
+      "val_rate": 0.0
     }
   ],
   "그림자 군단": [
@@ -8006,7 +9117,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 125,
       "rate": 0.0,
       "audiCnt": "46",
@@ -8030,7 +9141,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 126,
       "rate": 0.0,
       "audiCnt": "45",
@@ -8074,6 +9185,17 @@
       "salesAcc": "19,900,600",
       "val_audi": 51,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 114,
+      "rate": 0.0,
+      "audiCnt": "53",
+      "salesAmt": "512,000",
+      "audiAcc": "2,534",
+      "salesAcc": "19,900,600",
+      "val_audi": 53,
+      "val_rate": 0.0
     }
   ],
   "석류의 빛깔": [
@@ -8100,7 +9222,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 126,
       "rate": 0.0,
       "audiCnt": "45",
@@ -8133,6 +9255,17 @@
       "salesAcc": "1,869,500",
       "val_audi": 47,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 120,
+      "rate": 0.0,
+      "audiCnt": "49",
+      "salesAmt": "498,000",
+      "audiAcc": "202",
+      "salesAcc": "1,869,500",
+      "val_audi": 49,
+      "val_rate": 0.0
     }
   ],
   "에브리씽 에브리웨어 올 앳 원스": [
@@ -8150,6 +9283,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 130,
+      "rate": 0.0,
+      "audiCnt": "40",
+      "salesAmt": "400,000",
+      "audiAcc": "397,190",
+      "salesAcc": "4,215,051,249",
+      "val_audi": 40,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 131,
       "rate": 0.0,
       "audiCnt": "40",
       "salesAmt": "400,000",
@@ -8181,6 +9325,17 @@
       "salesAcc": "272,000",
       "val_audi": 39,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 132,
+      "rate": 0.0,
+      "audiCnt": "39",
+      "salesAmt": "215,000",
+      "audiAcc": "44",
+      "salesAcc": "272,000",
+      "val_audi": 39,
+      "val_rate": 0.0
     }
   ],
   "작전 훈련": [
@@ -8198,6 +9353,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 131,
+      "rate": 0.0,
+      "audiCnt": "39",
+      "salesAmt": "200,000",
+      "audiAcc": "34",
+      "salesAcc": "207,000",
+      "val_audi": 39,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 132,
       "rate": 0.0,
       "audiCnt": "39",
       "salesAmt": "200,000",
@@ -8240,6 +9406,17 @@
       "salesAcc": "225,000",
       "val_audi": 38,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 132,
+      "rate": 0.0,
+      "audiCnt": "39",
+      "salesAmt": "222,000",
+      "audiAcc": "37",
+      "salesAcc": "225,000",
+      "val_audi": 39,
+      "val_rate": 0.0
     }
   ],
   "소설가의 영화": [
@@ -8255,7 +9432,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 135,
       "rate": 0.0,
       "audiCnt": "36",
@@ -8279,7 +9456,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 135,
       "rate": 0.0,
       "audiCnt": "36",
@@ -8323,6 +9500,17 @@
       "salesAcc": "2,085,000",
       "val_audi": 39,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 130,
+      "rate": 0.0,
+      "audiCnt": "41",
+      "salesAmt": "386,000",
+      "audiAcc": "283",
+      "salesAcc": "2,085,000",
+      "val_audi": 41,
+      "val_rate": 0.0
     }
   ],
   "슈퍼 해피 포에버": [
@@ -8358,6 +9546,17 @@
       "salesAcc": "99,680,600",
       "val_audi": 41,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 129,
+      "rate": 0.0,
+      "audiCnt": "42",
+      "salesAmt": "314,000",
+      "audiAcc": "9,532",
+      "salesAcc": "99,680,600",
+      "val_audi": 42,
+      "val_rate": 0.0
     }
   ],
   "튜즈데이": [
@@ -8373,7 +9572,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 135,
       "rate": 0.0,
       "audiCnt": "36",
@@ -8397,7 +9596,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 138,
       "rate": 0.0,
       "audiCnt": "31",
@@ -8410,7 +9609,7 @@
   ],
   "[인디스페이스x서신교환] 섹션 1": [
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 139,
       "rate": 0.0,
       "audiCnt": "30",
@@ -8423,7 +9622,7 @@
   ],
   "정보원": [
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 139,
       "rate": 0.0,
       "audiCnt": "30",
@@ -8458,7 +9657,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 139,
       "rate": 0.0,
       "audiCnt": "30",
@@ -8493,7 +9692,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 142,
       "rate": 0.0,
       "audiCnt": "29",
@@ -8517,7 +9716,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 143,
       "rate": 0.0,
       "audiCnt": "25",
@@ -8538,6 +9737,17 @@
       "audiAcc": "26,745",
       "salesAcc": "282,342,290",
       "val_audi": 19,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 144,
+      "rate": 0.0,
+      "audiCnt": "20",
+      "salesAmt": "183,000",
+      "audiAcc": "26,745",
+      "salesAcc": "282,342,290",
+      "val_audi": 20,
       "val_rate": 0.0
     }
   ],
@@ -8574,6 +9784,17 @@
       "salesAcc": "288,350,360",
       "val_audi": 16,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 147,
+      "rate": 0.0,
+      "audiCnt": "17",
+      "salesAmt": "150,000",
+      "audiAcc": "26,867",
+      "salesAcc": "288,350,360",
+      "val_audi": 17,
+      "val_rate": 0.0
     }
   ],
   "고등학교": [
@@ -8589,7 +9810,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 145,
       "rate": 0.0,
       "audiCnt": "18",
@@ -8622,6 +9843,17 @@
       "salesAcc": "766,000",
       "val_audi": 16,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 148,
+      "rate": 0.0,
+      "audiCnt": "16",
+      "salesAmt": "95,000",
+      "audiAcc": "111",
+      "salesAcc": "766,000",
+      "val_audi": 16,
+      "val_rate": 0.0
     }
   ],
   "바늘을 든 소녀": [
@@ -8639,6 +9871,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 146,
+      "rate": 0.0,
+      "audiCnt": "16",
+      "salesAmt": "80,000",
+      "audiAcc": "5,686",
+      "salesAcc": "53,407,950",
+      "val_audi": 16,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 148,
       "rate": 0.0,
       "audiCnt": "16",
       "salesAmt": "80,000",
@@ -8681,6 +9924,17 @@
       "salesAcc": "1,917,000",
       "val_audi": 16,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 145,
+      "rate": 0.0,
+      "audiCnt": "18",
+      "salesAmt": "180,000",
+      "audiAcc": "175",
+      "salesAcc": "1,917,000",
+      "val_audi": 18,
+      "val_rate": 0.0
     }
   ],
   "위키드: 포 굿": [
@@ -8716,6 +9970,17 @@
       "salesAcc": "9,924,301,880",
       "val_audi": 16,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 151,
+      "rate": 0.0,
+      "audiCnt": "15",
+      "salesAmt": "146,600",
+      "audiAcc": "972,411",
+      "salesAcc": "9,924,301,880",
+      "val_audi": 15,
+      "val_rate": 0.0
     }
   ],
   "소매치기": [
@@ -8733,6 +9998,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 152,
+      "rate": 0.0,
+      "audiCnt": "14",
+      "salesAmt": "144,000",
+      "audiAcc": "833",
+      "salesAcc": "5,683,300",
+      "val_audi": 14,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 153,
       "rate": 0.0,
       "audiCnt": "14",
       "salesAmt": "144,000",
@@ -8775,6 +10051,17 @@
       "salesAcc": "251,791,330",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 157,
+      "rate": 0.0,
+      "audiCnt": "11",
+      "salesAmt": "116,000",
+      "audiAcc": "26,958",
+      "salesAcc": "251,791,330",
+      "val_audi": 11,
+      "val_rate": 0.0
     }
   ],
   "자전거 도둑": [
@@ -8798,6 +10085,17 @@
       "audiAcc": "6,419",
       "salesAcc": "39,424,453",
       "val_audi": 15,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 148,
+      "rate": 0.0,
+      "audiCnt": "16",
+      "salesAmt": "157,500",
+      "audiAcc": "6,419",
+      "salesAcc": "39,424,453",
+      "val_audi": 16,
       "val_rate": 0.0
     }
   ],
@@ -8834,6 +10132,17 @@
       "salesAcc": "614,024,440",
       "val_audi": 14,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 153,
+      "rate": 0.0,
+      "audiCnt": "14",
+      "salesAmt": "143,000",
+      "audiAcc": "95,766",
+      "salesAcc": "614,024,440",
+      "val_audi": 14,
+      "val_rate": 0.0
     }
   ],
   "힘": [
@@ -8860,7 +10169,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 156,
       "rate": 0.0,
       "audiCnt": "12",
@@ -8884,7 +10193,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 157,
       "rate": 0.0,
       "audiCnt": "11",
@@ -8908,7 +10217,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 157,
       "rate": 0.0,
       "audiCnt": "11",
@@ -8952,6 +10261,17 @@
       "salesAcc": "1,573,000",
       "val_audi": 13,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 151,
+      "rate": 0.0,
+      "audiCnt": "15",
+      "salesAmt": "91,000",
+      "audiAcc": "215",
+      "salesAcc": "1,573,000",
+      "val_audi": 15,
+      "val_rate": 0.0
     }
   ],
   "병원": [
@@ -8975,6 +10295,17 @@
       "audiAcc": "167",
       "salesAcc": "1,134,000",
       "val_audi": 11,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 163,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "54,000",
+      "audiAcc": "167",
+      "salesAcc": "1,134,000",
+      "val_audi": 10,
       "val_rate": 0.0
     }
   ],
@@ -9004,6 +10335,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 154,
+      "rate": 0.0,
+      "audiCnt": "13",
+      "salesAmt": "68,000",
+      "audiAcc": "84",
+      "salesAcc": "571,000",
+      "val_audi": 13,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 155,
       "rate": 0.0,
       "audiCnt": "13",
       "salesAmt": "68,000",
@@ -9046,6 +10388,17 @@
       "salesAcc": "333,738,420",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 163,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "103,000",
+      "audiAcc": "38,792",
+      "salesAcc": "333,738,420",
+      "val_audi": 10,
+      "val_rate": 0.0
     }
   ],
   "6번 칸": [
@@ -9072,7 +10425,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 157,
       "rate": 0.0,
       "audiCnt": "11",
@@ -9116,6 +10469,17 @@
       "salesAcc": "37,919,200",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 163,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "60,000",
+      "audiAcc": "3,711",
+      "salesAcc": "37,919,200",
+      "val_audi": 10,
+      "val_rate": 0.0
     }
   ],
   "법과 질서": [
@@ -9151,6 +10515,17 @@
       "salesAcc": "840,000",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 163,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "42,000",
+      "audiAcc": "119",
+      "salesAcc": "840,000",
+      "val_audi": 10,
+      "val_rate": 0.0
     }
   ],
   "(작은영화영화제)전국~영화자랑! - 강원편 두번째 이야기": [
@@ -9166,7 +10541,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 157,
       "rate": 0.0,
       "audiCnt": "11",
@@ -9199,6 +10574,17 @@
       "salesAcc": "391,000",
       "val_audi": 9,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 168,
+      "rate": 0.0,
+      "audiCnt": "9",
+      "salesAmt": "44,500",
+      "audiAcc": "60",
+      "salesAcc": "391,000",
+      "val_audi": 9,
+      "val_rate": 0.0
     }
   ],
   "운하 지구": [
@@ -9216,6 +10602,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 169,
+      "rate": 0.0,
+      "audiCnt": "8",
+      "salesAmt": "43,000",
+      "audiAcc": "65",
+      "salesAcc": "419,000",
+      "val_audi": 8,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 171,
       "rate": 0.0,
       "audiCnt": "8",
       "salesAmt": "43,000",
@@ -9249,7 +10646,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 174,
       "rate": 0.0,
       "audiCnt": "7",
@@ -9293,6 +10690,17 @@
       "salesAcc": "2,274,756,087",
       "val_audi": 8,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 171,
+      "rate": 0.0,
+      "audiCnt": "8",
+      "salesAmt": "82,000",
+      "audiAcc": "259,692",
+      "salesAcc": "2,274,756,087",
+      "val_audi": 8,
+      "val_rate": 0.0
     }
   ],
   "아이돌리쉬 세븐 퍼스트 비트! 극장총집편 후편": [
@@ -9321,6 +10729,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 162,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "96,000",
+      "audiAcc": "3,018",
+      "salesAcc": "28,253,620",
+      "val_audi": 10,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 163,
       "rate": 0.0,
       "audiCnt": "10",
       "salesAmt": "96,000",
@@ -9363,6 +10782,17 @@
       "salesAcc": "41,848,900",
       "val_audi": 8,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 171,
+      "rate": 0.0,
+      "audiCnt": "8",
+      "salesAmt": "40,000",
+      "audiAcc": "4,627",
+      "salesAcc": "41,848,900",
+      "val_audi": 8,
+      "val_rate": 0.0
     }
   ],
   "자줏빛 제비": [
@@ -9389,7 +10819,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 175,
       "rate": 0.0,
       "audiCnt": "6",
@@ -9433,6 +10863,17 @@
       "salesAcc": "6,424,000",
       "val_audi": 9,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 157,
+      "rate": 0.0,
+      "audiCnt": "11",
+      "salesAmt": "110,000",
+      "audiAcc": "830",
+      "salesAcc": "6,424,000",
+      "val_audi": 11,
+      "val_rate": 0.0
     }
   ],
   "경주로": [
@@ -9459,7 +10900,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 175,
       "rate": 0.0,
       "audiCnt": "6",
@@ -9494,7 +10935,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 175,
       "rate": 0.0,
       "audiCnt": "6",
@@ -9538,6 +10979,17 @@
       "salesAcc": "372,076,950",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "43,000",
+      "audiAcc": "46,988",
+      "salesAcc": "372,076,950",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "속초에서의 겨울": [
@@ -9564,7 +11016,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 175,
       "rate": 0.0,
       "audiCnt": "6",
@@ -9608,6 +11060,17 @@
       "salesAcc": "977,000",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 185,
+      "rate": 0.0,
+      "audiCnt": "4",
+      "salesAmt": "20,000",
+      "audiAcc": "142",
+      "salesAcc": "977,000",
+      "val_audi": 4,
+      "val_rate": 0.0
     }
   ],
   "부모 바보": [
@@ -9643,6 +11106,17 @@
       "salesAcc": "10,609,500",
       "val_audi": 4,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 185,
+      "rate": 0.0,
+      "audiCnt": "4",
+      "salesAmt": "40,000",
+      "audiAcc": "1,201",
+      "salesAcc": "10,609,500",
+      "val_audi": 4,
+      "val_rate": 0.0
     }
   ],
   "후계자": [
@@ -9671,6 +11145,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 182,
+      "rate": 0.0,
+      "audiCnt": "4",
+      "salesAmt": "12,000",
+      "audiAcc": "2,212",
+      "salesAcc": "19,976,100",
+      "val_audi": 4,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 185,
       "rate": 0.0,
       "audiCnt": "4",
       "salesAmt": "12,000",
@@ -9726,6 +11211,17 @@
       "salesAcc": "143,875,100",
       "val_audi": 8,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 168,
+      "rate": 0.0,
+      "audiCnt": "9",
+      "salesAmt": "90,000",
+      "audiAcc": "18,782",
+      "salesAcc": "143,875,100",
+      "val_audi": 9,
+      "val_rate": 0.0
     }
   ],
   "국외자들": [
@@ -9754,6 +11250,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 186,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "30,000",
+      "audiAcc": "5,147",
+      "salesAcc": "51,002,860",
+      "val_audi": 3,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 188,
       "rate": 0.0,
       "audiCnt": "3",
       "salesAmt": "30,000",
@@ -9796,6 +11303,17 @@
       "salesAcc": "564,615,582",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "50,000",
+      "audiAcc": "68,961",
+      "salesAcc": "564,615,582",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "고당도": [
@@ -9824,6 +11342,17 @@
     {
       "time": "2026-01-20 21:59",
       "rank": 186,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "30,000",
+      "audiAcc": "5,223",
+      "salesAcc": "45,809,590",
+      "val_audi": 3,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 188,
       "rate": 0.0,
       "audiCnt": "3",
       "salesAmt": "30,000",
@@ -9866,6 +11395,17 @@
       "salesAcc": "5,086,500",
       "val_audi": 8,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 168,
+      "rate": 0.0,
+      "audiCnt": "9",
+      "salesAmt": "90,000",
+      "audiAcc": "654",
+      "salesAcc": "5,086,500",
+      "val_audi": 9,
+      "val_rate": 0.0
     }
   ],
   "하늘과 바람과 별과 섬": [
@@ -9901,6 +11441,17 @@
       "salesAcc": "0",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 188,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "30,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "코드: G 주목의 시작": [
@@ -9927,7 +11478,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -9971,6 +11522,17 @@
       "salesAcc": "46,000",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 188,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "22,000",
+      "audiAcc": "6",
+      "salesAcc": "46,000",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "두 피아노를 위한 콘체르토": [
@@ -10005,6 +11567,17 @@
       "audiAcc": "32",
       "salesAcc": "270,000",
       "val_audi": 3,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "35,000",
+      "audiAcc": "32",
+      "salesAcc": "270,000",
+      "val_audi": 5,
       "val_rate": 0.0
     }
   ],
@@ -10041,6 +11614,17 @@
       "salesAcc": "0",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 188,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "15,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "드라이브 마이 카": [
@@ -10056,7 +11640,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10080,7 +11664,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10113,6 +11697,17 @@
       "salesAcc": "2,324,387,170",
       "val_audi": 4,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 175,
+      "rate": 0.0,
+      "audiCnt": "6",
+      "salesAmt": "48,500",
+      "audiAcc": "236,491",
+      "salesAcc": "2,324,387,170",
+      "val_audi": 6,
+      "val_rate": 0.0
     }
   ],
   "고기": [
@@ -10128,7 +11723,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10152,7 +11747,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10176,7 +11771,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10200,7 +11795,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10224,7 +11819,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10272,7 +11867,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 193,
       "rate": 0.0,
       "audiCnt": "2",
@@ -10296,7 +11891,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10320,7 +11915,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10344,7 +11939,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10368,7 +11963,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10392,7 +11987,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10436,6 +12031,17 @@
       "salesAcc": "1,322,052,000",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "35,000",
+      "audiAcc": "134,419",
+      "salesAcc": "1,322,052,000",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "나나미의 삽입결단 무삭제판": [
@@ -10451,7 +12057,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10475,7 +12081,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10499,7 +12105,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10523,7 +12129,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10547,7 +12153,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10571,7 +12177,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10595,7 +12201,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10619,7 +12225,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10643,7 +12249,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10667,7 +12273,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10691,7 +12297,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10715,7 +12321,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10739,7 +12345,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10763,7 +12369,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10787,7 +12393,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10811,7 +12417,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10835,7 +12441,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10859,7 +12465,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10883,7 +12489,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10907,7 +12513,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10931,7 +12537,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10955,7 +12561,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -10979,7 +12585,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11003,7 +12609,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11027,7 +12633,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11051,7 +12657,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11075,7 +12681,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11099,7 +12705,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11123,7 +12729,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11147,7 +12753,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11171,7 +12777,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11195,7 +12801,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11219,7 +12825,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11243,7 +12849,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11267,7 +12873,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11291,7 +12897,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11315,7 +12921,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11339,7 +12945,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11363,7 +12969,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11387,7 +12993,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11411,7 +13017,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11435,7 +13041,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11459,7 +13065,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11496,7 +13102,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11520,7 +13126,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11544,7 +13150,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11568,7 +13174,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11592,7 +13198,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11616,7 +13222,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11640,7 +13246,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11664,7 +13270,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11688,7 +13294,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11712,7 +13318,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11736,7 +13342,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11760,7 +13366,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11784,7 +13390,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11808,7 +13414,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11832,7 +13438,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11856,7 +13462,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11880,7 +13486,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11904,7 +13510,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11928,7 +13534,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11952,7 +13558,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
@@ -11985,17 +13591,41 @@
       "salesAcc": "131,321,700",
       "val_audi": 4,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "50,000",
+      "audiAcc": "16,989",
+      "salesAcc": "131,321,700",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "콘클라베": [
     {
-      "time": "2026-01-20 21:59",
+      "time": "2026-01-20 22:53",
       "rank": 201,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "11,000",
       "audiAcc": "334,967",
       "salesAcc": "3,194,563,300",
+      "val_audi": 1,
+      "val_rate": 0.0
+    }
+  ],
+  "윗집 사람들": [
+    {
+      "time": "2026-01-20 22:53",
+      "rank": 201,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "5,000",
+      "audiAcc": "549,321",
+      "salesAcc": "5,312,968,900",
       "val_audi": 1,
       "val_rate": 0.0
     }
