@@ -1,10 +1,8 @@
 import os
 import requests
 import re
-from datetime import datetime, timedelta
-from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from bs4 import BeautifulSoup 
-from urllib.parse import quote
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -38,12 +36,12 @@ def extract_movie_data(row):
         "title": title,
         "rate": cols[3].get_text(strip=True),
         "salesAmt": clean(cols[4].get_text(strip=True)),
-        "salesAcc": clean(cols[5].get_text(strip=True)),
-        "audiCnt": clean(cols[6].get_text(strip=True)),
-        "audiAcc": clean(cols[7].get_text(strip=True))
+        # 실시간 데이터 구조상 누적매출/누적관객 위치가 다를 수 있으나, 
+        # 화면에 보이는 순서대로 가져옴 (예매매출, 예매관객 등)
+        "audiCnt": clean(cols[6].get_text(strip=True)), # 예매관객
+        "audiAcc": clean(cols[7].get_text(strip=True))  # 누적관객
     }
 
-# [핵심] 고정 Payload 방식 (사용자 요청 반영)
 def fetch_kobis_fixed():
     session = requests.Session()
     headers = {
@@ -54,23 +52,13 @@ def fetch_kobis_fixed():
     }
     
     try:
-        # 1. GET으로 토큰 획득
         visit = session.get(KOBIS_REALTIME_URL, headers=headers, timeout=5)
         soup = BeautifulSoup(visit.text, 'html.parser')
-        token_input = soup.find('input', {'name': 'CSRFToken'})
-        csrf_token = token_input.get('value', '') if token_input else ''
+        token = soup.find('input', {'name': 'CSRFToken'})
+        csrf_token = token.get('value', '') if token else ''
 
-        # 2. 필수값만 채운 고정 Payload 전송
-        payload = {
-            'CSRFToken': csrf_token,
-            'loadEnd': '0',
-            'dmlMode': 'search',
-            'allMovieYn': 'Y', 
-            'sMultiChk': ''
-        }
-        
-        resp = session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=10)
-        return resp
+        payload = {'CSRFToken': csrf_token, 'loadEnd': '0', 'dmlMode': 'search', 'allMovieYn': 'Y', 'sMultiChk': ''}
+        return session.post(KOBIS_REALTIME_URL, headers=headers, data=payload, timeout=10)
     except: return None
 
 @app.get("/")
