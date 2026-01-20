@@ -32,23 +32,21 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [1] 조회일시 파싱 (HTML 내 텍스트 추출)
+        # [핵심] 조회일시 정밀 파싱
+        # 예: 조회일시 : 2026/01/20 15:39
         crawled_time = ""
         try:
-            # "조회일시"가 포함된 텍스트 노드 찾기
-            time_node = soup.find(string=re.compile("조회일시"))
-            if time_node:
-                # 2026/01/20 15:39 형식 추출
-                match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_node)
-                if match: 
-                    crawled_time = match.group(1).replace("/", "-")
+            # 텍스트 전체에서 날짜 패턴 검색
+            text_content = soup.get_text()
+            match = re.search(r"조회일시\s*:\s*(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", text_content)
+            if match:
+                crawled_time = match.group(1).replace("/", "-")
         except: pass
         
-        # 실패 시 시스템 시간 (Fallback)
+        # 실패 시 시스템 시간 사용 (Fallback)
         if not crawled_time:
             crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        # [2] 기존 데이터 로드 (누적을 위해)
         history = {}
         if os.path.exists(REALTIME_FILE):
             with open(REALTIME_FILE, 'r', encoding='utf-8') as f:
@@ -63,35 +61,34 @@ def update_realtime():
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if not rank.isdigit() or int(rank) > 200: continue
+            if not rank.isdigit() or int(rank) > 300: continue
             
             title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             
-            # [3] 데이터 추출 (서식 그대로)
-            rate_str = cols[3].get_text(strip=True) # "14.4%"
-            res_audi_str = cols[6].get_text(strip=True) # "36,157"
-            res_sales_str = cols[4].get_text(strip=True) # "506,697,090"
-            acc_audi_str = cols[7].get_text(strip=True) # "378"
-            acc_sales_str = cols[5].get_text(strip=True) # "5,670,000"
+            # 데이터 추출 (쉼표, % 포함 원본)
+            rate_str = cols[3].get_text(strip=True)
+            res_audi_str = cols[6].get_text(strip=True)
+            sales_str = cols[4].get_text(strip=True)
+            acc_audi_str = cols[7].get_text(strip=True)
+            acc_sales_str = cols[5].get_text(strip=True)
             
             if title not in history: history[title] = []
             
-            # [4] 데이터 누적 (시간이 다를 때만 추가)
-            last_entry = history[title][-1] if history[title] else None
-            if not last_entry or last_entry['time'] != crawled_time:
+            # [누적 로직] 시간이 다를 때만 append (5분 단위)
+            if not history[title] or history[title][-1]['time'] != crawled_time:
                 history[title].append({
                     "time": crawled_time,
                     "rank": int(rank),
                     "rate": rate_str, 
                     "audiCnt": res_audi_str, 
-                    "salesAmt": res_sales_str,
+                    "salesAmt": sales_str,
                     "audiAcc": acc_audi_str,
                     "salesAcc": acc_sales_str,
-                    # 그래프 및 AI 분석용 숫자값
+                    # 그래프용 숫자 (쉼표 제거)
                     "val_audi": int(res_audi_str.replace(',', '')) if res_audi_str.replace(',', '').isdigit() else 0,
                     "val_rate": float(rate_str.replace('%', '')) if rate_str else 0
                 })
-                # 최근 288개 (약 24시간 분량, 5분 간격) 유지
+                # 하루치(24시간 * 12회 = 288개) 유지
                 if len(history[title]) > 288: history[title] = history[title][-288:]
             count += 1
 
