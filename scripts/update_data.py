@@ -5,56 +5,61 @@ import datetime
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
-# [설정] 프론트엔드가 찾는 파일명과 정확히 일치시킴
 DAILY_FILE = "public/daily_data.json"
 REALTIME_FILE = "public/realtime_data.json"
-
-# GitHub Secrets에서 가져옴
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
+
+# [핵심] 차단 방지용 헤더
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Referer': 'https://www.kobis.or.kr/',
+    'Origin': 'https://www.kobis.or.kr',
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
 
 def ensure_dir():
     if not os.path.exists("public"):
         os.makedirs("public")
 
-# [실시간 예매율] 매 10분마다 실행
 def update_realtime():
     print("Updating Realtime Data...")
     url = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
     try:
-        resp = requests.post(url, data={'dmlMode': 'search', 'allMovieYn': 'Y'}, timeout=15)
+        # 헤더 추가
+        resp = requests.post(url, headers=HEADERS, data={'dmlMode': 'search', 'allMovieYn': 'Y'}, timeout=20)
         soup = BeautifulSoup(resp.text, 'html.parser')
         
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         history = {}
 
-        # 기존 데이터 로드 (누적용)
         if os.path.exists(REALTIME_FILE):
             with open(REALTIME_FILE, 'r', encoding='utf-8') as f:
                 try: history = json.load(f)
                 except: pass
 
-        for row in soup.find_all("tr"):
+        rows = soup.find_all("tr")
+        if len(rows) < 2:
+            print("Warning: No data found in realtime page.")
+            return
+
+        for row in rows:
             cols = row.find_all("td")
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if int(rank) > 10: break # Top 10만
+            if not rank.isdigit() or int(rank) > 10: continue
             
-            # 영화 제목 추출
-            a_tag = cols[1].find("a")
-            title = a_tag["title"].strip() if (a_tag and a_tag.get("title")) else cols[1].get_text(strip=True)
+            title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             rate = cols[3].get_text(strip=True).replace('%', '')
             
             if title not in history: history[title] = []
             
-            # 값이 바뀌었거나 시간이 지났으면 추가
             if not history[title] or history[title][-1]['time'] != timestamp:
                 history[title].append({
                     "time": timestamp,
-                    "rate": float(rate),
+                    "rate": float(rate) if rate else 0,
                     "rank": int(rank)
                 })
-                # 최근 144개(약 24시간) 유지
                 if len(history[title]) > 144:
                     history[title] = history[title][-144:]
 
@@ -65,7 +70,6 @@ def update_realtime():
     except Exception as e:
         print(f"Realtime Update Failed: {e}")
 
-# [일별 박스오피스] 하루 한 번 실행
 def update_daily():
     print("Updating Daily Boxoffice...")
     if not KOBIS_API_KEY:
@@ -109,7 +113,6 @@ def update_daily():
 if __name__ == "__main__":
     ensure_dir()
     update_realtime()
-    
-    # 일별 데이터는 없거나 특정 시간에만 업데이트
+    # UTC 1시 (한국 10시) 혹은 파일 없을 때 실행
     if not os.path.exists(DAILY_FILE) or datetime.datetime.utcnow().hour == 1:
         update_daily()
