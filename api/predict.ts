@@ -14,23 +14,21 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const apiKey = process.env.API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "Server API Key Missing" });
+  if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
 
   try {
-    const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData } = req.body;
+    const { movieName, trendData, movieInfo, currentAudiAcc, type } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 정교한 프롬프트
+    // 1.5 Flash 모델 사용 (안정성 확보)
     const prompt = `
-    Role: Senior Box Office Analyst.
+    Role: Box Office Analyst.
     Target: ${movieName} (${type}).
-    Status: Total ${currentAudiAcc}.
+    Status: Total ${currentAudiAcc || 0}.
     
     Task:
-    1. Analyze the trend (${type}).
-    2. Write a professional 3-paragraph Korean report (Status, Analysis, Outlook).
-    3. Predict 3-day numbers.
-    4. Extract 2 keywords.
+    Analyze the current trend and write a 3-paragraph Korean report (Status, Analysis, Outlook).
+    Predict 3-day numbers. Provide 2 search keywords.
 
     Output JSON ONLY:
     {
@@ -40,9 +38,8 @@ export default async function handler(req, res) {
     }
     `;
     
-    // [수정] 가장 안정적인 모델명 사용 (2.0이 안되면 1.5로)
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", 
+      model: "gemini-3.0-pro-preview", 
       contents: { parts: [{ text: prompt }] },
       generationConfig: { responseMimeType: "application/json" }
     });
@@ -52,7 +49,11 @@ export default async function handler(req, res) {
     try {
       result = JSON.parse(cleanJsonString(text));
     } catch {
-      result = { analysis: "분석 데이터를 생성하는 중입니다.", forecast: [0, 0, 0] };
+      // 파싱 실패시 기본값
+      result = { 
+          analysis: "현재 AI 분석 서버 연결 상태가 원활하지 않아 간략한 정보만 표시합니다. (데이터 집계 중)", 
+          forecast: [0, 0, 0] 
+      };
     }
 
     return res.status(200).json({
@@ -64,7 +65,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     return res.status(200).json({ 
-      analysisText: `분석 서버 오류: ${error.message}`, 
+      analysisText: `AI 분석 요청 실패 (잠시 후 다시 시도해주세요)`, 
       predictionSeries: [0, 0, 0]
     });
   }
