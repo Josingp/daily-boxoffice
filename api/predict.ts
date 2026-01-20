@@ -14,21 +14,30 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const apiKey = process.env.API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "Server API Key Missing" });
+  if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
 
   try {
-    const { movieName, trendData, movieInfo, currentAudiAcc, type } = req.body;
+    const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // [중요] 2.0 Flash 모델 사용
+    // 실시간 분석일 경우 historyData 활용
+    let historyContext = "";
+    if (type === 'REALTIME' && historyData && historyData.length > 1) {
+        const latest = historyData[historyData.length - 1];
+        const prev = historyData[historyData.length - 2];
+        historyContext = `Recent update: ${latest.time} (${latest.audiCnt} reservations). Prev: ${prev.time} (${prev.audiCnt}). Change: ${latest.audiCnt - prev.audiCnt}.`;
+    }
+
     const prompt = `
     Role: Box Office Analyst.
     Target: ${movieName} (${type}).
-    Status: Total ${currentAudiAcc}.
+    Data: ${historyContext || `Total Audi: ${currentAudiAcc}`}.
     
     Task:
-    Analyze trend & write 3-para Korean report.
-    Predict 3-day numbers. Provide 2 keywords.
+    1. If Realtime: Analyze reservation audience count trend (Increasing/Decreasing?). Compare with previous time.
+    2. If Daily: Analyze daily audience trend.
+    3. Write 3 short Korean paragraphs.
+    4. Predict next 3 days numbers.
 
     Output JSON ONLY:
     {
@@ -39,18 +48,13 @@ export default async function handler(req, res) {
     `;
     
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", 
+      model: "gemini-3-flash-preview", 
       contents: { parts: [{ text: prompt }] },
       generationConfig: { responseMimeType: "application/json" }
     });
 
     let text = response.response?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-    let result;
-    try {
-      result = JSON.parse(cleanJsonString(text));
-    } catch {
-      result = { analysis: "분석 데이터를 처리하는 중입니다.", forecast: [0, 0, 0] };
-    }
+    let result = JSON.parse(cleanJsonString(text));
 
     return res.status(200).json({
       analysisText: result.analysis,
@@ -61,7 +65,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     return res.status(200).json({ 
-      analysisText: `분석 실패: ${error.message}`, 
+      analysisText: "분석 데이터를 처리하는 중입니다.", 
       predictionSeries: [0, 0, 0]
     });
   }
