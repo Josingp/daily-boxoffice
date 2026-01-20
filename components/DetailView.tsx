@@ -44,10 +44,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       const info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
 
-      // 뉴스
+      // 뉴스 로드
       fetchMovieNews(movie.movieNm).then(items => {
-         if (!items || items.length === 0) fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
-         else setNewsList(items);
+         if (!items || items.length === 0) {
+             fetchMovieNews(movie.movieNm + " 영화").then(setNewsList);
+         } else {
+             setNewsList(items);
+         }
       });
 
       if (type === 'DAILY') {
@@ -64,7 +67,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             setRealtimeHistory(history);
             requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
           } else {
-             // 데이터 없으면 분석만이라도 요청
              requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', null);
           }
         } catch { 
@@ -89,10 +91,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   };
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
-  const openSearch = (engine: 'naver' | 'google') => {
-      const q = encodeURIComponent(movie?.movieNm + " 영화");
-      window.open(engine === 'naver' ? `https://search.naver.com/search.naver?query=${q}` : `https://www.google.com/search?q=${q}`, '_blank');
-  };
 
   if (!movie) return null;
 
@@ -117,7 +115,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            <div className="flex gap-2"><Film size={14} className="text-slate-400"/> 감독: <span className="text-slate-800">{movieDetail?.directors?.map((d: any)=>d.peopleNm).join(', ') || '-'}</span></div>
            <div className="flex gap-2"><User size={14} className="text-slate-400"/> 출연: <span className="text-slate-800">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
            <div className="flex gap-2"><CalendarIcon size={14} className="text-slate-400"/> 개봉: <span className="text-slate-800">{movieDetail?.openDt || '-'}</span></div>
-           {/* [추가] 누적 관객수 표시 */}
            <div className="flex gap-2 font-bold text-blue-600 pt-1 border-t border-slate-50 mt-1"><Users size={14}/> 누적 관객: {formatNumber(movie.audiAcc)}명</div>
         </div>
 
@@ -143,12 +140,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
-        {/* [그래프 복구] 통합 TrendChart 사용 */}
+        {/* 차트 */}
         <TrendChart 
             data={type === 'DAILY' ? trendData : realtimeHistory} 
             type={type} 
             loading={loading}
-            prediction={{ predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} }} // 예측 데이터 전달
+            prediction={{ predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} }} 
         />
 
         {/* AI 리포트 */}
@@ -164,8 +161,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             )}
         </div>
 
-        {/* 뉴스 (데이터 있으면 리스트, 없으면 버튼) */}
-        {newsList.length > 0 ? (
+        {/* 뉴스 리스트 (데이터가 있을 때만 표시) */}
+        {newsList.length > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm"><Newspaper size={16} className="text-blue-500"/> 관련 최신 기사</div>
             <div className="space-y-3">
@@ -177,11 +174,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 </div>
               ))}
             </div>
-          </div>
-        ) : (
-          <div className="flex gap-2 mt-4">
-             <button onClick={() => openSearch('naver')} className="flex-1 py-3 bg-[#03C75A] text-white rounded-lg text-xs font-bold shadow-sm">네이버 검색</button>
-             <button onClick={() => openSearch('google')} className="flex-1 py-3 bg-blue-500 text-white rounded-lg text-xs font-bold shadow-sm">구글 검색</button>
           </div>
         )}
       </div>
