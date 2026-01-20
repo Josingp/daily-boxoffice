@@ -32,14 +32,21 @@ def update_realtime():
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # [수정] 사이트상의 조회일시 파싱 (YYYY/MM/DD HH:MM)
-        crawled_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        # [핵심] 조회일시 파싱 (사이트 텍스트 기준)
+        crawled_time = ""
         try:
-            time_text = soup.find(string=lambda t: t and "조회일시" in t)
-            if time_text:
-                match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_text)
-                if match: crawled_time = match.group(1).replace("/", "-")
+            # "조회일시" 텍스트가 포함된 모든 태그 검색
+            time_tag = soup.find(string=re.compile("조회일시"))
+            if time_tag:
+                # 숫자와 / : 공백 패턴 추출
+                match = re.search(r"(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", time_tag)
+                if match: 
+                    crawled_time = match.group(1).replace("/", "-")
         except: pass
+        
+        # 실패 시 시스템 시간 (KST 보정)
+        if not crawled_time:
+            crawled_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
 
         history = {}
         if os.path.exists(REALTIME_FILE):
@@ -54,11 +61,11 @@ def update_realtime():
             if len(cols) < 8: continue
             
             rank = cols[0].get_text(strip=True)
-            if not rank.isdigit() or int(rank) > 200: continue # 상위 200개까지
+            if not rank.isdigit() or int(rank) > 200: continue
             
             title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
             
-            # [수정] 정확한 값 추출 (쉼표 제거, % 제거)
+            # 데이터 추출 (쉼표, % 제거)
             rate = cols[3].get_text(strip=True).replace('%', '')
             audiCnt = cols[6].get_text(strip=True).replace(',', '')
             
@@ -72,8 +79,8 @@ def update_realtime():
                     "audiCnt": int(audiCnt) if audiCnt.isdigit() else 0,
                     "rank": int(rank)
                 })
-                # 최근 72개(약 6시간~12시간 분량) 유지
-                if len(history[title]) > 72: history[title] = history[title][-72:]
+                # 24시간분 유지
+                if len(history[title]) > 144: history[title] = history[title][-144:]
             count += 1
 
         if count > 0:
@@ -82,7 +89,7 @@ def update_realtime():
             print(f"Saved {count} movies at {crawled_time}")
         
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Update Failed: {e}")
 
 if __name__ == "__main__":
     ensure_dir()
