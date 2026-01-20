@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     `;
     
     const response = await ai.models.generateContent({
-      model: "gemini-3.0-pro-preview", 
+      model: "gemini-3-flash-preview", 
       contents: { parts: [{ text: prompt }] },
       generationConfig: { responseMimeType: "application/json" }
     });
