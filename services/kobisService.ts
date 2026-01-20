@@ -1,24 +1,37 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
-// [공통] 하이브리드 로딩 (JSON -> API)
+// [핵심] JSON 파일 우선 -> 실패하거나 비어있으면 실시간 API 호출
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
-  transformFn?: (json: any) => T
+  transformFn?: (json: any) => T | null
 ): Promise<T | null> => {
+  // 1. JSON 파일 시도
   try {
     const jsonRes = await fetch(`${jsonUrl}?t=${Date.now()}`);
     if (jsonRes.ok) {
       const data = await jsonRes.json();
-      return transformFn ? transformFn(data) : data;
+      // 변환 함수 실행
+      const result = transformFn ? transformFn(data) : data;
+      
+      // [중요] 결과가 유효하면 반환, 아니면(null) API로 넘어감
+      if (result) return result; 
+      console.warn(`Data in ${jsonUrl} is invalid or empty. Switching to API...`);
+    } else {
+      console.warn(`File not found: ${jsonUrl} (${jsonRes.status}). Switching to API...`);
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn(`JSON Fetch Error: ${e}. Switching to API...`);
+  }
 
+  // 2. API 시도 (파일 실패/비어있음/404일 때 실행)
   try {
+    console.log(`Fetching from API fallback: ${apiUrl}`);
     const apiRes = await fetch(apiUrl);
-    if (!apiRes.ok) throw new Error('API Error');
+    if (!apiRes.ok) throw new Error(`API Error ${apiRes.status}`);
     return await apiRes.json();
   } catch (e) {
+    console.error(`All fetch methods failed for ${apiUrl}`, e);
     return null;
   }
 };
@@ -28,8 +41,11 @@ export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
     '/daily_data.json',
     `/kobis/daily?targetDt=${targetDt}`,
     (json) => {
-      if (json.movies) return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
-      return json;
+      // 데이터 유효성 검사
+      if (json && json.movies && json.movies.length > 0) {
+        return { boxOfficeResult: { dailyBoxOfficeList: json.movies } };
+      }
+      return null; // 비어있으면 API 호출 유도
     }
   );
   return data || { boxOfficeResult: { dailyBoxOfficeList: [] } };
@@ -40,28 +56,39 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
     '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      if (json.status === 'ok') return json; // API 응답인 경우
+      // 1. API 응답 형식 ({ status: "ok", data: [...] })
+      if (json.status === 'ok' && Array.isArray(json.data) && json.data.length > 0) return json;
 
-      // History 파일 형식인 경우 변환
-      if (!json || Object.keys(json).length === 0) return null;
+      // 2. History 파일 형식 ({ "영화제목": [...] })
+      if (!json || Object.keys(json).length === 0) return null; // 빈 객체면 null 반환 -> API 호출
       
-      const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
-        const history = json[title];
-        if (!Array.isArray(history) || history.length === 0) return null;
-        const latest = history[history.length - 1];
-        return {
-          movieCd: String(idx),
-          rank: String(latest.rank),
-          title: title,
-          rate: String(latest.rate) + "%",
-          salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
-        };
-      }).filter(Boolean) as RealtimeMovie[];
+      try {
+        const list: RealtimeMovie[] = Object.keys(json).map((title, idx) => {
+          const history = json[title];
+          if (!Array.isArray(history) || history.length === 0) return null;
+          const latest = history[history.length - 1];
+          return {
+            movieCd: String(idx),
+            rank: String(latest.rank),
+            title: title,
+            rate: String(latest.rate) + "%",
+            salesAmt: "0", salesAcc: "0", audiCnt: "0", audiAcc: "0"
+          };
+        }).filter(Boolean) as RealtimeMovie[];
 
-      list.sort((a, b) => Number(a.rank) - Number(b.rank));
-      const time = list.length > 0 ? json[list[0].title].slice(-1)[0].time : "";
-      
-      return { status: "ok", data: list, crawledTime: time };
+        if (list.length === 0) return null;
+
+        list.sort((a, b) => Number(a.rank) - Number(b.rank));
+        
+        // 시간 정보 추출 (안전하게)
+        let time = "";
+        const firstKey = Object.keys(json)[0];
+        if (firstKey && json[firstKey].length > 0) {
+            time = json[firstKey].slice(-1)[0].time;
+        }
+        
+        return { status: "ok", data: list, crawledTime: time };
+      } catch { return null; }
     }
   );
 
