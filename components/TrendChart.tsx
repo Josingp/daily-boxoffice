@@ -42,11 +42,12 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         return recentData;
     }
     
-    // [REALTIME] 예매 관객수 기준 (핵심 수정)
+
+    // [REALTIME] 예매 관객수 기준 (숫자값 사용)
     return data.map(item => ({
         label: item.time.split(' ')[1], // HH:MM
-        value: item.val_audi || item.audiCnt, // 숫자값 사용
-        rate: item.rate // 툴팁용
+        value: item.val_audi || 0,      // 숫자로 저장된 관객수 사용
+        rate: item.rate                 // 툴팁 표기용
     }));
   }, [data, prediction, type, metric]);
 
