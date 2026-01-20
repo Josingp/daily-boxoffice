@@ -1,5 +1,6 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
 
+// [핵심] JSON 파일 -> 실패/빈값이면 API 자동 전환
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
   apiUrl: string, 
@@ -13,13 +14,18 @@ const fetchWithFallback = async <T>(
           return transformFn ? transformFn(data) : data;
       }
     }
-  } catch (e) { console.warn(`Fallback to API for ${jsonUrl}`); }
+  } catch (e) {
+    console.warn(`Fallback to API for ${jsonUrl}`);
+  }
 
+  // 파일 실패 시 API 호출
   try {
     const apiRes = await fetch(apiUrl);
     if (!apiRes.ok) throw new Error('API Error');
     return await apiRes.json();
-  } catch (e) { return null; }
+  } catch (e) {
+    return null;
+  }
 };
 
 export const fetchDailyBoxOffice = async (targetDt: string): Promise<any> => {
@@ -39,10 +45,9 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
     '/realtime_data.json',
     '/api/realtime',
     (json) => {
-      if (json.status === 'ok') return json; // API 응답인 경우
-      
+      if (json.status === 'ok') return json;
+
       try {
-        // [수정] JSON 파일 구조 변경 대응 ("meta" 키 무시)
         const meta = json.meta || {};
         const movieKeys = Object.keys(json).filter(k => k !== 'meta');
         
@@ -51,22 +56,21 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
           if (!Array.isArray(history) || history.length === 0) return null;
           const latest = history[history.length - 1];
           
-          // [수정] 퍼센트 중복 방지
+          // 퍼센트 중복 방지
           const rawRate = String(latest.rate);
           const formattedRate = rawRate.includes('%') ? rawRate : `${rawRate}%`;
 
           return {
-            movieCd: String(idx), // 임시 ID
+            movieCd: String(idx),
             rank: String(latest.rank),
             title: title,
             rate: formattedRate,
-            // 0원 0명 문제 해결: JSON에 있는 문자열 그대로 사용
-            salesAmt: String(latest.salesAmt || "0"), 
-            salesAcc: String(latest.salesAcc || "0"), 
-            audiCnt: String(latest.audiCnt || "0"), 
-            audiAcc: String(latest.audiAcc || "0"),
-            // [New] 저장된 상세정보가 있으면 같이 넘김 (DetailView에서 사용)
-            detail: meta[title] || null 
+            // [수정] 콤마(,)를 제거하여 숫자로 변환 가능한 상태로 만듦 ("NaN" 방지)
+            salesAmt: String(latest.salesAmt || "0").replace(/,/g, ''),
+            salesAcc: String(latest.salesAcc || "0").replace(/,/g, ''),
+            audiCnt: String(latest.audiCnt || "0").replace(/,/g, ''),
+            audiAcc: String(latest.audiAcc || "0").replace(/,/g, ''),
+            detail: meta[title] || null
           };
         }).filter(Boolean) as RealtimeMovie[];
 
@@ -78,6 +82,7 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
       } catch { return null; }
     }
   );
+
   return (result && result.status === 'ok') ? result : { data: [], crawledTime: "" };
 };
 
@@ -100,6 +105,13 @@ export const fetchMovieDetail = async (movieCd: string): Promise<MovieInfo | nul
     const res = await fetch(`/kobis/detail?movieCd=${movieCd}`);
     return (await res.json()).movieInfoResult.movieInfo;
   } catch { return null; }
+};
+
+export const fetchMovieTrend = async (movieCd: string, endDateStr: string): Promise<TrendDataPoint[]> => {
+  try {
+    const res = await fetch(`/kobis/trend?movieCd=${movieCd}&endDate=${endDateStr}`);
+    return res.ok ? await res.json() : [];
+  } catch { return []; }
 };
 
 export const fetchRealtimeReservation = async (movieName: string, movieCd?: string) => {
