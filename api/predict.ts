@@ -14,20 +14,20 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const apiKey = process.env.API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
+  if (!apiKey) return res.status(500).json({ error: "Server API Key Missing" });
 
   try {
     const { movieName, trendData, movieInfo, currentAudiAcc, type } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 1.5 Flash 모델 사용 (안정성 확보)
+    // [모델] gemini-1.5-flash (안정적)
     const prompt = `
     Role: Box Office Analyst.
     Target: ${movieName} (${type}).
-    Status: Total ${currentAudiAcc || 0}.
+    Status: Total ${currentAudiAcc}.
     
     Task:
-    Analyze the current trend and write a 3-paragraph Korean report (Status, Analysis, Outlook).
+    Analyze the trend and write a 3-paragraph Korean report (Status, Analysis, Outlook).
     Predict 3-day numbers. Provide 2 search keywords.
 
     Output JSON ONLY:
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     `;
     
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview", 
+      model: "gemini-1.5-flash", 
       contents: { parts: [{ text: prompt }] },
       generationConfig: { responseMimeType: "application/json" }
     });
@@ -49,11 +49,7 @@ export default async function handler(req, res) {
     try {
       result = JSON.parse(cleanJsonString(text));
     } catch {
-      // 파싱 실패시 기본값
-      result = { 
-          analysis: "현재 AI 분석 서버 연결 상태가 원활하지 않아 간략한 정보만 표시합니다. (데이터 집계 중)", 
-          forecast: [0, 0, 0] 
-      };
+      result = { analysis: "현재 분석 서버가 혼잡하여 데이터를 집계 중입니다.", forecast: [0, 0, 0] };
     }
 
     return res.status(200).json({
@@ -65,7 +61,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     return res.status(200).json({ 
-      analysisText: `AI 분석 요청 실패 (잠시 후 다시 시도해주세요)`, 
+      analysisText: `분석 실패: ${error.message}`, 
       predictionSeries: [0, 0, 0]
     });
   }
