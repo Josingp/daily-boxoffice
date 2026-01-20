@@ -16,6 +16,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
     if (!data || data.length === 0) return [];
 
     if (type === 'DAILY') {
+        // Daily 로직 (기존 동일)
         const recentData = data.map((item) => ({
           ...item,
           value: metric === 'audi' ? item.audiCnt :
@@ -41,10 +42,10 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         return recentData;
     }
     
-    // [핵심 수정] REALTIME: 예매 관객수(audiCnt) 기준
+    // [REALTIME] 예매 관객수 기준 (핵심 수정)
     return data.map(item => ({
         label: item.time.split(' ')[1], // HH:MM
-        value: item.audiCnt, // 관객수 사용
+        value: item.val_audi || item.audiCnt, // 숫자값 사용
         rate: item.rate // 툴팁용
     }));
   }, [data, prediction, type, metric]);
@@ -74,7 +75,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
               contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.1)'}}
               formatter={(val: number, name, props) => [
                   `${val.toLocaleString()}명`, 
-                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객 (${props.payload.rate}%)` : '수치')
+                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객` : '수치')
               ]}
           />
           <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill="url(#colorGradient)" />
