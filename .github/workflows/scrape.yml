@@ -3,7 +3,7 @@ name: Data Scraper
 on:
   schedule:
     - cron: '*/5 * * * *' # 5분마다 실행 (가장 빠름)
-  workflow_dispatch:
+  workflow_dispatch:      # 수동 실행 버튼
 
 permissions:
   contents: write
@@ -13,37 +13,46 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 히스토리 충돌 방지를 위해 전체 기록 가져오기
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      
       - run: pip install requests beautifulsoup4
       
+      # 1. 실시간 데이터 업데이트
       - name: Update Realtime
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: python scripts/update_realtime.py
 
-      - name: Update Daily (Once a day)
+      # 2. 일별 데이터 업데이트 (오전 9시 = UTC 0시)
+      - name: Update Daily
         env:
           KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         run: |
+          # UTC 시간 구하기
           HOUR=$(date -u +%H)
-          if [ "$HOUR" == "01" ]; then
+          # UTC 00시 (한국 오전 9시)에만 실행
+          if [ "$HOUR" == "00" ]; then
             python scripts/update_daily.py
           fi
 
+      # 3. 변경 사항 저장 (충돌 방지 로직 추가)
       - name: Commit
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add public/*.json
           
-          # 변경사항이 있는지 확인
+          # 변경사항이 없으면 종료, 있으면 커밋 후 푸시
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Update Data"
-            # [핵심] 원격 저장소의 최신 변경사항을 가져와서 합침 (충돌 방지)
+            # [핵심] 리모트 변경사항 당겨오기 (충돌 해결)
             git pull --rebase origin main
             git push
           fi
