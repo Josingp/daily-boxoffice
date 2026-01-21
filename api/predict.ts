@@ -5,7 +5,7 @@ import { GoogleGenAI } from "@google/genai";
  *  ========================= */
 const CFG = {
   // ✅ 기본은 LLM 호출 안 함(=API 최소화). 필요하면 요청 body에서 useLLM:true로 켜세요.
-  USE_LLM_DEFAULT: false,
+  USE_LLM_DEFAULT: ture,
 
   // (공통) 예측이 "너무 작게" 떨어지는 걸 막는 최소 앵커 강도(구조모델 비중 최소값)
   MIN_ANCHOR_BLEND: 0.35, // 0~1
