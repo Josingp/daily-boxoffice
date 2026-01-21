@@ -29,10 +29,6 @@ def fetch_movie_detail(movie_cd):
         return res.json().get("movieInfoResult", {}).get("movieInfo")
     except: return None
 
-# 데이터 정규화 (제목 매칭용)
-def normalize(s):
-    return re.sub(r'\s+', '', str(s)).lower()
-
 def is_same_data(last, new):
     if not last: return False
     return (
@@ -42,12 +38,11 @@ def is_same_data(last, new):
     )
 
 def update_realtime():
-    print("Updating Realtime Data with Smart DB Linking...")
+    print("Updating Realtime Data...")
     
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
     
-    # 1. Daily DB에서 상세정보 캐시 생성 (movieCd 기준 & 제목 기준)
     detail_cache_cd = {}
     detail_cache_title = {}
     
@@ -55,7 +50,7 @@ def update_realtime():
         for m in daily_data["movies"]:
             if "detail" in m:
                 if "movieCd" in m: detail_cache_cd[m["movieCd"]] = m["detail"]
-                if "movieNm" in m: detail_cache_title[normalize(m["movieNm"])] = m["detail"]
+                if "movieNm" in m: detail_cache_title[m["movieNm"].replace(" ", "")] = m["detail"]
 
     session = requests.Session()
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -93,6 +88,7 @@ def update_realtime():
             target_link = row.find("a", onclick=MSTVIEW_REGEX.search)
             title = ""
             movie_cd = ""
+            
             if target_link:
                 title = target_link.get("title", "").strip() or target_link.get_text(strip=True)
                 match = MSTVIEW_REGEX.search(target_link['onclick'])
@@ -102,28 +98,20 @@ def update_realtime():
             
             if not title: continue
             
-            # [중요] 상세정보 확보 로직 (순서: Realtime Meta -> Daily DB -> API)
+            # 상세정보 확보 (캐시 -> API)
             if title not in realtime_data["meta"]:
                 found_detail = None
+                norm_title = title.replace(" ", "")
                 
-                # 1. Daily DB (Code 매칭)
                 if movie_cd and movie_cd in detail_cache_cd:
                     found_detail = detail_cache_cd[movie_cd]
-                    print(f"[DailyDB] Found by Code: {title}")
-                
-                # 2. Daily DB (Title 매칭) - 코드가 다를 수 있으므로 제목으로도 확인
-                elif normalize(title) in detail_cache_title:
-                    found_detail = detail_cache_title[normalize(title)]
-                    print(f"[DailyDB] Found by Title: {title}")
-                
-                # 3. API 호출 (상위 20위만)
-                elif movie_cd and int(rank) <= 20:
-                    print(f"[API] Fetching: {title}")
+                elif norm_title in detail_cache_title:
+                    found_detail = detail_cache_title[norm_title]
+                elif movie_cd and int(rank) <= 30:
                     found_detail = fetch_movie_detail(movie_cd)
                     if found_detail: time.sleep(0.1)
-                
-                if found_detail:
-                    realtime_data["meta"][title] = found_detail
+
+                if found_detail: realtime_data["meta"][title] = found_detail
 
             rate = cols[3].get_text(strip=True).replace('%', '')
             audi_cnt_raw = cols[6].get_text(strip=True)
@@ -137,7 +125,7 @@ def update_realtime():
                 "time": crawled_time,
                 "rank": int(rank),
                 "rate": float(rate) if rate else 0,
-                "audiCnt": audi_cnt_raw,
+                "audiCnt": audi_cnt_raw, 
                 "salesAmt": sales_amt_raw,
                 "audiAcc": audi_acc_raw,
                 "salesAcc": sales_acc_raw,
@@ -164,7 +152,8 @@ def update_realtime():
             print(f"Updated {count} movies at {crawled_time}")
 
     except Exception as e:
-        print(f"Realtime Update Failed: {e}")
+        print(f"Update Failed: {e}")
 
 if __name__ == "__main__":
+    if not os.path.exists("public"): os.makedirs("public")
     update_realtime()
