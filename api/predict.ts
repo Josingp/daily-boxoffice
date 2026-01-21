@@ -28,7 +28,6 @@ export default async function handler(req, res) {
       ? historyData.slice(-10).map((d: any) => `[${d.time}] Rank: ${d.rank}, Rate: ${d.rate}%, Audi: ${d.val_audi}`).join("\n")
       : "No realtime data";
 
-    // BEP 정보 생성
     let bepContext = "Production cost unknown.";
     if (productionCost && productionCost > 0) {
         const cost = Number(productionCost);
@@ -37,10 +36,15 @@ export default async function handler(req, res) {
         bepContext = `Production Cost: ${cost} KRW, Current Sales: ${sales} KRW. BEP Progress: ${percent}%.`;
     }
 
+    // 개봉일 확인
+    const openDate = movieInfo?.openDt || "";
+    
+    // [핵심] 전문 분석가 페르소나 및 개봉 전/후 시나리오 프롬프트
     const prompt = `
     Role: Senior Data Scientist & Box Office Analyst.
     
     Target Movie: "${movieName}"
+    Open Date: ${openDate} (YYYYMMDD)
     Current Status: Total Audience ${currentAudiAcc}
     Financial Context: ${bepContext}
     
@@ -51,13 +55,20 @@ export default async function handler(req, res) {
     ${realtimeTrend}
 
     Task:
-    1. **Mathematical Analysis**: Calculate momentum.
-    2. **Forecast Algorithm**: Predict next 3 days audience.
-    3. **Final Prediction**: Estimate the *Final Total Audience* based on current pace and BEP status.
-    4. **Report Generation**: Write a 3-paragraph Korean report.
-       - Para 1: Status & Momentum.
-       - Para 2: Audience Psychology.
-       - Para 3: Future Outlook & BEP Analysis.
+    1. **Check Release Status**: Compare 'Open Date' with today. 
+       - If **Unreleased**: Focus strictly on "Pre-release Hype", "Reservation Rate Growth", and "Expectation". Do NOT criticize low audience numbers as it hasn't opened yet.
+       - If **Released**: Analyze "Box Office Momentum", "Drop Rate", and "Viral Factor".
+    
+    2. **Forecast Algorithm**: 
+       - Use linear/logarithmic regression to predict next 3 days. 
+       - If unreleased, predict based on reservation growth trends.
+    
+    3. **Final Prediction**: Estimate the *Final Total Audience* considering the BEP and current pace.
+
+    4. **Report Generation**: Write a 3-paragraph Korean report with emojis.
+       - Para 1: Current Momentum (Reservation rate or Daily audience).
+       - Para 2: Analysis (Why is this happening? Genre, Competition, Buzz).
+       - Para 3: Strategic Outlook & Final Prediction.
     
     Output JSON Schema:
     {
