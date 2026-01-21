@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: "API Key Missing" });
 
   try {
-    const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData, productionCost, salesAcc } = req.body;
+    const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData, productionCost, salesAcc, audiAcc, avgTicketPrice } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
     const recentTrend = Array.isArray(trendData) && trendData.length > 0
@@ -32,14 +32,15 @@ export default async function handler(req, res) {
     if (productionCost && productionCost > 0) {
         const cost = Number(productionCost);
         const sales = Number(salesAcc || 0);
-        const percent = ((sales / cost) * 100).toFixed(1);
-        bepContext = `Production Cost: ${cost} KRW, Current Sales: ${sales} KRW. BEP Progress: ${percent}%.`;
+        const atp = Number(avgTicketPrice || 12000);
+        // BEP 관객 = 제작비 / (ATP * 0.4)
+        const bepAudi = Math.round(cost / (atp * 0.4));
+        const percent = ((Number(audiAcc)/bepAudi) * 100).toFixed(1);
+        bepContext = `Production Cost: ${cost} KRW. Calculated Average Ticket Price: ${Math.round(atp)} KRW. BEP Target Audience: approx ${bepAudi}. Current Progress: ${percent}%.`;
     }
 
-    // 개봉일 확인
     const openDate = movieInfo?.openDt || "";
     
-    // [핵심] 전문 분석가 페르소나 및 개봉 전/후 시나리오 프롬프트
     const prompt = `
     Role: Senior Data Scientist & Box Office Analyst.
     
@@ -56,18 +57,17 @@ export default async function handler(req, res) {
 
     Task:
     1. **Check Release Status**: Compare 'Open Date' with today. 
-       - If **Unreleased**: Focus strictly on "Pre-release Hype", "Reservation Rate Growth", and "Expectation". Do NOT criticize low audience numbers as it hasn't opened yet.
-       - If **Released**: Analyze "Box Office Momentum", "Drop Rate", and "Viral Factor".
+       - If **Unreleased**: Focus strictly on "Pre-release Hype", "Reservation Rate Growth".
+       - If **Released**: Analyze "Box Office Momentum", "Drop Rate".
     
     2. **Forecast Algorithm**: 
-       - Use linear/logarithmic regression to predict next 3 days. 
-       - If unreleased, predict based on reservation growth trends.
+       - Use regression to predict next 3 days.
     
     3. **Final Prediction**: Estimate the *Final Total Audience* considering the BEP and current pace.
 
     4. **Report Generation**: Write a 3-paragraph Korean report with emojis.
-       - Para 1: Current Momentum (Reservation rate or Daily audience).
-       - Para 2: Analysis (Why is this happening? Genre, Competition, Buzz).
+       - Para 1: Current Momentum.
+       - Para 2: Analysis (Genre, Competition, Buzz).
        - Para 3: Strategic Outlook & Final Prediction.
     
     Output JSON Schema:
