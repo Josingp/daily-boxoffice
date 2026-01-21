@@ -13,7 +13,19 @@
   },
   "하트맨": {
     "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/9db39ce00de94802988753777473344b.jpg",
+    "productionCost": 7200000000 
+  },
+    "아바타: 불과 재": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/11/82faefd04a8945be86b21a62ea24f1d9.jpg",
     "productionCost": 0 
-  }
+  },
+   "신비아파트 10주년 극장판: 한 번 더, 소환": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/3912e36450be4ec2a3b5337cc6be7167.jpg",
+    "productionCost": 0 
+  },
+    "보이": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/9e5dc9d3308b458a879202b710e3bc12.jpg",
+    "productionCost": 0 
+  },
 }
 
