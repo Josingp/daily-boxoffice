@@ -30,6 +30,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // 수동 데이터 가져오기 (공백 제거 후 매칭)
   const getManualInfo = (title: string) => {
       if (!title) return null;
       const cleanTitle = title.replace(/\s+/g, '');
@@ -68,12 +69,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setChartMetric('audi');
 
     try {
+      // 1. 상세정보
       let infoData = (movie as any).detail;
       if (!infoData && movie.movieCd && movie.movieCd !== "0") {
           infoData = await fetchMovieDetail(movie.movieCd);
       }
       setMovieDetail(infoData);
 
+      // 2. 포스터 (수동 우선)
       const manual = getManualInfo(movie.movieNm);
       if (manual?.posterUrl) {
           setPosterUrl(manual.posterUrl);
@@ -87,6 +90,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           setNewsList(news.length > 0 ? news : []);
       }
 
+      // 3. 실시간 정보
       let currentRt = movie.realtime;
       if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
@@ -96,12 +100,19 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           }
       }
 
+      // 4. AI 분석 (동적 ATP 계산 값 전달)
       const cost = manual?.productionCost || 0;
-      const sales = parseInt(movie.salesAcc || "0");
+      
+      // 현재 누적 매출 및 관객수 (실시간 정보 우선)
+      const curSales = currentRt ? parseInt(String(currentRt.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
+      const curAudi = currentRt ? parseInt(String(currentRt.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
+      
+      // 실제 평균 티켓값 계산 (매출 / 관객). 관객 0이면 기본값 12,000원 적용
+      const avgTicketPrice = curAudi > 0 ? (curSales / curAudi) : 12000;
 
       if (type === 'DAILY') {
         if (movie.trend && movie.trend.length > 0) {
-            requestAnalysis(movie.movieNm, movie.trend, infoData, movie.audiAcc, 'DAILY', null, cost, sales);
+            requestAnalysis(movie.movieNm, movie.trend, infoData, movie.audiAcc, 'DAILY', null, cost, curSales, curAudi, avgTicketPrice);
         }
       } else {
         try {
@@ -118,7 +129,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 });
             }
             setRealtimeHistory(history);
-            requestAnalysis(movie.movieNm, [], infoData, movie.audiAcc, 'REALTIME', history, cost, sales);
+            requestAnalysis(movie.movieNm, [], infoData, movie.audiAcc, 'REALTIME', history, cost, curSales, curAudi, avgTicketPrice);
           }
         } catch {}
       }
@@ -126,14 +137,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     finally { setLoading(false); }
   };
 
-  const requestAnalysis = async (name: string, trend: any, info: any, total: string, type: string, history: any, cost: number, sales: number) => {
+  const requestAnalysis = async (name: string, trend: any, info: any, total: string, type: string, history: any, cost: number, sales: number, audi: number, atp: number) => {
     try {
         const res = await fetch('/predict', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 movieName: name, trendData: trend, movieInfo: info, currentAudiAcc: total, type, historyData: history,
-                productionCost: cost, salesAcc: sales
+                productionCost: cost, salesAcc: sales, audiAcc: audi, avgTicketPrice: atp
             })
         });
         const data = await res.json();
@@ -143,11 +154,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     } catch(e) {}
   };
 
-  // [수정] 공유하기 기능: 상세 데이터 포함
+  // [핵심] 공유하기 텍스트 생성 (AI 제거, 순수 데이터만)
   const handleShare = async () => {
     if (!movie) return;
     
-    // 증감 표시 함수
     const fmtInten = (v: any) => {
         const val = parseInt(v || 0);
         if (val === 0) return "-";
@@ -155,21 +165,39 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     };
 
     let text = `[BoxOffice Pro] ${movie.movieNm}\n`;
-    text += `누적관객: ${formatNumber(movie.audiAcc)}명\n\n`;
-
+    
+    // 일별 데이터가 있는 경우
     if (type === 'DAILY') {
-        text += `📅 ${targetDate.substring(4,6)}/${targetDate.substring(6,8)} 일별 박스오피스\n`;
-        text += `- 일일관객: ${formatNumber(movie.audiCnt)}명 (${fmtInten(movie.audiInten)})\n`;
-        text += `- 매출액: ${formatKoreanNumber(movie.salesAmt)}원 (${fmtInten(movie.salesInten)})\n`;
-        text += `- 스크린: ${formatNumber(movie.scrnCnt)}개 (${fmtInten(movie.scrnInten)})\n`;
-        text += `- 상영횟수: ${formatNumber(movie.showCnt)}회 (${fmtInten(movie.showInten)})\n\n`;
+        text += `📅 ${targetDate.substring(4,6)}/${targetDate.substring(6,8)} 일별 리포트\n`;
+        text += `• 일일관객: ${formatNumber(movie.audiCnt)}명 (${fmtInten(movie.audiInten)})\n`;
+        text += `• 누적관객: ${formatNumber(movie.audiAcc)}명\n`;
+        text += `• 매출액: ${formatKoreanNumber(movie.salesAmt)}원\n`;
+        text += `• 스크린: ${formatNumber(movie.scrnCnt)}개 / 상영 ${formatNumber(movie.showCnt)}회\n`;
+    } else {
+        text += `누적관객: ${formatNumber(movie.audiAcc)}명\n`;
     }
 
+    // 실시간 데이터가 있는 경우
     if (realtimeInfo) {
-        text += `💜 KOBIS 실시간 예매 (${realtimeInfo.crawledTime || '실시간'} 기준)\n`;
-        text += `- 예매율: ${realtimeInfo.rate} (${realtimeInfo.rank}위)\n`;
-        text += `- 예매관객: ${formatNumber(String(realtimeInfo.audiCnt).replace(/,/g,''))}명\n`;
-        text += `- 예매매출: ${formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원\n`;
+        text += `\n💜 KOBIS 실시간 예매 (${realtimeInfo.crawledTime || '현재'} 기준)\n`;
+        text += `• 예매율: ${realtimeInfo.rate} (전체 ${realtimeInfo.rank}위)\n`;
+        text += `• 예매관객: ${formatNumber(String(realtimeInfo.audiCnt).replace(/,/g,''))}명\n`;
+        text += `• 예매매출: ${formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원\n`;
+    }
+
+    // BEP 정보가 있는 경우 추가
+    const manual = getManualInfo(movie.movieNm);
+    if (manual?.productionCost) {
+        const sales = realtimeInfo ? parseInt(String(realtimeInfo.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
+        const audi = realtimeInfo ? parseInt(String(realtimeInfo.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
+        const atp = audi > 0 ? sales / audi : 12000;
+        const bepAudi = Math.round(manual.productionCost / (atp * 0.4));
+        const rate = Math.min((audi / bepAudi) * 100, 100).toFixed(1);
+        
+        text += `\n💰 손익분기점(BEP) 분석\n`;
+        text += `• 총 제작비: ${formatKoreanNumber(manual.productionCost)}원\n`;
+        text += `• 목표 관객: 약 ${formatNumber(bepAudi)}명 (추정)\n`;
+        text += `• 현재 달성률: ${rate}% (${audi >= bepAudi ? '달성 완료 🎉' : `약 ${formatNumber(bepAudi - audi)}명 남음`})\n`;
     }
 
     try { 
@@ -190,24 +218,30 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </span>;
   };
 
-  // [수정] BEP 계산 로직: (제작비 / 4800) = 목표 관객수
+  // [핵심] 동적 BEP 계산 및 렌더링
   const renderBEPSection = () => {
       const manual = getManualInfo(movie?.movieNm || "");
       if (!manual?.productionCost) return null;
       
       const cost = manual.productionCost;
       
-      // 1. 손익분기점 관객수 = 제작비 / (12000원 * 40%) = 제작비 / 4800
-      const bepAudience = Math.round(cost / 4800);
-      
-      // 2. 현재 누적 관객수 (실시간 정보가 있으면 그쪽 누적, 없으면 일별 누적)
-      const currentAudience = realtimeInfo 
-          ? parseInt(String(realtimeInfo.audiAcc).replace(/,/g, '')) 
-          : parseInt(movie?.audiAcc || "0");
+      // 현재 데이터 (실시간 우선)
+      const sales = realtimeInfo ? parseInt(String(realtimeInfo.salesAcc).replace(/,/g, '')) : parseInt(movie?.salesAcc || "0");
+      const audi = realtimeInfo ? parseInt(String(realtimeInfo.audiAcc).replace(/,/g, '')) : parseInt(movie?.audiAcc || "0");
 
-      const remainAudience = bepAudience - currentAudience;
-      const percent = Math.min((currentAudience / bepAudience) * 100, 100);
-      const isBreakeven = currentAudience >= bepAudience;
+      // 1. 실제 평균 티켓값(ATP) 계산
+      // 관객이 없으면(개봉전) 기본값 12,000원 가정
+      const atp = audi > 0 ? (sales / audi) : 12000;
+      
+      // 2. 제작사 수익(티켓당) = ATP * 40%
+      const profitPerTicket = atp * 0.4;
+
+      // 3. BEP 관객수 = 제작비 / 티켓당 수익
+      const bepAudience = Math.round(cost / profitPerTicket);
+      
+      const remainAudience = bepAudience - audi;
+      const percent = Math.min((audi / bepAudience) * 100, 100);
+      const isBreakeven = audi >= bepAudience;
 
       return (
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm mb-4">
@@ -236,6 +270,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                         <span className="block text-slate-400 mb-0.5">목표 관객수 (BEP)</span>
                         <span className="font-bold text-slate-700">{formatNumber(bepAudience)}명</span>
                     </div>
+                 </div>
+                 
+                 <div className="text-[10px] text-slate-400 text-right">
+                    * 실시간 평균 티켓값({formatNumber(Math.round(atp))}원) 기준 추정치
                  </div>
 
                  {!isBreakeven && (
