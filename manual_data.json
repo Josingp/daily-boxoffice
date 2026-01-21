@@ -10,6 +10,10 @@
   "프로젝트 Y": {
     "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/eb48fc599cc24e5aa0b731ca54d52329.jpg",
     "productionCost": 0 
+  },
+  "하트맨": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/9db39ce00de94802988753777473344b.jpg",
+    "productionCost": 0 
   }
 }
 
