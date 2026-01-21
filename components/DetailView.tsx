@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
-import { MANUAL_MOVIE_DATA } from '../manualData'; // 이 부분은 JSON 직접 import로 변경 권장하지만 기존 구조 유지 시 아래 로직으로 커버 가능
-import manualDataJson from '../manual_data.json'; // [NEW] JSON 직접 import
+import manualDataJson from '../manual_data.json';
 import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock, Coins } from 'lucide-react';
 
@@ -31,7 +30,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // [NEW] 수동 데이터 매칭 함수 (공백 제거 후 비교)
   const getManualInfo = (title: string) => {
       if (!title) return null;
       const cleanTitle = title.replace(/\s+/g, '');
@@ -70,21 +68,17 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setChartMetric('audi');
 
     try {
-      // 1. 상세정보
       let infoData = (movie as any).detail;
       if (!infoData && movie.movieCd && movie.movieCd !== "0") {
           infoData = await fetchMovieDetail(movie.movieCd);
       }
       setMovieDetail(infoData);
 
-      // 2. 포스터 설정 (수동 데이터 최우선)
       const manual = getManualInfo(movie.movieNm);
       if (manual?.posterUrl) {
           setPosterUrl(manual.posterUrl);
-          // 뉴스는 병렬 호출
           fetchMovieNews(movie.movieNm).then(setNewsList);
       } else {
-          // 수동 데이터 없으면 API 호출
           const [poster, news] = await Promise.all([
               fetchMoviePoster(movie.movieNm),
               fetchMovieNews(movie.movieNm)
@@ -93,7 +87,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           setNewsList(news.length > 0 ? news : []);
       }
 
-      // 3. 실시간 정보 확보
       let currentRt = movie.realtime;
       if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
@@ -103,7 +96,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           }
       }
 
-      // 4. AI 분석
       const cost = manual?.productionCost || 0;
       const sales = parseInt(movie.salesAcc || "0");
 
@@ -151,10 +143,40 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     } catch(e) {}
   };
 
+  // [수정] 공유하기 기능: 상세 데이터 포함
   const handleShare = async () => {
     if (!movie) return;
-    const text = `[BoxOffice Pro] ${movie.movieNm}\n누적관객: ${formatNumber(movie.audiAcc)}명\n${analysis.slice(0,50)}...`;
-    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(()=>setCopied(false),2000); } catch {}
+    
+    // 증감 표시 함수
+    const fmtInten = (v: any) => {
+        const val = parseInt(v || 0);
+        if (val === 0) return "-";
+        return `${val > 0 ? "▲" : "▼"}${Math.abs(val).toLocaleString()}`;
+    };
+
+    let text = `[BoxOffice Pro] ${movie.movieNm}\n`;
+    text += `누적관객: ${formatNumber(movie.audiAcc)}명\n\n`;
+
+    if (type === 'DAILY') {
+        text += `📅 ${targetDate.substring(4,6)}/${targetDate.substring(6,8)} 일별 박스오피스\n`;
+        text += `- 일일관객: ${formatNumber(movie.audiCnt)}명 (${fmtInten(movie.audiInten)})\n`;
+        text += `- 매출액: ${formatKoreanNumber(movie.salesAmt)}원 (${fmtInten(movie.salesInten)})\n`;
+        text += `- 스크린: ${formatNumber(movie.scrnCnt)}개 (${fmtInten(movie.scrnInten)})\n`;
+        text += `- 상영횟수: ${formatNumber(movie.showCnt)}회 (${fmtInten(movie.showInten)})\n\n`;
+    }
+
+    if (realtimeInfo) {
+        text += `💜 KOBIS 실시간 예매 (${realtimeInfo.crawledTime || '실시간'} 기준)\n`;
+        text += `- 예매율: ${realtimeInfo.rate} (${realtimeInfo.rank}위)\n`;
+        text += `- 예매관객: ${formatNumber(String(realtimeInfo.audiCnt).replace(/,/g,''))}명\n`;
+        text += `- 예매매출: ${formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원\n`;
+    }
+
+    try { 
+        await navigator.clipboard.writeText(text); 
+        setCopied(true); 
+        setTimeout(()=>setCopied(false),2000); 
+    } catch {}
   };
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
@@ -168,17 +190,24 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </span>;
   };
 
+  // [수정] BEP 계산 로직: (제작비 / 4800) = 목표 관객수
   const renderBEPSection = () => {
       const manual = getManualInfo(movie?.movieNm || "");
       if (!manual?.productionCost) return null;
       
       const cost = manual.productionCost;
-      const salesStr = realtimeInfo ? String(realtimeInfo.salesAcc) : (movie?.salesAcc || "0");
-      const sales = parseInt(salesStr.replace(/,/g, ''));
       
-      const profit = sales - cost;
-      const percent = Math.min((sales / cost) * 100, 100);
-      const isBreakeven = sales >= cost;
+      // 1. 손익분기점 관객수 = 제작비 / (12000원 * 40%) = 제작비 / 4800
+      const bepAudience = Math.round(cost / 4800);
+      
+      // 2. 현재 누적 관객수 (실시간 정보가 있으면 그쪽 누적, 없으면 일별 누적)
+      const currentAudience = realtimeInfo 
+          ? parseInt(String(realtimeInfo.audiAcc).replace(/,/g, '')) 
+          : parseInt(movie?.audiAcc || "0");
+
+      const remainAudience = bepAudience - currentAudience;
+      const percent = Math.min((currentAudience / bepAudience) * 100, 100);
+      const isBreakeven = currentAudience >= bepAudience;
 
       return (
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm mb-4">
@@ -188,7 +217,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
              <div className="space-y-4">
                  <div>
                     <div className="flex justify-between text-xs mb-1.5 font-medium">
-                        <span className="text-slate-500">BEP 달성률</span>
+                        <span className="text-slate-500">BEP 달성률 (관객 기준)</span>
                         <span className={`${isBreakeven ? 'text-red-500' : 'text-blue-500'} font-bold`}>
                             {percent.toFixed(1)}% ({isBreakeven ? '달성 완료' : '진행 중'})
                         </span>
@@ -197,21 +226,24 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                         <div className={`h-full rounded-full transition-all duration-1000 ${isBreakeven ? 'bg-gradient-to-r from-red-400 to-red-500' : 'bg-blue-500'}`} style={{width: `${percent}%`}}></div>
                     </div>
                  </div>
+                 
                  <div className="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-3 rounded-lg">
                     <div>
                         <span className="block text-slate-400 mb-0.5">총 제작비</span>
                         <span className="font-bold text-slate-700">{formatKoreanNumber(cost)}원</span>
                     </div>
                     <div>
-                        <span className="block text-slate-400 mb-0.5">누적 매출액</span>
-                        <span className="font-bold text-slate-700">{formatKoreanNumber(sales)}원</span>
+                        <span className="block text-slate-400 mb-0.5">목표 관객수 (BEP)</span>
+                        <span className="font-bold text-slate-700">{formatNumber(bepAudience)}명</span>
                     </div>
                  </div>
+
                  {!isBreakeven && (
                      <div className="text-xs text-center text-slate-500 bg-slate-50 py-2 rounded-lg">
-                         BEP 달성까지 약 <span className="font-bold text-slate-800">{formatKoreanNumber(Math.abs(profit))}원</span> 남았습니다.
+                         BEP 달성까지 약 <span className="font-bold text-slate-800">{formatNumber(remainAudience)}명</span> 남았습니다.
                      </div>
                  )}
+                 
                  {finalAudiPredict && finalAudiPredict.avg > 0 && (
                      <div className="mt-3 pt-3 border-t border-slate-100">
                          <div className="text-xs font-bold text-purple-600 mb-1 flex items-center gap-1"><Sparkles size={12}/> AI 예측 최종 관객수</div>
@@ -233,6 +265,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   return (
     <div className={`fixed inset-0 z-50 flex flex-col bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
       
+      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
         <div>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${type === 'DAILY' ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600'}`}>
