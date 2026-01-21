@@ -4,84 +4,77 @@ import { GoogleGenAI } from "@google/genai";
  *  CONFIG (튜닝 포인트)
  *  ========================= */
 const CFG = {
-  // Released: 다음 3일 과소예측을 막는 최소 앵커(지난주 같은 요일 대비)
-  ANCHOR_BLEND: 0.45, // 0~1 (높을수록 "지난주 같은 요일"을 더 믿음)
+  // ✅ 기본은 LLM 호출 안 함(=API 최소화). 필요하면 요청 body에서 useLLM:true로 켜세요.
+  USE_LLM_DEFAULT: false,
 
-  // Released: APS(스크린당 관객) 감쇠 slope 범위 (개봉 경과일에 따라 floor 자동 완화)
-  APS_SLOPE: {
-    floorD0_6: -0.006,  // day<7: 과소예측 방지 (완만 허용)
-    floorD7_13: -0.010,
-    floorD14_27: -0.016,
-    floorD28_59: -0.024,
-    floorD60p: -0.032,
-    ceil: -0.001,       // 너무 완만하면 꼬리 과대 → 최소한 이 정도는 감쇠
-    hardMin: -0.20,
-  },
+  // (공통) 예측이 "너무 작게" 떨어지는 걸 막는 최소 앵커 강도(구조모델 비중 최소값)
+  MIN_ANCHOR_BLEND: 0.35, // 0~1
 
-  // Released: 다음 3일 상한 캡 (개봉 초반 확장 가능성 반영)
+  // Released: 다음 3일 상한 캡(최근 최대치 기반, daySince 구간별)
   NEXT3_UPPER: {
-    d0_6: { weekend: 1.85, weekday: 1.40 },
-    d7_13: { weekend: 1.55, weekday: 1.28 },
-    d14_27: { weekend: 1.35, weekday: 1.18 },
-    d28p: { weekend: 1.20, weekday: 1.12 },
+    d0_6: { weekend: 2.10, weekday: 1.55 },
+    d7_13: { weekend: 1.75, weekday: 1.35 },
+    d14_27: { weekend: 1.45, weekday: 1.22 },
+    d28p: { weekend: 1.28, weekday: 1.15 },
   },
 
-  // Released: 최종 잔여(remaining) 상한 (너무 낮게 잡히면 과소예측)
+  // Released: 잔여 러닝(remaining) 캡(개봉이 무한하지 않음을 강제)
   REMAINING_CAP: {
-    // currentAcc * factor 와 last7Sum * weeks 를 비교해 큰 값 채택
     byAccFactor: (daySince: number) => {
-      if (daySince < 7) return 14.0;
-      if (daySince < 14) return 10.0;
-      if (daySince < 28) return 5.5;
-      if (daySince < 60) return 2.4;
-      return 0.9;
+      if (daySince < 7) return 18.0;
+      if (daySince < 14) return 13.0;
+      if (daySince < 28) return 7.0;
+      if (daySince < 60) return 3.0;
+      return 1.1;
     },
     byRunRateWeeks: (daySince: number) => {
-      if (daySince < 7) return 22;
-      if (daySince < 14) return 16;
-      if (daySince < 28) return 12;
-      if (daySince < 60) return 9;
+      if (daySince < 7) return 24;
+      if (daySince < 14) return 18;
+      if (daySince < 28) return 13;
+      if (daySince < 60) return 10;
       return 6;
     },
   },
 
-  // DOW priors (데이터가 부족할 때 사용)
-  DOW_PRIOR: { Mon: 1.00, Tue: 1.00, Wed: 1.03, Thu: 1.08, Fri: 1.30, Sat: 1.85, Sun: 1.65 },
+  // DOW priors (데이터 부족 시)
+  DOW_PRIOR: { Mon: 1.0, Tue: 1.0, Wed: 1.03, Thu: 1.09, Fri: 1.33, Sat: 1.92, Sun: 1.70 },
 
-  // Unreleased: historyData에 예매량(val_audi)이 없을 때 rate(%)를 "가정 시장 예매풀"로 환산
-  // (외부 API 없이 최소한의 숫자 리포팅을 위해 둔 내부 가정치)
-  ASSUMED_RESERVED_MARKET: {
-    weekday: 380_000,
-    weekend: 520_000,
-  },
+  // Unreleased: val_audi가 없고 rate만 있을 때의 "가정 예매풀"
+  ASSUMED_RESERVED_MARKET: { weekday: 420_000, weekend: 600_000 },
 
-  // Unreleased: 예매 → 오프닝 day walk-up(현장/당일) 계수
+  // Unreleased: 당일/현장(walk-up) 계수
   WALKUP: {
-    weekdayBase: 0.85,
-    weekendBase: 1.10,
-    momentumAdjScale: 0.22, // rateMomentum에 곱해서 walkup에 더함
-    clamp: { lo: 0.55, hi: 1.55 },
+    weekdayBase: 0.95,
+    weekendBase: 1.20,
+    momentumAdjScale: 0.22,
+    clamp: { lo: 0.55, hi: 1.65 },
   },
 
-  // Unreleased: 오프닝 최소/최대 캡(0 근처 방지 + 과장 방지)
-  OPENING_CAP: { min: 25_000, max: 2_800_000 },
+  // Unreleased: 오프닝 최소/최대 캡 (0 방지 + 과장 방지)
+  OPENING_CAP: { min: 40_000, max: 3_200_000 },
 
-  // Unreleased: 장르 기반 legs prior (최종/오프닝3일 배수)
-  // (없으면 default)
+  // Unreleased: 장르 legs prior (최종/오프닝3일 배수)
   LEGS_PRIOR: {
-    horror: { min: 2.1, avg: 2.7, max: 3.6 },
+    horror: { min: 2.0, avg: 2.6, max: 3.4 },
     animation: { min: 4.0, avg: 5.8, max: 8.2 },
-    drama: { min: 3.2, avg: 4.6, max: 6.5 },
-    action: { min: 2.9, avg: 4.0, max: 5.9 },
-    default: { min: 3.0, avg: 4.3, max: 6.4 },
+    drama: { min: 3.2, avg: 4.7, max: 6.6 },
+    action: { min: 2.9, avg: 4.1, max: 6.0 },
+    default: { min: 3.0, avg: 4.4, max: 6.6 },
   },
 
-  // LLM은 “문장”만 다듬고, 숫자는 코드 예측에 최대한 붙게 제한
-  LLM: { temperature: 0.12, maxAdjust: 0.25, minAdjust: 0.70 },
+  // LLM: 숫자 조정 제한(LLM이 숫자를 바꾸더라도 앵커 범위 밖으로 못 나가게)
+  LLM: { temperature: 0.12, maxAdjust: 0.22, minAdjust: 0.78 },
+
+  // ✅ Bass 폭주 방지: m(잠재시장) 상한을 누적의 배수로 제한
+  BASS_M_CAP: (daySince: number) => {
+    if (daySince < 7) return 40;
+    if (daySince < 14) return 20;
+    return 10;
+  },
 };
 
 /** =========================
- *  Small utils
+ *  utils
  *  ========================= */
 const cleanJsonString = (str: string) => {
   if (!str) return "{}";
@@ -162,8 +155,26 @@ const median = (arr: number[]) => {
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
 };
 
+const percentile = (arr: number[], p: number) => {
+  if (!arr.length) return 0;
+  const s = [...arr].sort((a, b) => a - b);
+  const idx = (s.length - 1) * clamp(p, 0, 1);
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  if (lo === hi) return s[lo];
+  return s[lo] + (s[hi] - s[lo]) * (idx - lo);
+};
+
+const sameDowMedian = (rows: TrendRow[], targetDow: DowName, lookbackDays = 28) => {
+  const slice = rows.slice(-lookbackDays);
+  const vals = slice
+    .filter(r => dowNameOf(r.date) === targetDow)
+    .map(r => safeNum(r.audiCnt, 0))
+    .filter(v => v > 0);
+  return median(vals) || 0;
+};
+
 /** =========================
- *  Simple stats
+ *  stats
  *  ========================= */
 const linearRegression = (xs: number[], ys: number[]) => {
   const n = xs.length;
@@ -202,48 +213,8 @@ const stdResidual = (ys: number[], yhat: number[]) => {
   return Math.sqrt(ss / (n - 2)) || 0.35;
 };
 
-const robustLogLinearFit = (xs: number[], ysLog: number[]) => {
-  if (xs.length < 4) {
-    return { slope: -0.03, intercept: ysLog[0] ?? Math.log(100), r2: 0, residualStd: 0.35 };
-  }
-  const fitOnce = (X: number[], Y: number[]) => {
-    const { slope, intercept } = linearRegression(X, Y);
-    const yhat = X.map((x) => intercept + slope * x);
-    return {
-      slope,
-      intercept,
-      yhat,
-      r2: rSquared(Y, yhat),
-      residualStd: stdResidual(Y, yhat),
-      resid: Y.map((y, i) => y - yhat[i]),
-    };
-  };
-  const first = fitOnce(xs, ysLog);
-  const absResid = first.resid.map((r) => Math.abs(r));
-  const mad = median(absResid) || 0.0001;
-  const thr = 2.8 * mad;
-
-  const keep: number[] = [];
-  for (let i = 0; i < xs.length; i++) {
-    if (Math.abs(first.resid[i]) <= thr) keep.push(i);
-  }
-  if (keep.length < 4) return first;
-
-  const X2 = keep.map((i) => xs[i]);
-  const Y2 = keep.map((i) => ysLog[i]);
-  return fitOnce(X2, Y2);
-};
-
-const estimateWeeklySlope = (series: number[]) => {
-  if (series.length < 14) return null;
-  const a = series.slice(-7).reduce((s, v) => s + v, 0);
-  const b = series.slice(-14, -7).reduce((s, v) => s + v, 0);
-  if (a <= 0 || b <= 0) return null;
-  return Math.log(a / b) / 7;
-};
-
 /** =========================
- *  Trend normalize
+ *  Data normalization
  *  ========================= */
 type TrendRow = {
   date: string;
@@ -273,6 +244,25 @@ const normalizeTrend = (trendData: any[]): TrendRow[] => {
   return Object.values(dedup).sort((a, b) => (a.date < b.date ? -1 : 1));
 };
 
+const fillMissingDates = (rows: TrendRow[]) => {
+  if (rows.length < 2) return rows;
+  const out: TrendRow[] = [];
+  for (let i = 0; i < rows.length - 1; i++) {
+    out.push(rows[i]);
+    const cur = rows[i].date;
+    const nxt = rows[i + 1].date;
+    const gap = daysBetweenUTC(cur, nxt);
+    if (gap > 1) {
+      for (let k = 1; k < gap; k++) {
+        const d = addDaysUTC(cur, k);
+        out.push({ date: d, audiCnt: 0, salesAmt: 0, scrnCnt: rows[i].scrnCnt, showCnt: rows[i].showCnt });
+      }
+    }
+  }
+  out.push(rows[rows.length - 1]);
+  return out.sort((a, b) => (a.date < b.date ? -1 : 1));
+};
+
 const findEffectiveStartIndex = (rows: TrendRow[], ratio = 0.30) => {
   const scrns = rows.map((r) => r.scrnCnt ?? 0);
   const maxScrn = Math.max(...scrns, 0);
@@ -283,7 +273,7 @@ const findEffectiveStartIndex = (rows: TrendRow[], ratio = 0.30) => {
 };
 
 /** =========================
- *  DOW multipliers (data-driven + prior blend)
+ *  DOW multipliers: data-driven + prior blend
  *  ========================= */
 const computeDowMultipliers = (rows: TrendRow[]) => {
   const slice = rows.slice(-28);
@@ -301,17 +291,17 @@ const computeDowMultipliers = (rows: TrendRow[]) => {
 
   const mult: Record<DowName, number> = {} as any;
   let dataCount = 0;
+
   for (const k of DOW) {
     const m = median(buckets[k]);
     if (m > 0) dataCount += 1;
     const dataMult = m > 0 ? m / baseline : 1;
-    // 데이터가 적으면 prior를 더 섞음
-    const w = clamp(buckets[k].length / 4, 0, 1); // 0~1
+
+    const w = clamp(buckets[k].length / 4, 0, 1);
     const prior = (CFG.DOW_PRIOR as any)[k] ?? 1;
-    mult[k] = clamp((w * dataMult + (1 - w) * prior), 0.60, 2.70);
+    mult[k] = clamp((w * dataMult + (1 - w) * prior), 0.60, 2.80);
   }
 
-  // 주말 데이터 거의 없으면 최소 보장
   if ((buckets.Sat.length + buckets.Sun.length) < 2) {
     mult.Sat = Math.max(mult.Sat, 1.45);
     mult.Sun = Math.max(mult.Sun, 1.55);
@@ -320,17 +310,17 @@ const computeDowMultipliers = (rows: TrendRow[]) => {
   return { mult, dataCount };
 };
 
-/** =========================
- *  Released model: Screen + APS + Anchor ensemble
- *  ========================= */
-const computeScreenTrend = (rows: TrendRow[]) => {
-  const A = rows.slice(-14, -7).map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0);
-  const B = rows.slice(-7).map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0);
-  const medA = median(A) || median(rows.map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0)) || 1;
-  const medB = median(B) || medA;
-  return clamp(medB / medA, 0.60, 1.45);
+const deSeasonalize = (rows: TrendRow[], mult: Record<DowName, number>) => {
+  return rows.map((r) => {
+    const y = safeNum(r.audiCnt, 0);
+    const m = mult[dowNameOf(r.date)] || 1;
+    return y > 0 ? y / m : 0;
+  });
 };
 
+/** =========================
+ *  Model A: Screen × APS (Structural)
+ *  ========================= */
 const computeApsSeries = (rows: TrendRow[]) => {
   return rows.map((r) => {
     const audi = safeNum(r.audiCnt, 0);
@@ -341,285 +331,541 @@ const computeApsSeries = (rows: TrendRow[]) => {
   });
 };
 
-const fitApsDecay = (rows: TrendRow[], mult: Record<DowName, number>, daySinceRelease: number) => {
+const computeScreenTrend = (rows: TrendRow[]) => {
+  const A = rows.slice(-14, -7).map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0);
+  const B = rows.slice(-7).map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0);
+  const medA = median(A) || median(rows.map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0)) || 1;
+  const medB = median(B) || medA;
+  return clamp(medB / medA, 0.58, 1.55);
+};
+
+const fitApsDecay_LogLinear = (rows: TrendRow[], mult: Record<DowName, number>) => {
   const aps = computeApsSeries(rows);
-  const apsNormAll = rows.map((r, i) => {
+  const apsNorm = rows.map((r, i) => {
     const m = mult[dowNameOf(r.date)] || 1;
     return aps[i] > 0 ? aps[i] / m : 0;
   });
 
-  const win = Math.min(apsNormAll.length, apsNormAll.length >= 21 ? 21 : 14);
-  const start = Math.max(0, apsNormAll.length - win);
-  const recent = apsNormAll.slice(start);
+  const win = Math.min(apsNorm.length, apsNorm.length >= 21 ? 21 : 14);
+  const start = Math.max(0, apsNorm.length - win);
+  const recent = apsNorm.slice(start);
 
   const xs: number[] = [];
-  const ysLog: number[] = [];
+  const ys: number[] = [];
   for (let i = 0; i < recent.length; i++) {
     if (recent[i] > 0) {
       xs.push(i);
-      ysLog.push(Math.log(recent[i]));
+      ys.push(Math.log(recent[i]));
     }
   }
 
-  const fit = robustLogLinearFit(xs, ysLog);
-  const wkSlope = estimateWeeklySlope(apsNormAll);
-
-  let slope = fit.slope;
-  if (wkSlope != null && Number.isFinite(wkSlope)) slope = 0.65 * slope + 0.35 * wkSlope;
-
-  const floor =
-    daySinceRelease < 7 ? CFG.APS_SLOPE.floorD0_6 :
-    daySinceRelease < 14 ? CFG.APS_SLOPE.floorD7_13 :
-    daySinceRelease < 28 ? CFG.APS_SLOPE.floorD14_27 :
-    daySinceRelease < 60 ? CFG.APS_SLOPE.floorD28_59 :
-    CFG.APS_SLOPE.floorD60p;
-
-  // 과소예측 방지: 너무 가파른 감쇠(더 음수)면 완화
-  slope = Math.max(slope, floor);
-
-  // 과대 방지: 너무 완만하면(0에 가까우면) 최소 감쇠 강제
-  slope = Math.min(slope, CFG.APS_SLOPE.ceil);
-
-  // 최종 안전 범위
-  slope = clamp(slope, CFG.APS_SLOPE.hardMin, -0.001);
-
-  return {
-    slope,
-    intercept: fit.intercept,
-    r2: fit.r2,
-    residualStd: fit.residualStd || 0.35,
-    fitWindow: win,
-    fitStartIndex: start,
-    apsNormAll,
-  };
-};
-
-const chooseUpperFactor = (daySinceRelease: number) => {
-  if (daySinceRelease < 7) return CFG.NEXT3_UPPER.d0_6;
-  if (daySinceRelease < 14) return CFG.NEXT3_UPPER.d7_13;
-  if (daySinceRelease < 28) return CFG.NEXT3_UPPER.d14_27;
-  return CFG.NEXT3_UPPER.d28p;
-};
-
-const lastSameDowAnchor = (rows: TrendRow[], targetYmd: string) => {
-  const targetDow = dowNameOf(targetYmd);
-  // 최근 21일에서 같은 요일 가장 최근값 찾기
-  for (let i = rows.length - 1; i >= Math.max(0, rows.length - 21); i--) {
-    if (dowNameOf(rows[i].date) === targetDow && safeNum(rows[i].audiCnt, 0) > 0) {
-      return { date: rows[i].date, audi: safeNum(rows[i].audiCnt, 0), scrn: safeNum(rows[i].scrnCnt, 0) };
-    }
+  if (xs.length < 4) {
+    const base = Math.log(recent.find((v) => v > 0) || 120);
+    return { slope: -0.03, intercept: base, r2: 0, residualStd: 0.35, fitStartIndex: start };
   }
-  return null;
+
+  const { slope, intercept } = linearRegression(xs, ys);
+  const yhat = xs.map((x) => intercept + slope * x);
+  const r2 = rSquared(ys, yhat);
+  const residualStd = stdResidual(ys, yhat);
+
+  const safeSlope = clamp(slope, -0.20, -0.001);
+  return { slope: safeSlope, intercept, r2, residualStd, fitStartIndex: start };
 };
 
-const predictNext3Released = (
+const predictNext3_ScreenAPS = (
   rows: TrendRow[],
   mult: Record<DowName, number>,
-  decay: any,
+  apsDecay: any,
   screenTrend: number,
-  daySinceRelease: number
+  daySince: number
 ) => {
   const lastDate = rows[rows.length - 1]?.date;
-  if (!lastDate) return { next3: [0, 0, 0], anchors: [] as any[] };
+  if (!lastDate) return { next3: [0, 0, 0], debug: {} };
 
-  const upperFactor = chooseUpperFactor(daySinceRelease);
+  const upperFactor =
+    daySince < 7 ? CFG.NEXT3_UPPER.d0_6 :
+    daySince < 14 ? CFG.NEXT3_UPPER.d7_13 :
+    daySince < 28 ? CFG.NEXT3_UPPER.d14_27 :
+    CFG.NEXT3_UPPER.d28p;
 
-  const slice = rows.slice(-28);
-  const weekendVals = slice.filter((r) => safeNum(r.audiCnt, 0) > 0 && isWeekend(r.date)).map((r) => safeNum(r.audiCnt, 0));
-  const weekdayVals = slice.filter((r) => safeNum(r.audiCnt, 0) > 0 && !isWeekend(r.date)).map((r) => safeNum(r.audiCnt, 0));
-  const maxWeekend = weekendVals.length ? Math.max(...weekendVals) : 0;
-  const maxWeekday = weekdayVals.length ? Math.max(...weekdayVals) : 0;
+  const apsRaw = computeApsSeries(rows).slice(-21).filter((v) => v > 0);
+  const apsMax = apsRaw.length ? Math.max(...apsRaw) : 0;
 
   const scrnLast = safeNum(rows[rows.length - 1].scrnCnt, 0);
   const scrnBase = scrnLast > 0 ? scrnLast : (median(rows.map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0)) || 1);
 
-  const apsNormAll = decay.apsNormAll as number[];
-  const tLast = apsNormAll.length - 1;
+  const recent = rows.slice(-7).map((r) => safeNum(r.audiCnt, 0)).filter((v) => v > 0);
+  const recentMax = recent.length ? Math.max(...recent) : 120_000;
+  const recentMin = recent.length ? Math.min(...recent) : 0;
 
-  // APS per screen 물리적 캡(좌석수 없이 가능한 최저 수준의 현실 캡)
-  const apsRaw = computeApsSeries(rows).slice(-21).filter((v) => v > 0);
-  const apsMax = apsRaw.length ? Math.max(...apsRaw) : 0;
-
-  const anchors: any[] = [];
   const out: number[] = [];
-
   for (let i = 1; i <= 3; i++) {
     const date = addDaysUTC(lastDate, i);
     const dow = dowNameOf(date);
 
-    // 1) Model core: APS_norm decay -> APS -> audience
-    const logAps = decay.intercept + decay.slope * (tLast - (decay.fitStartIndex || 0) + i);
-    const apsNormPred = Math.exp(logAps);
-    const apsPred = apsNormPred * (mult[dow] || 1);
+    const x = (rows.length - 1 - (apsDecay.fitStartIndex || 0)) + i;
+    const logAps = apsDecay.intercept + apsDecay.slope * x;
+    const apsNorm = Math.exp(logAps);
+    const apsPred = apsNorm * (mult[dow] || 1);
 
     const scrnPred = scrnBase * Math.pow(screenTrend, i / 3);
-    const modelY = apsPred * scrnPred;
+    let y = apsPred * scrnPred;
 
-    // 2) Anchor: last same DOW (지난주/최근 같은 요일)
-    const a = lastSameDowAnchor(rows, date);
-    let anchorY = 0;
-    if (a) {
-      // 스크린 변화율을 반영해 스케일
-      const scrnScale = (a.scrn > 0 && scrnPred > 0) ? clamp(scrnPred / a.scrn, 0.75, 1.35) : 1;
-      anchorY = a.audi * scrnScale;
-      anchors.push({ target: date, from: a.date, audi: a.audi, scaled: Math.round(anchorY) });
-    } else {
-      anchors.push({ target: date, from: null });
-    }
+    const upper = recentMax * (isWeekend(date) ? upperFactor.weekend : upperFactor.weekday);
+    const lower = Math.max(0, recentMin * 0.55);
 
-    // 3) Ensemble
-    const w = a ? CFG.ANCHOR_BLEND : 0;
-    let y = (1 - w) * modelY + w * anchorY;
-
-    // 4) Caps
-    const weekend = isWeekend(date);
-    const typeMax = weekend ? maxWeekend : maxWeekday;
-    const upper = typeMax > 0
-      ? typeMax * (weekend ? upperFactor.weekend : upperFactor.weekday)
-      : (Math.max(...rows.slice(-7).map((r) => safeNum(r.audiCnt, 0)), 120000) * 1.28);
-
-    const recentMin = Math.min(...rows.slice(-7).map((r) => safeNum(r.audiCnt, 0)).filter((v) => v > 0), 999999999);
-    const lower = Math.max(0, Number.isFinite(recentMin) ? recentMin * 0.55 : 0);
-
-    // APS 물리 캡 (스크린 * 최대 APS * 1.15)
     const physUpper = (apsMax > 0) ? (scrnPred * apsMax * 1.15) : upper;
-    const finalUpper = Math.min(upper, physUpper);
-
-    y = clamp(y, lower, finalUpper);
+    y = clamp(y, lower, Math.min(upper, physUpper));
     out.push(Math.round(y));
   }
 
-  return { next3: out, anchors };
+  return { next3: out, debug: { scrnBase, screenTrend, apsSlope: apsDecay.slope } };
 };
 
-const predictFinalReleased = (
+/** =========================
+ *  Model B: Bass Diffusion (Diffusion Dynamics)
+ *  ========================= */
+const solveBassParams = (a: number, b: number, c: number) => {
+  const disc = b * b - 4 * c * a;
+  if (!Number.isFinite(disc) || disc <= 0 || Math.abs(c) < 1e-12) return null;
+  const sqrt = Math.sqrt(disc);
+  const m1 = (-b + sqrt) / (2 * c);
+  const m2 = (-b - sqrt) / (2 * c);
+
+  const candidates = [m1, m2].filter((m) => Number.isFinite(m) && m > 0);
+  if (!candidates.length) return null;
+
+  const m = Math.max(...candidates);
+  const p = a / m;
+  const q = -c * m;
+
+  if (!(p > 0 && q > 0 && m > 0)) return null;
+
+  const pClamped = clamp(p, 1e-6, 0.12);
+  const qClamped = clamp(q, 1e-6, 1.20);
+
+  return { p: pClamped, q: qClamped, m };
+};
+
+const fitBassOnSeries = (rows: TrendRow[], mult: Record<DowName, number>) => {
+  const y = deSeasonalize(rows, mult);
+  const N: number[] = [];
+  let cum = 0;
+  for (let i = 0; i < y.length; i++) {
+    N.push(cum);
+    cum += y[i];
+  }
+
+  const X1: number[] = [];
+  const X2: number[] = [];
+  const Y: number[] = [];
+  for (let t = 1; t < y.length; t++) {
+    if (y[t] <= 0) continue;
+    const n = N[t];
+    X1.push(n);
+    X2.push(n * n);
+    Y.push(y[t]);
+  }
+
+  if (Y.length < 10) return { ok: false, reason: "too_few_points" as const };
+
+  let s1 = 0, sX = 0, sX2 = 0, sXX = 0, sXX2 = 0, sX2X2 = 0;
+  let sY = 0, sXY = 0, sX2Y = 0;
+  const n = Y.length;
+
+  for (let i = 0; i < n; i++) {
+    const x = X1[i];
+    const x2 = X2[i];
+    const yy = Y[i];
+    s1 += 1;
+    sX += x;
+    sX2 += x2;
+    sXX += x * x;
+    sXX2 += x * x2;
+    sX2X2 += x2 * x2;
+    sY += yy;
+    sXY += x * yy;
+    sX2Y += x2 * yy;
+  }
+
+  const A = [
+    [s1, sX, sX2],
+    [sX, sXX, sXX2],
+    [sX2, sXX2, sX2X2],
+  ];
+  const B = [sY, sXY, sX2Y];
+
+  const det3 = (M: number[][]) =>
+    M[0][0] * (M[1][1] * M[2][2] - M[1][2] * M[2][1]) -
+    M[0][1] * (M[1][0] * M[2][2] - M[1][2] * M[2][0]) +
+    M[0][2] * (M[1][0] * M[2][1] - M[1][1] * M[2][0]);
+
+  const detA = det3(A);
+  if (Math.abs(detA) < 1e-12) return { ok: false, reason: "singular" as const };
+
+  const replaceCol = (col: number) => {
+    const M = A.map((row) => [...row]);
+    for (let i = 0; i < 3; i++) M[i][col] = B[i];
+    return M;
+  };
+
+  const detA0 = det3(replaceCol(0));
+  const detA1 = det3(replaceCol(1));
+  const detA2 = det3(replaceCol(2));
+
+  const a = detA0 / detA;
+  const b = detA1 / detA;
+  const c = detA2 / detA;
+
+  const params = solveBassParams(a, b, c);
+  if (!params) return { ok: false, reason: "invalid_params" as const, a, b, c };
+
+  const yhat: number[] = [];
+  const yobs: number[] = [];
+  for (let t = 1; t < y.length; t++) {
+    if (y[t] <= 0) continue;
+    const nPrev = N[t];
+    const pred = a + b * nPrev + c * nPrev * nPrev;
+    yhat.push(pred);
+    yobs.push(y[t]);
+  }
+  const r2 = rSquared(yobs, yhat);
+  const residualStd = stdResidual(yobs, yhat);
+
+  return { ok: true as const, a, b, c, ...params, r2, residualStd };
+};
+
+const predictNext3_Bass = (rows: TrendRow[], mult: Record<DowName, number>, bassFit: any) => {
+  const lastDate = rows[rows.length - 1]?.date;
+  if (!lastDate || !bassFit?.ok) return [0, 0, 0];
+
+  const { p, q, m } = bassFit;
+
+  const y = deSeasonalize(rows, mult);
+  let N = y.reduce((s, v) => s + v, 0);
+
+  const out: number[] = [];
+  for (let i = 1; i <= 3; i++) {
+    const date = addDaysUTC(lastDate, i);
+    const dow = dowNameOf(date);
+
+    const adoption = (p + (q * (N / m))) * (m - N);
+    const yDeseason = Math.max(0, adoption);
+    const yRaw = yDeseason * (mult[dow] || 1);
+
+    out.push(Math.round(yRaw));
+    N += yDeseason;
+  }
+  return out;
+};
+
+/** =========================
+ *  Model C: State-space (Kalman local linear trend)
+ *  ========================= */
+const kalmanLocalLinear = (z: number[]) => {
+  let level = z[0] ?? 0;
+  let slope = (z.length >= 2) ? (z[1] - z[0]) : 0;
+
+  let P00 = 1, P01 = 0, P10 = 0, P11 = 1;
+
+  const diffs = z.slice(1).map((v, i) => v - z[i]);
+  const obsVar = Math.max(0.10, (median(diffs.map((d) => d * d)) || 0.25));
+  const qLevel = obsVar * 0.15;
+  const qSlope = obsVar * 0.02;
+
+  for (let t = 1; t < z.length; t++) {
+    const levelPred = level + slope;
+    const slopePred = slope;
+
+    const P00p = P00 + P01 + P10 + P11 + qLevel;
+    const P01p = P01 + P11;
+    const P10p = P10 + P11;
+    const P11p = P11 + qSlope;
+
+    const S = P00p + obsVar;
+    const K0 = P00p / S;
+    const K1 = P10p / S;
+
+    const y = z[t] - levelPred;
+    level = levelPred + K0 * y;
+    slope = slopePred + K1 * y;
+
+    P00 = (1 - K0) * P00p;
+    P01 = (1 - K0) * P01p;
+    P10 = P10p - K1 * P00p;
+    P11 = P11p - K1 * P01p;
+  }
+
+  return { level, slope, obsVar, qLevel, qSlope };
+};
+
+const predictNext3_Kalman = (rows: TrendRow[], mult: Record<DowName, number>) => {
+  const lastDate = rows[rows.length - 1]?.date;
+  if (!lastDate) return [0, 0, 0];
+
+  const yDeseason = deSeasonalize(rows, mult);
+  const z = yDeseason.map((v) => Math.log(v + 1));
+  const fit = kalmanLocalLinear(z);
+
+  const out: number[] = [];
+  for (let i = 1; i <= 3; i++) {
+    const date = addDaysUTC(lastDate, i);
+    const dow = dowNameOf(date);
+
+    const zPred = fit.level + fit.slope * i;
+    const yDeseasonPred = Math.max(0, Math.round(Math.exp(zPred) - 1));
+    const yRaw = yDeseasonPred * (mult[dow] || 1);
+    out.push(Math.round(yRaw));
+  }
+  return out;
+};
+
+/** =========================
+ *  Ensemble weighting (fit-based)
+ *  ========================= */
+const mapeLastK = (actual: number[], pred: number[], k = 7) => {
+  const n = Math.min(k, actual.length, pred.length);
+  if (n <= 0) return 9e9;
+  let s = 0, c = 0;
+  for (let i = actual.length - n; i < actual.length; i++) {
+    const a = actual[i];
+    const p = pred[i];
+    if (a > 0) { s += Math.abs((a - p) / a); c += 1; }
+  }
+  return c ? (s / c) : 9e9;
+};
+
+const softmaxWeights = (scores: number[]) => {
+  const m = Math.max(...scores);
+  const exps = scores.map((s) => Math.exp(s - m));
+  const sum = exps.reduce((a, b) => a + b, 0) || 1;
+  return exps.map((e) => e / sum);
+};
+
+const backcast_ScreenAPS = (rows: TrendRow[], mult: Record<DowName, number>, apsDecay: any) => {
+  const aps = computeApsSeries(rows);
+  const apsMax = Math.max(...aps.slice(-21).filter((v) => v > 0), 0);
+
+  const out: number[] = [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const scrn = safeNum(r.scrnCnt, 0);
+    const dow = dowNameOf(r.date);
+    if (i === 0 || scrn <= 0) { out.push(safeNum(r.audiCnt, 0)); continue; }
+
+    const x = i - (apsDecay.fitStartIndex || 0);
+    const logAps = apsDecay.intercept + apsDecay.slope * x;
+    const apsNorm = Math.exp(logAps);
+    const apsPred = apsNorm * (mult[dow] || 1);
+    const y = scrn * apsPred;
+    const cap = apsMax > 0 ? scrn * apsMax * 1.2 : y;
+    out.push(Math.round(Math.min(y, cap)));
+  }
+  return out;
+};
+
+const backcast_Bass = (rows: TrendRow[], mult: Record<DowName, number>, bassFit: any) => {
+  if (!bassFit?.ok) return rows.map((r) => safeNum(r.audiCnt, 0));
+  const { p, q, m } = bassFit;
+
+  const yDeseason = deSeasonalize(rows, mult);
+  let N = 0;
+  const out: number[] = [];
+
+  for (let t = 0; t < rows.length; t++) {
+    const date = rows[t].date;
+    const dow = dowNameOf(date);
+    const adopt = (p + (q * (N / m))) * (m - N);
+    const yD = Math.max(0, adopt);
+    const yRaw = yD * (mult[dow] || 1);
+    out.push(Math.round(yRaw));
+
+    // online 업데이트: 실제 누적으로 N 업데이트
+    N += yDeseason[t];
+  }
+  return out;
+};
+
+const backcast_Kalman = (rows: TrendRow[], mult: Record<DowName, number>) => {
+  const yDeseason = deSeasonalize(rows, mult);
+  const z = yDeseason.map((v) => Math.log(v + 1));
+  const fit = kalmanLocalLinear(z);
+  const out: number[] = [];
+  for (let i = 0; i < rows.length; i++) {
+    const date = rows[i].date;
+    const dow = dowNameOf(date);
+    const zHat = (z[0] ?? 0) + fit.slope * i;
+    const yD = Math.max(0, Math.exp(zHat) - 1);
+    out.push(Math.round(yD * (mult[dow] || 1)));
+  }
+  return out;
+};
+
+const ensembleNext3 = (nextA: number[], nextB: number[], nextC: number[], w: number[]) => {
+  const out = [0, 0, 0];
+  for (let i = 0; i < 3; i++) {
+    out[i] = Math.round(w[0] * nextA[i] + w[1] * nextB[i] + w[2] * nextC[i]);
+  }
+  return out;
+};
+
+/** =========================
+ *  ✅ daySince 폭주 방지 3중 락
+ *  ========================= */
+const phaseCapFactor = (daySince: number, weekend: boolean) => {
+  if (daySince < 7)  return weekend ? 2.4 : 1.8;
+  if (daySince < 14) return weekend ? 1.9 : 1.5;
+  if (daySince < 28) return weekend ? 1.55 : 1.25;
+  if (daySince < 60) return weekend ? 1.35 : 1.15;
+  return weekend ? 1.22 : 1.10;
+};
+
+const growthCap = (daySince: number, weekend: boolean) => {
+  if (daySince < 7)  return weekend ? 2.2 : 1.7;
+  if (daySince < 14) return weekend ? 1.8 : 1.45;
+  if (daySince < 28) return weekend ? 1.55 : 1.25;
+  return weekend ? 1.35 : 1.15;
+};
+
+const applyDaySinceLocks = (
+  rows: TrendRow[],
+  next3: number[],
+  daySince: number,
+  mult: Record<DowName, number>,
+  screenTrend: number
+) => {
+  if (!rows.length) return next3;
+
+  const last = rows[rows.length - 1];
+  const lastDate = last.date;
+
+  const last1 = safeNum(last.audiCnt, 0);
+  const recent = rows.slice(-7).map(r => safeNum(r.audiCnt, 0)).filter(v => v > 0);
+  const recentMax = recent.length ? Math.max(...recent) : 0;
+  const recentMin = recent.length ? Math.min(...recent) : 0;
+
+  // 물리 캡: scrnPred × APS95 (APS는 raw에서 계산, 95p로 이상치 영향 줄임)
+  const aps = rows.map(r => {
+    const a = safeNum(r.audiCnt, 0);
+    const s = safeNum(r.scrnCnt, 0);
+    return (a > 0 && s > 0) ? (a / s) : 0;
+  }).filter(v => v > 0);
+
+  const aps95 = percentile(aps.slice(-21), 0.95) || percentile(aps, 0.95) || 0;
+
+  const scrnBase =
+    safeNum(last.scrnCnt, 0) ||
+    median(rows.map(r => safeNum(r.scrnCnt, 0)).filter(v => v > 0)) ||
+    1;
+
+  const out: number[] = [];
+  let prev = last1;
+
+  for (let i = 1; i <= 3; i++) {
+    const date = addDaysUTC(lastDate, i);
+    const dow = dowNameOf(date);
+    const wk = isWeekend(date);
+
+    // 1) 같은 요일 중앙값 캡
+    const sameMed = sameDowMedian(rows, dow, 28);
+    const capSameDow = sameMed > 0 ? sameMed * phaseCapFactor(daySince, wk) : Infinity;
+
+    // 2) 전일 대비 성장률 캡
+    const capGrowth = prev > 0 ? prev * growthCap(daySince, wk) : Infinity;
+
+    // 3) 물리 캡(스크린 트렌드 반영)
+    const scrnPred = scrnBase * Math.pow(clamp(screenTrend, 0.75, 1.25), i / 7);
+    const capPhysical = (aps95 > 0) ? (scrnPred * aps95 * 1.15) : Infinity;
+
+    // 4) 후반부 추가 제한: 최근 최대치 기반(후반 평일 폭주 억제)
+    const capRecent =
+      daySince >= 14 && recentMax > 0
+        ? recentMax * (wk ? 1.25 : 1.10)
+        : Infinity;
+
+    const hardCap = Math.min(capSameDow, capGrowth, capPhysical, capRecent);
+
+    // 하한: 너무 과소 방지(최근 최저의 55%)
+    const floor = Math.max(0, recentMin * 0.55);
+
+    const y = Math.round(clamp(next3[i - 1], floor, Number.isFinite(hardCap) ? hardCap : next3[i - 1]));
+    out.push(y);
+    prev = y;
+  }
+
+  return out;
+};
+
+/** =========================
+ *  Final range simulation (finite horizon + caps)
+ *  ========================= */
+const predictFinalRange_StructuralTail = (
   rows: TrendRow[],
   mult: Record<DowName, number>,
-  decay: any,
-  screenTrend: number,
   currentAcc: number,
-  daySinceRelease: number
+  daySince: number,
+  screenTrend: number,
+  apsDecay: any
 ) => {
   const lastDate = rows[rows.length - 1]?.date;
-  if (!lastDate) return { min: currentAcc, max: currentAcc, avg: currentAcc, horizon: 60 };
+  if (!lastDate) return { min: currentAcc, avg: currentAcc, max: currentAcc };
 
-  // finite horizon (너무 짧게 잡아 과소예측이 나오는 걸 방지)
-  const horizon = Math.round(clamp(180 - daySinceRelease, 35, 120));
+  const last7Sum = rows.slice(-7).map(r => safeNum(r.audiCnt, 0)).reduce((a, b) => a + b, 0);
+  const capByAcc = currentAcc * CFG.REMAINING_CAP.byAccFactor(daySince);
+  const capByRun = last7Sum * CFG.REMAINING_CAP.byRunRateWeeks(daySince);
+  const remainingCap = Math.max(capByAcc, capByRun) * clamp(screenTrend, 0.80, 1.20);
 
-  const last7 = rows.slice(-7).map((r) => safeNum(r.audiCnt, 0));
-  const runRate7 = last7.reduce((s, v) => s + v, 0);
+  const horizon = Math.round(clamp(180 - daySince, 40, 120));
+  const stopThreshold = 650;
 
-  const capByAcc = currentAcc * CFG.REMAINING_CAP.byAccFactor(daySinceRelease);
-  const capByRun = runRate7 * CFG.REMAINING_CAP.byRunRateWeeks(daySinceRelease);
-
-  const remainingCap = Math.max(capByAcc, capByRun) * clamp(screenTrend, 0.78, 1.18);
-
-  const apsNormAll = decay.apsNormAll as number[];
-  const tLast = apsNormAll.length - 1;
+  const apsRaw = computeApsSeries(rows).slice(-21).filter((v) => v > 0);
+  const aps95 = percentile(apsRaw, 0.95) || (apsRaw.length ? Math.max(...apsRaw) : 0);
 
   const scrnLast = safeNum(rows[rows.length - 1].scrnCnt, 0);
   const scrnBase = scrnLast > 0 ? scrnLast : (median(rows.map((r) => safeNum(r.scrnCnt, 0)).filter((v) => v > 0)) || 1);
 
-  const stopThreshold = 650;
-  const stopAfter = 14;
+  const residualStd = clamp(apsDecay?.residualStd ?? 0.35, 0.18, 0.80);
 
-  const simulate = (zLog: number) => {
+  const simulate = (z: number) => {
     let sum = 0;
-    let below = 0;
     for (let i = 1; i <= horizon; i++) {
       const date = addDaysUTC(lastDate, i);
       const dow = dowNameOf(date);
 
-      // tail에서 slope 약간 가속(과대 방지). 단 초반에는 가속 최소
-      const tailBoost = (daySinceRelease >= 14 && i > 21) ? 1.10 : 1.0;
-      const slopeEff = decay.slope * tailBoost;
-
-      const logAps = decay.intercept + slopeEff * (tLast - (decay.fitStartIndex || 0) + i) + zLog;
-      const apsNormPred = Math.exp(logAps);
-      const apsPred = apsNormPred * (mult[dow] || 1);
+      const x = (rows.length - 1 - (apsDecay.fitStartIndex || 0)) + i;
+      const logAps = apsDecay.intercept + apsDecay.slope * x + z;
+      const apsNorm = Math.exp(logAps);
+      const apsPred = apsNorm * (mult[dow] || 1);
 
       const scrnPred = scrnBase * Math.pow(screenTrend, i / 7);
-      const yi = Math.max(0, Math.round(apsPred * scrnPred));
+      let yi = apsPred * scrnPred;
 
+      const physUpper = aps95 > 0 ? scrnPred * aps95 * 1.15 : yi;
+      yi = Math.min(yi, physUpper);
+
+      yi = Math.max(0, Math.round(yi));
       sum += yi;
 
-      if (yi < stopThreshold && i > stopAfter) below += 1;
-      else below = 0;
-
-      if (below >= 7) break;
+      if (i > 14 && yi < stopThreshold) break;
       if (sum >= remainingCap) { sum = remainingCap; break; }
     }
     return sum;
   };
 
-  const std = decay.residualStd || 0.35;
   const extraAvg = simulate(0);
-  const extraMin = simulate(-1.0 * std);
-  const extraMax = simulate(+1.0 * std);
-
-  const min = Math.max(currentAcc + Math.round(extraMin), currentAcc);
-  const avg = Math.max(currentAcc + Math.round(extraAvg), currentAcc);
-  const max = Math.max(currentAcc + Math.round(extraMax), currentAcc);
-
-  return { min, avg, max, horizon };
-};
-
-type ReleasedModel = {
-  mode: "RELEASED";
-  effectiveOpenDate: string;
-  daySinceRelease: number;
-  multipliers: Record<DowName, number>;
-  screenTrend: number;
-  apsDecay: any;
-  next3: number[];
-  finalPred: { min: number; max: number; avg: number };
-  debug: any;
-};
-
-const buildReleasedModel = (trendData: any[], currentAudiAcc: any): ReleasedModel => {
-  const rowsAll = normalizeTrend(trendData);
-  const startIndex = findEffectiveStartIndex(rowsAll, 0.30);
-  const rows = rowsAll.slice(startIndex);
-
-  const effectiveOpenDate = rows[0]?.date || (rowsAll[0]?.date ?? "");
-  const lastDate = rows[rows.length - 1]?.date || effectiveOpenDate;
-
-  const daySinceRelease = Math.max(0, daysBetweenUTC(effectiveOpenDate, lastDate));
-  const { mult, dataCount } = computeDowMultipliers(rows);
-
-  const screenTrend = computeScreenTrend(rows);
-  const apsDecay = fitApsDecay(rows, mult, daySinceRelease);
-
-  const { next3, anchors } = predictNext3Released(rows, mult, apsDecay, screenTrend, daySinceRelease);
-
-  const curAcc = safeNum(currentAudiAcc, 0);
-  const finalSim = predictFinalReleased(rows, mult, apsDecay, screenTrend, curAcc, daySinceRelease);
+  const extraMin = simulate(-1.0 * residualStd);
+  const extraMax = simulate(+1.0 * residualStd);
 
   return {
-    mode: "RELEASED",
-    effectiveOpenDate,
-    daySinceRelease,
-    multipliers: mult,
-    screenTrend,
-    apsDecay,
-    next3,
-    finalPred: { min: finalSim.min, max: finalSim.max, avg: finalSim.avg },
-    debug: {
-      rowsAll: rowsAll.length,
-      rowsUsed: rows.length,
-      lastDate,
-      dataCount,
-      anchors,
-      horizon: finalSim.horizon,
-      last7: rows.slice(-7).map(r => ({ date: r.date, audi: r.audiCnt, scrn: r.scrnCnt })),
-      apsSlope: apsDecay.slope,
-      apsR2: apsDecay.r2,
-    }
+    min: Math.max(currentAcc + Math.round(extraMin), currentAcc),
+    avg: Math.max(currentAcc + Math.round(extraAvg), currentAcc),
+    max: Math.max(currentAcc + Math.round(extraMax), currentAcc),
   };
 };
 
 /** =========================
- *  Unreleased model (reservation-based; only internal inputs)
+ *  Unreleased model (reservation-only)
  *  ========================= */
 type UnreleasedModel = {
   mode: "UNRELEASED";
@@ -629,7 +875,6 @@ type UnreleasedModel = {
     latestRate: number;
     latestCnt: number;
     rateMomentum: number;
-    cntMomentum: number;
     inferredFrom: "val_audi" | "rate_assumption" | "fallback_min";
   };
   opening3: number[];
@@ -649,7 +894,6 @@ const inferLegsByGenre = (movieInfo: any) => {
     (movieInfo?.genreAlt) ||
     (Array.isArray(movieInfo?.genres) ? movieInfo.genres.map((g: any) => g.genreNm).join(", ") : "") ||
     "";
-
   const g = (genreText || "").toLowerCase();
   if (g.includes("공포") || g.includes("horror") || g.includes("thriller") || g.includes("스릴러")) return { legs: CFG.LEGS_PRIOR.horror, genreText };
   if (g.includes("애니") || g.includes("animation") || g.includes("가족") || g.includes("family")) return { legs: CFG.LEGS_PRIOR.animation, genreText };
@@ -663,19 +907,16 @@ const buildUnreleasedModel = (openDate: string, historyData: any[], movieInfo: a
   const daysToOpen = openDate && openDate.length === 8 ? daysBetweenUTC(today, openDate) : 0;
 
   const series = Array.isArray(historyData) ? historyData.slice(-24) : [];
-  const rates = series.map((d: any) => safeNum(d.rate, 0));       // %
-  const cnts = series.map((d: any) => safeNum(d.val_audi, 0));    // 예매량 또는 유사량
+  const rates = series.map((d: any) => safeNum(d.rate, 0));     // %
+  const cnts  = series.map((d: any) => safeNum(d.val_audi, 0)); // 예매량(있으면)
 
   const latestRate = rates.length ? rates[rates.length - 1] : 0;
   const latestCntRaw = cnts.length ? cnts[cnts.length - 1] : 0;
-
   const rateMomentum = computeMomentum(rates);
-  const cntMomentum = cnts.length >= 2 ? (latestCntRaw - cnts[cnts.length - 2]) : 0;
 
-  const dow = openDate ? dowNameOf(openDate) : "Fri";
-  const weekendOpen = (dow === "Fri" || dow === "Sat" || dow === "Sun");
+  const d0 = openDate || today;
+  const weekendOpen = (dowNameOf(d0) === "Fri" || dowNameOf(d0) === "Sat" || dowNameOf(d0) === "Sun");
 
-  // 1) 예매량(latestCnt) 확정: val_audi가 유효하면 사용, 아니면 rate로 환산, 그것도 없으면 최소치
   let latestCnt = 0;
   let inferredFrom: UnreleasedModel["reservation"]["inferredFrom"] = "fallback_min";
 
@@ -687,57 +928,53 @@ const buildUnreleasedModel = (openDate: string, historyData: any[], movieInfo: a
     latestCnt = Math.round(pool * (latestRate / 100));
     inferredFrom = "rate_assumption";
   } else {
-    latestCnt = CFG.OPENING_CAP.min; // 0 근처 방지: 최소 앵커
+    latestCnt = CFG.OPENING_CAP.min;
     inferredFrom = "fallback_min";
   }
 
-  // 2) walk-up(현장/당일) 계수
   const baseWalkup = weekendOpen ? CFG.WALKUP.weekendBase : CFG.WALKUP.weekdayBase;
-  const momentumAdj = clamp(rateMomentum * CFG.WALKUP.momentumAdjScale, -0.18, 0.25);
+  const momentumAdj = clamp(rateMomentum * CFG.WALKUP.momentumAdjScale, -0.20, 0.28);
   const walkup = clamp(baseWalkup + momentumAdj, CFG.WALKUP.clamp.lo, CFG.WALKUP.clamp.hi);
 
-  // 3) 오프닝데이: reserved * (1 + walkup)
   let openDay = Math.round(latestCnt * (1 + walkup));
   openDay = clamp(openDay, CFG.OPENING_CAP.min, CFG.OPENING_CAP.max);
 
-  // 4) 오프닝 3일: 요일 패턴 prior (데이터 없을 때도 자연스러운 형태 유지)
-  const dowMult: Record<DowName, number> = { Mon: 1.00, Tue: 1.00, Wed: 1.05, Thu: 1.12, Fri: 1.38, Sat: 1.95, Sun: 1.75 };
-  const d0 = openDate || today;
+  // 요일 오프닝 프로파일
+  const dowMult: Record<DowName, number> = { Mon: 1.00, Tue: 1.00, Wed: 1.05, Thu: 1.12, Fri: 1.45, Sat: 2.05, Sun: 1.80 };
   const d1 = addDaysUTC(d0, 1);
   const d2 = addDaysUTC(d0, 2);
-
-  // openDay가 d0 기준이니 base로 역산해 d1/d2로 확장
   const base = openDay / (dowMult[dowNameOf(d0)] || 1);
   const o0 = Math.round(base * (dowMult[dowNameOf(d0)] || 1));
   const o1 = Math.round(base * (dowMult[dowNameOf(d1)] || 1));
   const o2 = Math.round(base * (dowMult[dowNameOf(d2)] || 1));
 
-  // 5) 최종 관객: opener3 * legs(genre prior) * rate-adjust(완만)
   const { legs, genreText } = inferLegsByGenre(movieInfo);
 
   const rateAdj =
-    latestRate >= 20 ? 1.18 :
-    latestRate >= 10 ? 1.08 :
-    latestRate >= 5  ? 1.00 :
-    latestRate > 0   ? 0.92 : 0.96;
+    latestRate >= 20 ? 1.22 :
+    latestRate >= 10 ? 1.10 :
+    latestRate >= 5  ? 1.02 :
+    latestRate > 0   ? 0.94 : 0.98;
 
   const opener3 = o0 + o1 + o2;
 
-  // 개봉일까지 너무 멀면(예: 30일+) 숫자 과장 방지 위해 legs를 약간 눌러서 “리포팅은 하되” 과장은 줄임
-  const distanceAdj = daysToOpen >= 30 ? 0.88 : daysToOpen >= 14 ? 0.94 : 1.00;
+  // 개봉까지 멀수록 레인지 폭만 넓힘(숫자 0수렴 방지)
+  const distanceAdj =
+    daysToOpen >= 30 ? 0.94 :
+    daysToOpen >= 14 ? 0.98 : 1.00;
 
   const avg = Math.round(opener3 * legs.avg * rateAdj * distanceAdj);
-  const min = Math.round(opener3 * legs.min * clamp(rateAdj - 0.06, 0.75, 1.25) * distanceAdj);
-  const max = Math.round(opener3 * legs.max * clamp(rateAdj + 0.06, 0.75, 1.35) * distanceAdj);
+  const min = Math.round(opener3 * legs.min * clamp(rateAdj - 0.06, 0.80, 1.30) * distanceAdj);
+  const max = Math.round(opener3 * legs.max * clamp(rateAdj + 0.06, 0.80, 1.40) * distanceAdj);
 
   return {
     mode: "UNRELEASED",
     openDate: d0,
     daysToOpen,
-    reservation: { latestRate, latestCnt, rateMomentum, cntMomentum, inferredFrom },
+    reservation: { latestRate, latestCnt, rateMomentum, inferredFrom },
     opening3: [o0, o1, o2],
     finalPred: { min: Math.min(min, avg), avg, max: Math.max(max, avg) },
-    debug: { genreText, legs, walkup, rateAdj, distanceAdj, dows: [dowNameOf(d0), dowNameOf(d1), dowNameOf(d2)] }
+    debug: { genreText, legs, walkup, rateAdj, distanceAdj, dows: [dowNameOf(d0), dowNameOf(d1), dowNameOf(d2)] },
   };
 };
 
@@ -745,7 +982,6 @@ const buildUnreleasedModel = (openDate: string, historyData: any[], movieInfo: a
  *  Handler
  *  ========================= */
 export default async function handler(req, res) {
-  // CORS
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
@@ -763,10 +999,10 @@ export default async function handler(req, res) {
       currentAudiAcc,
       historyData,
       productionCost,
-      salesAcc,
       audiAcc,
       avgTicketPrice,
-      peopleContext, // optional: 사용자가 "검증된" 감독/배우 대표작/성과 텍스트를 넣을 때만
+      peopleContext, // (선택) 검증된 필모/성과 텍스트를 직접 주면 그걸만 기반으로 분석
+      useLLM,        // (선택) true면 LLM로 문장만 보강
     } = req.body;
 
     const todayKST = getKST_YYYYMMDD();
@@ -775,15 +1011,9 @@ export default async function handler(req, res) {
     const openDateRaw = (movieInfo?.openDt || "").toString();
     const openDate = (openDateRaw && openDateRaw.length === 8) ? openDateRaw : "";
 
-    const rowsAll = normalizeTrend(trendData);
-    const hasDaily = rowsAll.length >= 6;
-    const isUnreleased = openDate ? (openDate > todayKST) : (!hasDaily);
-
-    // People (표시/해석용)
     const directors = movieInfo?.directors?.map((d: any) => d.peopleNm).join(", ") || "Unknown Director";
     const actors = movieInfo?.actors?.slice(0, 5).map((a: any) => a.peopleNm).join(", ") || "Unknown Actors";
 
-    // BEP context (있으면)
     let bepContext = "Production cost unknown.";
     if (productionCost && Number(productionCost) > 0) {
       const cost = Number(productionCost);
@@ -793,16 +1023,24 @@ export default async function handler(req, res) {
       bepContext = `Production Cost: ${Math.round(cost)} KRW. Avg Ticket Price: ${Math.round(atp)} KRW. BEP Target: approx ${bepAudi}. Progress: ${percent}%.`;
     }
 
-    // -------- model outputs (numbers are decided here, not by LLM) --------
+    // Trend 준비
+    let rowsAll = normalizeTrend(trendData);
+    rowsAll = fillMissingDates(rowsAll);
+
+    const hasDaily = rowsAll.length >= 6;
+    const isUnreleased = openDate ? (openDate > todayKST) : (!hasDaily);
+
+    // ---- Forecast numbers (no extra APIs) ----
     let baseForecast3: number[] = [0, 0, 0];
     let baseFinal = { min: 0, max: 0, avg: 0 };
-    let modelSignals: any = {};
-    let forecastLabel = "NEXT_3_DAYS";
+    let forecastLabel = "";
     let forecastDates = "";
+    let modelSignals: any = {};
 
     if (isUnreleased) {
-      const inferredOpen = openDate || todayKST; // openDt가 없으면 today 기준 리포팅
+      const inferredOpen = openDate || todayKST;
       const pre = buildUnreleasedModel(inferredOpen, historyData, movieInfo);
+
       baseForecast3 = pre.opening3;
       baseFinal = pre.finalPred;
       modelSignals = pre;
@@ -812,34 +1050,124 @@ export default async function handler(req, res) {
       const d1 = addDaysUTC(d0, 1);
       const d2 = addDaysUTC(d0, 2);
       forecastDates = `${d0} ${getDayContext(d0)} | ${d1} ${getDayContext(d1)} | ${d2} ${getDayContext(d2)}`;
-    } else {
-      const rel = buildReleasedModel(trendData, currentAudiAcc);
-      baseForecast3 = rel.next3;
-      baseFinal = rel.finalPred;
-      modelSignals = rel;
 
-      const lastDate = modelSignals?.debug?.lastDate || (rowsAll.length ? rowsAll[rowsAll.length - 1].date : todayKST);
+    } else {
+      // effective window
+      const startIndex = findEffectiveStartIndex(rowsAll, 0.30);
+      const rows = rowsAll.slice(startIndex);
+
+      const effectiveOpenDate = rows[0]?.date || rowsAll[0]?.date || todayKST;
+      const lastDate = rows[rows.length - 1]?.date || todayKST;
+      const daySince = Math.max(0, daysBetweenUTC(effectiveOpenDate, lastDate));
+
+      const { mult, dataCount } = computeDowMultipliers(rows);
+
+      // Model A: Screen×APS
+      const screenTrend = computeScreenTrend(rows);
+      const apsDecay = fitApsDecay_LogLinear(rows, mult);
+      const A = predictNext3_ScreenAPS(rows, mult, apsDecay, screenTrend, daySince).next3;
+
+      // Model B: Bass diffusion
+      const bassFit = fitBassOnSeries(rows, mult);
+
+      // ✅ Bass m 캡(폭주 방지): 누적의 배수로 제한
+      const curAcc = safeNum(currentAudiAcc, 0);
+      if (bassFit.ok && curAcc > 0) {
+        const mCap = curAcc * CFG.BASS_M_CAP(daySince);
+        bassFit.m = Math.min(bassFit.m, mCap);
+      }
+
+      const B = predictNext3_Bass(rows, mult, bassFit);
+
+      // Model C: Kalman local trend
+      const C = predictNext3_Kalman(rows, mult);
+
+      // Weighting by recent MAPE
+      const actual = rows.map((r) => safeNum(r.audiCnt, 0));
+      const backA = backcast_ScreenAPS(rows, mult, apsDecay);
+      const backB = backcast_Bass(rows, mult, bassFit);
+      const backC = backcast_Kalman(rows, mult);
+
+      const eA = mapeLastK(actual, backA, 7);
+      const eB = mapeLastK(actual, backB, 7);
+      const eC = mapeLastK(actual, backC, 7);
+
+      // score = -error + 초반 Bass 과신 패널티
+      const bassPenalty = (daySince < 7) ? 0.55 : (daySince < 14 ? 0.25 : 0.0);
+      const sA = -eA;
+      const sB = -(eB + bassPenalty);
+      const sC = -eC;
+
+      let w = softmaxWeights([sA, sB, sC]);
+
+      // 과소예측 방지: 구조모델(A) 최소 비중 확보
+      const minA = CFG.MIN_ANCHOR_BLEND;
+      if (w[0] < minA) {
+        const rest = 1 - minA;
+        const sumRest = (w[1] + w[2]) || 1;
+        w = [minA, rest * (w[1] / sumRest), rest * (w[2] / sumRest)];
+      }
+
+      baseForecast3 = ensembleNext3(A, B, C, w);
+
+      // ✅ 핵심: daySince 기반 폭주 방지 3중 락 적용(몇백만 튐 차단)
+      baseForecast3 = applyDaySinceLocks(rows, baseForecast3, daySince, mult, screenTrend);
+
+      // Final range (finite horizon + caps)
+      const final = predictFinalRange_StructuralTail(rows, mult, curAcc, daySince, screenTrend, apsDecay);
+      baseFinal = { min: final.min, max: final.max, avg: final.avg };
+
+      forecastLabel = "NEXT_3_DAYS";
       const d1 = addDaysUTC(lastDate, 1);
       const d2 = addDaysUTC(lastDate, 2);
       const d3 = addDaysUTC(lastDate, 3);
       forecastDates = `${d1} ${getDayContext(d1)} | ${d2} ${getDayContext(d2)} | ${d3} ${getDayContext(d3)}`;
+
+      modelSignals = {
+        mode: "RELEASED_ENSEMBLE_LOCKED",
+        effectiveOpenDate,
+        lastDate,
+        daySince,
+        dataCount,
+        weights: { screenAPS: w[0], bass: w[1], kalman: w[2] },
+        next3_byModel: { screenAPS: A, bass: B, kalman: C },
+        next3_locked: baseForecast3,
+        errors: { mape7_screenAPS: eA, mape7_bass: eB, mape7_kalman: eC },
+        bassFit: bassFit.ok ? { p: bassFit.p, q: bassFit.q, m: Math.round(bassFit.m), r2: bassFit.r2 } : { ok: false, reason: bassFit.reason },
+        apsDecay: { slope: apsDecay.slope, r2: apsDecay.r2, residualStd: apsDecay.residualStd },
+        screenTrend,
+      };
     }
 
-    // -------- Build prompt (LLM은 보고서 문장과 해석만; 숫자는 anchor로 제한) --------
-    const rowsForPrompt = rowsAll.slice(-14);
-    const recentTrend = rowsForPrompt.length
-      ? rowsForPrompt.map((d: any) => {
-          const dayContext = getDayContext(d.date);
-          return `[${d.date} ${dayContext}] Audi: ${safeNum(d.audiCnt, 0)}, Sales: ${safeNum(d.salesAmt, 0)}, Scrn: ${safeNum(d.scrnCnt, 0)}, Show: ${safeNum(d.showCnt, 0)}`;
-        }).join("\n")
-      : "No daily trend data";
+    // ---- Report text (LLM optional) ----
+    const useLLMFinal = (typeof useLLM === "boolean") ? useLLM : CFG.USE_LLM_DEFAULT;
 
-    const realtimeTrend = Array.isArray(historyData) && historyData.length
-      ? historyData.slice(-10).map((d: any) => `[${d.time}] Rank: ${d.rank}, Rate: ${d.rate}%, Audi: ${d.val_audi}`).join("\n")
-      : "No realtime/reservation data";
+    const fallbackAnalysis = isUnreleased
+      ? `🎟️ 개봉 전(개봉일: ${openDate || "미상"})으로 판단되어 예매/실시간 지표 기반으로 오프닝을 산출했습니다.\n` +
+        `📈 개봉 3일(개봉일~+2일) 관객 예측: ${baseForecast3.map(n => n.toLocaleString()).join(" / ")}명.\n` +
+        `🎯 최종 관객수는 ${baseFinal.min.toLocaleString()}~${baseFinal.max.toLocaleString()}명(중앙 ${baseFinal.avg.toLocaleString()}명) 범위로 추정됩니다.`
+      : `📌 현재 누적 관객은 ${safeNum(currentAudiAcc, 0).toLocaleString()}명입니다.\n` +
+        `📈 (구조×확산×상태공간 앙상블 + daySince 락) 다음 3일 예측: ${baseForecast3.map(n => n.toLocaleString()).join(" / ")}명.\n` +
+        `🎯 최종 관객수는 ${baseFinal.min.toLocaleString()}~${baseFinal.max.toLocaleString()}명(중앙 ${baseFinal.avg.toLocaleString()}명) 범위로 추정됩니다.`;
 
-    const prompt = `
-Role: Elite Box Office Analyst (Korea) + Senior Data Scientist.
+    let analysisText = fallbackAnalysis;
+    let keywords = [movieName, isUnreleased ? "예매율" : "박스오피스"];
+
+    if (useLLMFinal) {
+      const rowsForPrompt = rowsAll.slice(-14);
+      const recentTrend = rowsForPrompt.length
+        ? rowsForPrompt.map((d: any) => {
+            const dayContext = getDayContext(d.date);
+            return `[${d.date} ${dayContext}] Audi: ${safeNum(d.audiCnt, 0)}, Sales: ${safeNum(d.salesAmt, 0)}, Scrn: ${safeNum(d.scrnCnt, 0)}, Show: ${safeNum(d.showCnt, 0)}`;
+          }).join("\n")
+        : "No daily trend data";
+
+      const realtimeTrend = Array.isArray(historyData) && historyData.length
+        ? historyData.slice(-10).map((d: any) => `[${d.time}] Rank: ${d.rank}, Rate: ${d.rate}%, Audi: ${d.val_audi}`).join("\n")
+        : "No realtime/reservation data";
+
+      const prompt = `
+Role: Elite Box Office Quant + Analyst (Korea).
 
 Target Movie: "${movieName}"
 Key People:
@@ -850,34 +1178,30 @@ ${peopleContext ? `\nVerified People Context (provided by user; ground truth):\n
 Open Date (KOBIS): ${openDate || "Unknown"}
 Today (KST): ${todayKST}
 Now (KST): ${nowKST}
-
 Financial Context: ${bepContext}
 
 Daily Trend (recent 14 days):
 ${recentTrend}
 
-Realtime/Reservation Trend (recent 10):
+Realtime/Reservation (recent 10):
 ${realtimeTrend}
 
 MODEL MODE:
-- Mode: ${isUnreleased ? "UNRELEASED (reservation-based)" : "RELEASED (screen×APS ensemble)"}
-- Forecast Label: ${forecastLabel}
+- Mode: ${isUnreleased ? "UNRELEASED(reservation-only)" : "RELEASED(Structural+Diffusion+StateSpace Ensemble + daySince locks)"}
 - Forecast Dates: ${forecastDates}
-
-HARD ANCHORS (numbers are decided by code; you must stay close):
-- Base Forecast (3 numbers): ${JSON.stringify(baseForecast3)}
-- Base Final Audience Range: ${JSON.stringify(baseFinal)}
+- Base Forecast(3): ${JSON.stringify(baseForecast3)}
+- Base Final Range: ${JSON.stringify(baseFinal)}
 - Model Signals: ${JSON.stringify(modelSignals)}
 
 GUARDRAILS:
-- Do NOT invent filmography facts. If unsure and no peopleContext, speak generally.
-- Forecast must stay within ±${Math.round(CFG.LLM.maxAdjust * 100)}% of Base Forecast unless you cite explicit evidence from input data (trend/reservation).
-- Final audience must remain within Base Final Audience Range.
+- Do NOT invent filmography facts. If unsure and no peopleContext, keep it generic.
+- Forecast numbers must stay within ±${Math.round(CFG.LLM.maxAdjust * 100)}% of base forecast.
+- Final must stay inside baseFinal range.
 
 TASK:
 Write 3 short paragraphs in Korean with emojis:
-1) Momentum summary with 2+ concrete numbers and weekday/weekend context.
-2) People analysis (general, no hallucinated filmography).
+1) Momentum + weekday/weekend context with 2+ concrete numbers.
+2) People & market context (generic if no peopleContext).
 3) Strategy & final prediction (include min/max/avg).
 
 Output STRICT JSON only:
@@ -889,61 +1213,57 @@ Output STRICT JSON only:
 }
 `;
 
-    const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
-      contents: [{ parts: [{ text: prompt }] }],
-      config: { responseMimeType: "application/json", temperature: CFG.LLM.temperature, topP: 0.9 }
-    });
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: "gemini-3-pro-preview",
+        contents: [{ parts: [{ text: prompt }] }],
+        config: { responseMimeType: "application/json", temperature: CFG.LLM.temperature, topP: 0.9 }
+      });
 
-    let text = "{}";
-    if (response?.candidates?.length) {
-      text = response.candidates[0]?.content?.parts?.[0]?.text || "{}";
-    }
+      let text = "{}";
+      if (response?.candidates?.length) text = response.candidates[0]?.content?.parts?.[0]?.text || "{}";
 
-    let result: any;
-    try { result = JSON.parse(cleanJsonString(text)); } catch { result = null; }
+      let result: any = null;
+      try { result = JSON.parse(cleanJsonString(text)); } catch { result = null; }
 
-    // fallback analysis
-    const fallbackAnalysis = isUnreleased
-      ? `🎟️ 아직 개봉 전으로 판단되어(개봉일: ${openDate || "미상"}) 예매/실시간 지표 기반으로 오프닝을 산출했습니다.\n` +
-        `📈 개봉 3일(개봉일~+2일) 관객 예측: ${baseForecast3.map(n => n.toLocaleString()).join(" / ")}명.\n` +
-        `🎯 최종 관객수는 ${baseFinal.min.toLocaleString()}~${baseFinal.max.toLocaleString()}명(중앙 ${baseFinal.avg.toLocaleString()}명) 범위로 추정됩니다.`
-      : `📌 현재 누적 관객은 ${safeNum(currentAudiAcc, 0).toLocaleString()}명입니다.\n` +
-        `📈 (스크린×APS 앙상블) 다음 3일 예측: ${baseForecast3.map(n => n.toLocaleString()).join(" / ")}명.\n` +
-        `🎯 최종 관객수는 ${baseFinal.min.toLocaleString()}~${baseFinal.max.toLocaleString()}명(중앙 ${baseFinal.avg.toLocaleString()}명) 범위로 추정됩니다.`;
+      if (result?.analysis) analysisText = result.analysis;
 
-    const analysisText = result?.analysis || fallbackAnalysis;
-
-    // clamp forecast around base (과장/과소 방지)
-    const forecast = Array.isArray(result?.forecast) && result.forecast.length === 3
-      ? result.forecast.map((x: any, i: number) => Math.round(
-          clamp(
-            safeNum(x, baseForecast3[i]),
-            baseForecast3[i] * CFG.LLM.minAdjust,
-            baseForecast3[i] * (1 + CFG.LLM.maxAdjust)
+      const forecast = Array.isArray(result?.forecast) && result.forecast.length === 3
+        ? result.forecast.map((x: any, i: number) =>
+            Math.round(clamp(
+              safeNum(x, baseForecast3[i]),
+              baseForecast3[i] * CFG.LLM.minAdjust,
+              baseForecast3[i] * (1 + CFG.LLM.maxAdjust)
+            ))
           )
-        ))
-      : baseForecast3;
+        : baseForecast3;
 
-    // clamp final inside base range
-    const predictedFinalAudi = result?.predictedFinalAudi?.avg
-      ? {
-          min: Math.round(clamp(safeNum(result.predictedFinalAudi.min, baseFinal.min), baseFinal.min, baseFinal.max)),
-          max: Math.round(clamp(safeNum(result.predictedFinalAudi.max, baseFinal.max), baseFinal.min, baseFinal.max)),
-          avg: Math.round(clamp(safeNum(result.predictedFinalAudi.avg, baseFinal.avg), baseFinal.min, baseFinal.max)),
-        }
-      : baseFinal;
+      const predictedFinalAudi = result?.predictedFinalAudi?.avg
+        ? {
+            min: Math.round(clamp(safeNum(result.predictedFinalAudi.min, baseFinal.min), baseFinal.min, baseFinal.max)),
+            max: Math.round(clamp(safeNum(result.predictedFinalAudi.max, baseFinal.max), baseFinal.min, baseFinal.max)),
+            avg: Math.round(clamp(safeNum(result.predictedFinalAudi.avg, baseFinal.avg), baseFinal.min, baseFinal.max)),
+          }
+        : baseFinal;
 
-    const keywords = Array.isArray(result?.keywords) && result.keywords.length
-      ? result.keywords.slice(0, 2)
-      : [movieName, isUnreleased ? "예매율" : "박스오피스"];
+      keywords = Array.isArray(result?.keywords) && result.keywords.length ? result.keywords.slice(0, 2) : keywords;
+
+      return res.status(200).json({
+        analysisText,
+        predictionSeries: forecast,
+        searchKeywords: keywords,
+        predictedFinalAudi,
+        forecastLabel,
+        forecastDates,
+        modelSignals,
+      });
+    }
 
     return res.status(200).json({
       analysisText,
-      predictionSeries: forecast,
+      predictionSeries: baseForecast3,
       searchKeywords: keywords,
-      predictedFinalAudi,
+      predictedFinalAudi: baseFinal,
       forecastLabel,
       forecastDates,
       modelSignals,
@@ -954,7 +1274,7 @@ Output STRICT JSON only:
     return res.status(200).json({
       analysisText: `오류: ${error?.message || "unknown"}`,
       predictionSeries: [0, 0, 0],
-      predictedFinalAudi: { min: 0, max: 0, avg: 0 },
+      predictedFinalAudi: { min: 0, max: 0, avg: 0 }
     });
   }
 }
