@@ -1,5 +1,4 @@
 import { TrendDataPoint, MovieInfo, RealtimeMovie, NewsItem } from '../types';
-import { MANUAL_MOVIE_DATA } from '../manualData'; // [NEW] 수동 데이터 임포트
 
 const fetchWithFallback = async <T>(
   jsonUrl: string, 
@@ -50,6 +49,7 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
           const rawRate = String(latest.rate);
           const formattedRate = rawRate.includes('%') ? rawRate : `${rawRate}%`;
 
+          // [핵심] 저장된 상세정보 매핑
           return {
             movieCd: String(idx),
             rank: String(latest.rank),
@@ -59,7 +59,7 @@ export const fetchRealtimeRanking = async (): Promise<{ data: RealtimeMovie[], c
             salesAcc: String(latest.salesAcc || "0").replace(/,/g, ''),
             audiCnt: String(latest.audiCnt || "0").replace(/,/g, ''),
             audiAcc: String(latest.audiAcc || "0").replace(/,/g, ''),
-            detail: meta[title] || null
+            detail: meta[title] || null // <-- 여기서 포스터/감독 정보가 들어감
           };
         }).filter(Boolean) as RealtimeMovie[];
 
@@ -80,11 +80,6 @@ export const fetchMovieNews = async (keyword: string): Promise<NewsItem[]> => {
 };
 
 export const fetchMoviePoster = async (movieName: string): Promise<string> => {
-  // [NEW] 수동 설정된 포스터가 있는지 먼저 확인
-  if (MANUAL_MOVIE_DATA[movieName]?.posterUrl) {
-    return MANUAL_MOVIE_DATA[movieName].posterUrl!;
-  }
-
   try {
     const res = await fetch(`/api/poster?movieName=${encodeURIComponent(movieName)}`);
     return res.ok ? (await res.json()).url : "";
