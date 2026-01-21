@@ -3,7 +3,8 @@ import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
+// [수정] Share2 추가됨
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -57,7 +58,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
     try {
       // 1. 상세정보 설정 (DB에 있으면 바로 사용, 없으면 API 호출)
-      // [수정] movie 객체에 detail이 있으면 그것을 우선 사용!
       let infoData = (movie as any).detail;
       
       if (!infoData && movie.movieCd && movie.movieCd !== "0") {
@@ -210,7 +210,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
                     <div>
                         <div className="opacity-70 mb-0.5">예매 관객수</div>
-                        {/* 0원 오류 수정: replace로 콤마 제거 후 포맷팅 */}
                         <div className="font-bold text-sm">{formatNumber(String(realtimeInfo.audiCnt).replace(/,/g,''))}명</div>
                     </div>
                     <div>
