@@ -21,16 +21,15 @@ export default async function handler(req, res) {
     const { movieName, trendData, movieInfo, currentAudiAcc, type, historyData } = req.body;
     const ai = new GoogleGenAI({ apiKey });
 
-    // 데이터 전처리 (AI에게 줄 요약본)
-    const recentTrend = trendData ? trendData.slice(-7).map(d => 
-      `[${d.dateDisplay}] Audi: ${d.audiCnt}, Sales: ${d.salesAmt}`
-    ).join("\n") : "No daily trend data";
+    // [수정] 데이터 안전 처리 (historyData가 배열일 때만 slice 호출)
+    const recentTrend = Array.isArray(trendData) && trendData.length > 0
+      ? trendData.slice(-7).map((d: any) => `[${d.dateDisplay}] Audi: ${d.audiCnt}, Sales: ${d.salesAmt}`).join("\n")
+      : "No daily trend data";
 
-    const realtimeTrend = historyData ? historyData.slice(-10).map(d => 
-      `[${d.time}] Rank: ${d.rank}, Rate: ${d.rate}%, Audi: ${d.val_audi}`
-    ).join("\n") : "No realtime data";
+    const realtimeTrend = Array.isArray(historyData) && historyData.length > 0
+      ? historyData.slice(-10).map((d: any) => `[${d.time}] Rank: ${d.rank}, Rate: ${d.rate}%, Audi: ${d.val_audi}`).join("\n")
+      : "No realtime data";
 
-    // [핵심] AI에게 부여할 전문 분석가 페르소나 및 알고리즘 지시
     const prompt = `
     Role: Senior Data Scientist & Box Office Analyst.
     
@@ -44,18 +43,18 @@ export default async function handler(req, res) {
     ${realtimeTrend}
 
     Task:
-    1. **Mathematical Analysis**: Calculate the Compound Daily Growth Rate (CDGR) and identify the current momentum (Accelerating, Decelerating, or Plateauing) based on the provided data.
-    2. **Forecast Algorithm**: Use a simplified linear or logarithmic regression model mentally to predict the audience numbers for the next 3 days (Day+1, Day+2, Day+3). Consider weekly seasonality (e.g., weekends are higher).
+    1. **Mathematical Analysis**: Calculate the momentum based on the provided data.
+    2. **Forecast Algorithm**: Predict the audience numbers for the next 3 days (Day+1, Day+2, Day+3).
     3. **Report Generation**: Write a professional 3-paragraph report in Korean:
-       - **Paragraph 1 (Status & Momentum)**: Analyze current performance using specific metrics (e.g., "reservation rate increased by X%").
-       - **Paragraph 2 (Audience Psychology)**: Interpret the data to explain *why* this trend is happening (viral factor, competition, etc.).
+       - **Paragraph 1 (Status & Momentum)**: Analyze current performance using specific metrics.
+       - **Paragraph 2 (Audience Psychology)**: Interpret the data to explain trends.
        - **Paragraph 3 (Future Outlook)**: Provide the strategic forecast.
     
     Output JSON Schema:
     {
       "analysis": "String (Korean report with emojis)",
-      "forecast": [Number, Number, Number], // Predicted audience count for next 3 days
-      "keywords": ["String", "String"] // 2 Key phrases describing the trend
+      "forecast": [Number, Number, Number],
+      "keywords": ["String", "String"]
     }
     `;
     
@@ -68,6 +67,8 @@ export default async function handler(req, res) {
     let text = "{}";
     if (response.candidates && response.candidates.length > 0) {
         text = response.candidates[0].content?.parts?.[0]?.text || "{}";
+    } else if (typeof (response as any).text === 'function') {
+        text = (response as any).text() || "{}";
     }
 
     let result;
