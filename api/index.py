@@ -125,9 +125,47 @@ def trend(movieCd: str = Query(...), openDt: str = Query(None)):
         results = list(ex.map(fetch, date_list))
     return sorted([r for r in results if r], key=lambda x: x['date'])
 
-# [기능 6] 예매율 API
+# [기능 6] 예매율 API (Fallback)
 @app.get("/api/realtime")
-def get_realtime(): return {"status": "ok", "data": []} # JSON 파일 사용 권장
+def get_realtime(): return {"status": "ok", "data": []}
 
 @app.get("/api/reservation")
-def get_reservation(movieName: str = Query(...)): return {"found": False}
+def get_reservation(movieName: str = Query(...)):
+    # 2단계: 크롤링 (시간 파싱 포함)
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        res = requests.get(KOBIS_REALTIME_URL, headers=headers, timeout=5)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        
+        crawled_time = ""
+        try:
+            match = re.search(r"조회일시\s*:\s*(\d{4}[./-]\d{2}[./-]\d{2}\s+\d{2}:\d{2})", soup.get_text())
+            if match: crawled_time = match.group(1).replace("/", "-")
+        except: pass
+        if not crawled_time: crawled_time = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+        norm_query = re.sub(r'[^0-9a-zA-Z가-힣]', '', movieName).lower()
+        rows = soup.find_all("tr")
+        
+        for row in rows:
+            cols = row.find_all("td")
+            if len(cols) < 8: continue
+            title = cols[1].find("a")["title"].strip() if cols[1].find("a") else cols[1].get_text(strip=True)
+            norm_title = re.sub(r'[^0-9a-zA-Z가-힣]', '', title).lower()
+            
+            if norm_query in norm_title or norm_title in norm_query:
+                return {
+                    "found": True, 
+                    "data": {
+                        "rank": cols[0].get_text(strip=True),
+                        "rate": cols[3].get_text(strip=True),
+                        "audiCnt": cols[6].get_text(strip=True),
+                        "salesAmt": cols[4].get_text(strip=True),
+                        "audiAcc": cols[7].get_text(strip=True),
+                        "salesAcc": cols[5].get_text(strip=True),
+                        "crawledTime": crawled_time
+                    },
+                    "crawledTime": crawled_time
+                }
+        return {"found": False}
+    except: return {"found": False}
