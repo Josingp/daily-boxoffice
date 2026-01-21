@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 REALTIME_FILE = "public/realtime_data.json"
 DAILY_FILE = "public/daily_data.json"
+MANUAL_FILE = "manual_data.json" # [NEW] 수동 데이터 파일
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 KOBIS_DETAIL_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
@@ -42,15 +43,13 @@ def update_realtime():
     
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
+    manual_data = load_json(MANUAL_FILE) # [NEW] 수동 데이터 로드
     
     detail_cache_cd = {}
-    detail_cache_title = {}
-    
     if "movies" in daily_data:
         for m in daily_data["movies"]:
-            if "detail" in m:
-                if "movieCd" in m: detail_cache_cd[m["movieCd"]] = m["detail"]
-                if "movieNm" in m: detail_cache_title[m["movieNm"].replace(" ", "")] = m["detail"]
+            if "movieCd" in m and "detail" in m:
+                detail_cache_cd[m["movieCd"]] = m["detail"]
 
     session = requests.Session()
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -88,7 +87,6 @@ def update_realtime():
             target_link = row.find("a", onclick=MSTVIEW_REGEX.search)
             title = ""
             movie_cd = ""
-            
             if target_link:
                 title = target_link.get("title", "").strip() or target_link.get_text(strip=True)
                 match = MSTVIEW_REGEX.search(target_link['onclick'])
@@ -98,16 +96,22 @@ def update_realtime():
             
             if not title: continue
             
-            # 상세정보 확보 (캐시 -> API)
+            # [중요] 상세정보 확보 로직 (수동 데이터 우선 확인)
             if title not in realtime_data["meta"]:
                 found_detail = None
-                norm_title = title.replace(" ", "")
                 
+                # 0. 수동 데이터 확인 (제목 매칭)
+                for m_title, m_info in manual_data.items():
+                    if m_title.replace(" ", "") == title.replace(" ", ""):
+                        # 수동 데이터가 있으면 그걸 기반으로 가짜 detail 생성 (포스터용)
+                        # 하지만 여기서는 KOBIS 상세정보를 주로 저장하므로 패스
+                        pass
+
+                # 1. Daily DB (Code 매칭)
                 if movie_cd and movie_cd in detail_cache_cd:
                     found_detail = detail_cache_cd[movie_cd]
-                elif norm_title in detail_cache_title:
-                    found_detail = detail_cache_title[norm_title]
-                elif movie_cd and int(rank) <= 30:
+                # 2. API 호출
+                elif movie_cd and int(rank) <= 20:
                     found_detail = fetch_movie_detail(movie_cd)
                     if found_detail: time.sleep(0.1)
 
@@ -155,5 +159,4 @@ def update_realtime():
         print(f"Update Failed: {e}")
 
 if __name__ == "__main__":
-    if not os.path.exists("public"): os.makedirs("public")
     update_realtime()
