@@ -25,16 +25,14 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [posterUrl, setPosterUrl] = useState<string>('');
   
-  // AI 관련 상태
   const [analysis, setAnalysis] = useState<string>('');
   const [predictionSeries, setPredictionSeries] = useState<number[]>([]);
   const [finalAudiPredict, setFinalAudiPredict] = useState<{min:number, max:number, avg:number} | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false); // 분석 중 로딩 상태
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   
-  const [loading, setLoading] = useState(false); // 기본 데이터 로딩 상태
+  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // 수동 데이터 매칭
   const getManualInfo = (title: string) => {
       if (!title) return null;
       const cleanTitle = title.replace(/\s+/g, '');
@@ -51,17 +49,30 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     }
   }, [movie]);
 
-  const getDDay = (openDt: string) => {
-      if (!openDt) return '';
-      const start = new Date(openDt.replace(/-/g, '/'));
+  // [수정] D-Day 계산 및 포맷팅 강화
+  const getDDayBadge = (openDt: string) => {
+      if (!openDt) return null;
+      const cleanDate = openDt.replace(/-/g, '/');
+      const start = new Date(cleanDate);
       const now = new Date();
-      const diff = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      return diff >= 0 ? `(개봉 ${diff + 1}일차)` : `(D-${Math.abs(diff)})`;
+      // 시간 제거 후 날짜만 비교
+      start.setHours(0,0,0,0);
+      now.setHours(0,0,0,0);
+      
+      const diffTime = start.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays > 0) {
+          return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-red-100 text-red-600 text-[10px] font-bold border border-red-200">D-{diffDays}</span>;
+      } else if (diffDays === 0) {
+          return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-red-600 text-white text-[10px] font-bold animate-pulse">D-Day</span>;
+      } else {
+          return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-medium border border-slate-200">개봉 {Math.abs(diffDays) + 1}일차</span>;
+      }
   };
 
   const loadData = async (movie: DailyBoxOfficeList) => {
     setLoading(true);
-    // 초기화
     setAnalysis('');
     setPredictionSeries([]);
     setFinalAudiPredict(null);
@@ -76,14 +87,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setChartMetric('audi');
 
     try {
-      // 1. 상세정보
       let infoData = (movie as any).detail;
       if (!infoData && movie.movieCd && movie.movieCd !== "0") {
           infoData = await fetchMovieDetail(movie.movieCd);
       }
       setMovieDetail(infoData);
 
-      // 2. 포스터
       const manual = getManualInfo(movie.movieNm);
       if (manual?.posterUrl) {
           setPosterUrl(manual.posterUrl);
@@ -97,7 +106,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           setNewsList(news.length > 0 ? news : []);
       }
 
-      // 3. 실시간 정보
       let currentRt = movie.realtime;
       if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
@@ -107,9 +115,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           }
       }
 
-      // [변경] 여기서는 AI 분석을 자동 호출하지 않음 (버튼 클릭 시 호출)
-      
-      // 실시간 그래프용 히스토리 데이터만 미리 로드
       if (type === 'REALTIME') {
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
@@ -132,7 +137,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     finally { setLoading(false); }
   };
 
-  // [NEW] 버튼 클릭 시 실행될 AI 분석 함수
   const handleRunAnalysis = async () => {
       if (!movie) return;
       setIsAnalyzing(true);
@@ -171,7 +175,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   const handleShare = async () => {
     if (!movie) return;
-    
     const fmtInten = (v: any) => {
         const val = parseInt(v || 0);
         if (val === 0) return "-";
@@ -184,7 +187,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     if (type === 'DAILY') {
         text += `📅 ${targetDate.substring(4,6)}/${targetDate.substring(6,8)} 일별 리포트\n`;
         text += `• 일일관객: ${formatNumber(movie.audiCnt)}명 (${fmtInten(movie.audiInten)})\n`;
-        text += `• PSA(효율): 회당 약 ${calculatePSA()}명\n`; // PSA 추가
+        text += `• PSA(효율): 회당 약 ${calculatePSA()}명\n`;
         text += `• 매출액: ${formatKoreanNumber(movie.salesAmt)}원\n`;
         text += `• 스크린: ${formatNumber(movie.scrnCnt)}개 / 상영 ${formatNumber(movie.showCnt)}회\n`;
     } 
@@ -226,7 +229,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </span>;
   };
 
-  // [NEW] PSA 계산 함수
   const calculatePSA = () => {
       if (!movie) return 0;
       const audi = parseInt(movie.audiCnt || "0");
@@ -313,6 +315,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
         
+        {/* 1. 포스터 & 정보 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
            <div className="w-24 h-36 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
              {posterUrl ? <img src={posterUrl} alt={movie.movieNm} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1"><Film size={24} /><span className="text-[10px]">No Poster</span></div>}
@@ -320,13 +323,18 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            <div className="flex-1 flex flex-col justify-center space-y-2 text-xs text-slate-600">
              <div className="flex gap-2"><Film size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-1">{movieDetail?.directors?.map((d: any)=>d.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2"><User size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-2">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
-             <div className="flex gap-2"><CalendarIcon size={14} className="text-slate-400 shrink-0"/> 
-               <span className="text-slate-800">{movieDetail?.openDt || '-'} <span className="text-orange-500 font-bold ml-1">{getDDay(movie.openDt)}</span></span>
+             <div className="flex gap-2 items-center"><CalendarIcon size={14} className="text-slate-400 shrink-0"/> 
+               <span className="text-slate-800 flex items-center">{movieDetail?.openDt || '-'} 
+                 {/* [수정] D-Day 배지 적용 */}
+                 {getDDayBadge(movie.openDt)}
+               </span>
              </div>
              <div className="flex gap-2 font-bold text-blue-600 pt-2 mt-auto border-t border-slate-50"><Users size={14}/> 누적: {formatNumber(movie.audiAcc)}명</div>
            </div>
         </div>
 
+        {/* ... (이하 동일, renderBEPSection, Share, AI Button 등 기존 유지) ... */}
+        {/* 편의상 나머지 UI 코드는 생략하지 않고 위 전체 코드에 포함되어 있습니다. */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -342,7 +350,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.scrnCnt)}개</div>
             </div>
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                {/* [NEW] PSA 지표 추가 */}
                 <div className="flex justify-between items-start mb-1">
                     <div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영횟수</span></div>
                     <span className="text-[10px] text-blue-600 font-bold bg-blue-50 px-1.5 py-0.5 rounded">PSA {calculatePSA()}명</span>
@@ -402,7 +409,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
         {renderBEPSection()}
 
-        {/* [NEW] AI 분석 수동 실행 섹션 */}
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center justify-between mb-3 border-b border-slate-50 pb-2">
               <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
