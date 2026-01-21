@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
+import { DailyBoxOfficeList, TrendDataPoint, MovieInfo, PredictionResult } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
+import { MANUAL_MOVIE_DATA } from '../manualData'; // [NEW]
 import TrendChart from './TrendChart';
 import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock, Coins } from 'lucide-react';
-import manualData from '../manual_data.json'; // [NEW]
-
-const MANUAL_DATA = manualData as Record<string, { posterUrl?: string, productionCost?: number }>;
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -30,11 +28,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // [NEW] 수동 데이터 매칭 (공백 제거 후 비교)
-  const getManualInfo = (title: string) => {
-      const key = Object.keys(MANUAL_DATA).find(k => k.replace(/\s+/g, '') === title.replace(/\s+/g, ''));
-      return key ? MANUAL_DATA[key] : null;
-  };
+  // [NEW] 수동 데이터 (제작비 등)
+  const manualData = movie ? MANUAL_MOVIE_DATA[movie.movieNm] : undefined;
 
   useEffect(() => {
     if (movie) {
@@ -89,8 +84,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           }
       }
 
-      const manual = getManualInfo(movie.movieNm);
-      const cost = manual?.productionCost || 0;
+      // AI 분석 요청 시 제작비 정보 전달
+      const cost = manualData?.productionCost || 0;
       const sales = parseInt(movie.salesAcc || "0");
 
       if (type === 'DAILY') {
@@ -107,7 +102,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                  history.push({
                     time: currentRt.crawledTime || new Date().toISOString(),
                     rate: currentRt.rate, 
-                    val_audi: parseInt(String(currentRt.audiCnt).replace(/,/g,'')),
+                    val_audi: parseInt(currentRt.audiCnt.replace(/,/g,'')),
                     audiCnt: currentRt.audiCnt
                 });
             }
@@ -127,7 +122,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 movieName: name, trendData: trend, movieInfo: info, currentAudiAcc: total, type, historyData: history,
-                productionCost: cost, salesAcc: sales
+                productionCost: cost, salesAcc: sales // [NEW] 제작비 정보 전달
             })
         });
         const data = await res.json();
@@ -144,7 +139,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   };
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
-  
+
   const IntenBadge = ({ val }: { val?: string | number }) => {
       const v = typeof val === 'string' ? parseInt(val) : (val || 0);
       if (v === 0) return <span className="text-slate-400 text-[10px]">-</span>;
@@ -154,14 +149,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </span>;
   };
 
+  // BEP 계산 로직
   const renderBEPSection = () => {
-      const manual = getManualInfo(movie?.movieNm || "");
-      if (!manual?.productionCost) return null;
+      if (!manualData?.productionCost) return null;
       
-      const cost = manual.productionCost;
-      const salesStr = realtimeInfo ? String(realtimeInfo.salesAcc) : (movie?.salesAcc || "0");
-      const sales = parseInt(salesStr.replace(/,/g, ''));
-      
+      const cost = manualData.productionCost;
+      // 실시간 매출액 or 일별 매출액 사용
+      const sales = realtimeInfo ? parseInt(String(realtimeInfo.salesAcc).replace(/,/g,'')) : parseInt(movie?.salesAcc || "0");
       const profit = sales - cost;
       const percent = Math.min((sales / cost) * 100, 100);
       const isBreakeven = sales >= cost;
@@ -183,6 +177,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                         <div className={`h-full rounded-full transition-all duration-1000 ${isBreakeven ? 'bg-gradient-to-r from-red-400 to-red-500' : 'bg-blue-500'}`} style={{width: `${percent}%`}}></div>
                     </div>
                  </div>
+                 
                  <div className="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-3 rounded-lg">
                     <div>
                         <span className="block text-slate-400 mb-0.5">총 제작비</span>
@@ -193,11 +188,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                         <span className="font-bold text-slate-700">{formatKoreanNumber(sales)}원</span>
                     </div>
                  </div>
+
                  {!isBreakeven && (
                      <div className="text-xs text-center text-slate-500 bg-slate-50 py-2 rounded-lg">
                          BEP 달성까지 약 <span className="font-bold text-slate-800">{formatKoreanNumber(Math.abs(profit))}원</span> 남았습니다.
                      </div>
                  )}
+                 
                  {finalAudiPredict && finalAudiPredict.avg > 0 && (
                      <div className="mt-3 pt-3 border-t border-slate-100">
                          <div className="text-xs font-bold text-purple-600 mb-1 flex items-center gap-1"><Sparkles size={12}/> AI 예측 최종 관객수</div>
@@ -218,6 +215,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   return (
     <div className={`fixed inset-0 z-50 flex flex-col bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
+      
+      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
         <div>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${type === 'DAILY' ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600'}`}>
@@ -229,6 +228,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
+        
+        {/* 1. 영화 정보 & 포스터 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
            <div className="w-24 h-36 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
              {posterUrl ? <img src={posterUrl} alt={movie.movieNm} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1"><Film size={24} /><span className="text-[10px]">No Poster</span></div>}
@@ -243,6 +244,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            </div>
         </div>
 
+        {/* 2. 일일 통계 (Daily 모드: 카드 4개) */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -264,6 +266,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
+        {/* 3. 실시간 카드 */}
         {realtimeInfo && (
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
                 <div className="flex justify-between items-center mb-2">
@@ -295,6 +298,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             </div>
         )}
 
+        {/* 4. 그래프 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             {type === 'DAILY' && (
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
@@ -312,8 +316,10 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             />
         </div>
 
+        {/* 5. [NEW] BEP 분석 탭 */}
         {renderBEPSection()}
 
+        {/* 6. AI 분석 */}
         <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
               <Sparkles size={16} className="text-purple-600"/> AI 분석 리포트
@@ -325,6 +331,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
             )}
         </div>
 
+        {/* 7. 뉴스 */}
         {newsList.length > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm"><Newspaper size={16} className="text-blue-500"/> 관련 최신 기사</div>
