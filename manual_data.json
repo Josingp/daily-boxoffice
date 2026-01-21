@@ -13,7 +13,7 @@
   },
   "하트맨": {
     "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/9db39ce00de94802988753777473344b.jpg",
-    "productionCost": 7200000000 
+    "productionCost": 6500000000 
   },
     "아바타: 불과 재": {
     "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/11/82faefd04a8945be86b21a62ea24f1d9.jpg",
@@ -26,6 +26,18 @@
     "보이": {
     "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/9e5dc9d3308b458a879202b710e3bc12.jpg",
     "productionCost": 0 
+  },
+    "더 퍼스트 슬램덩크": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/31a30f8a30eb41589eab964e197b5b55.jpg",
+    "productionCost": 0 
+  },
+    "극장판 짱구는 못말려: 초화려! 작열하는 떡잎마을 댄서즈": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/06b227e46bfc4feea1eb84b2a62e8ec4.jpg",
+    "productionCost": 0 
+  },
+    "오늘 밤, 세계에서 이 사랑이 사라진다 해도": {
+    "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/93fa9fb754e8451f9975ce7d8c8711e8.jpg",
+    "productionCost": 2700000000 
   }
 }
 
