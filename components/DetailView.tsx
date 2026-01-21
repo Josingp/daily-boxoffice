@@ -49,13 +49,27 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     }
   }, [movie]);
 
-  // [수정] D-Day 계산 및 포맷팅 강화
+  // [수정] 날짜 포맷팅 강화 함수 (YYYYMMDD -> YYYY-MM-DD)
+  const parseDate = (str: string) => {
+      if (!str) return null;
+      let dateStr = str.replace(/-/g, '/'); // 2026-02-11 -> 2026/02/11
+      
+      // 20260211 처럼 하이픈 없는 8자리 문자열인 경우 강제 변환
+      if (!dateStr.includes('/') && dateStr.length === 8) {
+          const y = dateStr.substring(0,4);
+          const m = dateStr.substring(4,6);
+          const d = dateStr.substring(6,8);
+          dateStr = `${y}/${m}/${d}`;
+      }
+      return new Date(dateStr);
+  };
+
+  // [수정] D-Day 배지 생성
   const getDDayBadge = (openDt: string) => {
-      if (!openDt) return null;
-      const cleanDate = openDt.replace(/-/g, '/');
-      const start = new Date(cleanDate);
+      const start = parseDate(openDt);
+      if (!start || isNaN(start.getTime())) return null;
+
       const now = new Date();
-      // 시간 제거 후 날짜만 비교
       start.setHours(0,0,0,0);
       now.setHours(0,0,0,0);
       
@@ -63,10 +77,13 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       if (diffDays > 0) {
+          // 미래 (개봉 전)
           return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-red-100 text-red-600 text-[10px] font-bold border border-red-200">D-{diffDays}</span>;
       } else if (diffDays === 0) {
+          // 당일
           return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-red-600 text-white text-[10px] font-bold animate-pulse">D-Day</span>;
       } else {
+          // 과거 (개봉 후)
           return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-medium border border-slate-200">개봉 {Math.abs(diffDays) + 1}일차</span>;
       }
   };
@@ -315,7 +332,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 bg-slate-50/30">
         
-        {/* 1. 포스터 & 정보 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
            <div className="w-24 h-36 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
              {posterUrl ? <img src={posterUrl} alt={movie.movieNm} className="w-full h-full object-cover" /> : <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1"><Film size={24} /><span className="text-[10px]">No Poster</span></div>}
@@ -325,7 +341,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
              <div className="flex gap-2"><User size={14} className="text-slate-400 shrink-0"/> <span className="text-slate-800 line-clamp-2">{movieDetail?.actors?.slice(0,3).map((a: any)=>a.peopleNm).join(', ') || '-'}</span></div>
              <div className="flex gap-2 items-center"><CalendarIcon size={14} className="text-slate-400 shrink-0"/> 
                <span className="text-slate-800 flex items-center">{movieDetail?.openDt || '-'} 
-                 {/* [수정] D-Day 배지 적용 */}
+                 {/* [수정] D-Day 배지 표시 */}
                  {getDDayBadge(movie.openDt)}
                </span>
              </div>
@@ -333,8 +349,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            </div>
         </div>
 
-        {/* ... (이하 동일, renderBEPSection, Share, AI Button 등 기존 유지) ... */}
-        {/* 편의상 나머지 UI 코드는 생략하지 않고 위 전체 코드에 포함되어 있습니다. */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
