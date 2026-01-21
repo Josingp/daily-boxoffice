@@ -3,7 +3,7 @@ import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock, Bot } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -21,12 +21,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [posterUrl, setPosterUrl] = useState<string>('');
-  
-  // AI 관련 State
   const [analysis, setAnalysis] = useState<string>('');
   const [predictionSeries, setPredictionSeries] = useState<number[]>([]);
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -36,9 +32,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       loadData(movie);
     } else {
       setIsVisible(false);
-      // 초기화
-      setAnalysis('');
-      setPredictionSeries([]);
     }
   }, [movie]);
 
@@ -52,6 +45,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
 
   const loadData = async (movie: DailyBoxOfficeList) => {
     setLoading(true);
+    setAnalysis('');
+    setPredictionSeries([]);
     setTrendData(movie.trend || []);
     setRealtimeHistory([]);
     setRealtimeInfo(movie.realtime || null);
@@ -70,6 +65,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
       setPosterUrl(poster);
       setNewsList(news.length > 0 ? news : []);
 
+      // 실시간 정보 없으면 즉시 크롤링 (API Fallback)
       let currentRt = movie.realtime;
       if (!currentRt) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
@@ -79,12 +75,19 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           }
       }
 
-      if (type === 'REALTIME') {
+      if (type === 'DAILY') {
+        if (movie.trend && movie.trend.length > 0) {
+            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', currentRt);
+        }
+      } else {
+        // [REALTIME 탭] 히스토리 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
             const history = json[movie.movieNm] || [];
+            
+            // 데이터가 없으면 현재값으로 초기화
             if (history.length === 0 && currentRt) {
                 history.push({
                     time: currentRt.crawledTime || new Date().toISOString(),
@@ -94,6 +97,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 });
             }
             setRealtimeHistory(history);
+            requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
           }
         } catch {}
       }
@@ -101,35 +105,17 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     finally { setLoading(false); }
   };
 
-  // [버튼 클릭 시 실행] AI 분석 요청
-  const handleAiAnalysis = async () => {
-    if (!movie) return;
-    setIsAiLoading(true);
+  const requestAnalysis = async (name: string, trend: any, info: any, total: string, type: string, history: any) => {
     try {
-        const payload = {
-            movieName: movie.movieNm,
-            trendData: type === 'DAILY' ? trendData : [],
-            movieInfo: movieDetail,
-            currentAudiAcc: movie.audiAcc,
-            type: type,
-            historyData: type === 'REALTIME' ? realtimeHistory : []
-        };
-
         const res = await fetch('/predict', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ movieName: name, trendData: trend, movieInfo: info, currentAudiAcc: total, type, historyData: history })
         });
-
         const data = await res.json();
-        if (data.analysisText) setAnalysis(data.analysisText);
-        if (data.predictionSeries) setPredictionSeries(data.predictionSeries);
-
-    } catch (e) {
-        setAnalysis("분석 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    } finally {
-        setIsAiLoading(false);
-    }
+        if(data.analysisText) setAnalysis(data.analysisText);
+        if(data.predictionSeries) setPredictionSeries(data.predictionSeries);
+    } catch(e) {}
   };
 
   const handleShare = async () => {
@@ -139,6 +125,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
   };
 
   const openNewsLink = (url: string) => window.open(url, '_blank');
+
   const IntenBadge = ({ val }: { val?: string | number }) => {
       const v = typeof val === 'string' ? parseInt(val) : (val || 0);
       if (v === 0) return <span className="text-slate-400 text-[10px]">-</span>;
@@ -181,32 +168,61 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            </div>
         </div>
 
-        {/* 2. 통계 카드 */}
-        {type === 'DAILY' ? (
+        {/* 2. 일일 통계 (Daily 모드만) */}
+        {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
                 <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><TrendingUp size={14}/><span className="text-xs">일일 관객</span></div><IntenBadge val={movie.audiInten} /></div>
                 <div className="text-lg font-bold text-slate-800">{formatNumber(movie.audiCnt)}명</div>
             </div>
-            {/* ... 나머지 카드 생략 (기존 유지) ... */}
+            <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><DollarSign size={14}/><span className="text-xs">매출액</span></div><IntenBadge val={movie.salesInten} /></div>
+                <div className="text-lg font-bold text-slate-800">{formatKoreanNumber(movie.salesAmt)}원</div>
+            </div>
+            <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><Monitor size={14}/><span className="text-xs">스크린수</span></div><IntenBadge val={movie.scrnInten} /></div>
+                <div className="text-lg font-bold text-slate-800">{formatNumber(movie.scrnCnt)}개</div>
+            </div>
+            <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                <div className="flex justify-between items-start mb-1"><div className="flex items-center gap-1.5 text-slate-500"><PlayCircle size={14}/><span className="text-xs">상영횟수</span></div><IntenBadge val={movie.showInten} /></div>
+                <div className="text-lg font-bold text-slate-800">{formatNumber(movie.showCnt)}회</div>
+            </div>
           </div>
-        ) : (
-            realtimeInfo && (
-                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간 예매</span>
-                        <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime || '실시간'} 기준</span>
-                    </div>
-                    <div className="flex items-end gap-2 mb-4">
-                        <span className="text-4xl font-black">{realtimeInfo.rate}</span>
-                        <span className="text-sm font-medium opacity-80 mb-1">예매율 {realtimeInfo.rank}위</span>
-                    </div>
-                    {/* ... 실시간 상세 정보 ... */}
-                </div>
-            )
         )}
 
-        {/* 3. 그래프 & AI 버튼 */}
+        {/* 3. 보라색 실시간 카드 (시간 표시) */}
+        {realtimeInfo && (
+            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
+                <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles size={10}/> KOBIS 실시간 예매</span>
+                    <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded flex items-center gap-1"><Clock size={10}/> {realtimeInfo.crawledTime || '실시간'} 기준</span>
+                </div>
+                <div className="flex items-end gap-2 mb-4">
+                    <span className="text-4xl font-black">{realtimeInfo.rate}</span>
+                    <span className="text-sm font-medium opacity-80 mb-1">예매율 {realtimeInfo.rank}위</span>
+                </div>
+                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
+                    <div>
+                        <div className="opacity-70 mb-0.5">예매 관객수</div>
+                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiCnt.replace(/,/g,''))}명</div>
+                    </div>
+                    <div>
+                        <div className="opacity-70 mb-0.5">누적 관객수</div>
+                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiAcc.replace(/,/g,''))}명</div>
+                    </div>
+                    <div>
+                        <div className="opacity-70 mb-0.5">예매 매출액</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div>
+                    </div>
+                    <div>
+                        <div className="opacity-70 mb-0.5">누적 매출액</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* 4. 그래프 */}
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             {type === 'DAILY' && (
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
@@ -215,7 +231,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                     ))}
                 </div>
             )}
-            
             <TrendChart 
                 data={type === 'DAILY' ? trendData : realtimeHistory} 
                 type={type} 
@@ -223,42 +238,35 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 loading={loading}
                 prediction={predictionSeries.length > 0 ? { predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} } : null} 
             />
+        </div>
 
-            {/* [NEW] AI 분석 실행 버튼 */}
-            {!analysis && (
-                <button 
-                    onClick={handleAiAnalysis} 
-                    disabled={isAiLoading}
-                    className="w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-50"
-                >
-                    {isAiLoading ? (
-                        <>
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            <span>AI가 데이터를 분석 중입니다...</span>
-                        </>
-                    ) : (
-                        <>
-                            <Bot size={18} />
-                            <span>AI 예측 분석 실행</span>
-                        </>
-                    )}
-                </button>
+        {/* 5. AI 분석 */}
+        <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm border-b border-slate-50 pb-2">
+              <Sparkles size={16} className="text-purple-600"/> AI 분석 리포트
+            </div>
+            {analysis ? (
+              <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify break-keep">{analysis}</p>
+            ) : (
+              <div className="space-y-2 animate-pulse"><div className="h-4 bg-slate-100 rounded w-3/4"></div><div className="h-4 bg-slate-100 rounded w-full"></div></div>
             )}
         </div>
 
-        {/* 4. AI 분석 리포트 (결과가 있을 때만 표시) */}
-        {analysis && (
-            <div className="bg-white p-5 rounded-xl border border-purple-100 shadow-sm ring-1 ring-purple-50">
-                <div className="flex items-center gap-2 mb-3 text-purple-700 font-bold text-sm border-b border-purple-50 pb-2">
-                  <Sparkles size={16}/> Gemini AI 분석 리포트
+        {/* 6. 뉴스 */}
+        {newsList.length > 0 && (
+          <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3 text-slate-800 font-bold text-sm"><Newspaper size={16} className="text-blue-500"/> 관련 최신 기사</div>
+            <div className="space-y-3">
+              {newsList.map((news, idx) => (
+                <div key={idx} onClick={() => openNewsLink(news.link)} className="flex flex-col gap-1 cursor-pointer group pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                  <h4 className="text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors" dangerouslySetInnerHTML={{ __html: news.title }} />
+                  <p className="text-xs text-slate-500 line-clamp-2 leading-snug" dangerouslySetInnerHTML={{ __html: news.desc }} />
+                  <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-slate-400">{news.press}</span><ExternalLink size={12} className="text-slate-300"/></div>
                 </div>
-                <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line text-justify break-keep animate-fade-in">
-                    {analysis}
-                </div>
+              ))}
             </div>
+          </div>
         )}
-
-        {/* ... 뉴스 섹션 (기존 유지) ... */}
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-100 pb-8">
