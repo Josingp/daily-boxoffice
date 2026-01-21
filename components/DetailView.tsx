@@ -3,7 +3,7 @@ import { DailyBoxOfficeList, TrendDataPoint, MovieInfo } from '../types';
 import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock } from 'lucide-react';
 
 interface DetailViewProps {
   movie: DailyBoxOfficeList | null;
@@ -49,55 +49,61 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
     setPredictionSeries([]);
     setTrendData(movie.trend || []);
     setRealtimeHistory([]);
-    setRealtimeInfo(movie.realtime || null);
+    setRealtimeInfo(movie.realtime || null); // 전달받은 실시간 정보 우선 사용
     setNewsList([]);
     setPosterUrl('');
     setMovieDetail(null);
     setChartMetric('audi');
 
     try {
-      const [info, poster, news] = await Promise.all([
-          fetchMovieDetail(movie.movieCd),
+      // 1. 상세정보 설정 (DB에 있으면 바로 사용, 없으면 API 호출)
+      // [수정] movie 객체에 detail이 있으면 그것을 우선 사용!
+      let infoData = (movie as any).detail;
+      
+      if (!infoData && movie.movieCd && movie.movieCd !== "0") {
+          infoData = await fetchMovieDetail(movie.movieCd);
+      }
+      setMovieDetail(infoData);
+
+      // 2. 포스터 & 뉴스 (병렬 호출)
+      const [poster, news] = await Promise.all([
           fetchMoviePoster(movie.movieNm),
           fetchMovieNews(movie.movieNm)
       ]);
-      setMovieDetail(info);
       setPosterUrl(poster);
       setNewsList(news.length > 0 ? news : []);
 
-      // 실시간 정보 없으면 즉시 크롤링 (API Fallback)
-      let currentRt = movie.realtime;
-      if (!currentRt) {
+      // 3. 실시간 정보가 없고(일별 탭 등), 영화명이 있으면 API로 검색 (보라색 카드 띄우기 위함)
+      if (!movie.realtime) {
           const live = await fetchRealtimeReservation(movie.movieNm, movie.movieCd);
           if (live.data) {
-              currentRt = { ...live.data, crawledTime: live.crawledTime };
-              setRealtimeInfo(currentRt);
+              setRealtimeInfo({ ...live.data, crawledTime: live.crawledTime });
           }
       }
 
+      // 4. AI 분석 및 그래프 데이터 로드
       if (type === 'DAILY') {
         if (movie.trend && movie.trend.length > 0) {
-            requestAnalysis(movie.movieNm, movie.trend, info, movie.audiAcc, 'DAILY', currentRt);
+            requestAnalysis(movie.movieNm, movie.trend, infoData, movie.audiAcc, 'DAILY', null);
         }
       } else {
-        // [REALTIME 탭] 히스토리 로드
+        // [REALTIME] 히스토리 로드
         try {
           const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
           if (res.ok) {
             const json = await res.json();
             const history = json[movie.movieNm] || [];
-            
             // 데이터가 없으면 현재값으로 초기화
-            if (history.length === 0 && currentRt) {
-                history.push({
-                    time: currentRt.crawledTime || new Date().toISOString(),
-                    rate: currentRt.rate, 
-                    val_audi: parseInt(currentRt.audiCnt.replace(/,/g,'')),
-                    audiCnt: currentRt.audiCnt
+            if (history.length === 0 && movie.realtime) {
+                 history.push({
+                    time: movie.realtime.crawledTime || new Date().toISOString(),
+                    rate: movie.realtime.rate, 
+                    val_audi: parseInt(movie.realtime.audiCnt.replace(/,/g,'')),
+                    audiCnt: movie.realtime.audiCnt
                 });
             }
             setRealtimeHistory(history);
-            requestAnalysis(movie.movieNm, [], info, movie.audiAcc, 'REALTIME', history);
+            requestAnalysis(movie.movieNm, [], infoData, movie.audiAcc, 'REALTIME', history);
           }
         } catch {}
       }
@@ -168,7 +174,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
            </div>
         </div>
 
-        {/* 2. 일일 통계 (Daily 모드만) */}
+        {/* 2. 일일 통계 (Daily 모드: 카드 4개 모두 표시) */}
         {type === 'DAILY' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
@@ -190,7 +196,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
           </div>
         )}
 
-        {/* 3. 보라색 실시간 카드 (시간 표시) */}
+        {/* 3. 보라색 실시간 카드 (시간 표시 포함) */}
         {realtimeInfo && (
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-xl shadow-lg text-white">
                 <div className="flex justify-between items-center mb-2">
@@ -204,19 +210,20 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, targetDate, type, onClos
                 <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs border-t border-white/20 pt-3">
                     <div>
                         <div className="opacity-70 mb-0.5">예매 관객수</div>
-                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiCnt.replace(/,/g,''))}명</div>
+                        {/* 0원 오류 수정: replace로 콤마 제거 후 포맷팅 */}
+                        <div className="font-bold text-sm">{formatNumber(String(realtimeInfo.audiCnt).replace(/,/g,''))}명</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">누적 관객수</div>
-                        <div className="font-bold text-sm">{formatNumber(realtimeInfo.audiAcc.replace(/,/g,''))}명</div>
+                        <div className="font-bold text-sm">{formatNumber(String(realtimeInfo.audiAcc).replace(/,/g,''))}명</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">예매 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAmt.replace(/,/g,''))}원</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원</div>
                     </div>
                     <div>
                         <div className="opacity-70 mb-0.5">누적 매출액</div>
-                        <div className="font-bold text-sm">{formatKoreanNumber(realtimeInfo.salesAcc.replace(/,/g,''))}원</div>
+                        <div className="font-bold text-sm">{formatKoreanNumber(String(realtimeInfo.salesAcc).replace(/,/g,''))}원</div>
                     </div>
                 </div>
             </div>
