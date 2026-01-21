@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 DAILY_FILE = "public/daily_data.json"
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
 
-# [핵심 1] 기존 파일에서 상세정보만 쏙 빼서 캐싱 (API 절약 & 데이터 보존)
+# [핵심 1] 기존 파일에서 상세정보만 쏙 빼서 메모리에 저장 (API 절약 & 데이터 보존)
 def load_existing_details():
     cache = {}
     if os.path.exists(DAILY_FILE):
@@ -27,14 +27,15 @@ def load_existing_details():
 def fetch_api_list(target_dt):
     url = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
     try:
-        res = requests.get(f"{url}?key={KOBIS_API_KEY}&targetDt={target_dt}", timeout=5)
+        # Top 10만 가져오기 (itemPerPage=10)
+        res = requests.get(f"{url}?key={KOBIS_API_KEY}&targetDt={target_dt}&itemPerPage=10", timeout=5)
         return res.json().get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
     except: return []
 
-# [핵심 2] 상세정보 가져오기 (재시도 로직 강화)
+# [핵심 2] 상세정보 가져오기 (캐시 확인 -> 없으면 3회 재시도)
 def fetch_movie_detail(movie_cd, cache):
-    # 1. 캐시에 있으면 그거 씀 (API 호출 안 함 -> 실패 확률 0%)
-    if movie_cd in cache:
+    # 1. 캐시에 있으면 그거 씀 (API 호출 X -> 중복 방지 & 속도 UP)
+    if movie_cd in cache and cache[movie_cd]:
         # print(f"  [Skip] Used cached detail for {movie_cd}")
         return cache[movie_cd]
 
@@ -49,18 +50,19 @@ def fetch_movie_detail(movie_cd, cache):
             
             # 정보가 제대로 왔는지 확인 (영화명이 있어야 성공)
             if info and "movieNm" in info:
+                # print(f"  [Fetch] Successfully fetched {movie_cd}")
                 return info
             
             # 정보가 비어있으면 에러로 간주하고 재시도
             raise Exception("Empty data received")
 
         except Exception as e:
-            wait_time = (attempt + 1) * 2 # 2초, 4초, 6초 대기
+            wait_time = (attempt + 1) * 2 # 2초, 4초, 6초 대기 (점점 길게)
             print(f"  [Retry] {movie_cd} failed (Attempt {attempt+1}/3): {e}. Waiting {wait_time}s...")
             time.sleep(wait_time)
     
     print(f"  [Fail] Could not fetch detail for {movie_cd} after 3 attempts.")
-    return {} # 끝내 실패하면 빈 객체 반환
+    return {} # 끝내 실패하면 빈 객체 반환 (어쩔 수 없음)
 
 def main():
     if not KOBIS_API_KEY: 
@@ -72,7 +74,7 @@ def main():
     yesterday = (today - datetime.timedelta(days=1)).strftime("%Y%m%d")
     print(f"Target Date: {yesterday}")
 
-    # 2. 기존 데이터 로드 (백업용)
+    # 2. 기존 데이터 로드 (중복 방지용 캐시 구축)
     detail_cache = load_existing_details()
 
     # 3. 박스오피스 목록 가져오기
@@ -107,10 +109,10 @@ def main():
                 date_list.append(curr.strftime("%Y%m%d"))
                 curr += datetime.timedelta(days=1)
             
+            # API 과부하 방지: 최근 90일만 조회
             if len(date_list) > 90: date_list = date_list[-90:]
             
             trend_data = []
-            # 트렌드 API 호출도 병렬로
             trend_futures = {executor.submit(fetch_api_list, d): d for d in date_list}
             
             for f in trend_futures:
@@ -141,7 +143,7 @@ def main():
                 movie['scrnInten'] = 0
                 movie['showInten'] = 0
             
-            # --- [핵심] 상세정보 병합 (캐시 + 재시도 적용) ---
+            # --- [핵심] 상세정보 병합 (캐시 우선 + 재시도 적용) ---
             detail = fetch_movie_detail(movie_cd, detail_cache)
             movie['detail'] = detail
 
