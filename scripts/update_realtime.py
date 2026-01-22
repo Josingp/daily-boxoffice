@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 REALTIME_FILE = "public/realtime_data.json"
 DAILY_FILE = "public/daily_data.json"
-MANUAL_FILE = "manual_data.json" # [NEW] 수동 데이터 파일
+MANUAL_FILE = "manual_data.json"
 KOBIS_REALTIME_URL = "https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do"
 KOBIS_DETAIL_URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
 KOBIS_API_KEY = os.environ.get("KOBIS_API_KEY")
@@ -43,8 +43,9 @@ def update_realtime():
     
     realtime_data = load_json(REALTIME_FILE)
     daily_data = load_json(DAILY_FILE)
-    manual_data = load_json(MANUAL_FILE) # [NEW] 수동 데이터 로드
+    manual_data = load_json(MANUAL_FILE)
     
+    # 기존 Daily 데이터에서 상세정보 캐시 확보
     detail_cache_cd = {}
     if "movies" in daily_data:
         for m in daily_data["movies"]:
@@ -96,26 +97,28 @@ def update_realtime():
             
             if not title: continue
             
-            # [중요] 상세정보 확보 로직 (수동 데이터 우선 확인)
-            if title not in realtime_data["meta"]:
+            # [중요] 상세정보 확보 및 수동 데이터 병합 로직
+            if title not in realtime_data["meta"] or "posterUrl" not in realtime_data["meta"][title]:
                 found_detail = None
                 
-                # 0. 수동 데이터 확인 (제목 매칭)
-                for m_title, m_info in manual_data.items():
-                    if m_title.replace(" ", "") == title.replace(" ", ""):
-                        # 수동 데이터가 있으면 그걸 기반으로 가짜 detail 생성 (포스터용)
-                        # 하지만 여기서는 KOBIS 상세정보를 주로 저장하므로 패스
-                        pass
-
-                # 1. Daily DB (Code 매칭)
+                # 1. API/캐시 데이터 먼저 확인
                 if movie_cd and movie_cd in detail_cache_cd:
                     found_detail = detail_cache_cd[movie_cd]
-                # 2. API 호출
                 elif movie_cd and int(rank) <= 20:
                     found_detail = fetch_movie_detail(movie_cd)
                     if found_detail: time.sleep(0.1)
 
-                if found_detail: realtime_data["meta"][title] = found_detail
+                if not found_detail: found_detail = {}
+                
+                # 2. 수동 데이터(포스터)가 있다면 덮어씌우기
+                clean_title = title.replace(" ", "")
+                for m_title, m_info in manual_data.items():
+                    if m_title.replace(" ", "") == clean_title:
+                        found_detail.update(m_info) # posterUrl, productionCost 병합
+                        break
+                
+                if found_detail:
+                    realtime_data["meta"][title] = found_detail
 
             rate = cols[3].get_text(strip=True).replace('%', '')
             audi_cnt_raw = cols[6].get_text(strip=True)
