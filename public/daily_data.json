@@ -1,5 +1,5 @@
 {
-  "date": "20260121",
+  "date": "20260122",
   "movies": [
     {
       "rnum": "1",
@@ -9,17 +9,17 @@
       "movieCd": "20249255",
       "movieNm": "만약에 우리",
       "openDt": "2025-12-31",
-      "salesAmt": "401842980",
-      "salesShare": "24.2",
-      "salesInten": "-23928440",
-      "salesChange": "-5.6",
-      "salesAcc": "16657753490",
-      "audiCnt": "41618",
-      "audiInten": "-2151",
-      "audiChange": "-4.9",
-      "audiAcc": "1707257",
-      "scrnCnt": "886",
-      "showCnt": "3171",
+      "salesAmt": "383045060",
+      "salesShare": "26.4",
+      "salesInten": "-18797920",
+      "salesChange": "-4.7",
+      "salesAcc": "17040767550",
+      "audiCnt": "39480",
+      "audiInten": "-2138",
+      "audiChange": "-5.1",
+      "audiAcc": "1746734",
+      "scrnCnt": "932",
+      "showCnt": "3194",
       "trend": [
         {
           "date": "20251231",
@@ -29,18 +29,18 @@
           "showCnt": 2734
         },
         {
+          "date": "20260101",
+          "audiCnt": 100059,
+          "salesAmt": 996136420,
+          "scrnCnt": 893,
+          "showCnt": 2589
+        },
+        {
           "date": "20260102",
           "audiCnt": 64445,
           "salesAmt": 632998370,
           "scrnCnt": 880,
           "showCnt": 2659
-        },
-        {
-          "date": "20260103",
-          "audiCnt": 100809,
-          "salesAmt": 999014170,
-          "scrnCnt": 913,
-          "showCnt": 2723
         },
         {
           "date": "20260104",
@@ -57,25 +57,11 @@
           "showCnt": 2522
         },
         {
-          "date": "20260106",
-          "audiCnt": 51980,
-          "salesAmt": 496875890,
-          "scrnCnt": 856,
-          "showCnt": 2584
-        },
-        {
           "date": "20260107",
           "audiCnt": 54918,
           "salesAmt": 525383350,
           "scrnCnt": 925,
           "showCnt": 2759
-        },
-        {
-          "date": "20260108",
-          "audiCnt": 58278,
-          "salesAmt": 558557820,
-          "scrnCnt": 981,
-          "showCnt": 2910
         },
         {
           "date": "20260109",
@@ -85,46 +71,11 @@
           "showCnt": 3332
         },
         {
-          "date": "20260110",
-          "audiCnt": 134301,
-          "salesAmt": 1334054230,
-          "scrnCnt": 1102,
-          "showCnt": 3887
-        },
-        {
           "date": "20260111",
           "audiCnt": 133310,
           "salesAmt": 1341033550,
           "scrnCnt": 1107,
           "showCnt": 3783
-        },
-        {
-          "date": "20260112",
-          "audiCnt": 54601,
-          "salesAmt": 530034730,
-          "scrnCnt": 944,
-          "showCnt": 3459
-        },
-        {
-          "date": "20260113",
-          "audiCnt": 53830,
-          "salesAmt": 521987450,
-          "scrnCnt": 968,
-          "showCnt": 3476
-        },
-        {
-          "date": "20260114",
-          "audiCnt": 52687,
-          "salesAmt": 506532920,
-          "scrnCnt": 964,
-          "showCnt": 3425
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 49896,
-          "salesAmt": 481899310,
-          "scrnCnt": 984,
-          "showCnt": 3381
         },
         {
           "date": "20260116",
@@ -134,36 +85,15 @@
           "showCnt": 3650
         },
         {
-          "date": "20260117",
-          "audiCnt": 133181,
-          "salesAmt": 1330003410,
-          "scrnCnt": 1116,
-          "showCnt": 4089
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 121752,
-          "salesAmt": 1220432140,
-          "scrnCnt": 1084,
-          "showCnt": 3878
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 48031,
-          "salesAmt": 470408840,
-          "scrnCnt": 986,
-          "showCnt": 3567
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 41618,
-          "salesAmt": 401842980,
-          "scrnCnt": 886,
-          "showCnt": 3171
+          "date": "20260122",
+          "audiCnt": 39480,
+          "salesAmt": 383045060,
+          "scrnCnt": 932,
+          "showCnt": 3194
         }
       ],
-      "scrnInten": -100,
-      "showInten": -396,
+      "scrnInten": -94,
+      "showInten": -456,
       "detail": {
         "movieCd": "20249255",
         "movieNm": "만약에 우리",
@@ -262,218 +192,22 @@
     {
       "rnum": "2",
       "rank": "2",
-      "rankInten": "0",
-      "rankOldAndNew": "NEW",
-      "movieCd": "20249624",
-      "movieNm": "프로젝트 Y",
-      "openDt": "2026-01-21",
-      "salesAmt": "224920730",
-      "salesShare": "13.6",
-      "salesInten": "224920730",
-      "salesChange": "100",
-      "salesAcc": "246059730",
-      "audiCnt": "24398",
-      "audiInten": "24398",
-      "audiChange": "100",
-      "audiAcc": "26551",
-      "scrnCnt": "781",
-      "showCnt": "2785",
-      "trend": [
-        {
-          "date": "20260121",
-          "audiCnt": 24398,
-          "salesAmt": 224920730,
-          "scrnCnt": 781,
-          "showCnt": 2785
-        }
-      ],
-      "scrnInten": 0,
-      "showInten": 0,
-      "detail": {
-        "movieCd": "20249624",
-        "movieNm": "프로젝트 Y",
-        "movieNmEn": "PROJECT Y",
-        "movieNmOg": "",
-        "showTm": "108",
-        "prdtYear": "2025",
-        "openDt": "20260121",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "한국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "범죄"
-          },
-          {
-            "genreNm": "드라마"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "이환",
-            "peopleNmEn": "LEE Hwan"
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "한소희",
-            "peopleNmEn": "HAN Sohee",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "전종서",
-            "peopleNmEn": "JUN Jongseo",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "김신록",
-            "peopleNmEn": "KIM Shin-rock",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "정영주",
-            "peopleNmEn": "JEONG Young-ju",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "이재균",
-            "peopleNmEn": "LEE Jae-kyoon",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "유아",
-            "peopleNmEn": "YooA",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "김성철",
-            "peopleNmEn": "KIM Sung-cheol",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "박보인",
-            "peopleNmEn": "Park Bo In",
-            "cast": "하드코어 아가씨",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "서우준",
-            "peopleNmEn": "SeoWuJoon",
-            "cast": "제비",
-            "castEn": ""
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20203941",
-            "companyNm": "클라이맥스 스튜디오(주)",
-            "companyNmEn": "Climax Studio",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20218401",
-            "companyNm": "주식회사 와우포인트",
-            "companyNmEn": "WOWPOINT",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20141469",
-            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
-            "companyNmEn": "Plus M Entertainment",
-            "companyPartNm": "공동제작사"
-          },
-          {
-            "companyCd": "20141469",
-            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
-            "companyNmEn": "Plus M Entertainment",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20141469",
-            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
-            "companyNmEn": "Plus M Entertainment",
-            "companyPartNm": "제공"
-          },
-          {
-            "companyCd": "20141469",
-            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
-            "companyNmEn": "Plus M Entertainment",
-            "companyPartNm": "해외세일즈사"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03454",
-            "watchGradeNm": "15세이상관람가"
-          }
-        ],
-        "staffs": [
-          {
-            "peopleNm": "양유민",
-            "peopleNmEn": "",
-            "staffRoleNm": "제작"
-          },
-          {
-            "peopleNm": "변승민",
-            "peopleNmEn": "",
-            "staffRoleNm": "제작"
-          },
-          {
-            "peopleNm": "오유경",
-            "peopleNmEn": "",
-            "staffRoleNm": "시나리오(각본)"
-          },
-          {
-            "peopleNm": "이환",
-            "peopleNmEn": "LEE Hwan",
-            "staffRoleNm": "시나리오(각본)"
-          },
-          {
-            "peopleNm": "곽재민",
-            "peopleNmEn": "kwak jae min",
-            "staffRoleNm": "시나리오(각본)"
-          }
-        ],
-        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/eb48fc599cc24e5aa0b731ca54d52329.jpg",
-        "productionCost": 0
-      }
-    },
-    {
-      "rnum": "3",
-      "rank": "3",
-      "rankInten": "-1",
+      "rankInten": "1",
       "rankOldAndNew": "OLD",
       "movieCd": "20247457",
       "movieNm": "신의악단",
       "openDt": "2025-12-31",
-      "salesAmt": "174751000",
-      "salesShare": "10.5",
-      "salesInten": "-52668220",
-      "salesChange": "-23.2",
-      "salesAcc": "4810160780",
-      "audiCnt": "18809",
-      "audiInten": "-5268",
-      "audiChange": "-21.9",
-      "audiAcc": "502947",
-      "scrnCnt": "618",
-      "showCnt": "1194",
+      "salesAmt": "237059410",
+      "salesShare": "16.3",
+      "salesInten": "62308410",
+      "salesChange": "35.7",
+      "salesAcc": "5047211190",
+      "audiCnt": "25203",
+      "audiInten": "6394",
+      "audiChange": "34",
+      "audiAcc": "528149",
+      "scrnCnt": "717",
+      "showCnt": "1371",
       "trend": [
         {
           "date": "20251231",
@@ -483,18 +217,18 @@
           "showCnt": 811
         },
         {
+          "date": "20260101",
+          "audiCnt": 29755,
+          "salesAmt": 281148600,
+          "scrnCnt": 464,
+          "showCnt": 699
+        },
+        {
           "date": "20260102",
           "audiCnt": 15711,
           "salesAmt": 145609300,
           "scrnCnt": 477,
           "showCnt": 731
-        },
-        {
-          "date": "20260103",
-          "audiCnt": 23232,
-          "salesAmt": 221603990,
-          "scrnCnt": 498,
-          "showCnt": 721
         },
         {
           "date": "20260104",
@@ -511,13 +245,6 @@
           "showCnt": 757
         },
         {
-          "date": "20260106",
-          "audiCnt": 14880,
-          "salesAmt": 132674700,
-          "scrnCnt": 522,
-          "showCnt": 800
-        },
-        {
           "date": "20260107",
           "audiCnt": 11929,
           "salesAmt": 110968100,
@@ -525,25 +252,11 @@
           "showCnt": 819
         },
         {
-          "date": "20260108",
-          "audiCnt": 15293,
-          "salesAmt": 143729540,
-          "scrnCnt": 508,
-          "showCnt": 852
-        },
-        {
           "date": "20260109",
-          "audiCnt": 16893,
-          "salesAmt": 164519860,
+          "audiCnt": 16892,
+          "salesAmt": 164510860,
           "scrnCnt": 572,
           "showCnt": 963
-        },
-        {
-          "date": "20260110",
-          "audiCnt": 34696,
-          "salesAmt": 344585800,
-          "scrnCnt": 613,
-          "showCnt": 1075
         },
         {
           "date": "20260111",
@@ -553,34 +266,6 @@
           "showCnt": 1088
         },
         {
-          "date": "20260112",
-          "audiCnt": 16112,
-          "salesAmt": 150356140,
-          "scrnCnt": 547,
-          "showCnt": 1086
-        },
-        {
-          "date": "20260113",
-          "audiCnt": 16048,
-          "salesAmt": 151664760,
-          "scrnCnt": 567,
-          "showCnt": 1102
-        },
-        {
-          "date": "20260114",
-          "audiCnt": 12554,
-          "salesAmt": 117214550,
-          "scrnCnt": 524,
-          "showCnt": 970
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 15898,
-          "salesAmt": 148461860,
-          "scrnCnt": 579,
-          "showCnt": 1060
-        },
-        {
           "date": "20260116",
           "audiCnt": 19528,
           "salesAmt": 192378990,
@@ -588,36 +273,15 @@
           "showCnt": 1207
         },
         {
-          "date": "20260117",
-          "audiCnt": 45981,
-          "salesAmt": 458351360,
-          "scrnCnt": 734,
-          "showCnt": 1450
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 49330,
-          "salesAmt": 498765010,
-          "scrnCnt": 740,
-          "showCnt": 1406
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 24177,
-          "salesAmt": 229421300,
-          "scrnCnt": 605,
-          "showCnt": 1373
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 18809,
-          "salesAmt": 174751000,
-          "scrnCnt": 618,
-          "showCnt": 1194
+          "date": "20260122",
+          "audiCnt": 25203,
+          "salesAmt": 237059410,
+          "scrnCnt": 717,
+          "showCnt": 1371
         }
       ],
-      "scrnInten": 13,
-      "showInten": -179,
+      "scrnInten": 102,
+      "showInten": 164,
       "detail": {
         "movieCd": "20247457",
         "movieNm": "신의악단",
@@ -805,25 +469,32 @@
       }
     },
     {
-      "rnum": "4",
-      "rank": "4",
-      "rankInten": "-1",
+      "rnum": "3",
+      "rank": "3",
+      "rankInten": "1",
       "rankOldAndNew": "OLD",
       "movieCd": "20256396",
       "movieNm": "아바타: 불과 재",
       "openDt": "2025-12-17",
-      "salesAmt": "202634960",
-      "salesShare": "12.2",
-      "salesInten": "-13876430",
-      "salesChange": "-6.4",
-      "salesAcc": "74996407010",
-      "audiCnt": "16497",
-      "audiInten": "-1699",
-      "audiChange": "-9.3",
-      "audiAcc": "6433351",
-      "scrnCnt": "711",
-      "showCnt": "1585",
+      "salesAmt": "196575200",
+      "salesShare": "13.6",
+      "salesInten": "-6059760",
+      "salesChange": "-3",
+      "salesAcc": "75192982210",
+      "audiCnt": "15860",
+      "audiInten": "-637",
+      "audiChange": "-3.9",
+      "audiAcc": "6449211",
+      "scrnCnt": "717",
+      "showCnt": "1574",
       "trend": [
+        {
+          "date": "20251217",
+          "audiCnt": 265031,
+          "salesAmt": 2950290960,
+          "scrnCnt": 2582,
+          "showCnt": 8143
+        },
         {
           "date": "20251218",
           "audiCnt": 179034,
@@ -832,18 +503,25 @@
           "showCnt": 7819
         },
         {
-          "date": "20251220",
-          "audiCnt": 548560,
-          "salesAmt": 6394115180,
-          "scrnCnt": 2385,
-          "showCnt": 8029
-        },
-        {
           "date": "20251222",
           "audiCnt": 152241,
           "salesAmt": 1778364190,
           "scrnCnt": 2249,
           "showCnt": 6922
+        },
+        {
+          "date": "20251223",
+          "audiCnt": 145797,
+          "salesAmt": 1693017460,
+          "scrnCnt": 2280,
+          "showCnt": 6935
+        },
+        {
+          "date": "20251224",
+          "audiCnt": 299139,
+          "salesAmt": 3376169460,
+          "scrnCnt": 2050,
+          "showCnt": 6465
         },
         {
           "date": "20251225",
@@ -867,13 +545,6 @@
           "showCnt": 6201
         },
         {
-          "date": "20251229",
-          "audiCnt": 138756,
-          "salesAmt": 1602159840,
-          "scrnCnt": 1875,
-          "showCnt": 5663
-        },
-        {
           "date": "20251231",
           "audiCnt": 255811,
           "salesAmt": 2528548820,
@@ -881,18 +552,18 @@
           "showCnt": 5445
         },
         {
+          "date": "20260101",
+          "audiCnt": 358005,
+          "salesAmt": 4207700560,
+          "scrnCnt": 1752,
+          "showCnt": 5425
+        },
+        {
           "date": "20260102",
           "audiCnt": 168105,
           "salesAmt": 2059174600,
           "scrnCnt": 1715,
           "showCnt": 5316
-        },
-        {
-          "date": "20260103",
-          "audiCnt": 260785,
-          "salesAmt": 3136319700,
-          "scrnCnt": 1761,
-          "showCnt": 5503
         },
         {
           "date": "20260104",
@@ -909,25 +580,11 @@
           "showCnt": 4409
         },
         {
-          "date": "20260106",
-          "audiCnt": 52067,
-          "salesAmt": 620916980,
-          "scrnCnt": 1595,
-          "showCnt": 4380
-        },
-        {
           "date": "20260107",
           "audiCnt": 46670,
           "salesAmt": 564499290,
           "scrnCnt": 1518,
           "showCnt": 3997
-        },
-        {
-          "date": "20260108",
-          "audiCnt": 47530,
-          "salesAmt": 574272800,
-          "scrnCnt": 1507,
-          "showCnt": 3963
         },
         {
           "date": "20260109",
@@ -937,46 +594,11 @@
           "showCnt": 4147
         },
         {
-          "date": "20260110",
-          "audiCnt": 135341,
-          "salesAmt": 1697567980,
-          "scrnCnt": 1486,
-          "showCnt": 4307
-        },
-        {
           "date": "20260111",
           "audiCnt": 122869,
           "salesAmt": 1521034770,
           "scrnCnt": 1453,
           "showCnt": 4052
-        },
-        {
-          "date": "20260112",
-          "audiCnt": 35410,
-          "salesAmt": 432735510,
-          "scrnCnt": 1301,
-          "showCnt": 3319
-        },
-        {
-          "date": "20260113",
-          "audiCnt": 32821,
-          "salesAmt": 399747480,
-          "scrnCnt": 1327,
-          "showCnt": 3298
-        },
-        {
-          "date": "20260114",
-          "audiCnt": 28380,
-          "salesAmt": 333264860,
-          "scrnCnt": 1064,
-          "showCnt": 2391
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 25551,
-          "salesAmt": 306651740,
-          "scrnCnt": 1047,
-          "showCnt": 2324
         },
         {
           "date": "20260116",
@@ -986,36 +608,15 @@
           "showCnt": 2448
         },
         {
-          "date": "20260117",
-          "audiCnt": 77511,
-          "salesAmt": 974040540,
-          "scrnCnt": 1048,
-          "showCnt": 2584
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 66975,
-          "salesAmt": 830422780,
-          "scrnCnt": 1036,
-          "showCnt": 2467
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 19814,
-          "salesAmt": 236580550,
-          "scrnCnt": 959,
-          "showCnt": 2095
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 16497,
-          "salesAmt": 202634960,
-          "scrnCnt": 711,
-          "showCnt": 1585
+          "date": "20260122",
+          "audiCnt": 15860,
+          "salesAmt": 196575200,
+          "scrnCnt": 717,
+          "showCnt": 1574
         }
       ],
-      "scrnInten": -248,
-      "showInten": -510,
+      "scrnInten": -327,
+      "showInten": -874,
       "detail": {
         "movieCd": "20256396",
         "movieNm": "아바타: 불과 재",
@@ -1196,31 +797,824 @@
       }
     },
     {
+      "rnum": "4",
+      "rank": "4",
+      "rankInten": "-2",
+      "rankOldAndNew": "OLD",
+      "movieCd": "20249624",
+      "movieNm": "프로젝트 Y",
+      "openDt": "2026-01-21",
+      "salesAmt": "137017460",
+      "salesShare": "9.4",
+      "salesInten": "-87903270",
+      "salesChange": "-39.1",
+      "salesAcc": "383077190",
+      "audiCnt": "14435",
+      "audiInten": "-9963",
+      "audiChange": "-40.8",
+      "audiAcc": "40986",
+      "scrnCnt": "760",
+      "showCnt": "2447",
+      "trend": [
+        {
+          "date": "20260122",
+          "audiCnt": 14435,
+          "salesAmt": 137017460,
+          "scrnCnt": 760,
+          "showCnt": 2447
+        }
+      ],
+      "scrnInten": 0,
+      "showInten": 0,
+      "detail": {
+        "movieCd": "20249624",
+        "movieNm": "프로젝트 Y",
+        "movieNmEn": "PROJECT Y",
+        "movieNmOg": "",
+        "showTm": "108",
+        "prdtYear": "2025",
+        "openDt": "20260121",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "범죄"
+          },
+          {
+            "genreNm": "드라마"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "이환",
+            "peopleNmEn": "LEE Hwan"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "한소희",
+            "peopleNmEn": "HAN Sohee",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "전종서",
+            "peopleNmEn": "JUN Jongseo",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "김신록",
+            "peopleNmEn": "KIM Shin-rock",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "정영주",
+            "peopleNmEn": "JEONG Young-ju",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "이재균",
+            "peopleNmEn": "LEE Jae-kyoon",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "유아",
+            "peopleNmEn": "YooA",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "김성철",
+            "peopleNmEn": "KIM Sung-cheol",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "박보인",
+            "peopleNmEn": "Park Bo In",
+            "cast": "하드코어 아가씨",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "서우준",
+            "peopleNmEn": "SeoWuJoon",
+            "cast": "제비",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20203941",
+            "companyNm": "클라이맥스 스튜디오(주)",
+            "companyNmEn": "Climax Studio",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20218401",
+            "companyNm": "주식회사 와우포인트",
+            "companyNmEn": "WOWPOINT",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20141469",
+            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
+            "companyNmEn": "Plus M Entertainment",
+            "companyPartNm": "공동제작사"
+          },
+          {
+            "companyCd": "20141469",
+            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
+            "companyNmEn": "Plus M Entertainment",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20141469",
+            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
+            "companyNmEn": "Plus M Entertainment",
+            "companyPartNm": "제공"
+          },
+          {
+            "companyCd": "20141469",
+            "companyNm": "메가박스중앙(주) 플러스엠 엔터테인먼트",
+            "companyNmEn": "Plus M Entertainment",
+            "companyPartNm": "해외세일즈사"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03454",
+            "watchGradeNm": "15세이상관람가"
+          }
+        ],
+        "staffs": [
+          {
+            "peopleNm": "양유민",
+            "peopleNmEn": "",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "변승민",
+            "peopleNmEn": "",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "오유경",
+            "peopleNmEn": "",
+            "staffRoleNm": "시나리오(각본)"
+          },
+          {
+            "peopleNm": "이환",
+            "peopleNmEn": "LEE Hwan",
+            "staffRoleNm": "시나리오(각본)"
+          },
+          {
+            "peopleNm": "곽재민",
+            "peopleNmEn": "kwak jae min",
+            "staffRoleNm": "시나리오(각본)"
+          }
+        ],
+        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/eb48fc599cc24e5aa0b731ca54d52329.jpg",
+        "productionCost": 0
+      }
+    },
+    {
       "rnum": "5",
       "rank": "5",
-      "rankInten": "0",
-      "rankOldAndNew": "NEW",
+      "rankInten": "1",
+      "rankOldAndNew": "OLD",
+      "movieCd": "20252432",
+      "movieNm": "주토피아 2",
+      "openDt": "2025-11-26",
+      "salesAmt": "62084640",
+      "salesShare": "4.3",
+      "salesInten": "-937070",
+      "salesChange": "-1.5",
+      "salesAcc": "81512781880",
+      "audiCnt": "6811",
+      "audiInten": "62",
+      "audiChange": "0.9",
+      "audiAcc": "8470258",
+      "scrnCnt": "451",
+      "showCnt": "665",
+      "trend": [
+        {
+          "date": "20251126",
+          "audiCnt": 309168,
+          "salesAmt": 2491089050,
+          "scrnCnt": 2084,
+          "showCnt": 8027
+        },
+        {
+          "date": "20251127",
+          "audiCnt": 172048,
+          "salesAmt": 1647740230,
+          "scrnCnt": 1943,
+          "showCnt": 7769
+        },
+        {
+          "date": "20251128",
+          "audiCnt": 258740,
+          "salesAmt": 2587554610,
+          "scrnCnt": 2047,
+          "showCnt": 8490
+        },
+        {
+          "date": "20251129",
+          "audiCnt": 700790,
+          "salesAmt": 6897143360,
+          "scrnCnt": 2383,
+          "showCnt": 10719
+        },
+        {
+          "date": "20251203",
+          "audiCnt": 149236,
+          "salesAmt": 1406321030,
+          "scrnCnt": 1626,
+          "showCnt": 6352
+        },
+        {
+          "date": "20251204",
+          "audiCnt": 128427,
+          "salesAmt": 1207486370,
+          "scrnCnt": 1675,
+          "showCnt": 6399
+        },
+        {
+          "date": "20251205",
+          "audiCnt": 189916,
+          "salesAmt": 1868754350,
+          "scrnCnt": 1771,
+          "showCnt": 7335
+        },
+        {
+          "date": "20251211",
+          "audiCnt": 108697,
+          "salesAmt": 1036476210,
+          "scrnCnt": 1691,
+          "showCnt": 6686
+        },
+        {
+          "date": "20251213",
+          "audiCnt": 427384,
+          "salesAmt": 4212118870,
+          "scrnCnt": 2114,
+          "showCnt": 9545
+        },
+        {
+          "date": "20251214",
+          "audiCnt": 398897,
+          "salesAmt": 3900726940,
+          "scrnCnt": 2108,
+          "showCnt": 9102
+        },
+        {
+          "date": "20251215",
+          "audiCnt": 81923,
+          "salesAmt": 786570990,
+          "scrnCnt": 1679,
+          "showCnt": 6576
+        },
+        {
+          "date": "20251217",
+          "audiCnt": 85554,
+          "salesAmt": 794541870,
+          "scrnCnt": 1084,
+          "showCnt": 2909
+        },
+        {
+          "date": "20251218",
+          "audiCnt": 82280,
+          "salesAmt": 760728140,
+          "scrnCnt": 1124,
+          "showCnt": 3063
+        },
+        {
+          "date": "20251222",
+          "audiCnt": 66988,
+          "salesAmt": 629559610,
+          "scrnCnt": 1163,
+          "showCnt": 3729
+        },
+        {
+          "date": "20251223",
+          "audiCnt": 66369,
+          "salesAmt": 621352310,
+          "scrnCnt": 1181,
+          "showCnt": 3716
+        },
+        {
+          "date": "20251224",
+          "audiCnt": 131302,
+          "salesAmt": 1229918420,
+          "scrnCnt": 1265,
+          "showCnt": 4336
+        },
+        {
+          "date": "20251225",
+          "audiCnt": 431302,
+          "salesAmt": 4220061110,
+          "scrnCnt": 1356,
+          "showCnt": 5050
+        },
+        {
+          "date": "20251226",
+          "audiCnt": 108312,
+          "salesAmt": 1041885560,
+          "scrnCnt": 1235,
+          "showCnt": 4139
+        },
+        {
+          "date": "20251228",
+          "audiCnt": 159436,
+          "salesAmt": 1549879420,
+          "scrnCnt": 1210,
+          "showCnt": 4249
+        },
+        {
+          "date": "20251231",
+          "audiCnt": 101823,
+          "salesAmt": 824680100,
+          "scrnCnt": 1001,
+          "showCnt": 2839
+        },
+        {
+          "date": "20260101",
+          "audiCnt": 137413,
+          "salesAmt": 1340436480,
+          "scrnCnt": 986,
+          "showCnt": 2876
+        },
+        {
+          "date": "20260102",
+          "audiCnt": 65880,
+          "salesAmt": 637877960,
+          "scrnCnt": 920,
+          "showCnt": 2696
+        },
+        {
+          "date": "20260104",
+          "audiCnt": 81230,
+          "salesAmt": 788872580,
+          "scrnCnt": 950,
+          "showCnt": 2760
+        },
+        {
+          "date": "20260105",
+          "audiCnt": 23959,
+          "salesAmt": 227374110,
+          "scrnCnt": 786,
+          "showCnt": 2250
+        },
+        {
+          "date": "20260107",
+          "audiCnt": 22565,
+          "salesAmt": 209239830,
+          "scrnCnt": 788,
+          "showCnt": 2070
+        },
+        {
+          "date": "20260109",
+          "audiCnt": 25685,
+          "salesAmt": 246648440,
+          "scrnCnt": 801,
+          "showCnt": 2110
+        },
+        {
+          "date": "20260111",
+          "audiCnt": 51883,
+          "salesAmt": 507084050,
+          "scrnCnt": 819,
+          "showCnt": 2218
+        },
+        {
+          "date": "20260116",
+          "audiCnt": 14118,
+          "salesAmt": 135949090,
+          "scrnCnt": 664,
+          "showCnt": 1204
+        },
+        {
+          "date": "20260122",
+          "audiCnt": 6811,
+          "salesAmt": 62084640,
+          "scrnCnt": 451,
+          "showCnt": 665
+        }
+      ],
+      "scrnInten": -213,
+      "showInten": -539,
+      "detail": {
+        "movieCd": "20252432",
+        "movieNm": "주토피아 2",
+        "movieNmEn": "Zootopia 2",
+        "movieNmOg": "",
+        "showTm": "108",
+        "prdtYear": "2025",
+        "openDt": "20251126",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "미국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "애니메이션"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "재러드 부시",
+            "peopleNmEn": "Jared Bush"
+          },
+          {
+            "peopleNm": "바이론 하워드",
+            "peopleNmEn": "Byron Howard"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "지니퍼 굿윈",
+            "peopleNmEn": "Ginnifer Goodwin",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "제이슨 베이트먼",
+            "peopleNmEn": "Jason Bateman",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "키 호이 콴",
+            "peopleNmEn": "Ke Huy-Quan",
+            "cast": "",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          },
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털 영문자막"
+          },
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털 더빙"
+          },
+          {
+            "showTypeGroupNm": "4D",
+            "showTypeNm": "4D 더빙"
+          },
+          {
+            "showTypeGroupNm": "4D",
+            "showTypeNm": "4D"
+          },
+          {
+            "showTypeGroupNm": "IMAX",
+            "showTypeNm": "IMAX"
+          },
+          {
+            "showTypeGroupNm": "ScreenX",
+            "showTypeNm": "ScreenX"
+          },
+          {
+            "showTypeGroupNm": "DOLBYCINEMA",
+            "showTypeNm": "DOLBYCINEMA"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20161801",
+            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
+            "companyNmEn": "The Walt Disney Company Korea",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20161801",
+            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
+            "companyNmEn": "The Walt Disney Company Korea",
+            "companyPartNm": "수입사"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03006",
+            "watchGradeNm": "전체관람가"
+          }
+        ],
+        "staffs": []
+      }
+    },
+    {
+      "rnum": "6",
+      "rank": "6",
+      "rankInten": "1",
+      "rankOldAndNew": "OLD",
+      "movieCd": "20250188",
+      "movieNm": "하트맨",
+      "openDt": "2026-01-14",
+      "salesAmt": "54151560",
+      "salesShare": "3.7",
+      "salesInten": "-2687340",
+      "salesChange": "-4.7",
+      "salesAcc": "1802367240",
+      "audiCnt": "6195",
+      "audiInten": "-151",
+      "audiChange": "-2.4",
+      "audiAcc": "194605",
+      "scrnCnt": "534",
+      "showCnt": "972",
+      "trend": [
+        {
+          "date": "20260116",
+          "audiCnt": 22013,
+          "salesAmt": 205695220,
+          "scrnCnt": 814,
+          "showCnt": 2700
+        },
+        {
+          "date": "20260122",
+          "audiCnt": 6195,
+          "salesAmt": 54151560,
+          "scrnCnt": 534,
+          "showCnt": 972
+        }
+      ],
+      "scrnInten": -280,
+      "showInten": -1728,
+      "detail": {
+        "movieCd": "20250188",
+        "movieNm": "하트맨",
+        "movieNmEn": "Heartman: Rock and Love",
+        "movieNmOg": "",
+        "showTm": "99",
+        "prdtYear": "2025",
+        "openDt": "20260114",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "코미디"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "최원섭",
+            "peopleNmEn": "CHOI Won-sub"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "권상우",
+            "peopleNmEn": "KWON Sang-woo",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "문채원",
+            "peopleNmEn": "MOON Chae-won",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "박지환",
+            "peopleNmEn": "PARK Ji-hwan",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "표지훈",
+            "peopleNmEn": "",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "노은비",
+            "peopleNmEn": "eunbi noh",
+            "cast": "팬클럽5",
+            "castEn": "fanclub5"
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20139999",
+            "companyNm": "(주)무비락",
+            "companyNmEn": "MOVIEROCK",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20255241",
+            "companyNm": "(주)라이크엠컴퍼니",
+            "companyNmEn": "LIKE M COMPANY",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20188021",
+            "companyNm": "롯데컬처웍스(주)롯데엔터테인먼트",
+            "companyNmEn": "Lotte Entertainment",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20188021",
+            "companyNm": "롯데컬처웍스(주)롯데엔터테인먼트",
+            "companyNmEn": "Lotte Entertainment",
+            "companyPartNm": "제공"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03431",
+            "watchGradeNm": "12세이상관람가"
+          }
+        ],
+        "staffs": [
+          {
+            "peopleNm": "이성균",
+            "peopleNmEn": "",
+            "staffRoleNm": "발전차"
+          }
+        ],
+        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/9db39ce00de94802988753777473344b.jpg",
+        "productionCost": 6500000000
+      }
+    },
+    {
+      "rnum": "7",
+      "rank": "7",
+      "rankInten": "2",
+      "rankOldAndNew": "OLD",
+      "movieCd": "20250482",
+      "movieNm": "신비아파트 10주년 극장판: 한 번 더, 소환",
+      "openDt": "2026-01-14",
+      "salesAmt": "51774200",
+      "salesShare": "3.6",
+      "salesInten": "6562790",
+      "salesChange": "14.5",
+      "salesAcc": "1653630500",
+      "audiCnt": "5845",
+      "audiInten": "547",
+      "audiChange": "10.3",
+      "audiAcc": "185345",
+      "scrnCnt": "511",
+      "showCnt": "793",
+      "trend": [
+        {
+          "date": "20260116",
+          "audiCnt": 13468,
+          "salesAmt": 121103890,
+          "scrnCnt": 721,
+          "showCnt": 1205
+        },
+        {
+          "date": "20260122",
+          "audiCnt": 5845,
+          "salesAmt": 51774200,
+          "scrnCnt": 511,
+          "showCnt": 793
+        }
+      ],
+      "scrnInten": -210,
+      "showInten": -412,
+      "detail": {
+        "movieCd": "20250482",
+        "movieNm": "신비아파트 10주년 극장판: 한 번 더, 소환",
+        "movieNmEn": "Shinbi's Haunted House: One More Summon",
+        "movieNmOg": "",
+        "showTm": "86",
+        "prdtYear": "2025",
+        "openDt": "20260114",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "애니메이션"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "최우석",
+            "peopleNmEn": ""
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "김영은",
+            "peopleNmEn": "",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "조현정",
+            "peopleNmEn": "",
+            "cast": "",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "신용우",
+            "peopleNmEn": "SHIN Yong-woo",
+            "cast": "",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20110854",
+            "companyNm": "(주)씨제이이엔엠",
+            "companyNmEn": "CJ ENM Corp.",
+            "companyPartNm": "제공"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03363",
+            "watchGradeNm": "전체관람가"
+          }
+        ],
+        "staffs": [],
+        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/3912e36450be4ec2a3b5337cc6be7167.jpg",
+        "productionCost": 0
+      }
+    },
+    {
+      "rnum": "8",
+      "rank": "8",
+      "rankInten": "-3",
+      "rankOldAndNew": "OLD",
       "movieCd": "20040549",
       "movieNm": "천공의 성 라퓨타",
       "openDt": "2004-04-30",
-      "salesAmt": "143817110",
-      "salesShare": "8.7",
-      "salesInten": "143817110",
-      "salesChange": "100",
-      "salesAcc": "279432610",
-      "audiCnt": "14433",
-      "audiInten": "14433",
-      "audiChange": "100",
-      "audiAcc": "36402",
-      "scrnCnt": "431",
-      "showCnt": "727",
+      "salesAmt": "50148480",
+      "salesShare": "3.5",
+      "salesInten": "-93668630",
+      "salesChange": "-65.1",
+      "salesAcc": "329581090",
+      "audiCnt": "5209",
+      "audiInten": "-9224",
+      "audiChange": "-63.9",
+      "audiAcc": "41611",
+      "scrnCnt": "419",
+      "showCnt": "661",
       "trend": [
         {
-          "date": "20260121",
-          "audiCnt": 14433,
-          "salesAmt": 143817110,
-          "scrnCnt": 431,
-          "showCnt": 727
+          "date": "20260122",
+          "audiCnt": 5209,
+          "salesAmt": 50148480,
+          "scrnCnt": 419,
+          "showCnt": 661
         }
       ],
       "scrnInten": 0,
@@ -1331,634 +1725,31 @@
       }
     },
     {
-      "rnum": "6",
-      "rank": "6",
+      "rnum": "9",
+      "rank": "9",
       "rankInten": "-1",
       "rankOldAndNew": "OLD",
-      "movieCd": "20252432",
-      "movieNm": "주토피아 2",
-      "openDt": "2025-11-26",
-      "salesAmt": "63021710",
-      "salesShare": "3.8",
-      "salesInten": "-17331460",
-      "salesChange": "-21.6",
-      "salesAcc": "81450747240",
-      "audiCnt": "6749",
-      "audiInten": "-1601",
-      "audiChange": "-19.2",
-      "audiAcc": "8463451",
-      "scrnCnt": "449",
-      "showCnt": "674",
-      "trend": [
-        {
-          "date": "20251127",
-          "audiCnt": 172048,
-          "salesAmt": 1647740230,
-          "scrnCnt": 1943,
-          "showCnt": 7769
-        },
-        {
-          "date": "20251128",
-          "audiCnt": 258740,
-          "salesAmt": 2587554610,
-          "scrnCnt": 2047,
-          "showCnt": 8490
-        },
-        {
-          "date": "20251129",
-          "audiCnt": 700790,
-          "salesAmt": 6897143360,
-          "scrnCnt": 2383,
-          "showCnt": 10719
-        },
-        {
-          "date": "20251130",
-          "audiCnt": 664337,
-          "salesAmt": 6508786460,
-          "scrnCnt": 2369,
-          "showCnt": 10422
-        },
-        {
-          "date": "20251202",
-          "audiCnt": 141447,
-          "salesAmt": 1338676570,
-          "scrnCnt": 1919,
-          "showCnt": 7842
-        },
-        {
-          "date": "20251203",
-          "audiCnt": 149236,
-          "salesAmt": 1406321030,
-          "scrnCnt": 1626,
-          "showCnt": 6352
-        },
-        {
-          "date": "20251205",
-          "audiCnt": 189916,
-          "salesAmt": 1868754350,
-          "scrnCnt": 1771,
-          "showCnt": 7335
-        },
-        {
-          "date": "20251206",
-          "audiCnt": 563535,
-          "salesAmt": 5529134680,
-          "scrnCnt": 2282,
-          "showCnt": 10308
-        },
-        {
-          "date": "20251207",
-          "audiCnt": 499205,
-          "salesAmt": 4857541390,
-          "scrnCnt": 2240,
-          "showCnt": 9920
-        },
-        {
-          "date": "20251209",
-          "audiCnt": 96276,
-          "salesAmt": 903016940,
-          "scrnCnt": 1709,
-          "showCnt": 6645
-        },
-        {
-          "date": "20251211",
-          "audiCnt": 108697,
-          "salesAmt": 1036476210,
-          "scrnCnt": 1691,
-          "showCnt": 6686
-        },
-        {
-          "date": "20251212",
-          "audiCnt": 180122,
-          "salesAmt": 1782957350,
-          "scrnCnt": 1800,
-          "showCnt": 7357
-        },
-        {
-          "date": "20251213",
-          "audiCnt": 427384,
-          "salesAmt": 4212118870,
-          "scrnCnt": 2114,
-          "showCnt": 9545
-        },
-        {
-          "date": "20251214",
-          "audiCnt": 398897,
-          "salesAmt": 3900726940,
-          "scrnCnt": 2108,
-          "showCnt": 9102
-        },
-        {
-          "date": "20251215",
-          "audiCnt": 81923,
-          "salesAmt": 786570990,
-          "scrnCnt": 1679,
-          "showCnt": 6576
-        },
-        {
-          "date": "20251218",
-          "audiCnt": 82280,
-          "salesAmt": 760728140,
-          "scrnCnt": 1124,
-          "showCnt": 3063
-        },
-        {
-          "date": "20251220",
-          "audiCnt": 258091,
-          "salesAmt": 2507849770,
-          "scrnCnt": 1332,
-          "showCnt": 4597
-        },
-        {
-          "date": "20251222",
-          "audiCnt": 66988,
-          "salesAmt": 629559610,
-          "scrnCnt": 1163,
-          "showCnt": 3729
-        },
-        {
-          "date": "20251225",
-          "audiCnt": 431302,
-          "salesAmt": 4220061110,
-          "scrnCnt": 1356,
-          "showCnt": 5050
-        },
-        {
-          "date": "20251226",
-          "audiCnt": 108312,
-          "salesAmt": 1041885560,
-          "scrnCnt": 1235,
-          "showCnt": 4139
-        },
-        {
-          "date": "20251228",
-          "audiCnt": 159436,
-          "salesAmt": 1549879420,
-          "scrnCnt": 1210,
-          "showCnt": 4249
-        },
-        {
-          "date": "20251229",
-          "audiCnt": 59887,
-          "salesAmt": 560483890,
-          "scrnCnt": 1046,
-          "showCnt": 3523
-        },
-        {
-          "date": "20251231",
-          "audiCnt": 101823,
-          "salesAmt": 824680100,
-          "scrnCnt": 1001,
-          "showCnt": 2839
-        },
-        {
-          "date": "20260102",
-          "audiCnt": 65880,
-          "salesAmt": 637877960,
-          "scrnCnt": 920,
-          "showCnt": 2696
-        },
-        {
-          "date": "20260103",
-          "audiCnt": 98413,
-          "salesAmt": 958562790,
-          "scrnCnt": 964,
-          "showCnt": 2892
-        },
-        {
-          "date": "20260104",
-          "audiCnt": 81230,
-          "salesAmt": 788872580,
-          "scrnCnt": 950,
-          "showCnt": 2760
-        },
-        {
-          "date": "20260105",
-          "audiCnt": 23959,
-          "salesAmt": 227374110,
-          "scrnCnt": 786,
-          "showCnt": 2250
-        },
-        {
-          "date": "20260106",
-          "audiCnt": 22717,
-          "salesAmt": 213535900,
-          "scrnCnt": 801,
-          "showCnt": 2207
-        },
-        {
-          "date": "20260107",
-          "audiCnt": 22565,
-          "salesAmt": 209239830,
-          "scrnCnt": 788,
-          "showCnt": 2070
-        },
-        {
-          "date": "20260108",
-          "audiCnt": 22400,
-          "salesAmt": 207739540,
-          "scrnCnt": 778,
-          "showCnt": 2057
-        },
-        {
-          "date": "20260109",
-          "audiCnt": 25685,
-          "salesAmt": 246648440,
-          "scrnCnt": 801,
-          "showCnt": 2110
-        },
-        {
-          "date": "20260110",
-          "audiCnt": 56076,
-          "salesAmt": 549248060,
-          "scrnCnt": 828,
-          "showCnt": 2335
-        },
-        {
-          "date": "20260111",
-          "audiCnt": 51883,
-          "salesAmt": 507084050,
-          "scrnCnt": 819,
-          "showCnt": 2218
-        },
-        {
-          "date": "20260112",
-          "audiCnt": 14723,
-          "salesAmt": 140078470,
-          "scrnCnt": 664,
-          "showCnt": 1765
-        },
-        {
-          "date": "20260113",
-          "audiCnt": 14879,
-          "salesAmt": 138782460,
-          "scrnCnt": 682,
-          "showCnt": 1738
-        },
-        {
-          "date": "20260114",
-          "audiCnt": 12275,
-          "salesAmt": 114125890,
-          "scrnCnt": 647,
-          "showCnt": 1199
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 11767,
-          "salesAmt": 109892380,
-          "scrnCnt": 625,
-          "showCnt": 1166
-        },
-        {
-          "date": "20260116",
-          "audiCnt": 14118,
-          "salesAmt": 135949090,
-          "scrnCnt": 664,
-          "showCnt": 1204
-        },
-        {
-          "date": "20260117",
-          "audiCnt": 30639,
-          "salesAmt": 302883310,
-          "scrnCnt": 728,
-          "showCnt": 1394
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 28204,
-          "salesAmt": 278633350,
-          "scrnCnt": 735,
-          "showCnt": 1333
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 7820,
-          "salesAmt": 75785070,
-          "scrnCnt": 575,
-          "showCnt": 1075
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 6749,
-          "salesAmt": 63021710,
-          "scrnCnt": 449,
-          "showCnt": 674
-        }
-      ],
-      "scrnInten": -126,
-      "showInten": -401,
-      "detail": {
-        "movieCd": "20252432",
-        "movieNm": "주토피아 2",
-        "movieNmEn": "Zootopia 2",
-        "movieNmOg": "",
-        "showTm": "108",
-        "prdtYear": "2025",
-        "openDt": "20251126",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "미국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "애니메이션"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "재러드 부시",
-            "peopleNmEn": "Jared Bush"
-          },
-          {
-            "peopleNm": "바이론 하워드",
-            "peopleNmEn": "Byron Howard"
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "지니퍼 굿윈",
-            "peopleNmEn": "Ginnifer Goodwin",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "제이슨 베이트먼",
-            "peopleNmEn": "Jason Bateman",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "키 호이 콴",
-            "peopleNmEn": "Ke Huy-Quan",
-            "cast": "",
-            "castEn": ""
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          },
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털 영문자막"
-          },
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털 더빙"
-          },
-          {
-            "showTypeGroupNm": "4D",
-            "showTypeNm": "4D 더빙"
-          },
-          {
-            "showTypeGroupNm": "4D",
-            "showTypeNm": "4D"
-          },
-          {
-            "showTypeGroupNm": "IMAX",
-            "showTypeNm": "IMAX"
-          },
-          {
-            "showTypeGroupNm": "ScreenX",
-            "showTypeNm": "ScreenX"
-          },
-          {
-            "showTypeGroupNm": "DOLBYCINEMA",
-            "showTypeNm": "DOLBYCINEMA"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20161801",
-            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
-            "companyNmEn": "The Walt Disney Company Korea",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20161801",
-            "companyNm": "월트디즈니컴퍼니코리아 유한책임회사",
-            "companyNmEn": "The Walt Disney Company Korea",
-            "companyPartNm": "수입사"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03006",
-            "watchGradeNm": "전체관람가"
-          }
-        ],
-        "staffs": []
-      }
-    },
-    {
-      "rnum": "7",
-      "rank": "7",
-      "rankInten": "-3",
-      "rankOldAndNew": "OLD",
-      "movieCd": "20250188",
-      "movieNm": "하트맨",
-      "openDt": "2026-01-14",
-      "salesAmt": "56838900",
-      "salesShare": "3.4",
-      "salesInten": "-51564360",
-      "salesChange": "-47.6",
-      "salesAcc": "1748215680",
-      "audiCnt": "6346",
-      "audiInten": "-5797",
-      "audiChange": "-47.7",
-      "audiAcc": "188410",
-      "scrnCnt": "539",
-      "showCnt": "1021",
-      "trend": [
-        {
-          "date": "20260114",
-          "audiCnt": 26685,
-          "salesAmt": 239362550,
-          "scrnCnt": 839,
-          "showCnt": 2941
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 17810,
-          "salesAmt": 160010350,
-          "scrnCnt": 809,
-          "showCnt": 2641
-        },
-        {
-          "date": "20260116",
-          "audiCnt": 22013,
-          "salesAmt": 205695220,
-          "scrnCnt": 814,
-          "showCnt": 2700
-        },
-        {
-          "date": "20260117",
-          "audiCnt": 46295,
-          "salesAmt": 435831540,
-          "scrnCnt": 820,
-          "showCnt": 2709
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 38886,
-          "salesAmt": 366913360,
-          "scrnCnt": 808,
-          "showCnt": 2507
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 11730,
-          "salesAmt": 107668200,
-          "scrnCnt": 683,
-          "showCnt": 2026
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 6346,
-          "salesAmt": 56838900,
-          "scrnCnt": 539,
-          "showCnt": 1021
-        }
-      ],
-      "scrnInten": -144,
-      "showInten": -1005,
-      "detail": {
-        "movieCd": "20250188",
-        "movieNm": "하트맨",
-        "movieNmEn": "Heartman: Rock and Love",
-        "movieNmOg": "",
-        "showTm": "99",
-        "prdtYear": "2025",
-        "openDt": "20260114",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "한국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "코미디"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "최원섭",
-            "peopleNmEn": "CHOI Won-sub"
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "권상우",
-            "peopleNmEn": "KWON Sang-woo",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "문채원",
-            "peopleNmEn": "MOON Chae-won",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "박지환",
-            "peopleNmEn": "PARK Ji-hwan",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "표지훈",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "노은비",
-            "peopleNmEn": "eunbi noh",
-            "cast": "팬클럽5",
-            "castEn": "fanclub5"
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20139999",
-            "companyNm": "(주)무비락",
-            "companyNmEn": "MOVIEROCK",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20255241",
-            "companyNm": "(주)라이크엠컴퍼니",
-            "companyNmEn": "LIKE M COMPANY",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20188021",
-            "companyNm": "롯데컬처웍스(주)롯데엔터테인먼트",
-            "companyNmEn": "Lotte Entertainment",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20188021",
-            "companyNm": "롯데컬처웍스(주)롯데엔터테인먼트",
-            "companyNmEn": "Lotte Entertainment",
-            "companyPartNm": "제공"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03431",
-            "watchGradeNm": "12세이상관람가"
-          }
-        ],
-        "staffs": [
-          {
-            "peopleNm": "이성균",
-            "peopleNmEn": "",
-            "staffRoleNm": "발전차"
-          }
-        ],
-        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/9db39ce00de94802988753777473344b.jpg",
-        "productionCost": 6500000000
-      }
-    },
-    {
-      "rnum": "8",
-      "rank": "8",
-      "rankInten": "0",
-      "rankOldAndNew": "NEW",
       "movieCd": "20258324",
       "movieNm": "731",
       "openDt": "2026-01-21",
-      "salesAmt": "55173700",
-      "salesShare": "3.3",
-      "salesInten": "55173700",
-      "salesChange": "100",
-      "salesAcc": "55173700",
-      "audiCnt": "6084",
-      "audiInten": "6084",
-      "audiChange": "100",
-      "audiAcc": "6084",
-      "scrnCnt": "314",
-      "showCnt": "492",
+      "salesAmt": "37029500",
+      "salesShare": "2.6",
+      "salesInten": "-18144200",
+      "salesChange": "-32.9",
+      "salesAcc": "92203200",
+      "audiCnt": "4088",
+      "audiInten": "-1996",
+      "audiChange": "-32.8",
+      "audiAcc": "10172",
+      "scrnCnt": "312",
+      "showCnt": "448",
       "trend": [
         {
-          "date": "20260121",
-          "audiCnt": 6084,
-          "salesAmt": 55173700,
-          "scrnCnt": 314,
-          "showCnt": 492
+          "date": "20260122",
+          "audiCnt": 4088,
+          "salesAmt": 37029500,
+          "scrnCnt": 312,
+          "showCnt": 448
         }
       ],
       "scrnInten": 0,
@@ -2047,329 +1838,93 @@
       }
     },
     {
-      "rnum": "9",
-      "rank": "9",
-      "rankInten": "-3",
-      "rankOldAndNew": "OLD",
-      "movieCd": "20250482",
-      "movieNm": "신비아파트 10주년 극장판: 한 번 더, 소환",
-      "openDt": "2026-01-14",
-      "salesAmt": "45211410",
-      "salesShare": "2.7",
-      "salesInten": "-14920490",
-      "salesChange": "-24.8",
-      "salesAcc": "1601856300",
-      "audiCnt": "5298",
-      "audiInten": "-1659",
-      "audiChange": "-23.8",
-      "audiAcc": "179500",
-      "scrnCnt": "501",
-      "showCnt": "791",
-      "trend": [
-        {
-          "date": "20260114",
-          "audiCnt": 23430,
-          "salesAmt": 203862930,
-          "scrnCnt": 597,
-          "showCnt": 1033
-        },
-        {
-          "date": "20260115",
-          "audiCnt": 14546,
-          "salesAmt": 124912060,
-          "scrnCnt": 709,
-          "showCnt": 1147
-        },
-        {
-          "date": "20260116",
-          "audiCnt": 13468,
-          "salesAmt": 121103890,
-          "scrnCnt": 721,
-          "showCnt": 1205
-        },
-        {
-          "date": "20260117",
-          "audiCnt": 52370,
-          "salesAmt": 470390990,
-          "scrnCnt": 868,
-          "showCnt": 1746
-        },
-        {
-          "date": "20260118",
-          "audiCnt": 48428,
-          "salesAmt": 434409620,
-          "scrnCnt": 857,
-          "showCnt": 1725
-        },
-        {
-          "date": "20260119",
-          "audiCnt": 7198,
-          "salesAmt": 62733640,
-          "scrnCnt": 569,
-          "showCnt": 1073
-        },
-        {
-          "date": "20260121",
-          "audiCnt": 5298,
-          "salesAmt": 45211410,
-          "scrnCnt": 501,
-          "showCnt": 791
-        }
-      ],
-      "scrnInten": -68,
-      "showInten": -282,
-      "detail": {
-        "movieCd": "20250482",
-        "movieNm": "신비아파트 10주년 극장판: 한 번 더, 소환",
-        "movieNmEn": "Shinbi's Haunted House: One More Summon",
-        "movieNmOg": "",
-        "showTm": "86",
-        "prdtYear": "2025",
-        "openDt": "20260114",
-        "prdtStatNm": "개봉",
-        "typeNm": "장편",
-        "nations": [
-          {
-            "nationNm": "한국"
-          }
-        ],
-        "genres": [
-          {
-            "genreNm": "애니메이션"
-          }
-        ],
-        "directors": [
-          {
-            "peopleNm": "최우석",
-            "peopleNmEn": ""
-          }
-        ],
-        "actors": [
-          {
-            "peopleNm": "김영은",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "조현정",
-            "peopleNmEn": "",
-            "cast": "",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "신용우",
-            "peopleNmEn": "SHIN Yong-woo",
-            "cast": "",
-            "castEn": ""
-          }
-        ],
-        "showTypes": [
-          {
-            "showTypeGroupNm": "2D",
-            "showTypeNm": "디지털"
-          }
-        ],
-        "companys": [
-          {
-            "companyCd": "20110854",
-            "companyNm": "(주)씨제이이엔엠",
-            "companyNmEn": "CJ ENM Corp.",
-            "companyPartNm": "제작사"
-          },
-          {
-            "companyCd": "20110854",
-            "companyNm": "(주)씨제이이엔엠",
-            "companyNmEn": "CJ ENM Corp.",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20110854",
-            "companyNm": "(주)씨제이이엔엠",
-            "companyNmEn": "CJ ENM Corp.",
-            "companyPartNm": "제공"
-          }
-        ],
-        "audits": [
-          {
-            "auditNo": "2025-MF03363",
-            "watchGradeNm": "전체관람가"
-          }
-        ],
-        "staffs": [],
-        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2025/12/3912e36450be4ec2a3b5337cc6be7167.jpg",
-        "productionCost": 0
-      }
-    },
-    {
       "rnum": "10",
       "rank": "10",
-      "rankInten": "0",
-      "rankOldAndNew": "NEW",
-      "movieCd": "20030316",
-      "movieNm": "반지의 제왕 : 왕의 귀환",
-      "openDt": "2003-12-17",
-      "salesAmt": "67838640",
-      "salesShare": "4.1",
-      "salesInten": "67838640",
-      "salesChange": "100",
-      "salesAcc": "4751171030",
-      "audiCnt": "4570",
-      "audiInten": "4570",
-      "audiChange": "100",
-      "audiAcc": "731631",
-      "scrnCnt": "12",
-      "showCnt": "43",
+      "rankInten": "1",
+      "rankOldAndNew": "OLD",
+      "movieCd": "20259552",
+      "movieNm": "시라트",
+      "openDt": "2026-01-21",
+      "salesAmt": "27591020",
+      "salesShare": "1.9",
+      "salesInten": "-6831480",
+      "salesChange": "-19.8",
+      "salesAcc": "91918020",
+      "audiCnt": "3003",
+      "audiInten": "-778",
+      "audiChange": "-20.6",
+      "audiAcc": "9385",
+      "scrnCnt": "191",
+      "showCnt": "233",
       "trend": [
         {
-          "date": "20260121",
-          "audiCnt": 4570,
-          "salesAmt": 67838640,
-          "scrnCnt": 12,
-          "showCnt": 43
+          "date": "20260122",
+          "audiCnt": 3003,
+          "salesAmt": 27591020,
+          "scrnCnt": 191,
+          "showCnt": 233
         }
       ],
       "scrnInten": 0,
       "showInten": 0,
       "detail": {
-        "movieCd": "20030316",
-        "movieNm": "반지의 제왕 : 왕의 귀환",
-        "movieNmEn": "The Lord of the Rings: The Return of the King",
-        "movieNmOg": "The Lord of the Rings: The Return of the King",
-        "showTm": "262",
-        "prdtYear": "2003",
-        "openDt": "20031217",
+        "movieCd": "20259552",
+        "movieNm": "시라트",
+        "movieNmEn": "Sirat",
+        "movieNmOg": "",
+        "showTm": "114",
+        "prdtYear": "2025",
+        "openDt": "20260121",
         "prdtStatNm": "개봉",
         "typeNm": "장편",
         "nations": [
           {
-            "nationNm": "미국"
+            "nationNm": "스페인"
           }
         ],
         "genres": [
           {
-            "genreNm": "판타지"
-          },
-          {
-            "genreNm": "어드벤처"
+            "genreNm": "드라마"
           }
         ],
         "directors": [
           {
-            "peopleNm": "피터 잭슨",
-            "peopleNmEn": "Peter Jackson"
+            "peopleNm": "올리베르 라셰",
+            "peopleNmEn": "Oliver Laxe"
           }
         ],
         "actors": [
           {
-            "peopleNm": "비고 모텐슨",
-            "peopleNmEn": "Viggo Mortensen",
-            "cast": "아라곤",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "일라이저 우드",
-            "peopleNmEn": "Elijah Wood",
-            "cast": "프로도",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "이안 맥켈런",
-            "peopleNmEn": "Ian McKellen",
-            "cast": "간달프",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "숀 애스틴",
-            "peopleNmEn": "Sean Astin",
-            "cast": "샘",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "리브 타일러",
-            "peopleNmEn": "Liv Tyler",
-            "cast": "아르웬",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "올랜도 블룸",
-            "peopleNmEn": "Orlando Bloom",
-            "cast": "레골라스",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "숀 빈",
-            "peopleNmEn": "Sean Bean",
-            "cast": "보로미르",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "빌리 보이드",
-            "peopleNmEn": "Billy Boyd",
-            "cast": "피핀",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "케이트 블란쳇",
-            "peopleNmEn": "Cate Blanchett",
-            "cast": "갈라드리엘",
-            "castEn": ""
-          },
-          {
-            "peopleNm": "휴고 위빙",
-            "peopleNmEn": "Hugo Weaving",
-            "cast": "엘론드",
+            "peopleNm": "세르지 로페즈",
+            "peopleNmEn": "Sergi Lopez",
+            "cast": "",
             "castEn": ""
           }
         ],
         "showTypes": [
           {
-            "showTypeGroupNm": "필름",
-            "showTypeNm": "필름"
-          },
-          {
             "showTypeGroupNm": "2D",
             "showTypeNm": "디지털"
-          },
-          {
-            "showTypeGroupNm": "IMAX",
-            "showTypeNm": "IMAX"
-          },
-          {
-            "showTypeGroupNm": "DOLBYCINEMA",
-            "showTypeNm": "DOLBYCINEMA"
           }
         ],
         "companys": [
           {
-            "companyCd": "20100043",
-            "companyNm": "워너브러더스 코리아(주)",
-            "companyNmEn": "Warner Bros. Korea",
+            "companyCd": "20229581",
+            "companyNm": "(주)레드아이스 엔터테인먼트",
+            "companyNmEn": "",
             "companyPartNm": "배급사"
           },
           {
-            "companyCd": "20100109",
-            "companyNm": "씨제이엔터테인먼트",
-            "companyNmEn": "CJ Entertainment",
-            "companyPartNm": "배급사"
-          },
-          {
-            "companyCd": "20100043",
-            "companyNm": "워너브러더스 코리아(주)",
-            "companyNmEn": "Warner Bros. Korea",
-            "companyPartNm": "수입사"
-          },
-          {
-            "companyCd": "20100947",
-            "companyNm": "(주)태원엔터테인먼트",
-            "companyNmEn": "TAEWON ENTERTAINMENT",
+            "companyCd": "20061718",
+            "companyNm": "찬란",
+            "companyNmEn": "Challan Film",
             "companyPartNm": "수입사"
           }
         ],
         "audits": [
           {
-            "auditNo": "2003-F336",
-            "watchGradeNm": "12세관람가"
+            "auditNo": "2025-MF03190",
+            "watchGradeNm": "15세이상관람가"
           }
         ],
         "staffs": []
