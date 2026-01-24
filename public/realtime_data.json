@@ -5988,6 +5988,17 @@
       "salesAcc": "5,670,000",
       "val_audi": 60651,
       "val_rate": 17.3
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 2,
+      "rate": 17.6,
+      "audiCnt": "60,676",
+      "salesAmt": "735,722,820",
+      "audiAcc": "378",
+      "salesAcc": "5,670,000",
+      "val_audi": 60676,
+      "val_rate": 17.6
     }
   ],
   "프로젝트 Y": [
@@ -6958,6 +6969,17 @@
       "salesAcc": "524,762,730",
       "val_audi": 18209,
       "val_rate": 5.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 6,
+      "rate": 5.0,
+      "audiCnt": "17,422",
+      "salesAmt": "185,986,920",
+      "audiAcc": "55,702",
+      "salesAcc": "524,762,730",
+      "val_audi": 17422,
+      "val_rate": 5.0
     }
   ],
   "왕과 사는 남자": [
@@ -7928,6 +7950,17 @@
       "salesAcc": "46,782,000",
       "val_audi": 62270,
       "val_rate": 17.8
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 1,
+      "rate": 18.0,
+      "audiCnt": "62,324",
+      "salesAmt": "670,304,110",
+      "audiAcc": "4,946",
+      "salesAcc": "46,782,000",
+      "val_audi": 62324,
+      "val_rate": 18.0
     }
   ],
   "아바타: 불과 재": [
@@ -8898,6 +8931,17 @@
       "salesAcc": "75,464,390,350",
       "val_audi": 31878,
       "val_rate": 9.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 4,
+      "rate": 9.3,
+      "audiCnt": "32,272",
+      "salesAmt": "493,864,000",
+      "audiAcc": "6,469,901",
+      "salesAcc": "75,464,390,350",
+      "val_audi": 32272,
+      "val_rate": 9.3
     }
   ],
   "만약에 우리": [
@@ -9868,6 +9912,17 @@
       "salesAcc": "17,543,048,220",
       "val_audi": 36764,
       "val_rate": 10.5
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 3,
+      "rate": 10.1,
+      "audiCnt": "34,817",
+      "salesAmt": "343,275,080",
+      "audiAcc": "1,796,623",
+      "salesAcc": "17,543,048,220",
+      "val_audi": 34817,
+      "val_rate": 10.1
     }
   ],
   "천공의 성 라퓨타": [
@@ -10837,6 +10892,17 @@
       "audiAcc": "46,452",
       "salesAcc": "378,228,790",
       "val_audi": 7105,
+      "val_rate": 2.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 10,
+      "rate": 2.0,
+      "audiCnt": "6,746",
+      "salesAmt": "72,220,760",
+      "audiAcc": "46,452",
+      "salesAcc": "378,228,790",
+      "val_audi": 6746,
       "val_rate": 2.0
     }
   ],
@@ -11808,6 +11874,17 @@
       "salesAcc": "5,305,064,090",
       "val_audi": 23770,
       "val_rate": 6.8
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 5,
+      "rate": 6.7,
+      "audiCnt": "22,977",
+      "salesAmt": "223,513,640",
+      "audiAcc": "554,581",
+      "salesAcc": "5,305,064,090",
+      "val_audi": 22977,
+      "val_rate": 6.7
     }
   ],
   "반지의 제왕 : 왕의 귀환": [
@@ -12767,6 +12844,17 @@
       "salesAcc": "4,808,219,250",
       "val_audi": 3375,
       "val_rate": 1.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 18,
+      "rate": 0.9,
+      "audiCnt": "3,070",
+      "salesAmt": "48,329,220",
+      "audiAcc": "735,262",
+      "salesAcc": "4,808,219,250",
+      "val_audi": 3070,
+      "val_rate": 0.9
     }
   ],
   "731": [
@@ -13725,6 +13813,17 @@
       "audiAcc": "14,259",
       "salesAcc": "130,138,300",
       "val_audi": 4051,
+      "val_rate": 1.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 14,
+      "rate": 1.2,
+      "audiCnt": "3,999",
+      "salesAmt": "34,649,600",
+      "audiAcc": "14,259",
+      "salesAcc": "130,138,300",
+      "val_audi": 3999,
       "val_rate": 1.2
     }
   ],
@@ -14696,6 +14795,17 @@
       "salesAcc": "132,832,710",
       "val_audi": 6009,
       "val_rate": 1.7
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 12,
+      "rate": 1.6,
+      "audiCnt": "5,681",
+      "salesAmt": "56,171,430",
+      "audiAcc": "13,485",
+      "salesAcc": "132,832,710",
+      "val_audi": 5681,
+      "val_rate": 1.6
     }
   ],
   "하트맨": [
@@ -15666,6 +15776,17 @@
       "salesAcc": "1,862,773,240",
       "val_audi": 5496,
       "val_rate": 1.6
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 13,
+      "rate": 1.5,
+      "audiCnt": "5,270",
+      "salesAmt": "54,645,600",
+      "audiAcc": "201,014",
+      "salesAcc": "1,862,773,240",
+      "val_audi": 5270,
+      "val_rate": 1.5
     }
   ],
   "시스터": [
@@ -16614,6 +16735,17 @@
       "salesAcc": "14,608,000",
       "val_audi": 14103,
       "val_rate": 4.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 7,
+      "rate": 4.1,
+      "audiCnt": "14,117",
+      "salesAmt": "100,445,000",
+      "audiAcc": "1,466",
+      "salesAcc": "14,608,000",
+      "val_audi": 14117,
+      "val_rate": 4.1
     }
   ],
   "프라이메이트": [
@@ -17518,6 +17650,17 @@
       "salesAcc": "13,243,000",
       "val_audi": 11306,
       "val_rate": 3.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 8,
+      "rate": 3.3,
+      "audiCnt": "11,315",
+      "salesAmt": "88,849,300",
+      "audiAcc": "1,467",
+      "salesAcc": "13,243,000",
+      "val_audi": 11315,
+      "val_rate": 3.3
     }
   ],
   "신비아파트 10주년 극장판: 한 번 더, 소환": [
@@ -18488,6 +18631,17 @@
       "salesAcc": "1,708,533,500",
       "val_audi": 8509,
       "val_rate": 2.4
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 9,
+      "rate": 2.6,
+      "audiCnt": "8,919",
+      "salesAmt": "79,647,170",
+      "audiAcc": "191,524",
+      "salesAcc": "1,708,533,500",
+      "val_audi": 8919,
+      "val_rate": 2.6
     }
   ],
   "이터널 선샤인": [
@@ -19447,6 +19601,17 @@
       "salesAcc": "4,368,230,192",
       "val_audi": 3789,
       "val_rate": 1.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 16,
+      "rate": 1.0,
+      "audiCnt": "3,465",
+      "salesAmt": "34,976,600",
+      "audiAcc": "562,175",
+      "salesAcc": "4,368,230,192",
+      "val_audi": 3465,
+      "val_rate": 1.0
     }
   ],
   "에반게리온 신극장판: Q": [
@@ -20417,6 +20582,17 @@
       "salesAcc": "121,050,417",
       "val_audi": 848,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 29,
+      "rate": 0.2,
+      "audiCnt": "831",
+      "salesAmt": "8,635,900",
+      "audiAcc": "11,533",
+      "salesAcc": "121,050,417",
+      "val_audi": 831,
+      "val_rate": 0.2
     }
   ],
   "슈가": [
@@ -21331,6 +21507,17 @@
       "audiAcc": "8,130",
       "salesAcc": "75,708,100",
       "val_audi": 1803,
+      "val_rate": 0.5
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 23,
+      "rate": 0.5,
+      "audiCnt": "1,719",
+      "salesAmt": "16,329,100",
+      "audiAcc": "8,130",
+      "salesAcc": "75,708,100",
+      "val_audi": 1719,
       "val_rate": 0.5
     }
   ],
@@ -22302,6 +22489,17 @@
       "salesAcc": "81,602,227,640",
       "val_audi": 6341,
       "val_rate": 1.8
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 11,
+      "rate": 1.8,
+      "audiCnt": "6,159",
+      "salesAmt": "58,455,300",
+      "audiAcc": "8,479,331",
+      "salesAcc": "81,602,227,640",
+      "val_audi": 6159,
+      "val_rate": 1.8
     }
   ],
   "국보": [
@@ -23239,6 +23437,17 @@
       "salesAcc": "1,954,333,840",
       "val_audi": 1703,
       "val_rate": 0.5
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 24,
+      "rate": 0.5,
+      "audiCnt": "1,640",
+      "salesAmt": "20,126,400",
+      "audiAcc": "205,767",
+      "salesAcc": "1,954,333,840",
+      "val_audi": 1640,
+      "val_rate": 0.5
     }
   ],
   "노 머시: 90분": [
@@ -23397,7 +23606,7 @@
       "val_rate": 0.7
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 19,
       "rate": 0.7,
       "audiCnt": "2,590",
@@ -24365,6 +24574,17 @@
       "salesAcc": "460,711,652",
       "val_audi": 577,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 33,
+      "rate": 0.2,
+      "audiCnt": "594",
+      "salesAmt": "5,787,200",
+      "audiAcc": "45,914",
+      "salesAcc": "460,711,652",
+      "val_audi": 594,
+      "val_rate": 0.2
     }
   ],
   "고고다이노 극장판: 곤충세계 대모험": [
@@ -25236,6 +25456,17 @@
       "salesAcc": "210,690,000",
       "val_audi": 2401,
       "val_rate": 0.7
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 20,
+      "rate": 0.7,
+      "audiCnt": "2,459",
+      "salesAmt": "20,527,400",
+      "audiAcc": "23,635",
+      "salesAcc": "210,690,000",
+      "val_audi": 2459,
+      "val_rate": 0.7
     }
   ],
   "세계의 주인": [
@@ -26052,6 +26283,17 @@
       "salesAcc": "1,891,403,200",
       "val_audi": 1208,
       "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 25,
+      "rate": 0.4,
+      "audiCnt": "1,209",
+      "salesAmt": "13,594,900",
+      "audiAcc": "196,320",
+      "salesAcc": "1,891,403,200",
+      "val_audi": 1209,
+      "val_rate": 0.4
     }
   ],
   "하우스메이드": [
@@ -26691,6 +26933,17 @@
       "audiAcc": "1,896",
       "salesAcc": "17,064,000",
       "val_audi": 1017,
+      "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 28,
+      "rate": 0.3,
+      "audiCnt": "1,039",
+      "salesAmt": "9,870,700",
+      "audiAcc": "1,896",
+      "salesAcc": "17,064,000",
+      "val_audi": 1039,
       "val_rate": 0.3
     }
   ],
@@ -27937,6 +28190,28 @@
       "salesAcc": "12,278,313,809",
       "val_audi": 415,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 26,
+      "rate": 0.3,
+      "audiCnt": "1,163",
+      "salesAmt": "11,400,900",
+      "audiAcc": "848,193",
+      "salesAcc": "8,215,220,430",
+      "val_audi": 1163,
+      "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 41,
+      "rate": 0.1,
+      "audiCnt": "443",
+      "salesAmt": "3,895,000",
+      "audiAcc": "1,217,205",
+      "salesAcc": "12,278,313,809",
+      "val_audi": 443,
+      "val_rate": 0.1
     }
   ],
   "멀홀랜드 드라이브": [
@@ -28837,6 +29112,17 @@
       "rate": 0.0,
       "audiCnt": "172",
       "salesAmt": "1,593,000",
+      "audiAcc": "29,910",
+      "salesAcc": "270,864,282",
+      "val_audi": 172,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 71,
+      "rate": 0.0,
+      "audiCnt": "172",
+      "salesAmt": "1,596,500",
       "audiAcc": "29,910",
       "salesAcc": "270,864,282",
       "val_audi": 172,
@@ -29789,6 +30075,17 @@
       "salesAcc": "318,116,760",
       "val_audi": 547,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 37,
+      "rate": 0.2,
+      "audiCnt": "553",
+      "salesAmt": "5,372,000",
+      "audiAcc": "34,533",
+      "salesAcc": "318,116,760",
+      "val_audi": 553,
+      "val_rate": 0.2
     }
   ],
   "부흥": [
@@ -30561,6 +30858,17 @@
       "salesAcc": "227,000,250",
       "val_audi": 805,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 30,
+      "rate": 0.2,
+      "audiCnt": "804",
+      "salesAmt": "8,559,600",
+      "audiAcc": "21,865",
+      "salesAcc": "227,000,250",
+      "val_audi": 804,
+      "val_rate": 0.2
     }
   ],
   "보이": [
@@ -31299,6 +31607,17 @@
       "audiAcc": "12,849",
       "salesAcc": "107,144,820",
       "val_audi": 94,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 93,
+      "rate": 0.0,
+      "audiCnt": "95",
+      "salesAmt": "1,000,000",
+      "audiAcc": "12,849",
+      "salesAcc": "107,144,820",
+      "val_audi": 95,
       "val_rate": 0.0
     }
   ],
@@ -32248,6 +32567,17 @@
       "salesAcc": "68,032,900",
       "val_audi": 373,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 43,
+      "rate": 0.1,
+      "audiCnt": "365",
+      "salesAmt": "4,239,300",
+      "audiAcc": "6,516",
+      "salesAcc": "68,032,900",
+      "val_audi": 365,
+      "val_rate": 0.1
     }
   ],
   "하나 그리고 둘": [
@@ -33151,6 +33481,17 @@
       "audiAcc": "33,628",
       "salesAcc": "335,670,795",
       "val_audi": 652,
+      "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 32,
+      "rate": 0.2,
+      "audiCnt": "621",
+      "salesAmt": "6,903,100",
+      "audiAcc": "33,628",
+      "salesAcc": "335,670,795",
+      "val_audi": 621,
       "val_rate": 0.2
     }
   ],
@@ -34067,6 +34408,17 @@
       "salesAcc": "14,320,000",
       "val_audi": 135,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 82,
+      "rate": 0.0,
+      "audiCnt": "130",
+      "salesAmt": "1,514,600",
+      "audiAcc": "1,291",
+      "salesAcc": "14,320,000",
+      "val_audi": 130,
+      "val_rate": 0.0
     }
   ],
   "로스트 하이웨이": [
@@ -34926,6 +35278,17 @@
       "audiAcc": "4,072",
       "salesAcc": "36,822,222",
       "val_audi": 249,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 56,
+      "rate": 0.1,
+      "audiCnt": "248",
+      "salesAmt": "2,681,400",
+      "audiAcc": "4,072",
+      "salesAcc": "36,822,222",
+      "val_audi": 248,
       "val_rate": 0.1
     }
   ],
@@ -35864,6 +36227,17 @@
       "salesAcc": "7,852,000",
       "val_audi": 2491,
       "val_rate": 0.7
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 21,
+      "rate": 0.7,
+      "audiCnt": "2,355",
+      "salesAmt": "19,210,100",
+      "audiAcc": "822",
+      "salesAcc": "7,852,000",
+      "val_audi": 2355,
+      "val_rate": 0.7
     }
   ],
   "철도원": [
@@ -36790,6 +37164,17 @@
       "salesAcc": "151,035,230",
       "val_audi": 339,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 51,
+      "rate": 0.1,
+      "audiCnt": "288",
+      "salesAmt": "3,094,400",
+      "audiAcc": "15,577",
+      "salesAcc": "151,035,230",
+      "val_audi": 288,
+      "val_rate": 0.1
     }
   ],
   "마이 선샤인": [
@@ -37671,6 +38056,17 @@
       "audiAcc": "14,449",
       "salesAcc": "137,207,000",
       "val_audi": 193,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 62,
+      "rate": 0.1,
+      "audiCnt": "194",
+      "salesAmt": "2,534,100",
+      "audiAcc": "14,449",
+      "salesAcc": "137,207,000",
+      "val_audi": 194,
       "val_rate": 0.1
     }
   ],
@@ -38587,6 +38983,17 @@
       "salesAcc": "4,546,345,710",
       "val_audi": 578,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 31,
+      "rate": 0.2,
+      "audiCnt": "622",
+      "salesAmt": "6,210,100",
+      "audiAcc": "478,685",
+      "salesAcc": "4,546,345,710",
+      "val_audi": 622,
+      "val_rate": 0.2
     }
   ],
   "척의 일생": [
@@ -39446,6 +39853,17 @@
       "audiAcc": "26,394",
       "salesAcc": "255,378,260",
       "val_audi": 178,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 67,
+      "rate": 0.1,
+      "audiCnt": "179",
+      "salesAmt": "2,440,000",
+      "audiAcc": "26,394",
+      "salesAcc": "255,378,260",
+      "val_audi": 179,
       "val_rate": 0.1
     }
   ],
@@ -40362,6 +40780,17 @@
       "salesAcc": "89,923,400",
       "val_audi": 295,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 50,
+      "rate": 0.1,
+      "audiCnt": "296",
+      "salesAmt": "3,075,600",
+      "audiAcc": "10,712",
+      "salesAcc": "89,923,400",
+      "val_audi": 296,
+      "val_rate": 0.1
     }
   ],
   "직사각형, 삼각형": [
@@ -41233,6 +41662,17 @@
       "salesAcc": "2,569,500",
       "val_audi": 521,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 38,
+      "rate": 0.2,
+      "audiCnt": "520",
+      "salesAmt": "4,505,000",
+      "audiAcc": "370",
+      "salesAcc": "2,569,500",
+      "val_audi": 520,
+      "val_rate": 0.2
     }
   ],
   "광장": [
@@ -42115,6 +42555,17 @@
       "salesAcc": "48,712,800",
       "val_audi": 609,
       "val_rate": 0.2
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 34,
+      "rate": 0.2,
+      "audiCnt": "580",
+      "salesAmt": "3,695,100",
+      "audiAcc": "5,909",
+      "salesAcc": "48,712,800",
+      "val_audi": 580,
+      "val_rate": 0.2
     }
   ],
   "판결": [
@@ -42550,6 +43001,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 50,
+      "rate": 0.1,
+      "audiCnt": "306",
+      "salesAmt": "2,754,000",
+      "audiAcc": "1,998",
+      "salesAcc": "18,569,000",
+      "val_audi": 306,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 49,
       "rate": 0.1,
       "audiCnt": "306",
       "salesAmt": "2,754,000",
@@ -43428,6 +43890,17 @@
       "salesAcc": "46,424,600",
       "val_audi": 427,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 42,
+      "rate": 0.1,
+      "audiCnt": "427",
+      "salesAmt": "4,373,200",
+      "audiAcc": "6,239",
+      "salesAcc": "46,424,600",
+      "val_audi": 427,
+      "val_rate": 0.1
     }
   ],
   "스트레이트 스토리": [
@@ -44211,6 +44684,17 @@
       "salesAcc": "13,983,956",
       "val_audi": 212,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 61,
+      "rate": 0.1,
+      "audiCnt": "211",
+      "salesAmt": "2,133,300",
+      "audiAcc": "1,730",
+      "salesAcc": "13,983,956",
+      "val_audi": 211,
+      "val_rate": 0.1
     }
   ],
   "멜라니아": [
@@ -44457,7 +44941,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 35,
       "rate": 0.2,
       "audiCnt": "557",
@@ -45315,6 +45799,17 @@
       "salesAcc": "31,024,900",
       "val_audi": 204,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 65,
+      "rate": 0.1,
+      "audiCnt": "185",
+      "salesAmt": "1,961,500",
+      "audiAcc": "3,280",
+      "salesAcc": "31,024,900",
+      "val_audi": 185,
+      "val_rate": 0.1
     }
   ],
   "물의 연대기": [
@@ -46076,6 +46571,17 @@
       "salesAcc": "5,679,000",
       "val_audi": 2128,
       "val_rate": 0.6
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 22,
+      "rate": 0.6,
+      "audiCnt": "2,138",
+      "salesAmt": "17,202,500",
+      "audiAcc": "631",
+      "salesAcc": "5,679,000",
+      "val_audi": 2138,
+      "val_rate": 0.6
     }
   ],
   "굿 포츈": [
@@ -46617,6 +47123,17 @@
       "salesAcc": "225,439,170",
       "val_audi": 78,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 101,
+      "rate": 0.0,
+      "audiCnt": "78",
+      "salesAmt": "1,086,000",
+      "audiAcc": "25,677",
+      "salesAcc": "225,439,170",
+      "val_audi": 78,
+      "val_rate": 0.0
     }
   ],
   "허밍": [
@@ -46962,7 +47479,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 59,
       "rate": 0.1,
       "audiCnt": "218",
@@ -47379,6 +47896,17 @@
       "audiAcc": "426",
       "salesAcc": "2,982,000",
       "val_audi": 227,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 58,
+      "rate": 0.1,
+      "audiCnt": "232",
+      "salesAmt": "1,640,000",
+      "audiAcc": "426",
+      "salesAcc": "2,982,000",
+      "val_audi": 232,
       "val_rate": 0.1
     }
   ],
@@ -48262,6 +48790,17 @@
       "salesAcc": "61,391,707,550",
       "val_audi": 338,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 46,
+      "rate": 0.1,
+      "audiCnt": "337",
+      "salesAmt": "3,501,300",
+      "audiAcc": "5,699,101",
+      "salesAcc": "61,391,707,550",
+      "val_audi": 337,
+      "val_rate": 0.1
     }
   ],
   "고독의 오후": [
@@ -48945,6 +49484,17 @@
       "audiAcc": "252",
       "salesAcc": "2,278,500",
       "val_audi": 135,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 78,
+      "rate": 0.0,
+      "audiCnt": "136",
+      "salesAmt": "1,467,500",
+      "audiAcc": "252",
+      "salesAcc": "2,278,500",
+      "val_audi": 136,
       "val_rate": 0.0
     }
   ],
@@ -49805,6 +50355,17 @@
       "audiAcc": "61,089",
       "salesAcc": "584,597,071",
       "val_audi": 258,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 57,
+      "rate": 0.1,
+      "audiCnt": "246",
+      "salesAmt": "2,285,370",
+      "audiAcc": "61,089",
+      "salesAcc": "584,597,071",
+      "val_audi": 246,
       "val_rate": 0.1
     }
   ],
@@ -50731,6 +51292,17 @@
       "audiAcc": "21,768",
       "salesAcc": "172,207,130",
       "val_audi": 352,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 47,
+      "rate": 0.1,
+      "audiCnt": "332",
+      "salesAmt": "3,516,100",
+      "audiAcc": "21,768",
+      "salesAcc": "172,207,130",
+      "val_audi": 332,
       "val_rate": 0.1
     }
   ],
@@ -51691,6 +52263,17 @@
       "salesAcc": "7,172,550",
       "val_audi": 119,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 89,
+      "rate": 0.0,
+      "audiCnt": "116",
+      "salesAmt": "1,177,740",
+      "audiAcc": "715",
+      "salesAcc": "7,172,550",
+      "val_audi": 116,
+      "val_rate": 0.0
     }
   ],
   "트윈 픽스": [
@@ -52529,6 +53112,17 @@
       "salesAcc": "30,588,882",
       "val_audi": 174,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 69,
+      "rate": 0.1,
+      "audiCnt": "174",
+      "salesAmt": "1,936,200",
+      "audiAcc": "3,167",
+      "salesAcc": "30,588,882",
+      "val_audi": 174,
+      "val_rate": 0.1
     }
   ],
   "세노테": [
@@ -53213,6 +53807,17 @@
       "salesAcc": "1,413,000",
       "val_audi": 326,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 48,
+      "rate": 0.1,
+      "audiCnt": "326",
+      "salesAmt": "3,566,000",
+      "audiAcc": "169",
+      "salesAcc": "1,413,000",
+      "val_audi": 326,
+      "val_rate": 0.1
     }
   ],
   "비기너스": [
@@ -53622,6 +54227,17 @@
       "salesAcc": "147,388,000",
       "val_audi": 174,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 69,
+      "rate": 0.1,
+      "audiCnt": "174",
+      "salesAmt": "1,795,000",
+      "audiAcc": "18,620",
+      "salesAcc": "147,388,000",
+      "val_audi": 174,
+      "val_rate": 0.1
     }
   ],
   "송 썽 블루": [
@@ -54426,6 +55042,17 @@
       "audiAcc": "13,231",
       "salesAcc": "101,700,000",
       "val_audi": 204,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 63,
+      "rate": 0.1,
+      "audiCnt": "193",
+      "salesAmt": "1,584,000",
+      "audiAcc": "13,231",
+      "salesAcc": "101,700,000",
+      "val_audi": 193,
       "val_rate": 0.1
     }
   ],
@@ -55685,6 +56312,17 @@
       "salesAcc": "1,372,000",
       "val_audi": 113,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 90,
+      "rate": 0.0,
+      "audiCnt": "114",
+      "salesAmt": "1,349,500",
+      "audiAcc": "169",
+      "salesAcc": "1,372,000",
+      "val_audi": 114,
+      "val_rate": 0.0
     }
   ],
   "아라가네": [
@@ -56316,7 +56954,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 52,
       "rate": 0.1,
       "audiCnt": "284",
@@ -57173,6 +57811,17 @@
       "audiAcc": "483",
       "salesAcc": "1,449,000",
       "val_audi": 89,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 98,
+      "rate": 0.0,
+      "audiCnt": "84",
+      "salesAmt": "252,000",
+      "audiAcc": "483",
+      "salesAcc": "1,449,000",
+      "val_audi": 84,
       "val_rate": 0.0
     }
   ],
@@ -58056,6 +58705,17 @@
       "salesAcc": "36,146,552,030",
       "val_audi": 203,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 66,
+      "rate": 0.1,
+      "audiCnt": "184",
+      "salesAmt": "2,050,040",
+      "audiAcc": "3,438,995",
+      "salesAcc": "36,146,552,030",
+      "val_audi": 184,
+      "val_rate": 0.1
     }
   ],
   "희생": [
@@ -58775,7 +59435,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 92,
       "rate": 0.0,
       "audiCnt": "99",
@@ -59283,7 +59943,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 72,
       "rate": 0.0,
       "audiCnt": "165",
@@ -60396,6 +61056,17 @@
       "salesAcc": "289,640,300",
       "val_audi": 127,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 84,
+      "rate": 0.0,
+      "audiCnt": "126",
+      "salesAmt": "1,214,000",
+      "audiAcc": "37,586",
+      "salesAcc": "289,640,300",
+      "val_audi": 126,
+      "val_rate": 0.0
     }
   ],
   "한스 짐머 시네마 콘서트": [
@@ -61124,6 +61795,17 @@
       "salesAcc": "26,130,000",
       "val_audi": 131,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 80,
+      "rate": 0.0,
+      "audiCnt": "133",
+      "salesAmt": "4,243,100",
+      "audiAcc": "825",
+      "salesAcc": "26,130,000",
+      "val_audi": 133,
+      "val_rate": 0.0
     }
   ],
   "스폰지밥 무비: 네모바지를 찾아서": [
@@ -61709,6 +62391,17 @@
       "salesAcc": "764,970,420",
       "val_audi": 172,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 68,
+      "rate": 0.1,
+      "audiCnt": "176",
+      "salesAmt": "2,279,900",
+      "audiAcc": "85,552",
+      "salesAcc": "764,970,420",
+      "val_audi": 176,
+      "val_rate": 0.1
     }
   ],
   "와이키키 브라더스": [
@@ -62197,7 +62890,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 77,
       "rate": 0.0,
       "audiCnt": "146",
@@ -62944,6 +63637,17 @@
       "audiAcc": "1,276",
       "salesAcc": "12,132,500",
       "val_audi": 187,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 64,
+      "rate": 0.1,
+      "audiCnt": "186",
+      "salesAmt": "1,823,600",
+      "audiAcc": "1,276",
+      "salesAcc": "12,132,500",
+      "val_audi": 186,
       "val_rate": 0.1
     }
   ],
@@ -63837,6 +64541,17 @@
       "audiAcc": "6,246",
       "salesAcc": "39,627,830",
       "val_audi": 213,
+      "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 60,
+      "rate": 0.1,
+      "audiCnt": "215",
+      "salesAmt": "2,172,400",
+      "audiAcc": "6,246",
+      "salesAcc": "39,627,830",
+      "val_audi": 215,
       "val_rate": 0.1
     }
   ],
@@ -64878,7 +65593,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 74,
       "rate": 0.0,
       "audiCnt": "156",
@@ -65438,6 +66153,17 @@
       "audiAcc": "546",
       "salesAcc": "3,952,500",
       "val_audi": 160,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 73,
+      "rate": 0.0,
+      "audiCnt": "162",
+      "salesAmt": "1,692,000",
+      "audiAcc": "546",
+      "salesAcc": "3,952,500",
+      "val_audi": 162,
       "val_rate": 0.0
     }
   ],
@@ -66279,6 +67005,17 @@
       "salesAcc": "1,339,780,658",
       "val_audi": 78,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 103,
+      "rate": 0.0,
+      "audiCnt": "77",
+      "salesAmt": "691,000",
+      "audiAcc": "136,920",
+      "salesAcc": "1,339,780,658",
+      "val_audi": 77,
+      "val_rate": 0.0
     }
   ],
   "피렌체": [
@@ -67018,6 +67755,17 @@
       "salesAcc": "189,268,080",
       "val_audi": 77,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 116,
+      "rate": 0.0,
+      "audiCnt": "53",
+      "salesAmt": "438,800",
+      "audiAcc": "21,159",
+      "salesAcc": "189,268,080",
+      "val_audi": 53,
+      "val_rate": 0.0
     }
   ],
   "매드 댄스 오피스": [
@@ -67629,7 +68377,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 85,
       "rate": 0.0,
       "audiCnt": "123",
@@ -68332,6 +69080,17 @@
       "audiAcc": "258,344",
       "salesAcc": "2,246,749,630",
       "val_audi": 112,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 86,
+      "rate": 0.0,
+      "audiCnt": "122",
+      "salesAmt": "1,233,800",
+      "audiAcc": "258,344",
+      "salesAcc": "2,246,749,630",
+      "val_audi": 122,
       "val_rate": 0.0
     }
   ],
@@ -69082,6 +69841,17 @@
       "audiAcc": "166",
       "salesAcc": "4,946,000",
       "val_audi": 73,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 109,
+      "rate": 0.0,
+      "audiCnt": "72",
+      "salesAmt": "2,130,900",
+      "audiAcc": "166",
+      "salesAcc": "4,946,000",
+      "val_audi": 72,
       "val_rate": 0.0
     }
   ],
@@ -69931,6 +70701,17 @@
       "audiAcc": "4,304",
       "salesAcc": "43,740,500",
       "val_audi": 149,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 76,
+      "rate": 0.0,
+      "audiCnt": "147",
+      "salesAmt": "1,445,000",
+      "audiAcc": "4,304",
+      "salesAcc": "43,740,500",
+      "val_audi": 147,
       "val_rate": 0.0
     }
   ],
@@ -70813,6 +71594,17 @@
       "audiAcc": "2,336",
       "salesAcc": "9,661,775",
       "val_audi": 45,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 120,
+      "rate": 0.0,
+      "audiCnt": "46",
+      "salesAmt": "134,000",
+      "audiAcc": "2,336",
+      "salesAcc": "9,661,775",
+      "val_audi": 46,
       "val_rate": 0.0
     }
   ],
@@ -72492,6 +73284,17 @@
       "salesAcc": "0",
       "val_audi": 280,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 53,
+      "rate": 0.1,
+      "audiCnt": "283",
+      "salesAmt": "2,453,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 283,
+      "val_rate": 0.1
     }
   ],
   "잊혀진 대통령: 김영삼의 개혁시대": [
@@ -72738,7 +73541,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -73431,6 +74234,17 @@
       "salesAcc": "578,627,708",
       "val_audi": 46,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 120,
+      "rate": 0.0,
+      "audiCnt": "46",
+      "salesAmt": "416,000",
+      "audiAcc": "70,066",
+      "salesAcc": "578,627,708",
+      "val_audi": 46,
+      "val_rate": 0.0
     }
   ],
   "사운드 오브 폴링": [
@@ -74049,6 +74863,17 @@
       "salesAcc": "64,033,810",
       "val_audi": 88,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 96,
+      "rate": 0.0,
+      "audiCnt": "89",
+      "salesAmt": "597,000",
+      "audiAcc": "6,055",
+      "salesAcc": "64,033,810",
+      "val_audi": 89,
+      "val_rate": 0.0
     }
   ],
   "동창 : 최후의 만찬": [
@@ -74614,7 +75439,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 45,
       "rate": 0.1,
       "audiCnt": "344",
@@ -75782,6 +76607,17 @@
       "salesAcc": "563,000",
       "val_audi": 121,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 87,
+      "rate": 0.0,
+      "audiCnt": "121",
+      "salesAmt": "121",
+      "audiAcc": "60",
+      "salesAcc": "563,000",
+      "val_audi": 121,
+      "val_rate": 0.0
     }
   ],
   "모델": [
@@ -76305,6 +77141,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 100,
+      "rate": 0.0,
+      "audiCnt": "78",
+      "salesAmt": "497,000",
+      "audiAcc": "38",
+      "salesAcc": "216,000",
+      "val_audi": 78,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 101,
       "rate": 0.0,
       "audiCnt": "78",
       "salesAmt": "497,000",
@@ -77592,6 +78439,17 @@
       "salesAcc": "203,389,400",
       "val_audi": 78,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 103,
+      "rate": 0.0,
+      "audiCnt": "77",
+      "salesAmt": "813,000",
+      "audiAcc": "24,635",
+      "salesAcc": "203,389,400",
+      "val_audi": 77,
+      "val_rate": 0.0
     }
   ],
   "헤어질 결심": [
@@ -78276,6 +79134,17 @@
       "salesAcc": "19,800,019,678",
       "val_audi": 74,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 107,
+      "rate": 0.0,
+      "audiCnt": "73",
+      "salesAmt": "767,000",
+      "audiAcc": "1,910,313",
+      "salesAcc": "19,800,019,678",
+      "val_audi": 73,
+      "val_rate": 0.0
     }
   ],
   "괴물": [
@@ -78885,7 +79754,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 95,
       "rate": 0.0,
       "audiCnt": "93",
@@ -79699,6 +80568,17 @@
       "salesAcc": "3,742,912,730",
       "val_audi": 50,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 117,
+      "rate": 0.0,
+      "audiCnt": "52",
+      "salesAmt": "505,800",
+      "audiAcc": "369,027",
+      "salesAcc": "3,742,912,730",
+      "val_audi": 52,
+      "val_rate": 0.0
     }
   ],
   "더 폴: 디렉터스 컷": [
@@ -80438,6 +81318,17 @@
       "salesAcc": "1,964,512,100",
       "val_audi": 87,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 97,
+      "rate": 0.0,
+      "audiCnt": "87",
+      "salesAmt": "717,000",
+      "audiAcc": "190,025",
+      "salesAcc": "1,964,512,100",
+      "val_audi": 87,
+      "val_rate": 0.0
     }
   ],
   "한란": [
@@ -81058,7 +81949,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -81623,6 +82514,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 106,
+      "rate": 0.0,
+      "audiCnt": "76",
+      "salesAmt": "503,000",
+      "audiAcc": "99",
+      "salesAcc": "594,000",
+      "val_audi": 76,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 105,
       "rate": 0.0,
       "audiCnt": "76",
       "salesAmt": "503,000",
@@ -82401,6 +83303,17 @@
       "audiAcc": "3,831",
       "salesAcc": "42,614,400",
       "val_audi": 21,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 150,
+      "rate": 0.0,
+      "audiCnt": "22",
+      "salesAmt": "292,000",
+      "audiAcc": "3,831",
+      "salesAcc": "42,614,400",
+      "val_audi": 22,
       "val_rate": 0.0
     }
   ],
@@ -83218,6 +84131,17 @@
       "salesAcc": "86,179,608",
       "val_audi": 492,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 39,
+      "rate": 0.1,
+      "audiCnt": "498",
+      "salesAmt": "3,899,400",
+      "audiAcc": "10,678",
+      "salesAcc": "86,179,608",
+      "val_audi": 498,
+      "val_rate": 0.1
     }
   ],
   "클라이밍: 더 사운드": [
@@ -83684,7 +84608,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 158,
       "rate": 0.0,
       "audiCnt": "15",
@@ -84315,6 +85239,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 125,
+      "rate": 0.0,
+      "audiCnt": "42",
+      "salesAmt": "407,000",
+      "audiAcc": "378,530",
+      "salesAcc": "3,089,668,644",
+      "val_audi": 42,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 126,
       "rate": 0.0,
       "audiCnt": "42",
       "salesAmt": "407,000",
@@ -85039,6 +85974,17 @@
       "salesAcc": "5,932,200",
       "val_audi": 67,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 112,
+      "rate": 0.0,
+      "audiCnt": "67",
+      "salesAmt": "629,500",
+      "audiAcc": "998",
+      "salesAcc": "5,932,200",
+      "val_audi": 67,
+      "val_rate": 0.0
     }
   ],
   "시네마 천국": [
@@ -85679,6 +86625,17 @@
       "salesAcc": "674,062,200",
       "val_audi": 42,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 126,
+      "rate": 0.0,
+      "audiCnt": "42",
+      "salesAmt": "382,000",
+      "audiAcc": "91,894",
+      "salesAcc": "674,062,200",
+      "val_audi": 42,
+      "val_rate": 0.0
     }
   ],
   "오늘 하늘이 가장 좋아,라고 아직 말할 수 없는 나는": [
@@ -86222,7 +87179,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 141,
       "rate": 0.0,
       "audiCnt": "28",
@@ -86937,6 +87894,17 @@
       "salesAcc": "247,000",
       "val_audi": 31,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 137,
+      "rate": 0.0,
+      "audiCnt": "31",
+      "salesAmt": "362,000",
+      "audiAcc": "21",
+      "salesAcc": "247,000",
+      "val_audi": 31,
+      "val_rate": 0.0
     }
   ],
   "화장": [
@@ -87576,6 +88544,17 @@
       "audiAcc": "142,609",
       "salesAcc": "1,074,486,100",
       "val_audi": 94,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 93,
+      "rate": 0.0,
+      "audiCnt": "95",
+      "salesAmt": "95",
+      "audiAcc": "142,609",
+      "salesAcc": "1,074,486,100",
+      "val_audi": 95,
       "val_rate": 0.0
     }
   ],
@@ -88283,6 +89262,17 @@
       "salesAcc": "34,643,500",
       "val_audi": 74,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 107,
+      "rate": 0.0,
+      "audiCnt": "73",
+      "salesAmt": "880,000",
+      "audiAcc": "3,333",
+      "salesAcc": "34,643,500",
+      "val_audi": 73,
+      "val_rate": 0.0
     }
   ],
   "홀리보이": [
@@ -88905,6 +89895,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 128,
+      "rate": 0.0,
+      "audiCnt": "40",
+      "salesAmt": "475,000",
+      "audiAcc": "113",
+      "salesAcc": "646,000",
+      "val_audi": 40,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 129,
       "rate": 0.0,
       "audiCnt": "40",
       "salesAmt": "475,000",
@@ -89650,6 +90651,17 @@
       "audiAcc": "284",
       "salesAcc": "3,526,500",
       "val_audi": 72,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 106,
+      "rate": 0.0,
+      "audiCnt": "74",
+      "salesAmt": "900,000",
+      "audiAcc": "284",
+      "salesAcc": "3,526,500",
+      "val_audi": 74,
       "val_rate": 0.0
     }
   ],
@@ -90434,6 +91446,17 @@
       "salesAcc": "11,315,400",
       "val_audi": 61,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 114,
+      "rate": 0.0,
+      "audiCnt": "61",
+      "salesAmt": "526,000",
+      "audiAcc": "1,440",
+      "salesAcc": "11,315,400",
+      "val_audi": 61,
+      "val_rate": 0.0
     }
   ],
   "너와 나": [
@@ -91096,6 +92119,17 @@
       "salesAcc": "399,994,693",
       "val_audi": 43,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 123,
+      "rate": 0.0,
+      "audiCnt": "45",
+      "salesAmt": "424,000",
+      "audiAcc": "41,362",
+      "salesAcc": "399,994,693",
+      "val_audi": 45,
+      "val_rate": 0.0
     }
   ],
   "[인디스페이스x서신교환] 섹션 2": [
@@ -91661,7 +92695,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 118,
       "rate": 0.0,
       "audiCnt": "49",
@@ -92224,7 +93258,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 150,
       "rate": 0.0,
       "audiCnt": "22",
@@ -92950,6 +93984,17 @@
       "salesAcc": "112,033,000",
       "val_audi": 150,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 74,
+      "rate": 0.0,
+      "audiCnt": "156",
+      "salesAmt": "1,215,500",
+      "audiAcc": "16,942",
+      "salesAcc": "112,033,000",
+      "val_audi": 156,
+      "val_rate": 0.0
     }
   ],
   "시각 장애인": [
@@ -93572,6 +94617,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 123,
+      "rate": 0.0,
+      "audiCnt": "43",
+      "salesAmt": "235,000",
+      "audiAcc": "64",
+      "salesAcc": "401,000",
+      "val_audi": 43,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 124,
       "rate": 0.0,
       "audiCnt": "43",
       "salesAmt": "235,000",
@@ -94232,7 +95288,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 88,
       "rate": 0.0,
       "audiCnt": "118",
@@ -95068,6 +96124,17 @@
       "salesAcc": "5,670,258,110",
       "val_audi": 510,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 36,
+      "rate": 0.2,
+      "audiCnt": "554",
+      "salesAmt": "10,217,700",
+      "audiAcc": "534,269",
+      "salesAcc": "5,670,258,110",
+      "val_audi": 554,
+      "val_rate": 0.2
     }
   ],
   "그림자 군단": [
@@ -95710,7 +96777,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 141,
       "rate": 0.0,
       "audiCnt": "28",
@@ -96328,7 +97395,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 147,
       "rate": 0.0,
       "audiCnt": "24",
@@ -96987,6 +98054,17 @@
       "audiAcc": "2,567",
       "salesAcc": "20,227,600",
       "val_audi": 78,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 100,
+      "rate": 0.0,
+      "audiCnt": "79",
+      "salesAmt": "682,000",
+      "audiAcc": "2,567",
+      "salesAcc": "20,227,600",
+      "val_audi": 79,
       "val_rate": 0.0
     }
   ],
@@ -97663,7 +98741,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 146,
       "rate": 0.0,
       "audiCnt": "25",
@@ -98444,6 +99522,17 @@
       "salesAcc": "1,869,500",
       "val_audi": 246,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 55,
+      "rate": 0.1,
+      "audiCnt": "251",
+      "salesAmt": "2,346,000",
+      "audiAcc": "202",
+      "salesAcc": "1,869,500",
+      "val_audi": 251,
+      "val_rate": 0.1
     }
   ],
   "에브리씽 에브리웨어 올 앳 원스": [
@@ -98736,6 +99825,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 131,
+      "rate": 0.0,
+      "audiCnt": "37",
+      "salesAmt": "370,000",
+      "audiAcc": "397,222",
+      "salesAcc": "4,215,371,249",
+      "val_audi": 37,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 132,
       "rate": 0.0,
       "audiCnt": "37",
       "salesAmt": "370,000",
@@ -99239,6 +100339,17 @@
       "audiAcc": "44",
       "salesAcc": "272,000",
       "val_audi": 45,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 119,
+      "rate": 0.0,
+      "audiCnt": "47",
+      "salesAmt": "257,000",
+      "audiAcc": "44",
+      "salesAcc": "272,000",
+      "val_audi": 47,
       "val_rate": 0.0
     }
   ],
@@ -99783,7 +100894,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -100370,6 +101481,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 134,
+      "rate": 0.0,
+      "audiCnt": "36",
+      "salesAmt": "207,000",
+      "audiAcc": "37",
+      "salesAcc": "225,000",
+      "val_audi": 36,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 135,
       "rate": 0.0,
       "audiCnt": "36",
       "salesAmt": "207,000",
@@ -100999,6 +102121,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 130,
+      "rate": 0.0,
+      "audiCnt": "38",
+      "salesAmt": "398,000",
+      "audiAcc": "10,796",
+      "salesAcc": "98,448,570",
+      "val_audi": 38,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 131,
       "rate": 0.0,
       "audiCnt": "38",
       "salesAmt": "398,000",
@@ -102176,6 +103309,17 @@
       "salesAcc": "2,945,000",
       "val_audi": 46,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 120,
+      "rate": 0.0,
+      "audiCnt": "46",
+      "salesAmt": "370,000",
+      "audiAcc": "369",
+      "salesAcc": "2,945,000",
+      "val_audi": 46,
+      "val_rate": 0.0
     }
   ],
   "슈퍼 해피 포에버": [
@@ -102815,6 +103959,17 @@
       "audiAcc": "9,757",
       "salesAcc": "100,963,100",
       "val_audi": 32,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 137,
+      "rate": 0.0,
+      "audiCnt": "31",
+      "salesAmt": "321,000",
+      "audiAcc": "9,757",
+      "salesAcc": "100,963,100",
+      "val_audi": 31,
       "val_rate": 0.0
     }
   ],
@@ -103478,6 +104633,17 @@
       "salesAcc": "35,000,800",
       "val_audi": 37,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 136,
+      "rate": 0.0,
+      "audiCnt": "35",
+      "salesAmt": "365,000",
+      "audiAcc": "4,125",
+      "salesAcc": "35,000,800",
+      "val_audi": 35,
+      "val_rate": 0.0
     }
   ],
   "아방": [
@@ -104100,7 +105266,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 139,
       "rate": 0.0,
       "audiCnt": "30",
@@ -105092,6 +106258,17 @@
       "salesAcc": "206,097,440",
       "val_audi": 33,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 132,
+      "rate": 0.0,
+      "audiCnt": "37",
+      "salesAmt": "320,000",
+      "audiAcc": "24,371",
+      "salesAcc": "206,097,440",
+      "val_audi": 37,
+      "val_rate": 0.0
     }
   ],
   "룩백": [
@@ -105822,7 +106999,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 147,
       "rate": 0.0,
       "audiCnt": "24",
@@ -106614,6 +107791,17 @@
       "salesAcc": "16,164,100",
       "val_audi": 128,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 83,
+      "rate": 0.0,
+      "audiCnt": "127",
+      "salesAmt": "1,238,600",
+      "audiAcc": "1,445",
+      "salesAcc": "16,164,100",
+      "val_audi": 127,
+      "val_rate": 0.0
     }
   ],
   "후지모토 타츠키 17-26 파트 1": [
@@ -107234,7 +108422,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 178,
       "rate": 0.0,
       "audiCnt": "8",
@@ -107940,7 +109128,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 169,
       "rate": 0.0,
       "audiCnt": "11",
@@ -108450,6 +109638,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 177,
+      "rate": 0.0,
+      "audiCnt": "9",
+      "salesAmt": "61,000",
+      "audiAcc": "133",
+      "salesAcc": "890,000",
+      "val_audi": 9,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 176,
       "rate": 0.0,
       "audiCnt": "9",
       "salesAmt": "61,000",
@@ -109020,6 +110219,17 @@
       "salesAcc": "854,000",
       "val_audi": 20,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 153,
+      "rate": 0.0,
+      "audiCnt": "20",
+      "salesAmt": "114,000",
+      "audiAcc": "127",
+      "salesAcc": "854,000",
+      "val_audi": 20,
+      "val_rate": 0.0
     }
   ],
   "바늘을 든 소녀": [
@@ -109565,6 +110775,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 203,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "15,000",
+      "audiAcc": "5,692",
+      "salesAcc": "53,437,950",
+      "val_audi": 3,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
       "rate": 0.0,
       "audiCnt": "3",
       "salesAmt": "15,000",
@@ -110172,6 +111393,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 128,
+      "rate": 0.0,
+      "audiCnt": "40",
+      "salesAmt": "400,000",
+      "audiAcc": "175",
+      "salesAcc": "1,917,000",
+      "val_audi": 40,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 129,
       "rate": 0.0,
       "audiCnt": "40",
       "salesAmt": "400,000",
@@ -110885,6 +112117,17 @@
       "salesAcc": "9,926,484,580",
       "val_audi": 35,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 124,
+      "rate": 0.0,
+      "audiCnt": "43",
+      "salesAmt": "467,500",
+      "audiAcc": "972,651",
+      "salesAcc": "9,926,484,580",
+      "val_audi": 43,
+      "val_rate": 0.0
     }
   ],
   "소매치기": [
@@ -111419,6 +112662,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 184,
+      "rate": 0.0,
+      "audiCnt": "6",
+      "salesAmt": "36,000",
+      "audiAcc": "838",
+      "salesAcc": "5,729,300",
+      "val_audi": 6,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 185,
       "rate": 0.0,
       "audiCnt": "6",
       "salesAmt": "36,000",
@@ -112519,6 +113773,17 @@
       "salesAcc": "39,727,053",
       "val_audi": 19,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 152,
+      "rate": 0.0,
+      "audiCnt": "21",
+      "salesAmt": "196,500",
+      "audiAcc": "6,447",
+      "salesAcc": "39,727,053",
+      "val_audi": 21,
+      "val_rate": 0.0
     }
   ],
   "하나와 앨리스": [
@@ -113106,7 +114371,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -113669,7 +114934,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -114133,7 +115398,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 158,
       "rate": 0.0,
       "audiCnt": "15",
@@ -114907,7 +116172,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 158,
       "rate": 0.0,
       "audiCnt": "15",
@@ -115404,7 +116669,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 169,
       "rate": 0.0,
       "audiCnt": "11",
@@ -115903,6 +117168,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 172,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "58,000",
+      "audiAcc": "94",
+      "salesAcc": "615,000",
+      "val_audi": 10,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 173,
       "rate": 0.0,
       "audiCnt": "10",
       "salesAmt": "58,000",
@@ -116442,7 +117718,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 164,
       "rate": 0.0,
       "audiCnt": "13",
@@ -117040,6 +118316,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "10,000",
+      "audiAcc": "8,689",
+      "salesAcc": "81,745,784",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "10,000",
@@ -118140,6 +119427,17 @@
       "salesAcc": "840,000",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "17,500",
+      "audiAcc": "119",
+      "salesAcc": "840,000",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "(작은영화영화제)전국~영화자랑! - 강원편 두번째 이야기": [
@@ -118617,7 +119915,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 164,
       "rate": 0.0,
       "audiCnt": "13",
@@ -119050,6 +120348,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 172,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "51,500",
+      "audiAcc": "60",
+      "salesAcc": "391,000",
+      "val_audi": 10,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 173,
       "rate": 0.0,
       "audiCnt": "10",
       "salesAmt": "51,500",
@@ -119598,6 +120907,17 @@
       "salesAcc": "457,000",
       "val_audi": 6,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 185,
+      "rate": 0.0,
+      "audiCnt": "6",
+      "salesAmt": "34,000",
+      "audiAcc": "72",
+      "salesAcc": "457,000",
+      "val_audi": 6,
+      "val_rate": 0.0
     }
   ],
   "인피니트 아이콘: 비주얼 메모아르": [
@@ -120064,7 +121384,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 180,
       "rate": 0.0,
       "audiCnt": "7",
@@ -120605,7 +121925,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 164,
       "rate": 0.0,
       "audiCnt": "13",
@@ -121168,7 +122488,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 163,
       "rate": 0.0,
       "audiCnt": "14",
@@ -121711,6 +123031,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 203,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "15,000",
+      "audiAcc": "4,651",
+      "salesAcc": "41,980,900",
+      "val_audi": 3,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
       "rate": 0.0,
       "audiCnt": "3",
       "salesAmt": "15,000",
@@ -122767,6 +124098,17 @@
       "salesAcc": "6,654,000",
       "val_audi": 67,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 112,
+      "rate": 0.0,
+      "audiCnt": "67",
+      "salesAmt": "670,000",
+      "audiAcc": "853",
+      "salesAcc": "6,654,000",
+      "val_audi": 67,
+      "val_rate": 0.0
     }
   ],
   "경주로": [
@@ -123255,7 +124597,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 180,
       "rate": 0.0,
       "audiCnt": "7",
@@ -123840,7 +125182,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -124163,6 +125505,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "14,000",
+      "audiAcc": "47,035",
+      "salesAcc": "372,558,450",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "14,000",
@@ -124700,6 +126053,17 @@
       "salesAcc": "13,044,100",
       "val_audi": 6,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 185,
+      "rate": 0.0,
+      "audiCnt": "6",
+      "salesAmt": "27,000",
+      "audiAcc": "1,331",
+      "salesAcc": "13,044,100",
+      "val_audi": 6,
+      "val_rate": 0.0
     }
   ],
   "청소년 법원": [
@@ -125144,7 +126508,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -125663,7 +127027,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 180,
       "rate": 0.0,
       "audiCnt": "7",
@@ -126149,7 +127513,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -126855,6 +128219,17 @@
       "salesAcc": "144,135,100",
       "val_audi": 16,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 158,
+      "rate": 0.0,
+      "audiCnt": "15",
+      "salesAmt": "150,000",
+      "audiAcc": "18,808",
+      "salesAcc": "144,135,100",
+      "val_audi": 15,
+      "val_rate": 0.0
     }
   ],
   "국외자들": [
@@ -127488,7 +128863,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 154,
       "rate": 0.0,
       "audiCnt": "17",
@@ -128108,6 +129483,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 188,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "39,000",
+      "audiAcc": "5,240",
+      "salesAcc": "45,933,590",
+      "val_audi": 5,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
       "rate": 0.0,
       "audiCnt": "5",
       "salesAmt": "39,000",
@@ -128759,6 +130145,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 125,
+      "rate": 0.0,
+      "audiCnt": "42",
+      "salesAmt": "420,000",
+      "audiAcc": "688",
+      "salesAcc": "5,426,500",
+      "val_audi": 42,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 126,
       "rate": 0.0,
       "audiCnt": "42",
       "salesAmt": "420,000",
@@ -129441,6 +130838,17 @@
       "salesAcc": "96,937,200",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "10,000",
+      "audiAcc": "17,867",
+      "salesAcc": "96,937,200",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "사라지는 것들을 기억하는 법(인디스데이)": [
@@ -129909,6 +131317,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "8,000",
+      "audiAcc": "11",
+      "salesAcc": "78,000",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "8,000",
@@ -130534,6 +131953,17 @@
       "salesAcc": "270,000",
       "val_audi": 57,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 115,
+      "rate": 0.0,
+      "audiCnt": "57",
+      "salesAmt": "448,500",
+      "audiAcc": "32",
+      "salesAcc": "270,000",
+      "val_audi": 57,
+      "val_rate": 0.0
     }
   ],
   "(로컬 픽, 시간과 빛) 감각의 형상을 찾아서": [
@@ -131000,7 +132430,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -131462,6 +132892,17 @@
       "salesAcc": "850,344,316",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 176,
+      "rate": 0.0,
+      "audiCnt": "9",
+      "salesAmt": "78,000",
+      "audiAcc": "90,017",
+      "salesAcc": "850,344,316",
+      "val_audi": 9,
+      "val_rate": 0.0
     }
   ],
   "영생인": [
@@ -131906,7 +133347,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -132456,6 +133897,17 @@
       "salesAcc": "2,324,671,170",
       "val_audi": 6,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 185,
+      "rate": 0.0,
+      "audiCnt": "6",
+      "salesAmt": "42,000",
+      "audiAcc": "236,523",
+      "salesAcc": "2,324,671,170",
+      "val_audi": 6,
+      "val_rate": 0.0
     }
   ],
   "고기": [
@@ -132955,7 +134407,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -133333,6 +134785,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "5,000",
+      "audiAcc": "4,205",
+      "salesAcc": "39,938,700",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "5,000",
@@ -133839,7 +135302,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 180,
       "rate": 0.0,
       "audiCnt": "7",
@@ -134250,6 +135713,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "5,000",
+      "audiAcc": "11",
+      "salesAcc": "55,000",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "5,000",
@@ -134712,7 +136186,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 154,
       "rate": 0.0,
       "audiCnt": "17",
@@ -135275,6 +136749,17 @@
       "salesAcc": "77,407,000",
       "val_audi": 4,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "33,000",
+      "audiAcc": "8,573",
+      "salesAcc": "77,407,000",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "레이의 겨울방학": [
@@ -135767,6 +137252,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "10,000",
+      "audiAcc": "17,391",
+      "salesAcc": "159,911,000",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "10,000",
@@ -136495,7 +137991,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -137566,6 +139062,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "아빠의 어린 여자친구": [
@@ -137957,6 +139464,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -138507,6 +140025,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "잘 넣어주는 가정교사": [
@@ -138898,6 +140427,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -139303,6 +140843,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "출장서비스로 만난 선생님에게 조교 당한 아내": [
@@ -139694,6 +141245,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -140099,6 +141661,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "참을 수 없는 이모의 야한 속옷 무삭제판": [
@@ -140490,6 +142063,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -140895,6 +142479,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "그녀의 위험한 유혹 무삭제판": [
@@ -141286,6 +142881,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -141691,6 +143297,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "못참고 결국 싸버린 그녀": [
@@ -142082,6 +143699,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -142487,6 +144115,17 @@
       "salesAcc": "6,000",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "1",
+      "salesAcc": "6,000",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "수수하고 과묵한 옆집 누나의 반전 몸매": [
@@ -142878,6 +144517,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -143696,6 +145346,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "음란한 영업 무삭제판": [
@@ -144087,6 +145748,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -144492,6 +146164,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "젖어드는 다리 사이": [
@@ -144883,6 +146566,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -145288,6 +146982,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "거울 너머로 남편 몰래 상사와 즐기는 아내": [
@@ -145679,6 +147384,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "1",
+      "salesAcc": "6,000",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -146084,6 +147800,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "대학생 동정남 길들이는 옆집 유부녀": [
@@ -146475,6 +148202,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -146880,6 +148618,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "금욕 중인 형부를 다리 벌려 환영하는 처제": [
@@ -147271,6 +149020,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -147676,6 +149436,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "며느리를 뚫은 솟은 거근": [
@@ -148074,6 +149845,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "내 아내의 비밀친구 무삭제판": [
@@ -148465,6 +150247,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -148905,6 +150698,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "못참고 결국 싸버린 그녀 무삭제판": [
@@ -149303,6 +151107,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "잘 넣어주는 가정교사 무삭제판": [
@@ -149694,6 +151509,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -150266,6 +152092,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "헤어진 섹스 파트너 상사가 되어 돌아왔다": [
@@ -150657,6 +152494,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -151062,6 +152910,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "가정 방문 후, 학부모에게 조교당한 여교사": [
@@ -151453,6 +153312,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -151858,6 +153728,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "두근두근 그녀의 섹스 무삭제판": [
@@ -152256,6 +154137,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "삽입 후 최고의 순간 무삭제판": [
@@ -152647,6 +154539,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -153076,6 +154979,17 @@
       "salesAcc": "226,000",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "19,000",
+      "audiAcc": "34",
+      "salesAcc": "226,000",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "매춘부의 꿈": [
@@ -153467,6 +155381,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -153872,6 +155797,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "처형의 꼭지가 돌아버린 날": [
@@ -154263,6 +156199,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -154668,6 +156615,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "감독의 딸들": [
@@ -155059,6 +157017,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -155464,6 +157433,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "사디즘의 여자": [
@@ -155855,6 +157835,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -156260,6 +158251,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "꼬랑 체취의 새엄마": [
@@ -156651,6 +158653,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -157056,6 +159069,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "꽃집 남자의 사랑": [
@@ -157447,6 +159471,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -157852,6 +159887,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "가출 소녀와 아저씨": [
@@ -158243,6 +160289,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -158648,6 +160705,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "그 후로 사랑은 계속된다": [
@@ -159039,6 +161107,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -159444,6 +161523,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "운전기사와 회사원 그리고 창녀": [
@@ -159835,6 +161925,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -160240,6 +162341,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "엄마와 나 그리고 사랑의 적": [
@@ -160631,6 +162743,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "1,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "1,000",
@@ -161280,7 +163403,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 156,
       "rate": 0.0,
       "audiCnt": "16",
@@ -162485,6 +164608,17 @@
       "salesAcc": "1,002,588,139",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 180,
+      "rate": 0.0,
+      "audiCnt": "7",
+      "salesAmt": "70,000",
+      "audiAcc": "125,583",
+      "salesAcc": "1,002,588,139",
+      "val_audi": 7,
+      "val_rate": 0.0
     }
   ],
   "이사벨라 두크로트 언리미티드": [
@@ -162863,7 +164997,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -163208,6 +165342,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 131,
+      "rate": 0.0,
+      "audiCnt": "37",
+      "salesAmt": "496,000",
+      "audiAcc": "373",
+      "salesAcc": "3,395,000",
+      "val_audi": 37,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 132,
       "rate": 0.0,
       "audiCnt": "37",
       "salesAmt": "496,000",
@@ -163692,6 +165837,17 @@
       "salesAcc": "0",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "30,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "불륜의 성 파트1": [
@@ -164125,7 +166281,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -164477,6 +166633,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "다 먹는 AV 여배우가 된 첫사랑": [
@@ -164813,6 +166980,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -165163,6 +167341,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "하얗게 채워진 유부녀 입 속": [
@@ -165499,6 +167688,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -165849,6 +168049,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "창문 넘어 흘러들어온 시큼한 색기": [
@@ -166185,6 +168396,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -166535,6 +168757,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "젊은 냄새 맡고 잔뜩 젖어버린 숙모": [
@@ -166871,6 +169104,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -167221,6 +169465,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "자국 남긴 몇 번의 떨림": [
@@ -167557,6 +169812,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -167931,7 +170197,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -168569,6 +170835,17 @@
       "salesAcc": "612,000",
       "val_audi": 129,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 81,
+      "rate": 0.0,
+      "audiCnt": "132",
+      "salesAmt": "598,000",
+      "audiAcc": "204",
+      "salesAcc": "612,000",
+      "val_audi": 132,
+      "val_rate": 0.0
     }
   ],
   "흑인 대물로 물터진 일본 유부녀": [
@@ -168894,6 +171171,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -169233,6 +171521,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "폭주하는 일본 아줌마:일단 싸고 시작": [
@@ -169565,6 +171864,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "관음증-팬션방 여자들": [
@@ -169890,6 +172200,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -170266,6 +172587,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 188,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "45,000",
+      "audiAcc": "365",
+      "salesAcc": "3,447,000",
+      "val_audi": 5,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
       "rate": 0.0,
       "audiCnt": "5",
       "salesAmt": "45,000",
@@ -171135,6 +173467,17 @@
       "salesAcc": "7,356,000",
       "val_audi": 3802,
       "val_rate": 1.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 15,
+      "rate": 1.1,
+      "audiCnt": "3,832",
+      "salesAmt": "36,820,920",
+      "audiAcc": "502",
+      "salesAcc": "7,356,000",
+      "val_audi": 3832,
+      "val_rate": 1.1
     }
   ],
   "1980 사북": [
@@ -171566,6 +173909,17 @@
       "salesAcc": "84,616,300",
       "val_audi": 72,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 109,
+      "rate": 0.0,
+      "audiCnt": "72",
+      "salesAmt": "720,000",
+      "audiAcc": "11,012",
+      "salesAcc": "84,616,300",
+      "val_audi": 72,
+      "val_rate": 0.0
     }
   ],
   "나무의 노래": [
@@ -171928,6 +174282,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 18,
+      "rate": 0.9,
+      "audiCnt": "3,252",
+      "salesAmt": "29,276,000",
+      "audiAcc": "289",
+      "salesAcc": "2,890,000",
+      "val_audi": 3252,
+      "val_rate": 0.9
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 17,
       "rate": 0.9,
       "audiCnt": "3,252",
       "salesAmt": "29,276,000",
@@ -172300,6 +174665,17 @@
       "salesAcc": "377,302,860",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "9,000",
+      "audiAcc": "38,850",
+      "salesAcc": "377,302,860",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "주희에게": [
@@ -172524,7 +174900,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 91,
       "rate": 0.0,
       "audiCnt": "100",
@@ -173047,7 +175423,7 @@
       "val_rate": 0.1
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 40,
       "rate": 0.1,
       "audiCnt": "452",
@@ -173555,6 +175931,17 @@
       "salesAcc": "1,901,000",
       "val_audi": 251,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 54,
+      "rate": 0.1,
+      "audiCnt": "254",
+      "salesAmt": "2,824,000",
+      "audiAcc": "287",
+      "salesAcc": "1,901,000",
+      "val_audi": 254,
+      "val_rate": 0.1
     }
   ],
   "안녕하세요": [
@@ -173845,7 +176232,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 144,
       "rate": 0.0,
       "audiCnt": "26",
@@ -174175,6 +176562,17 @@
       "salesAcc": "0",
       "val_audi": 135,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 79,
+      "rate": 0.0,
+      "audiCnt": "135",
+      "salesAmt": "780,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 135,
+      "val_rate": 0.0
     }
   ],
   "노이즈가 말하기를": [
@@ -174474,6 +176872,17 @@
       "salesAcc": "0",
       "val_audi": 71,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 111,
+      "rate": 0.0,
+      "audiCnt": "71",
+      "salesAmt": "329,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 71,
+      "val_rate": 0.0
     }
   ],
   "보일링 포인트": [
@@ -174698,7 +177107,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -175177,7 +177586,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 169,
       "rate": 0.0,
       "audiCnt": "11",
@@ -175375,6 +177784,17 @@
       "salesAcc": "435,431,495",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "18,000",
+      "audiAcc": "46,800",
+      "salesAcc": "435,431,495",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "선 위의 세상": [
@@ -175544,7 +177964,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 143,
       "rate": 0.0,
       "audiCnt": "27",
@@ -175755,7 +178175,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 144,
       "rate": 0.0,
       "audiCnt": "26",
@@ -175930,6 +178350,17 @@
       "audiAcc": "249",
       "salesAcc": "1,802,000",
       "val_audi": 15,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 156,
+      "rate": 0.0,
+      "audiCnt": "16",
+      "salesAmt": "176,000",
+      "audiAcc": "249",
+      "salesAcc": "1,802,000",
+      "val_audi": 16,
       "val_rate": 0.0
     }
   ],
@@ -176144,7 +178575,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 147,
       "rate": 0.0,
       "audiCnt": "24",
@@ -176333,7 +178764,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 139,
       "rate": 0.0,
       "audiCnt": "30",
@@ -176511,7 +178942,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 167,
       "rate": 0.0,
       "audiCnt": "12",
@@ -176700,7 +179131,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 158,
       "rate": 0.0,
       "audiCnt": "15",
@@ -176876,6 +179307,17 @@
       "salesAcc": "410,000",
       "val_audi": 10,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 169,
+      "rate": 0.0,
+      "audiCnt": "11",
+      "salesAmt": "121,000",
+      "audiAcc": "58",
+      "salesAcc": "410,000",
+      "val_audi": 11,
+      "val_rate": 0.0
     }
   ],
   "카젤마허": [
@@ -177034,7 +179476,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 167,
       "rate": 0.0,
       "audiCnt": "12",
@@ -177243,6 +179685,17 @@
       "salesAcc": "0",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "30,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "오리카, 모두의 연인": [
@@ -177443,6 +179896,17 @@
       "salesAcc": "0",
       "val_audi": 5,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 189,
+      "rate": 0.0,
+      "audiCnt": "5",
+      "salesAmt": "30,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 5,
+      "val_rate": 0.0
     }
   ],
   "중국식 룰렛": [
@@ -177601,7 +180065,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 178,
       "rate": 0.0,
       "audiCnt": "8",
@@ -177748,6 +180212,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 172,
+      "rate": 0.0,
+      "audiCnt": "10",
+      "salesAmt": "100,000",
+      "audiAcc": "192",
+      "salesAcc": "1,511,000",
+      "val_audi": 10,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 173,
       "rate": 0.0,
       "audiCnt": "10",
       "salesAmt": "100,000",
@@ -178056,6 +180531,17 @@
       "salesAcc": "896,734,540",
       "val_audi": 1046,
       "val_rate": 0.3
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 27,
+      "rate": 0.3,
+      "audiCnt": "1,089",
+      "salesAmt": "17,229,500",
+      "audiAcc": "78,957",
+      "salesAcc": "896,734,540",
+      "val_audi": 1089,
+      "val_rate": 0.3
     }
   ],
   "타년타일": [
@@ -178333,6 +180819,17 @@
       "salesAcc": "0",
       "val_audi": 344,
       "val_rate": 0.1
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 44,
+      "rate": 0.1,
+      "audiCnt": "348",
+      "salesAmt": "2,944,900",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 348,
+      "val_rate": 0.1
     }
   ],
   "대디오": [
@@ -178599,6 +181096,17 @@
       "salesAcc": "0",
       "val_audi": 79,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 99,
+      "rate": 0.0,
+      "audiCnt": "81",
+      "salesAmt": "710,500",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 81,
+      "val_rate": 0.0
     }
   ],
   "불륜남녀 : 좋아 죽는 여자들": [
@@ -178737,6 +181245,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -178889,6 +181408,17 @@
       "salesAcc": "6,000",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "1",
+      "salesAcc": "6,000",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "미시녀 깊은 곳에서 꿈틀대는 대물": [
@@ -179016,6 +181546,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -179157,6 +181698,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "여대생 발정 났으면 삽입해야지": [
@@ -179284,6 +181836,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -179425,6 +181988,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "젖은 첫사랑의 야근 섹스": [
@@ -179552,6 +182126,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -179693,6 +182278,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "오늘도 젖어있는 여상사": [
@@ -179820,6 +182416,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -179961,6 +182568,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "대물 봉침 - 한방에 싸버린 유부녀": [
@@ -180088,6 +182706,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "6,000",
@@ -180229,6 +182858,17 @@
       "salesAcc": "0",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "6,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "정글비트 2": [
@@ -180352,6 +182992,17 @@
       "salesAcc": "0",
       "val_audi": 3,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 202,
+      "rate": 0.0,
+      "audiCnt": "3",
+      "salesAmt": "15,000",
+      "audiAcc": "0",
+      "salesAcc": "0",
+      "val_audi": 3,
+      "val_rate": 0.0
     }
   ],
   "럭키 데이 인 파리": [
@@ -180442,6 +183093,17 @@
       "salesAcc": "60,600,370",
       "val_audi": 1,
       "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "7,000",
+      "audiAcc": "6,332",
+      "salesAcc": "60,600,370",
+      "val_audi": 1,
+      "val_rate": 0.0
     }
   ],
   "리틀 포레스트": [
@@ -180523,7 +183185,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 208,
       "rate": 0.0,
       "audiCnt": "2",
@@ -180591,7 +183253,7 @@
       "val_rate": 0.0
     },
     {
-      "time": "2026-01-24 17:32",
+      "time": "2026-01-24 18:25",
       "rank": 195,
       "rate": 0.0,
       "audiCnt": "4",
@@ -180639,6 +183301,17 @@
     {
       "time": "2026-01-24 17:32",
       "rank": 220,
+      "rate": 0.0,
+      "audiCnt": "1",
+      "salesAmt": "10,000",
+      "audiAcc": "155,969",
+      "salesAcc": "1,270,954,429",
+      "val_audi": 1,
+      "val_rate": 0.0
+    },
+    {
+      "time": "2026-01-24 18:25",
+      "rank": 219,
       "rate": 0.0,
       "audiCnt": "1",
       "salesAmt": "10,000",
