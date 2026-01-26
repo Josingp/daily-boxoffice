@@ -4,8 +4,8 @@ import { PredictionResult } from '../types';
 
 interface TrendChartProps {
   data: any[];
-  type: 'DAILY' | 'REALTIME' | 'DRAMA'; // DRAMA 타입 추가
-  metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating'; // rating 메트릭 추가
+  type: 'DAILY' | 'REALTIME' | 'DRAMA'; // DRAMA 추가
+  metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating'; // rating 추가
   loading?: boolean;
   prediction?: PredictionResult | null;
 }
@@ -39,7 +39,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
             }
             return {
                 label,
-                value: item.rating, // ratingVal 사용됨
+                value: item.rating, // 숫자형 시청률 (예: 17.1)
                 date: item.date
             };
         });
@@ -93,9 +93,9 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                 metric === 'audi' ? '#3b82f6' : 
                 metric === 'sales' ? '#10b981' : '#f59e0b';
 
-  // 큰 숫자 포맷팅
+  // Y축 포맷팅 (시청률은 소수점 유지)
   const formatYAxis = (val: number) => {
-      if (type === 'DRAMA') return `${val}%`; // 시청률 포맷
+      if (type === 'DRAMA' || metric === 'rating') return `${val}%`; 
       if (val >= 100000000) return `${(val/100000000).toFixed(0)}억`;
       if (val >= 10000) return `${(val/10000).toFixed(0)}만`;
       return val.toLocaleString();
@@ -112,16 +112,37 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-          <XAxis dataKey="label" tick={{fontSize: 10, fill: '#94a3b8'}} axisLine={false} tickLine={false} interval={type === 'DAILY' ? 2 : 4}/>
-          <YAxis tick={{fontSize: 10, fill: '#94a3b8'}} axisLine={false} tickLine={false} tickFormatter={formatYAxis}/>
+          <XAxis 
+            dataKey="label" 
+            tick={{fontSize: 10, fill: '#94a3b8'}} 
+            axisLine={false} 
+            tickLine={false} 
+            interval={type === 'DAILY' ? 2 : 'preserveStartEnd'}
+          />
+          <YAxis 
+            tick={{fontSize: 10, fill: '#94a3b8'}} 
+            axisLine={false} 
+            tickLine={false} 
+            tickFormatter={formatYAxis} 
+            domain={type === 'DRAMA' ? ['auto', 'auto'] : [0, 'auto']} // 시청률은 변화폭이 중요하므로 auto
+            width={35}
+          />
           <Tooltip 
               contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.1)'}}
               formatter={(val: number, name) => [
-                  `${val.toLocaleString()}${unit}`, 
-                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객` : '수치')
+                  `${val}${unit}`, 
+                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객` : type==='DRAMA' ? '시청률' : '수치')
               ]}
+              labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }}
           />
-          <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill="url(#colorGradient)" />
+          <Area 
+            type="monotone" 
+            dataKey="value" 
+            stroke={color} 
+            strokeWidth={2} 
+            fill="url(#colorGradient)" 
+            animationDuration={1000}
+          />
           {metric === 'audi' && <Line type="monotone" dataKey="predict" stroke="#10b981" strokeDasharray="5 5" dot={{r:3}} connectNulls />}
         </AreaChart>
       </ResponsiveContainer>
