@@ -20,8 +20,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   const [isVisible, setIsVisible] = useState(false);
   const [chartMetric, setChartMetric] = useState<'audi' | 'sales' | 'scrn' | 'show'>('audi');
   
-  // 영화용 State
-  const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
+  // 영화용 State (TrendDataPoint | any[])
+  const [trendData, setTrendData] = useState<any[]>([]);
   const [realtimeInfo, setRealtimeInfo] = useState<any>(null);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
@@ -103,10 +103,35 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   };
 
   const loadMovieData = async (movie: DailyBoxOfficeList) => {
-    setLoading(true); setAnalysis(''); setPredictionSeries([]); setFinalAudiPredict(null); setIsAnalyzing(false);
-    setTrendData(movie.trend || []); setRealtimeInfo(movie.realtime || null); setNewsList([]); setPosterUrl(''); setMovieDetail(null); setChartMetric('audi');
+    setLoading(true); 
+    setAnalysis(''); setPredictionSeries([]); setFinalAudiPredict(null); setIsAnalyzing(false);
+    setTrendData(movie.trend || []); // 초기값 (일별의 경우 여기서 데이터가 들어감)
+    setRealtimeInfo(movie.realtime || null); 
+    setNewsList([]); setPosterUrl(''); setMovieDetail(null); setChartMetric('audi');
     
     try {
+      // 1. [중요] 실시간(REALTIME) 모드일 경우 별도 히스토리 파일 Fetch
+      if (type === 'REALTIME') {
+          try {
+             // 캐시 방지를 위해 시간 파라미터 추가
+             const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
+             if (res.ok) {
+                 const json = await res.json();
+                 // 제목 매칭 (공백 제거 후 비교)
+                 const searchTitle = movie.movieNm.replace(/\s+/g, '');
+                 const key = Object.keys(json).find(k => k.replace(/\s+/g, '') === searchTitle);
+                 
+                 // 해당 영화의 히스토리 데이터가 있으면 차트 데이터로 설정
+                 if (key && Array.isArray(json[key])) {
+                     setTrendData(json[key]);
+                 }
+             }
+          } catch (e) { 
+              console.error("Failed to load realtime history", e); 
+          }
+      }
+
+      // 2. 상세 정보 로드
       let info = (movie as any).detail;
       if (!info && movie.movieCd && movie.movieCd !== "0") info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
@@ -115,8 +140,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
       if (manual?.posterUrl) { setPosterUrl(manual.posterUrl); fetchMovieNews(movie.movieNm).then(setNewsList); }
       else { const [p, n] = await Promise.all([fetchMoviePoster(movie.movieNm), fetchMovieNews(movie.movieNm)]); setPosterUrl(p); setNewsList(n); }
       
+      // 3. 실시간 정보 (보라색 카드) 로드
       let rt = movie.realtime;
-      if(!rt) { const l = await fetchRealtimeReservation(movie.movieNm, movie.movieCd); if(l.data) { rt={...l.data, crawledTime:l.crawledTime}; setRealtimeInfo(rt); }}
+      if(!rt) { 
+          const l = await fetchRealtimeReservation(movie.movieNm, movie.movieCd); 
+          if(l.data) { rt={...l.data, crawledTime:l.crawledTime}; setRealtimeInfo(rt); }
+      }
     } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 
@@ -243,7 +272,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                         <Tv size={32} />
                     </div>
                     <div className="flex flex-col items-center">
-                        {/* 시청률에 % 추가 */}
                         <span className="text-3xl font-black text-slate-800 tracking-tight">{drama.rating}%</span>
                         <span className="text-xs text-slate-400 mt-1 font-medium">현재 시청률</span>
                     </div>
