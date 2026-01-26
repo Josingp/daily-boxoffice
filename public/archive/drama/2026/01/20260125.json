@@ -1,0 +1,147 @@
+{
+  "date": "20260125",
+  "nationwide": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "area": "전국"
+    },
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "rating": "20.5",
+      "area": "전국"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "誘몄�댁�곕━�����쇰�ㅼ����곕����≪����쇨린",
+      "rating": "8.6",
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS2",
+      "title": "1諛�2���",
+      "rating": "7.6",
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS2",
+      "title": "KBS2�����쇰�몃�����由ъ��(������������������������)",
+      "rating": "7.1",
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "���援���몃��������",
+      "rating": "6.7",
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "6.2",
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "5.8",
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "SBS",
+      "title": "TV���臾쇰�����",
+      "rating": "5.8",
+      "area": "전국"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "KBS��댁��(12:00)",
+      "rating": "4.9",
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "area": "수도권"
+    },
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "rating": "19.2",
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "誘몄�댁�곕━�����쇰�ㅼ����곕����≪����쇨린",
+      "rating": "8.1",
+      "area": "수도권"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS2",
+      "title": "1諛�2���",
+      "rating": "6.9",
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS2",
+      "title": "KBS2�����쇰�몃�����由ъ��(������������������������)",
+      "rating": "6.6",
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "6.3",
+      "area": "수도권"
+    },
+    {
+      "rank": "6",
+      "channel": "SBS",
+      "title": "TV���臾쇰�����",
+      "rating": "5.7",
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS1",
+      "title": "���援���몃��������",
+      "rating": "5.6",
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "MBC",
+      "title": "洹뱁��84",
+      "rating": "5.2",
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "4.9",
+      "area": "수도권"
+    }
+  ]
+}

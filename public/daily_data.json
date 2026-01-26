@@ -9,15 +9,15 @@
       "movieCd": "20249255",
       "movieNm": "만약에 우리",
       "openDt": "2025-12-31",
-      "salesAmt": "972397770",
+      "salesAmt": "972389770",
       "salesShare": "27.4",
-      "salesInten": "-107268670",
+      "salesInten": "-107269670",
       "salesChange": "-9.9",
-      "salesAcc": "19595098430",
-      "audiCnt": "96269",
+      "salesAcc": "19595087430",
+      "audiCnt": "96268",
       "audiInten": "-11875",
       "audiChange": "-11",
-      "audiAcc": "2001034",
+      "audiAcc": "2001032",
       "scrnCnt": "1065",
       "showCnt": "3766",
       "trend": [
@@ -190,6 +190,14 @@
           "salesAmt": 383045060,
           "scrnCnt": 932,
           "showCnt": 3194
+        },
+        {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 49887,
+          "salesAmt": 502270670,
+          "scrnCnt": 987,
+          "showCnt": 3448
         },
         {
           "date": "20260124",
@@ -493,6 +501,14 @@
           "salesAmt": 237059410,
           "scrnCnt": 717,
           "showCnt": 1371
+        },
+        {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 26432,
+          "salesAmt": 257852900,
+          "scrnCnt": 753,
+          "showCnt": 1565
         },
         {
           "date": "20260124",
@@ -939,6 +955,14 @@
           "showCnt": 1574
         },
         {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 20690,
+          "salesAmt": 271408140,
+          "scrnCnt": 715,
+          "showCnt": 1694
+        },
+        {
           "date": "20260124",
           "audiCnt": 50122,
           "salesAmt": 648875900,
@@ -1222,6 +1246,14 @@
           "showCnt": 793
         },
         {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 6179,
+          "salesAmt": 54903000,
+          "scrnCnt": 518,
+          "showCnt": 816
+        },
+        {
           "date": "20260124",
           "audiCnt": 25729,
           "salesAmt": 231017080,
@@ -1357,6 +1389,14 @@
           "salesAmt": 137017460,
           "scrnCnt": 760,
           "showCnt": 2447
+        },
+        {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 14716,
+          "salesAmt": 141685540,
+          "scrnCnt": 742,
+          "showCnt": 2413
         },
         {
           "date": "20260124",
@@ -1914,6 +1954,14 @@
           "showCnt": 665
         },
         {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 9073,
+          "salesAmt": 89445760,
+          "scrnCnt": 486,
+          "showCnt": 736
+        },
+        {
           "date": "20260124",
           "audiCnt": 20176,
           "salesAmt": 200181240,
@@ -2123,6 +2171,14 @@
           "salesAmt": 54151560,
           "scrnCnt": 534,
           "showCnt": 972
+        },
+        {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 6409,
+          "salesAmt": 60406000,
+          "scrnCnt": 550,
+          "showCnt": 1011
         },
         {
           "date": "20260124",
@@ -2358,15 +2414,47 @@
           "showCnt": 21
         },
         {
+          "date": "20260121",
+          "dateDisplay": "01/21",
+          "audiCnt": 14433,
+          "salesAmt": 143817110,
+          "scrnCnt": 431,
+          "showCnt": 727
+        },
+        {
+          "date": "20260122",
+          "dateDisplay": "01/22",
+          "audiCnt": 5209,
+          "salesAmt": 50148480,
+          "scrnCnt": 419,
+          "showCnt": 661
+        },
+        {
+          "date": "20260123",
+          "dateDisplay": "01/23",
+          "audiCnt": 4841,
+          "salesAmt": 48643700,
+          "scrnCnt": 413,
+          "showCnt": 637
+        },
+        {
           "date": "20260124",
           "audiCnt": 11064,
           "salesAmt": 118063760,
           "scrnCnt": 416,
           "showCnt": 608
+        },
+        {
+          "date": "20260125",
+          "dateDisplay": "01/25",
+          "audiCnt": 8268,
+          "salesAmt": 89686170,
+          "scrnCnt": 406,
+          "showCnt": 567
         }
       ],
-      "scrnInten": 410,
-      "showInten": 587,
+      "scrnInten": -10,
+      "showInten": -41,
       "detail": {
         "movieCd": "20040549",
         "movieNm": "천공의 성 라퓨타",
@@ -2941,10 +3029,18 @@
           "salesAmt": 26840000,
           "scrnCnt": 18,
           "showCnt": 81
+        },
+        {
+          "date": "20260125",
+          "dateDisplay": "01/25",
+          "audiCnt": 4673,
+          "salesAmt": 48000600,
+          "scrnCnt": 113,
+          "showCnt": 165
         }
       ],
-      "scrnInten": 1,
-      "showInten": 3,
+      "scrnInten": 95,
+      "showInten": 84,
       "detail": {
         "movieCd": "20050082",
         "movieNm": "이터널 선샤인",
