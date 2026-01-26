@@ -20,7 +20,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   const [isVisible, setIsVisible] = useState(false);
   const [chartMetric, setChartMetric] = useState<'audi' | 'sales' | 'scrn' | 'show'>('audi');
   
-  // 영화용 State (TrendDataPoint | any[])
+  // 영화용 State
   const [trendData, setTrendData] = useState<any[]>([]);
   const [realtimeInfo, setRealtimeInfo] = useState<any>(null);
   const [movieDetail, setMovieDetail] = useState<MovieInfo | null>(null);
@@ -94,7 +94,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
 
   const loadDramaData = (item: DramaItem) => {
       setDramaTrend(item.trend || []);
-      setPosterUrl(''); 
+      setPosterUrl(item.posterUrl || ''); 
       setNewsList([]);
       setAnalysis(''); 
       setIsAnalyzing(false);
@@ -105,30 +105,24 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   const loadMovieData = async (movie: DailyBoxOfficeList) => {
     setLoading(true); 
     setAnalysis(''); setPredictionSeries([]); setFinalAudiPredict(null); setIsAnalyzing(false);
-    setTrendData(movie.trend || []); // 초기값 (일별의 경우 여기서 데이터가 들어감)
+    setTrendData(movie.trend || []); 
     setRealtimeInfo(movie.realtime || null); 
     setNewsList([]); setPosterUrl(''); setMovieDetail(null); setChartMetric('audi');
     
     try {
-      // 1. [중요] 실시간(REALTIME) 모드일 경우 별도 히스토리 파일 Fetch
+      // 1. 실시간 모드일 경우 별도 히스토리 파일 로드
       if (type === 'REALTIME') {
           try {
-             // 캐시 방지를 위해 시간 파라미터 추가
              const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
              if (res.ok) {
                  const json = await res.json();
-                 // 제목 매칭 (공백 제거 후 비교)
                  const searchTitle = movie.movieNm.replace(/\s+/g, '');
                  const key = Object.keys(json).find(k => k.replace(/\s+/g, '') === searchTitle);
-                 
-                 // 해당 영화의 히스토리 데이터가 있으면 차트 데이터로 설정
                  if (key && Array.isArray(json[key])) {
                      setTrendData(json[key]);
                  }
              }
-          } catch (e) { 
-              console.error("Failed to load realtime history", e); 
-          }
+          } catch (e) { console.error("Realtime history load failed", e); }
       }
 
       // 2. 상세 정보 로드
@@ -159,7 +153,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         const sales = currentRt ? parseInt(String(currentRt.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
         const audi = currentRt ? parseInt(String(currentRt.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
         const atp = audi > 0 ? (sales / audi) : 12000;
-        const history = type === 'REALTIME' && movie.realtime ? [] : null; 
+        const history = type === 'REALTIME' ? trendData : null; 
         const trend = type === 'DAILY' ? trendData : [];
 
         const res = await fetch('/predict', {
@@ -267,18 +261,44 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         {/* === 드라마 모드 === */}
         {type === 'DRAMA' && drama && (
             <>
-                <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center gap-2">
-                    <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mb-2">
-                        <Tv size={32} />
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <span className="text-3xl font-black text-slate-800 tracking-tight">{drama.rating}%</span>
-                        <span className="text-xs text-slate-400 mt-1 font-medium">현재 시청률</span>
-                    </div>
-                    <p className="text-sm text-slate-500 font-medium border-t border-slate-50 pt-3 w-full mt-1">
-                        {drama.channel} • {drama.area} 기준 • {drama.rank}위
-                    </p>
+                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex gap-4">
+                   {/* 포스터 영역 */}
+                   <div className="w-24 h-32 shrink-0 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
+                     {posterUrl ? (
+                        <img src={posterUrl} alt={drama.title} className="w-full h-full object-cover" />
+                     ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 gap-1">
+                            <Tv size={24} />
+                            <span className="text-[10px]">No Image</span>
+                        </div>
+                     )}
+                   </div>
+                   
+                   {/* 정보 영역 */}
+                   <div className="flex-1 flex flex-col justify-center space-y-2 text-xs text-slate-600">
+                     <div className="flex gap-2 items-start">
+                        <Monitor size={14} className="text-purple-500 shrink-0 mt-0.5"/> 
+                        <span className="text-slate-800 font-medium leading-snug">{drama.broadcaster || drama.channel}</span>
+                     </div>
+                     {drama.cast && (
+                         <div className="flex gap-2 items-start">
+                            <User size={14} className="text-slate-400 shrink-0 mt-0.5"/> 
+                            <span className="text-slate-600 line-clamp-2 leading-snug">{drama.cast}</span>
+                         </div>
+                     )}
+                     <div className="mt-auto pt-2 border-t border-slate-50 flex items-center justify-between">
+                        <span className="text-slate-400">{drama.area} 기준</span>
+                        <span className="text-lg font-black text-purple-600">{drama.rating}%</span>
+                     </div>
+                   </div>
                 </div>
+
+                {drama.summary && (
+                    <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                        <div className="text-xs font-bold text-slate-800 mb-1">줄거리</div>
+                        <p className="text-xs text-slate-500 leading-relaxed">{drama.summary}</p>
+                    </div>
+                )}
 
                 <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-4 border-b border-slate-50 pb-2">
@@ -296,9 +316,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                             이전 데이터가 부족하여 그래프를 표시할 수 없습니다.
                         </div>
                     )}
-                     <p className="text-[10px] text-center text-slate-300 mt-3">
-                        * 방송이 없거나 집계되지 않은 날짜는 제외됩니다.
-                    </p>
                 </div>
             </>
         )}
