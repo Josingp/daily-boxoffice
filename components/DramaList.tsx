@@ -5,7 +5,7 @@ import { Tv } from 'lucide-react';
 interface DramaListProps {
   items: DramaItem[];
   title: string;
-  onItemClick?: (item: DramaItem) => void; // 클릭 핸들러
+  onItemClick?: (item: DramaItem) => void;
 }
 
 const DramaList: React.FC<DramaListProps> = ({ items, title, onItemClick }) => {
@@ -33,7 +33,8 @@ const DramaList: React.FC<DramaListProps> = ({ items, title, onItemClick }) => {
                   <div className="text-[11px] text-slate-400">{item.channel}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-slate-800 text-sm">{item.rating}</div>
+                  {/* [수정] 여기에 % 단위 추가 */}
+                  <div className="font-black text-slate-800 text-sm">{item.rating}%</div>
                   <div className="text-[10px] text-slate-400">시청률</div>
                 </div>
               </div>
