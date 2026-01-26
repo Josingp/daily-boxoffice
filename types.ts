@@ -74,20 +74,21 @@ export interface PredictionResult {
     } | null;
 }
 
-// [수정] 드라마 트렌드 타입 추가
+// [추가] 드라마 트렌드 타입
 export interface DramaTrend {
     date: string;
     rating: number;
 }
 
+// [수정] 드라마 아이템 타입
 export interface DramaItem {
   rank: string;
   channel: string;
   title: string;
-  rating: string;     // 표시용 (15.4%)
-  ratingVal: number;  // 숫자형
+  rating: string;     // 화면 표시용 (예: "15.4")
+  ratingVal: number;  // 그래프용 숫자 (예: 15.4)
   area: string;
-  trend?: DramaTrend[]; // [추가] 30일 추이 데이터
+  trend?: DramaTrend[]; // 30일 추이 데이터
 }
 
 export interface DramaData {
