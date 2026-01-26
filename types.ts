@@ -74,20 +74,26 @@ export interface PredictionResult {
     } | null;
 }
 
-// [핵심] 드라마 트렌드 타입: rating은 숫자여야 함
 export interface DramaTrend {
     date: string;
     rating: number; 
 }
 
+// [수정] 드라마 상세 정보 필드 추가
 export interface DramaItem {
   rank: string;
   channel: string;
   title: string;
-  rating: string;     // 화면 표시용 (예: "17.1")
-  ratingVal: number;  // 그래프용 숫자 (예: 17.1)
+  rating: string;     
+  ratingVal: number;  
   area: string;
-  trend?: DramaTrend[]; // 추이 데이터
+  trend?: DramaTrend[]; 
+  
+  // 네이버 크롤링 추가 필드
+  posterUrl?: string;
+  broadcaster?: string; // 편성 정보 (예: KBS2 월~금...)
+  cast?: string;        // 출연진
+  summary?: string;     // 줄거리/소개
 }
 
 export interface DramaData {
