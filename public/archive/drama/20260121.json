@@ -1,0 +1,327 @@
+{
+  "date": "20260121",
+  "nationwide": [
+    {
+      "rank": "1",
+      "channel": "KBS1",
+      "title": "일일드라마(마리와별난아빠들)",
+      "rating": "11.1",
+      "ratingVal": 11.1,
+      "area": "전국"
+    },
+    {
+      "rank": "2",
+      "channel": "KBS2",
+      "title": "일일드라마(친밀한리플리)",
+      "rating": "10.0",
+      "ratingVal": 10.0,
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS1",
+      "title": "인간극장",
+      "rating": "8.1",
+      "ratingVal": 8.1,
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS1",
+      "title": "아침마당",
+      "rating": "7.9",
+      "ratingVal": 7.9,
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "7.8",
+      "ratingVal": 7.8,
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "6.8",
+      "ratingVal": 6.8,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS1",
+      "title": "6시내고향",
+      "rating": "5.7",
+      "ratingVal": 5.7,
+      "area": "전국"
+    },
+    {
+      "rank": "8",
+      "channel": "MBC",
+      "title": "일일드라마(첫번째남자)",
+      "rating": "5.3",
+      "ratingVal": 5.3,
+      "area": "전국"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "KBS뉴스7",
+      "rating": "4.5",
+      "ratingVal": 4.5,
+      "area": "전국"
+    },
+    {
+      "rank": "10",
+      "channel": "KBS1",
+      "title": "KBS뉴스930",
+      "rating": "4.4",
+      "ratingVal": 4.4,
+      "area": "전국"
+    },
+    {
+      "rank": "11",
+      "channel": "KBS1",
+      "title": "KBS뉴스광장2부",
+      "rating": "4.2",
+      "ratingVal": 4.2,
+      "area": "전국"
+    },
+    {
+      "rank": "12",
+      "channel": "SBS",
+      "title": "골때리는그녀들리부트",
+      "rating": "4.0",
+      "ratingVal": 4.0,
+      "area": "전국"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS2",
+      "title": "2TV생생정보",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "전국"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS2",
+      "title": "슈퍼맨이돌아왔다",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "전국"
+    },
+    {
+      "rank": "15",
+      "channel": "KBS1",
+      "title": "생로병사의비밀",
+      "rating": "3.6",
+      "ratingVal": 3.6,
+      "area": "전국"
+    },
+    {
+      "rank": "16",
+      "channel": "KBS1",
+      "title": "황신혜의같이삽시다",
+      "rating": "3.5",
+      "ratingVal": 3.5,
+      "area": "전국"
+    },
+    {
+      "rank": "17",
+      "channel": "MBC",
+      "title": "황금어장라디오스타",
+      "rating": "3.3",
+      "ratingVal": 3.3,
+      "area": "전국"
+    },
+    {
+      "rank": "18",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "전국"
+    },
+    {
+      "rank": "18",
+      "channel": "KBS1",
+      "title": "동물의왕국",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "전국"
+    },
+    {
+      "rank": "20",
+      "channel": "KBS1",
+      "title": "KBS뉴스5",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "1",
+      "channel": "KBS1",
+      "title": "일일드라마(마리와별난아빠들)",
+      "rating": "9.5",
+      "ratingVal": 9.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "KBS2",
+      "title": "일일드라마(친밀한리플리)",
+      "rating": "8.3",
+      "ratingVal": 8.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "3",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "8.0",
+      "ratingVal": 8.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS1",
+      "title": "인간극장",
+      "rating": "6.6",
+      "ratingVal": 6.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "아침마당",
+      "rating": "6.1",
+      "ratingVal": 6.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "6",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "5.6",
+      "ratingVal": 5.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "MBC",
+      "title": "일일드라마(첫번째남자)",
+      "rating": "5.2",
+      "ratingVal": 5.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "KBS1",
+      "title": "6시내고향",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "KBS뉴스7",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "10",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "4.0",
+      "ratingVal": 4.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "10",
+      "channel": "KBS1",
+      "title": "KBS뉴스930",
+      "rating": "4.0",
+      "ratingVal": 4.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "10",
+      "channel": "SBS",
+      "title": "골때리는그녀들리부트",
+      "rating": "4.0",
+      "ratingVal": 4.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS1",
+      "title": "황신혜의같이삽시다",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "13",
+      "channel": "MBC",
+      "title": "황금어장라디오스타",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "15",
+      "channel": "KBS1",
+      "title": "KBS뉴스광장2부",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "15",
+      "channel": "KBS1",
+      "title": "동물의왕국",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "15",
+      "channel": "KBS1",
+      "title": "생로병사의비밀",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "18",
+      "channel": "KBS2",
+      "title": "슈퍼맨이돌아왔다",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "19",
+      "channel": "KBS1",
+      "title": "KBS뉴스5",
+      "rating": "2.9",
+      "ratingVal": 2.9,
+      "area": "수도권"
+    },
+    {
+      "rank": "20",
+      "channel": "KBS2",
+      "title": "2TV생생정보",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "수도권"
+    }
+  ]
+}

@@ -2,139 +2,9 @@
   "date": "20260125",
   "nationwide": [
     {
-      "rank": "������",
-      "channel": "梨����",
-      "title": "���濡�洹몃��",
-      "rating": "���泥�瑜�",
-      "ratingVal": 0,
-      "area": "전국",
-      "trend": [
-        {
-          "date": "20251227",
-          "rating": 0
-        },
-        {
-          "date": "20251228",
-          "rating": 0
-        },
-        {
-          "date": "20251229",
-          "rating": 0
-        },
-        {
-          "date": "20251230",
-          "rating": 0
-        },
-        {
-          "date": "20251231",
-          "rating": 0
-        },
-        {
-          "date": "20260101",
-          "rating": 0
-        },
-        {
-          "date": "20260102",
-          "rating": 0
-        },
-        {
-          "date": "20260103",
-          "rating": 0
-        },
-        {
-          "date": "20260104",
-          "rating": 0
-        },
-        {
-          "date": "20260105",
-          "rating": 0
-        },
-        {
-          "date": "20260106",
-          "rating": 0
-        },
-        {
-          "date": "20260107",
-          "rating": 0
-        },
-        {
-          "date": "20260108",
-          "rating": 0
-        },
-        {
-          "date": "20260109",
-          "rating": 0
-        },
-        {
-          "date": "20260110",
-          "rating": 0
-        },
-        {
-          "date": "20260111",
-          "rating": 0
-        },
-        {
-          "date": "20260112",
-          "rating": 0
-        },
-        {
-          "date": "20260113",
-          "rating": 0
-        },
-        {
-          "date": "20260114",
-          "rating": 0
-        },
-        {
-          "date": "20260115",
-          "rating": 0
-        },
-        {
-          "date": "20260116",
-          "rating": 0
-        },
-        {
-          "date": "20260117",
-          "rating": 0
-        },
-        {
-          "date": "20260118",
-          "rating": 0
-        },
-        {
-          "date": "20260119",
-          "rating": 0
-        },
-        {
-          "date": "20260120",
-          "rating": 0
-        },
-        {
-          "date": "20260121",
-          "rating": 0
-        },
-        {
-          "date": "20260122",
-          "rating": 0
-        },
-        {
-          "date": "20260123",
-          "rating": 0
-        },
-        {
-          "date": "20260124",
-          "rating": 0
-        },
-        {
-          "date": "20260125",
-          "rating": 0
-        }
-      ]
-    },
-    {
       "rank": "1",
       "channel": "KBS2",
-      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "title": "주말드라마(화려한날들)",
       "rating": "20.5",
       "ratingVal": 20.5,
       "area": "전국",
@@ -184,7 +54,7 @@
     {
       "rank": "2",
       "channel": "SBS",
-      "title": "誘몄�댁�곕━�����쇰�ㅼ����곕����≪����쇨린",
+      "title": "미운우리새끼다시쓰는육아일기",
       "rating": "8.6",
       "ratingVal": 8.6,
       "area": "전국",
@@ -214,7 +84,7 @@
     {
       "rank": "3",
       "channel": "KBS2",
-      "title": "1諛�2���",
+      "title": "1박2일",
       "rating": "7.6",
       "ratingVal": 7.6,
       "area": "전국",
@@ -244,7 +114,7 @@
     {
       "rank": "4",
       "channel": "KBS2",
-      "title": "KBS2�����쇰�몃�����由ъ��(������������������������)",
+      "title": "KBS2토일미니시리즈(은애하는도적님아)",
       "rating": "7.1",
       "ratingVal": 7.1,
       "area": "전국",
@@ -278,7 +148,7 @@
     {
       "rank": "5",
       "channel": "KBS1",
-      "title": "���援���몃��������",
+      "title": "전국노래자랑",
       "rating": "6.7",
       "ratingVal": 6.7,
       "area": "전국",
@@ -304,7 +174,7 @@
     {
       "rank": "6",
       "channel": "MBC",
-      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "title": "MBC뉴스데스크",
       "rating": "6.2",
       "ratingVal": 6.2,
       "area": "전국",
@@ -434,7 +304,7 @@
     {
       "rank": "7",
       "channel": "KBS1",
-      "title": "KBS9�����댁��",
+      "title": "KBS9시뉴스",
       "rating": "5.8",
       "ratingVal": 5.8,
       "area": "전국",
@@ -528,6 +398,10 @@
           "rating": 5.8
         },
         {
+          "date": "20260118",
+          "rating": 4.7
+        },
+        {
           "date": "20260119",
           "rating": 7.7
         },
@@ -560,7 +434,7 @@
     {
       "rank": "7",
       "channel": "SBS",
-      "title": "TV���臾쇰�����",
+      "title": "TV동물농장",
       "rating": "5.8",
       "ratingVal": 5.8,
       "area": "전국",
@@ -579,7 +453,7 @@
         },
         {
           "date": "20260118",
-          "rating": 4.6
+          "rating": 4.7
         },
         {
           "date": "20260125",
@@ -590,7 +464,7 @@
     {
       "rank": "9",
       "channel": "KBS1",
-      "title": "KBS��댁��(12:00)",
+      "title": "KBS뉴스(12:00)",
       "rating": "4.9",
       "ratingVal": 4.9,
       "area": "전국",
@@ -616,143 +490,383 @@
           "rating": 4.9
         }
       ]
-    }
-  ],
-  "capital": [
+    },
     {
-      "rank": "������",
-      "channel": "梨����",
-      "title": "���濡�洹몃��",
-      "rating": "���泥�瑜�",
-      "ratingVal": 0,
-      "area": "수도권",
+      "rank": "9",
+      "channel": "KBS2",
+      "title": "사장님귀는당나귀귀",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "전국",
       "trend": [
         {
-          "date": "20251227",
-          "rating": 0
-        },
-        {
           "date": "20251228",
-          "rating": 0
-        },
-        {
-          "date": "20251229",
-          "rating": 0
-        },
-        {
-          "date": "20251230",
-          "rating": 0
-        },
-        {
-          "date": "20251231",
-          "rating": 0
-        },
-        {
-          "date": "20260101",
-          "rating": 0
-        },
-        {
-          "date": "20260102",
-          "rating": 0
-        },
-        {
-          "date": "20260103",
-          "rating": 0
+          "rating": 4.3
         },
         {
           "date": "20260104",
-          "rating": 0
-        },
-        {
-          "date": "20260105",
-          "rating": 0
-        },
-        {
-          "date": "20260106",
-          "rating": 0
-        },
-        {
-          "date": "20260107",
-          "rating": 0
-        },
-        {
-          "date": "20260108",
-          "rating": 0
-        },
-        {
-          "date": "20260109",
-          "rating": 0
-        },
-        {
-          "date": "20260110",
-          "rating": 0
+          "rating": 4.4
         },
         {
           "date": "20260111",
-          "rating": 0
-        },
-        {
-          "date": "20260112",
-          "rating": 0
-        },
-        {
-          "date": "20260113",
-          "rating": 0
-        },
-        {
-          "date": "20260114",
-          "rating": 0
-        },
-        {
-          "date": "20260115",
-          "rating": 0
-        },
-        {
-          "date": "20260116",
-          "rating": 0
-        },
-        {
-          "date": "20260117",
-          "rating": 0
+          "rating": 4.5
         },
         {
           "date": "20260118",
-          "rating": 0
-        },
-        {
-          "date": "20260119",
-          "rating": 0
-        },
-        {
-          "date": "20260120",
-          "rating": 0
-        },
-        {
-          "date": "20260121",
-          "rating": 0
-        },
-        {
-          "date": "20260122",
-          "rating": 0
-        },
-        {
-          "date": "20260123",
-          "rating": 0
-        },
-        {
-          "date": "20260124",
-          "rating": 0
+          "rating": 4.9
         },
         {
           "date": "20260125",
-          "rating": 0
+          "rating": 4.9
         }
       ]
     },
     {
+      "rank": "11",
+      "channel": "MBC",
+      "title": "극한84",
+      "rating": "4.6",
+      "ratingVal": 4.6,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.4
+        },
+        {
+          "date": "20260104",
+          "rating": 3.3
+        },
+        {
+          "date": "20260111",
+          "rating": 3.3
+        },
+        {
+          "date": "20260118",
+          "rating": 4.0
+        },
+        {
+          "date": "20260125",
+          "rating": 4.6
+        }
+      ]
+    },
+    {
+      "rank": "12",
+      "channel": "KBS1",
+      "title": "KBS뉴스(19:00)",
+      "rating": "4.0",
+      "ratingVal": 4.0,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251227",
+          "rating": 3.2
+        },
+        {
+          "date": "20251228",
+          "rating": 3.9
+        },
+        {
+          "date": "20260101",
+          "rating": 5.7
+        },
+        {
+          "date": "20260104",
+          "rating": 3.4
+        },
+        {
+          "date": "20260111",
+          "rating": 2.7
+        },
+        {
+          "date": "20260117",
+          "rating": 3.2
+        },
+        {
+          "date": "20260118",
+          "rating": 3.1
+        },
+        {
+          "date": "20260124",
+          "rating": 3.4
+        },
+        {
+          "date": "20260125",
+          "rating": 4.0
+        }
+      ]
+    },
+    {
+      "rank": "13",
+      "channel": "SBS",
+      "title": "런닝맨",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.2
+        },
+        {
+          "date": "20260104",
+          "rating": 3.9
+        },
+        {
+          "date": "20260111",
+          "rating": 3.5
+        },
+        {
+          "date": "20260118",
+          "rating": 3.5
+        },
+        {
+          "date": "20260125",
+          "rating": 3.7
+        }
+      ]
+    },
+    {
+      "rank": "14",
+      "channel": "KBS2",
+      "title": "살림하는남자들<재>",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 4.1
+        },
+        {
+          "date": "20260111",
+          "rating": 3.1
+        },
+        {
+          "date": "20260125",
+          "rating": 3.4
+        }
+      ]
+    },
+    {
+      "rank": "14",
+      "channel": "KBS1",
+      "title": "이슈PICK쌤과함께",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.7
+        },
+        {
+          "date": "20260104",
+          "rating": 3.5
+        },
+        {
+          "date": "20260111",
+          "rating": 3.0
+        },
+        {
+          "date": "20260118",
+          "rating": 3.3
+        },
+        {
+          "date": "20260125",
+          "rating": 3.4
+        }
+      ]
+    },
+    {
+      "rank": "16",
+      "channel": "KBS1",
+      "title": "TV쇼진품명품",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.3
+        },
+        {
+          "date": "20260104",
+          "rating": 3.5
+        },
+        {
+          "date": "20260111",
+          "rating": 3.0
+        },
+        {
+          "date": "20260118",
+          "rating": 3.2
+        },
+        {
+          "date": "20260125",
+          "rating": 3.1
+        }
+      ]
+    },
+    {
+      "rank": "16",
+      "channel": "MBC",
+      "title": "탐사기획스트레이트",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20260104",
+          "rating": 3.8
+        },
+        {
+          "date": "20260111",
+          "rating": 3.7
+        },
+        {
+          "date": "20260118",
+          "rating": 5.3
+        },
+        {
+          "date": "20260125",
+          "rating": 3.1
+        }
+      ]
+    },
+    {
+      "rank": "16",
+      "channel": "KBS1",
+      "title": "열린음악회",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20260125",
+          "rating": 3.1
+        }
+      ]
+    },
+    {
+      "rank": "19",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.0",
+      "ratingVal": 3.0,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.1
+        },
+        {
+          "date": "20251229",
+          "rating": 2.8
+        },
+        {
+          "date": "20251230",
+          "rating": 3.0
+        },
+        {
+          "date": "20251231",
+          "rating": 2.9
+        },
+        {
+          "date": "20260101",
+          "rating": 3.5
+        },
+        {
+          "date": "20260102",
+          "rating": 3.3
+        },
+        {
+          "date": "20260104",
+          "rating": 3.8
+        },
+        {
+          "date": "20260105",
+          "rating": 3.3
+        },
+        {
+          "date": "20260106",
+          "rating": 2.9
+        },
+        {
+          "date": "20260107",
+          "rating": 2.5
+        },
+        {
+          "date": "20260108",
+          "rating": 2.9
+        },
+        {
+          "date": "20260111",
+          "rating": 3.0
+        },
+        {
+          "date": "20260112",
+          "rating": 2.8
+        },
+        {
+          "date": "20260113",
+          "rating": 2.9
+        },
+        {
+          "date": "20260114",
+          "rating": 3.0
+        },
+        {
+          "date": "20260115",
+          "rating": 3.0
+        },
+        {
+          "date": "20260119",
+          "rating": 3.3
+        },
+        {
+          "date": "20260120",
+          "rating": 3.5
+        },
+        {
+          "date": "20260121",
+          "rating": 3.2
+        },
+        {
+          "date": "20260122",
+          "rating": 2.7
+        },
+        {
+          "date": "20260123",
+          "rating": 2.6
+        },
+        {
+          "date": "20260125",
+          "rating": 3.0
+        }
+      ]
+    },
+    {
+      "rank": "20",
+      "channel": "KBS1",
+      "title": "황신혜의같이삽시다<재>",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "전국",
+      "trend": [
+        {
+          "date": "20260125",
+          "rating": 2.7
+        }
+      ]
+    }
+  ],
+  "capital": [
+    {
       "rank": "1",
       "channel": "KBS2",
-      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "title": "주말드라마(화려한날들)",
       "rating": "19.2",
       "ratingVal": 19.2,
       "area": "수도권",
@@ -802,7 +916,7 @@
     {
       "rank": "2",
       "channel": "SBS",
-      "title": "誘몄�댁�곕━�����쇰�ㅼ����곕����≪����쇨린",
+      "title": "미운우리새끼다시쓰는육아일기",
       "rating": "8.1",
       "ratingVal": 8.1,
       "area": "수도권",
@@ -832,7 +946,7 @@
     {
       "rank": "3",
       "channel": "KBS2",
-      "title": "1諛�2���",
+      "title": "1박2일",
       "rating": "6.9",
       "ratingVal": 6.9,
       "area": "수도권",
@@ -862,7 +976,7 @@
     {
       "rank": "4",
       "channel": "KBS2",
-      "title": "KBS2�����쇰�몃�����由ъ��(������������������������)",
+      "title": "KBS2토일미니시리즈(은애하는도적님아)",
       "rating": "6.6",
       "ratingVal": 6.6,
       "area": "수도권",
@@ -896,7 +1010,7 @@
     {
       "rank": "5",
       "channel": "MBC",
-      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "title": "MBC뉴스데스크",
       "rating": "6.3",
       "ratingVal": 6.3,
       "area": "수도권",
@@ -1026,7 +1140,7 @@
     {
       "rank": "6",
       "channel": "SBS",
-      "title": "TV���臾쇰�����",
+      "title": "TV동물농장",
       "rating": "5.7",
       "ratingVal": 5.7,
       "area": "수도권",
@@ -1045,7 +1159,7 @@
         },
         {
           "date": "20260118",
-          "rating": 4.6
+          "rating": 4.7
         },
         {
           "date": "20260125",
@@ -1056,7 +1170,7 @@
     {
       "rank": "7",
       "channel": "KBS1",
-      "title": "���援���몃��������",
+      "title": "전국노래자랑",
       "rating": "5.6",
       "ratingVal": 5.6,
       "area": "수도권",
@@ -1082,21 +1196,37 @@
     {
       "rank": "8",
       "channel": "MBC",
-      "title": "洹뱁��84",
+      "title": "극한84",
       "rating": "5.2",
       "ratingVal": 5.2,
       "area": "수도권",
       "trend": [
         {
+          "date": "20251228",
+          "rating": 3.4
+        },
+        {
+          "date": "20260104",
+          "rating": 3.3
+        },
+        {
+          "date": "20260111",
+          "rating": 3.3
+        },
+        {
+          "date": "20260118",
+          "rating": 4.0
+        },
+        {
           "date": "20260125",
-          "rating": 5.2
+          "rating": 4.6
         }
       ]
     },
     {
       "rank": "9",
       "channel": "KBS1",
-      "title": "KBS9�����댁��",
+      "title": "KBS9시뉴스",
       "rating": "4.9",
       "ratingVal": 4.9,
       "area": "수도권",
@@ -1190,6 +1320,10 @@
           "rating": 5.8
         },
         {
+          "date": "20260118",
+          "rating": 4.7
+        },
+        {
           "date": "20260119",
           "rating": 7.7
         },
@@ -1216,6 +1350,345 @@
         {
           "date": "20260125",
           "rating": 5.8
+        }
+      ]
+    },
+    {
+      "rank": "9",
+      "channel": "KBS2",
+      "title": "사장님귀는당나귀귀",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 4.3
+        },
+        {
+          "date": "20260104",
+          "rating": 4.4
+        },
+        {
+          "date": "20260111",
+          "rating": 4.5
+        },
+        {
+          "date": "20260118",
+          "rating": 4.9
+        },
+        {
+          "date": "20260125",
+          "rating": 4.9
+        }
+      ]
+    },
+    {
+      "rank": "11",
+      "channel": "KBS1",
+      "title": "KBS뉴스(12:00)",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 4.6
+        },
+        {
+          "date": "20260104",
+          "rating": 5.5
+        },
+        {
+          "date": "20260111",
+          "rating": 5.0
+        },
+        {
+          "date": "20260118",
+          "rating": 4.8
+        },
+        {
+          "date": "20260125",
+          "rating": 4.9
+        }
+      ]
+    },
+    {
+      "rank": "12",
+      "channel": "SBS",
+      "title": "런닝맨",
+      "rating": "4.2",
+      "ratingVal": 4.2,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.2
+        },
+        {
+          "date": "20260104",
+          "rating": 3.9
+        },
+        {
+          "date": "20260111",
+          "rating": 3.5
+        },
+        {
+          "date": "20260118",
+          "rating": 3.5
+        },
+        {
+          "date": "20260125",
+          "rating": 3.7
+        }
+      ]
+    },
+    {
+      "rank": "13",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.9",
+      "ratingVal": 3.9,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.1
+        },
+        {
+          "date": "20251229",
+          "rating": 2.8
+        },
+        {
+          "date": "20251230",
+          "rating": 3.0
+        },
+        {
+          "date": "20251231",
+          "rating": 2.9
+        },
+        {
+          "date": "20260101",
+          "rating": 3.5
+        },
+        {
+          "date": "20260102",
+          "rating": 3.3
+        },
+        {
+          "date": "20260104",
+          "rating": 3.8
+        },
+        {
+          "date": "20260105",
+          "rating": 3.3
+        },
+        {
+          "date": "20260106",
+          "rating": 2.9
+        },
+        {
+          "date": "20260107",
+          "rating": 2.5
+        },
+        {
+          "date": "20260108",
+          "rating": 2.9
+        },
+        {
+          "date": "20260111",
+          "rating": 3.0
+        },
+        {
+          "date": "20260112",
+          "rating": 2.8
+        },
+        {
+          "date": "20260113",
+          "rating": 2.9
+        },
+        {
+          "date": "20260114",
+          "rating": 3.0
+        },
+        {
+          "date": "20260115",
+          "rating": 3.0
+        },
+        {
+          "date": "20260119",
+          "rating": 3.3
+        },
+        {
+          "date": "20260120",
+          "rating": 3.5
+        },
+        {
+          "date": "20260121",
+          "rating": 3.2
+        },
+        {
+          "date": "20260122",
+          "rating": 2.7
+        },
+        {
+          "date": "20260123",
+          "rating": 2.6
+        },
+        {
+          "date": "20260125",
+          "rating": 3.0
+        }
+      ]
+    },
+    {
+      "rank": "14",
+      "channel": "KBS1",
+      "title": "KBS뉴스(19:00)",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251227",
+          "rating": 3.2
+        },
+        {
+          "date": "20251228",
+          "rating": 3.9
+        },
+        {
+          "date": "20260101",
+          "rating": 5.7
+        },
+        {
+          "date": "20260104",
+          "rating": 3.4
+        },
+        {
+          "date": "20260111",
+          "rating": 2.7
+        },
+        {
+          "date": "20260117",
+          "rating": 3.2
+        },
+        {
+          "date": "20260118",
+          "rating": 3.1
+        },
+        {
+          "date": "20260124",
+          "rating": 3.4
+        },
+        {
+          "date": "20260125",
+          "rating": 4.0
+        }
+      ]
+    },
+    {
+      "rank": "15",
+      "channel": "MBC",
+      "title": "탐사기획스트레이트",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20260104",
+          "rating": 3.8
+        },
+        {
+          "date": "20260111",
+          "rating": 3.7
+        },
+        {
+          "date": "20260118",
+          "rating": 5.3
+        },
+        {
+          "date": "20260125",
+          "rating": 3.1
+        }
+      ]
+    },
+    {
+      "rank": "16",
+      "channel": "KBS1",
+      "title": "이슈PICK쌤과함께",
+      "rating": "3.0",
+      "ratingVal": 3.0,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 3.7
+        },
+        {
+          "date": "20260104",
+          "rating": 3.5
+        },
+        {
+          "date": "20260111",
+          "rating": 3.0
+        },
+        {
+          "date": "20260118",
+          "rating": 3.3
+        },
+        {
+          "date": "20260125",
+          "rating": 3.4
+        }
+      ]
+    },
+    {
+      "rank": "17",
+      "channel": "SBS",
+      "title": "맨인블랙박스스페셜",
+      "rating": "2.8",
+      "ratingVal": 2.8,
+      "area": "수도권",
+      "trend": []
+    },
+    {
+      "rank": "18",
+      "channel": "MBC",
+      "title": "출발비디오여행",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권",
+      "trend": []
+    },
+    {
+      "rank": "18",
+      "channel": "KBS1",
+      "title": "팔도밥상스페셜",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권",
+      "trend": []
+    },
+    {
+      "rank": "20",
+      "channel": "KBS2",
+      "title": "살림하는남자들<재>",
+      "rating": "2.5",
+      "ratingVal": 2.5,
+      "area": "수도권",
+      "trend": [
+        {
+          "date": "20251228",
+          "rating": 4.1
+        },
+        {
+          "date": "20260111",
+          "rating": 3.1
+        },
+        {
+          "date": "20260125",
+          "rating": 3.4
         }
       ]
     }

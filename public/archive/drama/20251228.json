@@ -1,0 +1,327 @@
+{
+  "date": "20251228",
+  "nationwide": [
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "주말드라마(화려한날들)",
+      "rating": "19.0",
+      "ratingVal": 19.0,
+      "area": "전국"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "미운우리새끼다시쓰는육아일기",
+      "rating": "9.3",
+      "ratingVal": 9.3,
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS1",
+      "title": "SINCE1980전국노래자랑2025연말결선특별기획",
+      "rating": "7.1",
+      "ratingVal": 7.1,
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS2",
+      "title": "1박2일",
+      "rating": "6.2",
+      "ratingVal": 6.2,
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "5.8",
+      "ratingVal": 5.8,
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "5.4",
+      "ratingVal": 5.4,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "SBS",
+      "title": "TV동물농장",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "MBC",
+      "title": "미스터리음악쇼복면가왕THEFINALMASK",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "전국"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "KBS뉴스(12:00)",
+      "rating": "4.6",
+      "ratingVal": 4.6,
+      "area": "전국"
+    },
+    {
+      "rank": "10",
+      "channel": "KBS2",
+      "title": "사장님귀는당나귀귀",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "전국"
+    },
+    {
+      "rank": "11",
+      "channel": "KBS1",
+      "title": "송년특집열린음악회트로트4왕자",
+      "rating": "4.2",
+      "ratingVal": 4.2,
+      "area": "전국"
+    },
+    {
+      "rank": "12",
+      "channel": "KBS2",
+      "title": "살림하는남자들<재>",
+      "rating": "4.1",
+      "ratingVal": 4.1,
+      "area": "전국"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS1",
+      "title": "KBS뉴스(19:00)",
+      "rating": "3.9",
+      "ratingVal": 3.9,
+      "area": "전국"
+    },
+    {
+      "rank": "14",
+      "channel": "KBS1",
+      "title": "이슈PICK쌤과함께",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "전국"
+    },
+    {
+      "rank": "15",
+      "channel": "MBC",
+      "title": "극한84",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "전국"
+    },
+    {
+      "rank": "16",
+      "channel": "KBS1",
+      "title": "TV쇼진품명품",
+      "rating": "3.3",
+      "ratingVal": 3.3,
+      "area": "전국"
+    },
+    {
+      "rank": "17",
+      "channel": "SBS",
+      "title": "런닝맨",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "전국"
+    },
+    {
+      "rank": "18",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국"
+    },
+    {
+      "rank": "18",
+      "channel": "KBS1",
+      "title": "동물의왕국",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "전국"
+    },
+    {
+      "rank": "20",
+      "channel": "KBS1",
+      "title": "역사스페셜시간여행자<재>",
+      "rating": "3.0",
+      "ratingVal": 3.0,
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "주말드라마(화려한날들)",
+      "rating": "18.3",
+      "ratingVal": 18.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "미운우리새끼다시쓰는육아일기",
+      "rating": "9.3",
+      "ratingVal": 9.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS1",
+      "title": "SINCE1980전국노래자랑2025연말결선특별기획",
+      "rating": "6.0",
+      "ratingVal": 6.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "5.9",
+      "ratingVal": 5.9,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS2",
+      "title": "1박2일",
+      "rating": "5.8",
+      "ratingVal": 5.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "6",
+      "channel": "SBS",
+      "title": "TV동물농장",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "MBC",
+      "title": "미스터리음악쇼복면가왕THEFINALMASK",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "4.6",
+      "ratingVal": 4.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS2",
+      "title": "사장님귀는당나귀귀",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "10",
+      "channel": "KBS1",
+      "title": "KBS뉴스(12:00)",
+      "rating": "4.2",
+      "ratingVal": 4.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "11",
+      "channel": "MBC",
+      "title": "극한84",
+      "rating": "3.8",
+      "ratingVal": 3.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "12",
+      "channel": "KBS2",
+      "title": "살림하는남자들<재>",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS1",
+      "title": "송년특집열린음악회트로트4왕자",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS1",
+      "title": "이슈PICK쌤과함께",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "13",
+      "channel": "SBS",
+      "title": "런닝맨",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "16",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.2",
+      "ratingVal": 3.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "17",
+      "channel": "KBS1",
+      "title": "TV쇼진품명품",
+      "rating": "3.0",
+      "ratingVal": 3.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "17",
+      "channel": "KBS1",
+      "title": "KBS뉴스(19:00)",
+      "rating": "3.0",
+      "ratingVal": 3.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "19",
+      "channel": "KBS1",
+      "title": "특파원보고세계는지금<재>",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "19",
+      "channel": "MBC",
+      "title": "금토드라마(판사이한영프리미어)",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권"
+    }
+  ]
+}

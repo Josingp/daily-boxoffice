@@ -1,0 +1,327 @@
+{
+  "date": "20251231",
+  "nationwide": [
+    {
+      "rank": "1",
+      "channel": "KBS1",
+      "title": "인간극장",
+      "rating": "7.1",
+      "ratingVal": 7.1,
+      "area": "전국"
+    },
+    {
+      "rank": "1",
+      "channel": "KBS1",
+      "title": "아침마당",
+      "rating": "7.1",
+      "ratingVal": 7.1,
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS1",
+      "title": "일일드라마(마리와별난아빠들)",
+      "rating": "7.0",
+      "ratingVal": 7.0,
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "6.3",
+      "ratingVal": 6.3,
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "5.6",
+      "ratingVal": 5.6,
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "SBS",
+      "title": "2025SBS연기대상3부",
+      "rating": "5.5",
+      "ratingVal": 5.5,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS2",
+      "title": "2025KBSDRAMAAWARDS연기대상SINCE1987-2부",
+      "rating": "5.0",
+      "ratingVal": 5.0,
+      "area": "전국"
+    },
+    {
+      "rank": "8",
+      "channel": "KBS1",
+      "title": "6시내고향",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "전국"
+    },
+    {
+      "rank": "8",
+      "channel": "KBS2",
+      "title": "2025KBSDRAMAAWARDS연기대상SINCE1987-1부",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "전국"
+    },
+    {
+      "rank": "10",
+      "channel": "MBC",
+      "title": "일일드라마(첫번째남자)",
+      "rating": "4.6",
+      "ratingVal": 4.6,
+      "area": "전국"
+    },
+    {
+      "rank": "11",
+      "channel": "KBS1",
+      "title": "KBS뉴스930",
+      "rating": "4.4",
+      "ratingVal": 4.4,
+      "area": "전국"
+    },
+    {
+      "rank": "12",
+      "channel": "SBS",
+      "title": "2025SBS연기대상2부",
+      "rating": "4.2",
+      "ratingVal": 4.2,
+      "area": "전국"
+    },
+    {
+      "rank": "13",
+      "channel": "KBS1",
+      "title": "KBS뉴스7",
+      "rating": "3.8",
+      "ratingVal": 3.8,
+      "area": "전국"
+    },
+    {
+      "rank": "14",
+      "channel": "KBS1",
+      "title": "KBS뉴스광장2부",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "전국"
+    },
+    {
+      "rank": "15",
+      "channel": "KBS1",
+      "title": "생로병사의비밀",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "전국"
+    },
+    {
+      "rank": "16",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "2.9",
+      "ratingVal": 2.9,
+      "area": "전국"
+    },
+    {
+      "rank": "17",
+      "channel": "KBS1",
+      "title": "2025KBS영상실록국내편",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "전국"
+    },
+    {
+      "rank": "17",
+      "channel": "SBS",
+      "title": "2025SBS연기대상1부",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "전국"
+    },
+    {
+      "rank": "17",
+      "channel": "KBS1",
+      "title": "무엇이든물어보세요",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "전국"
+    },
+    {
+      "rank": "20",
+      "channel": "KBS1",
+      "title": "2026카운트다운쇼LIGHTNOW",
+      "rating": "2.5",
+      "ratingVal": 2.5,
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "1",
+      "channel": "MBC",
+      "title": "MBC뉴스데스크",
+      "rating": "6.8",
+      "ratingVal": 6.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "KBS1",
+      "title": "일일드라마(마리와별난아빠들)",
+      "rating": "6.1",
+      "ratingVal": 6.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "2025SBS연기대상3부",
+      "rating": "6.1",
+      "ratingVal": 6.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS1",
+      "title": "KBS9시뉴스",
+      "rating": "5.5",
+      "ratingVal": 5.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "인간극장",
+      "rating": "5.2",
+      "ratingVal": 5.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "6",
+      "channel": "KBS1",
+      "title": "아침마당",
+      "rating": "5.0",
+      "ratingVal": 5.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS2",
+      "title": "2025KBSDRAMAAWARDS연기대상SINCE1987-2부",
+      "rating": "4.7",
+      "ratingVal": 4.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "MBC",
+      "title": "일일드라마(첫번째남자)",
+      "rating": "4.6",
+      "ratingVal": 4.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "SBS",
+      "title": "2025SBS연기대상2부",
+      "rating": "4.5",
+      "ratingVal": 4.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "10",
+      "channel": "KBS2",
+      "title": "2025KBSDRAMAAWARDS연기대상SINCE1987-1부",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "11",
+      "channel": "KBS1",
+      "title": "KBS뉴스930",
+      "rating": "3.8",
+      "ratingVal": 3.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "12",
+      "channel": "KBS1",
+      "title": "6시내고향",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "12",
+      "channel": "KBS1",
+      "title": "KBS뉴스7",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "14",
+      "channel": "KBS1",
+      "title": "생로병사의비밀",
+      "rating": "3.4",
+      "ratingVal": 3.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "15",
+      "channel": "SBS",
+      "title": "SBS8뉴스",
+      "rating": "3.3",
+      "ratingVal": 3.3,
+      "area": "수도권"
+    },
+    {
+      "rank": "16",
+      "channel": "SBS",
+      "title": "2025SBS연기대상1부",
+      "rating": "3.1",
+      "ratingVal": 3.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "17",
+      "channel": "MBC",
+      "title": "가요대제전멋1부",
+      "rating": "2.8",
+      "ratingVal": 2.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "18",
+      "channel": "MBC",
+      "title": "가요대제전멋2부",
+      "rating": "2.7",
+      "ratingVal": 2.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "19",
+      "channel": "KBS1",
+      "title": "KBS뉴스광장2부",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권"
+    },
+    {
+      "rank": "19",
+      "channel": "KBS1",
+      "title": "2026카운트다운쇼LIGHTNOW",
+      "rating": "2.6",
+      "ratingVal": 2.6,
+      "area": "수도권"
+    }
+  ]
+}
