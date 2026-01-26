@@ -83,7 +83,6 @@ const App: React.FC = () => {
     });
   }, [movieList, searchQuery]);
 
-  // 영화 클릭 핸들러
   const handleMovieClick = (movie: DailyBoxOfficeList | RealtimeMovie) => {
     setSelectedDrama(null);
     if ('movieNm' in movie) {
@@ -126,10 +125,10 @@ const App: React.FC = () => {
     }
   };
 
-  // 드라마 클릭 핸들러
+  // [중요] 드라마 클릭 핸들러
   const handleDramaClick = (item: DramaItem) => {
       setSelectedMovie(null);
-      setSelectedDrama(item);
+      setSelectedDrama(item); // 선택된 드라마 저장 -> DetailView 열림
   };
 
   const dateInputValue = `${targetDate.substring(0, 4)}-${targetDate.substring(4, 6)}-${targetDate.substring(6, 8)}`;
@@ -214,7 +213,7 @@ const App: React.FC = () => {
                     <div className="text-center mb-4 text-xs text-slate-400 bg-white inline-block px-3 py-1 rounded-full border border-slate-100 shadow-sm mx-auto">
                         📅 기준일: {dramaData.date.substring(0,4)}.{dramaData.date.substring(4,6)}.{dramaData.date.substring(6,8)} (닐슨코리아)
                     </div>
-                    {/* 클릭 핸들러 전달 */}
+                    {/* [중요] 리스트에 클릭 핸들러 전달 */}
                     <DramaList title="전국 시청률 TOP 10" items={dramaData.nationwide} onItemClick={handleDramaClick} />
                     <DramaList title="수도권 시청률 TOP 10" items={dramaData.capital} onItemClick={handleDramaClick} />
                 </div>
