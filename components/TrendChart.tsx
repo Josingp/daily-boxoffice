@@ -29,14 +29,22 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
     if (!data || data.length === 0) return [];
 
     if (type === 'DAILY') {
-        const recentData = data.map((item) => ({
-          ...item,
-          value: metric === 'audi' ? item.audiCnt :
-                 metric === 'sales' ? item.salesAmt :
-                 metric === 'scrn' ? item.scrnCnt : item.showCnt,
-          label: item.dateDisplay,
-          predict: null
-        }));
+        const recentData = data.map((item) => {
+            // dateDisplay가 없으면 date(YYYYMMDD)를 MM/DD로 변환
+            let label = item.dateDisplay;
+            if (!label && item.date && item.date.length === 8) {
+                label = `${item.date.substring(4,6)}/${item.date.substring(6,8)}`;
+            }
+
+            return {
+              ...item,
+              value: metric === 'audi' ? item.audiCnt :
+                     metric === 'sales' ? item.salesAmt :
+                     metric === 'scrn' ? item.scrnCnt : item.showCnt,
+              label: label || item.date,
+              predict: null
+            };
+        });
 
         if (metric === 'audi' && prediction && prediction.predictionSeries) {
             const today = new Date();
