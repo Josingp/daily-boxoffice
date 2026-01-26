@@ -39,8 +39,19 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   const [copied, setCopied] = useState(false);
 
   // Helper 함수들
-  const getManualInfo = (title: string) => { if(!title) return null; const clean=title.replace(/\s+/g,''); const k=Object.keys(MANUAL_JSON).find(k=>k.replace(/\s+/g,'')===clean); return k?MANUAL_JSON[k]:null; };
-  const parseDate = (str: string) => { if(!str) return null; let d=String(str).replace(/-/g,'/'); if(!d.includes('/')&&d.length===8) d=`${d.substring(0,4)}/${d.substring(4,6)}/${d.substring(6,8)}`; return new Date(d); };
+  const getManualInfo = (title: string) => { 
+    if(!title) return null; 
+    const clean=title.replace(/\s+/g,''); 
+    const k=Object.keys(MANUAL_JSON).find(k=>k.replace(/\s+/g,'')===clean); 
+    return k?MANUAL_JSON[k]:null; 
+  };
+  
+  const parseDate = (str: string) => { 
+    if(!str) return null; 
+    let d=String(str).replace(/-/g,'/'); 
+    if(!d.includes('/')&&d.length===8) d=`${d.substring(0,4)}/${d.substring(4,6)}/${d.substring(6,8)}`; 
+    return new Date(d); 
+  };
   
   const getDDayBadge = (openDt: string) => {
       const start = parseDate(openDt);
@@ -52,7 +63,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
       else return <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-medium border border-slate-200">개봉 {Math.abs(diffDays) + 1}일차</span>;
   };
 
-  const calculatePSA = () => { if(!movie) return 0; const a=parseInt(movie.audiCnt||"0"); const s=parseInt(movie.showCnt||"0"); return s>0?Math.round(a/s):0; };
+  const calculatePSA = () => { 
+    if(!movie) return 0; 
+    const a=parseInt(movie.audiCnt||"0"); 
+    const s=parseInt(movie.showCnt||"0"); 
+    return s>0?Math.round(a/s):0; 
+  };
 
   const IntenBadge = ({ val }: { val?: string | number }) => {
       const v = typeof val === 'string' ? parseInt(val) : (val || 0);
@@ -114,7 +130,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         const sales = currentRt ? parseInt(String(currentRt.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
         const audi = currentRt ? parseInt(String(currentRt.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
         const atp = audi > 0 ? (sales / audi) : 12000;
-        const history = type === 'REALTIME' && movie.realtime ? [] : null; // 실시간 이력은 현재 없음
+        const history = type === 'REALTIME' && movie.realtime ? [] : null; 
         const trend = type === 'DAILY' ? trendData : [];
 
         const res = await fetch('/predict', {
@@ -138,7 +154,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
   };
 
   const handleShare = async () => {
-    // 공유 로직 (드라마용 추가 가능하지만 생략)
     if (movie) {
         let text = `[BoxOffice Pro] ${movie.movieNm}\n누적관객: ${formatNumber(movie.audiAcc)}명`;
         try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(()=>setCopied(false),2000); } catch {}
