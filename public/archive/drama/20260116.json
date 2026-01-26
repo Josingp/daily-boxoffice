@@ -1,0 +1,167 @@
+{
+  "date": "20260116",
+  "nationwide": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "ratingVal": 0,
+      "area": "전국"
+    },
+    {
+      "rank": "1",
+      "channel": "MBC",
+      "title": "MBC湲���������쇰��(�����ъ�댄�����)",
+      "rating": "10.0",
+      "ratingVal": 10.0,
+      "area": "전국"
+    },
+    {
+      "rank": "2",
+      "channel": "KBS2",
+      "title": "��쇱�쇰����쇰��(移�諛����由ы��由�)",
+      "rating": "9.8",
+      "ratingVal": 9.8,
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS1",
+      "title": "��쇱�쇰����쇰��(留�由ъ��蹂�������鍮����)",
+      "rating": "9.6",
+      "ratingVal": 9.6,
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS1",
+      "title": "��멸��洹뱀��",
+      "rating": "7.3",
+      "ratingVal": 7.3,
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "6.4",
+      "ratingVal": 6.4,
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "6.2",
+      "ratingVal": 6.2,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS1",
+      "title": "���移⑤�����",
+      "rating": "6.1",
+      "ratingVal": 6.1,
+      "area": "전국"
+    },
+    {
+      "rank": "8",
+      "channel": "MBC",
+      "title": "��쇱�쇰����쇰��(泥ル��吏몃�⑥��)",
+      "rating": "5.1",
+      "ratingVal": 5.1,
+      "area": "전국"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "6�����닿�����",
+      "rating": "5.0",
+      "ratingVal": 5.0,
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "ratingVal": 0,
+      "area": "수도권"
+    },
+    {
+      "rank": "1",
+      "channel": "MBC",
+      "title": "MBC湲���������쇰��(�����ъ�댄�����)",
+      "rating": "10.1",
+      "ratingVal": 10.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "KBS1",
+      "title": "��쇱�쇰����쇰��(留�由ъ��蹂�������鍮����)",
+      "rating": "8.0",
+      "ratingVal": 8.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS2",
+      "title": "��쇱�쇰����쇰��(移�諛����由ы��由�)",
+      "rating": "7.8",
+      "ratingVal": 7.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "6.1",
+      "ratingVal": 6.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "��멸��洹뱀��",
+      "rating": "5.8",
+      "ratingVal": 5.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "5.8",
+      "ratingVal": 5.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "KBS1",
+      "title": "���移⑤�����",
+      "rating": "5.4",
+      "ratingVal": 5.4,
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "MBC",
+      "title": "�����쇱����곕��",
+      "rating": "5.1",
+      "ratingVal": 5.1,
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "SBS",
+      "title": "沅�湲������댁�쇨린Y",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "수도권"
+    }
+  ]
+}

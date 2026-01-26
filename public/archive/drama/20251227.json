@@ -1,0 +1,167 @@
+{
+  "date": "20251227",
+  "nationwide": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "ratingVal": 0,
+      "area": "전국"
+    },
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "rating": "17.1",
+      "ratingVal": 17.1,
+      "area": "전국"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "湲���������쇰��(蹂듭����������⑤����ㅻえ踰�������3)",
+      "rating": "14.0",
+      "ratingVal": 14.0,
+      "area": "전국"
+    },
+    {
+      "rank": "3",
+      "channel": "KBS2",
+      "title": "遺�������紐�怨�",
+      "rating": "5.9",
+      "ratingVal": 5.9,
+      "area": "전국"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "5.3",
+      "ratingVal": 5.3,
+      "area": "전국"
+    },
+    {
+      "rank": "5",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "4.9",
+      "ratingVal": 4.9,
+      "area": "전국"
+    },
+    {
+      "rank": "6",
+      "channel": "KBS2",
+      "title": "��대┝��������⑥�����",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "전국"
+    },
+    {
+      "rank": "7",
+      "channel": "SBS",
+      "title": "洹멸����댁��怨���띕��",
+      "rating": "4.5",
+      "ratingVal": 4.5,
+      "area": "전국"
+    },
+    {
+      "rank": "8",
+      "channel": "SBS",
+      "title": "湲���������쇰��(蹂듭����������⑤����ㅻえ踰�������3<���>)",
+      "rating": "4.4",
+      "ratingVal": 4.4,
+      "area": "전국"
+    },
+    {
+      "rank": "9",
+      "channel": "KBS1",
+      "title": "�����ㅽ��諛���댁�ㅽ�����",
+      "rating": "4.3",
+      "ratingVal": 4.3,
+      "area": "전국"
+    }
+  ],
+  "capital": [
+    {
+      "rank": "������",
+      "channel": "梨����",
+      "title": "���濡�洹몃��",
+      "rating": "���泥�瑜�",
+      "ratingVal": 0,
+      "area": "수도권"
+    },
+    {
+      "rank": "1",
+      "channel": "KBS2",
+      "title": "二쇰�������쇰��(�����ㅽ��������)",
+      "rating": "15.5",
+      "ratingVal": 15.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "2",
+      "channel": "SBS",
+      "title": "湲���������쇰��(蹂듭����������⑤����ㅻえ踰�������3)",
+      "rating": "15.2",
+      "ratingVal": 15.2,
+      "area": "수도권"
+    },
+    {
+      "rank": "3",
+      "channel": "MBC",
+      "title": "MBC��댁�ㅻ�곗�ㅽ��",
+      "rating": "5.5",
+      "ratingVal": 5.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "4",
+      "channel": "KBS2",
+      "title": "遺�������紐�怨�",
+      "rating": "5.0",
+      "ratingVal": 5.0,
+      "area": "수도권"
+    },
+    {
+      "rank": "5",
+      "channel": "KBS1",
+      "title": "KBS9�����댁��",
+      "rating": "4.8",
+      "ratingVal": 4.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "6",
+      "channel": "SBS",
+      "title": "湲���������쇰��(蹂듭����������⑤����ㅻえ踰�������3<���>)",
+      "rating": "4.7",
+      "ratingVal": 4.7,
+      "area": "수도권"
+    },
+    {
+      "rank": "7",
+      "channel": "SBS",
+      "title": "洹멸����댁��怨���띕��",
+      "rating": "4.5",
+      "ratingVal": 4.5,
+      "area": "수도권"
+    },
+    {
+      "rank": "8",
+      "channel": "KBS1",
+      "title": "�����ㅽ��諛���댁�ㅽ�����",
+      "rating": "3.8",
+      "ratingVal": 3.8,
+      "area": "수도권"
+    },
+    {
+      "rank": "9",
+      "channel": "MBC",
+      "title": "���硫대��������",
+      "rating": "3.7",
+      "ratingVal": 3.7,
+      "area": "수도권"
+    }
+  ]
+}
