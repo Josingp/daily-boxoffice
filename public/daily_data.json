@@ -2052,5 +2052,105 @@
       "showInten": -46,
       "detail": {}
     }
+  ],
+  "만약에 우리": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 96269,
+      "salesAmt": 972397770,
+      "scrnCnt": 1065,
+      "showCnt": 3766
+    }
+  ],
+  "신의악단": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 71077,
+      "salesAmt": 699990220,
+      "scrnCnt": 907,
+      "showCnt": 1979
+    }
+  ],
+  "아바타: 불과 재": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 44828,
+      "salesAmt": 571571480,
+      "scrnCnt": 754,
+      "showCnt": 1731
+    }
+  ],
+  "신비아파트 10주년 극장판: 한 번 더, 소환": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 27909,
+      "salesAmt": 252213500,
+      "scrnCnt": 707,
+      "showCnt": 1321
+    }
+  ],
+  "프로젝트 Y": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 21462,
+      "salesAmt": 225894350,
+      "scrnCnt": 774,
+      "showCnt": 2080
+    }
+  ],
+  "주토피아 2": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 20514,
+      "salesAmt": 201944670,
+      "scrnCnt": 594,
+      "showCnt": 907
+    }
+  ],
+  "하트맨": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 12955,
+      "salesAmt": 128981000,
+      "scrnCnt": 599,
+      "showCnt": 962
+    }
+  ],
+  "천공의 성 라퓨타": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 8268,
+      "salesAmt": 89686170,
+      "scrnCnt": 406,
+      "showCnt": 567
+    }
+  ],
+  "고고다이노 극장판: 곤충세계 대모험": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 5204,
+      "salesAmt": 46487400,
+      "scrnCnt": 214,
+      "showCnt": 288
+    }
+  ],
+  "이터널 선샤인": [
+    {
+      "date": "20260125",
+      "dateDisplay": "01/25",
+      "audiCnt": 4673,
+      "salesAmt": 48000600,
+      "scrnCnt": 113,
+      "showCnt": 165
+    }
   ]
 }
