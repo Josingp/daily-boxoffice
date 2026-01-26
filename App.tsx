@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { getYesterdayStr, formatDateDisplay } from './constants';
 import { fetchDailyBoxOffice, fetchRealtimeRanking } from './services/kobisService';
-import { DailyBoxOfficeList, RealtimeMovie, DramaData } from './types';
+import { DailyBoxOfficeList, RealtimeMovie, DramaData, DramaItem } from './types';
 import MovieListItem from './components/MovieListItem';
 import DetailView from './components/DetailView';
 import SearchBar from './components/SearchBar';
@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMovie, setSelectedMovie] = useState<DailyBoxOfficeList | null>(null);
+  const [selectedDrama, setSelectedDrama] = useState<DramaItem | null>(null); // 드라마 선택 State
 
   const loadData = async () => {
     setLoading(true);
@@ -61,7 +62,6 @@ const App: React.FC = () => {
         }
 
       } else { // REALTIME
-        // 이미 위에서 로드함
         const rtResult = await fetchRealtimeRanking();
         if(rtResult.data) setMovieList(rtResult.data);
       }
@@ -83,7 +83,9 @@ const App: React.FC = () => {
     });
   }, [movieList, searchQuery]);
 
+  // 영화 클릭 핸들러
   const handleMovieClick = (movie: DailyBoxOfficeList | RealtimeMovie) => {
+    setSelectedDrama(null);
     if ('movieNm' in movie) {
       // DAILY
       const key = movie.movieNm.replace(/\s+/g, '').toLowerCase();
@@ -122,6 +124,12 @@ const App: React.FC = () => {
       }
       setSelectedMovie(converted);
     }
+  };
+
+  // 드라마 클릭 핸들러
+  const handleDramaClick = (item: DramaItem) => {
+      setSelectedMovie(null);
+      setSelectedDrama(item);
   };
 
   const dateInputValue = `${targetDate.substring(0, 4)}-${targetDate.substring(4, 6)}-${targetDate.substring(6, 8)}`;
@@ -206,8 +214,9 @@ const App: React.FC = () => {
                     <div className="text-center mb-4 text-xs text-slate-400 bg-white inline-block px-3 py-1 rounded-full border border-slate-100 shadow-sm mx-auto">
                         📅 기준일: {dramaData.date.substring(0,4)}.{dramaData.date.substring(4,6)}.{dramaData.date.substring(6,8)} (닐슨코리아)
                     </div>
-                    <DramaList title="전국 시청률 TOP 10" items={dramaData.nationwide} />
-                    <DramaList title="수도권 시청률 TOP 10" items={dramaData.capital} />
+                    {/* 클릭 핸들러 전달 */}
+                    <DramaList title="전국 시청률 TOP 10" items={dramaData.nationwide} onItemClick={handleDramaClick} />
+                    <DramaList title="수도권 시청률 TOP 10" items={dramaData.capital} onItemClick={handleDramaClick} />
                 </div>
              ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
@@ -244,9 +253,10 @@ const App: React.FC = () => {
 
         <DetailView 
           movie={selectedMovie} 
+          drama={selectedDrama}
           targetDate={targetDate} 
-          type={boxOfficeType === 'REALTIME' ? 'REALTIME' : 'DAILY'}
-          onClose={() => setSelectedMovie(null)} 
+          type={boxOfficeType === 'REALTIME' ? 'REALTIME' : boxOfficeType}
+          onClose={() => { setSelectedMovie(null); setSelectedDrama(null); }} 
         />
       </div>
     </div>
