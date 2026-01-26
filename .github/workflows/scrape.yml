@@ -22,13 +22,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
-    - name: Run Scrapers
+    # [수정 1] 일별 박스오피스 실행 (실패해도 다음 단계로 진행)
+    - name: Run Daily Box Office
+      continue-on-error: true
       env:
         KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
-      run: |
-        python scripts/update_daily.py
-        python scripts/update_realtime.py
-        python scripts/update_drama.py
+      run: python scripts/update_daily.py
+
+    # [수정 2] 실시간 예매율 실행 (실패해도 다음 단계로 진행)
+    - name: Run Realtime Ranking
+      continue-on-error: true
+      env:
+        KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
+      run: python scripts/update_realtime.py
+
+    # [수정 3] 드라마 시청률 실행 (독립적으로 실행됨)
+    - name: Run Drama Scraper
+      continue-on-error: true 
+      run: python scripts/update_drama.py
 
     - name: Commit and Push
       run: |
