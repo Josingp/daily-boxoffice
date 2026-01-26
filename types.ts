@@ -1,6 +1,6 @@
 export interface TrendDataPoint {
   date: string;
-  dateDisplay?: string; // 옵션으로 변경
+  dateDisplay?: string; 
   audiCnt: number;
   salesAmt: number;
   scrnCnt: number;
@@ -23,12 +23,12 @@ export interface RealtimeMovie {
   rank: string;
   title: string;
   rate: string;
-  audiCnt: string; // 예매 관객수
+  audiCnt: string; 
   salesAmt: string;
-  audiAcc: string; // 누적 관객수
+  audiAcc: string; 
   salesAcc: string;
   crawledTime?: string;
-  detail?: MovieInfo; // 상세정보 포함 가능
+  detail?: MovieInfo; 
 }
 
 export interface DailyBoxOfficeList {
@@ -50,11 +50,11 @@ export interface DailyBoxOfficeList {
   audiAcc: string;
   scrnCnt: string;
   showCnt: string;
-  trend?: TrendDataPoint[]; // 트렌드 데이터
-  detail?: MovieInfo;       // 상세 정보
-  realtime?: RealtimeMovie; // 실시간 정보 (매칭될 경우)
-  scrnInten?: number;       // 전일 대비 스크린 증감 (계산됨)
-  showInten?: number;       // 전일 대비 상영회차 증감 (계산됨)
+  trend?: TrendDataPoint[]; 
+  detail?: MovieInfo;       
+  realtime?: RealtimeMovie; 
+  scrnInten?: number;       
+  showInten?: number;       
 }
 
 export interface BoxOfficeResult {
@@ -74,13 +74,20 @@ export interface PredictionResult {
     } | null;
 }
 
-// [추가됨] 드라마 데이터 타입
+// [수정] 드라마 트렌드 타입 추가
+export interface DramaTrend {
+    date: string;
+    rating: number;
+}
+
 export interface DramaItem {
   rank: string;
   channel: string;
   title: string;
-  rating: string;
+  rating: string;     // 표시용 (15.4%)
+  ratingVal: number;  // 숫자형
   area: string;
+  trend?: DramaTrend[]; // [추가] 30일 추이 데이터
 }
 
 export interface DramaData {
