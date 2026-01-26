@@ -4,17 +4,18 @@ import { PredictionResult } from '../types';
 
 interface TrendChartProps {
   data: any[];
-  type: 'DAILY' | 'REALTIME';
-  metric: 'audi' | 'sales' | 'scrn' | 'show';
+  type: 'DAILY' | 'REALTIME' | 'DRAMA'; // DRAMA 추가
+  metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating'; // rating 추가
   loading?: boolean;
   prediction?: PredictionResult | null;
 }
 
 const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, prediction }) => {
   
-  // [수정] 단위 결정 함수
+  // 단위 결정 함수
   const getUnit = () => {
-      if (type === 'REALTIME') return '명'; // 실시간은 예매 관객수 기준
+      if (type === 'REALTIME') return '명'; 
+      if (type === 'DRAMA' || metric === 'rating') return '%'; // 시청률은 %
       switch(metric) {
           case 'sales': return '원';
           case 'scrn': return '개';
@@ -28,14 +29,28 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
   const chartData = useMemo(() => {
     if (!data || data.length === 0) return [];
 
+    if (type === 'DRAMA') {
+        // 드라마 데이터 매핑
+        return data.map((item) => {
+             // date: 20260126 -> 01/26
+            let label = item.date;
+            if (label && label.length === 8) {
+                label = `${label.substring(4,6)}/${label.substring(6,8)}`;
+            }
+            return {
+                label,
+                value: item.rating, // ratingVal
+                date: item.date
+            };
+        });
+    }
+
     if (type === 'DAILY') {
         const recentData = data.map((item) => {
-            // dateDisplay가 없으면 date(YYYYMMDD)를 MM/DD로 변환
             let label = item.dateDisplay;
             if (!label && item.date && item.date.length === 8) {
                 label = `${item.date.substring(4,6)}/${item.date.substring(6,8)}`;
             }
-
             return {
               ...item,
               value: metric === 'audi' ? item.audiCnt :
@@ -62,7 +77,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         return recentData;
     }
     
-    // REALTIME: 예매 관객수 기준
+    // REALTIME
     return data.map(item => ({
         label: item.time.split(' ')[1],
         value: item.val_audi || 0,
@@ -74,11 +89,13 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
   if (!chartData.length) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터가 없습니다.</div>;
 
   const color = type === 'REALTIME' ? '#8b5cf6' : 
+                type === 'DRAMA' ? '#9333ea' : // 보라색
                 metric === 'audi' ? '#3b82f6' : 
                 metric === 'sales' ? '#10b981' : '#f59e0b';
 
-  // [수정] 큰 숫자 포맷팅 (억, 만 단위)
+  // 큰 숫자 포맷팅
   const formatYAxis = (val: number) => {
+      if (type === 'DRAMA') return `${val}%`; // 시청률 포맷
       if (val >= 100000000) return `${(val/100000000).toFixed(0)}억`;
       if (val >= 10000) return `${(val/10000).toFixed(0)}만`;
       return val.toLocaleString();
