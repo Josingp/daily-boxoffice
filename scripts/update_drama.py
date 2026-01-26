@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 # --- [설정] ---
 MAIN_FILE = "public/drama_data.json"
-ARCHIVE_DIR = "public/archive/drama" # 폴더 구조 단순화
+ARCHIVE_ROOT = "public/archive/drama" # 폴더 구조 단순화
 NIELSEN_URL = "https://www.nielsenkorea.co.kr/tv_terrestrial_day.asp?menu=Tit_1&sub_menu=1_1"
 
 def fetch_nielsen_rating(date_str, area_code):
@@ -64,6 +64,11 @@ def update_drama_data():
     trend_history = {}
 
     latest_data = None
+    latest_date_str = ""
+
+    # 폴더 생성
+    if not os.path.exists(ARCHIVE_ROOT):
+        os.makedirs(ARCHIVE_ROOT)
     
     # 최근 30일 데이터 수집 및 병합
     for i in range(1, 31):
@@ -71,8 +76,8 @@ def update_drama_data():
         target_date = today - timedelta(days=i)
         d_str = target_date.strftime("%Y%m%d")
         
-        # 폴더 구조 단순화: archive/drama/20260126.json
-        f_path = os.path.join(ARCHIVE_DIR, f"{d_str}.json")
+        # 폴더 구조 단순화: public/archive/drama/20260126.json
+        f_path = os.path.join(ARCHIVE_ROOT, f"{d_str}.json")
         
         daily_json = None
         
@@ -91,7 +96,6 @@ def update_drama_data():
             
             if nw or cp:
                 daily_json = { "date": d_str, "nationwide": nw, "capital": cp }
-                os.makedirs(os.path.dirname(f_path), exist_ok=True)
                 with open(f_path, 'w', encoding='utf-8') as f:
                     json.dump(daily_json, f, ensure_ascii=False, indent=2)
                 time.sleep(0.5)
@@ -100,9 +104,10 @@ def update_drama_data():
 
         # 3. 트렌드 데이터 누적 (History Building)
         if daily_json:
-            # 가장 최신 데이터(어제)는 메인 파일용으로 저장
+            # 가장 최신 데이터(어제)는 메인 파일용으로 저장하기 위해 잡아둠
             if latest_data is None:
                 latest_data = daily_json
+                latest_date_str = d_str
             
             # 전국 기준 트렌드 수집
             for item in daily_json.get("nationwide", []):
@@ -110,8 +115,14 @@ def update_drama_data():
                 if title not in trend_history: trend_history[title] = []
                 trend_history[title].append({ "date": d_str, "rating": item['ratingVal'] })
             
-            # 수도권 기준 트렌드 수집 (키 충돌 방지를 위해 접미사 사용하거나 별도 로직 가능하나 단순화함)
-            # 여기서는 편의상 전국/수도권 타이틀이 같으면 통합 관리
+            # 수도권 기준 트렌드 수집
+            for item in daily_json.get("capital", []):
+                title = item['title'].replace(" ", "")
+                if title not in trend_history: trend_history[title] = []
+                # 날짜 중복 방지 (전국/수도권 타이틀 같을 경우 대비)
+                existing = next((x for x in trend_history[title] if x['date'] == d_str), None)
+                if not existing:
+                    trend_history[title].append({ "date": d_str, "rating": item['ratingVal'] })
 
     # 4. 최신 데이터에 트렌드 정보 주입 (Injection)
     if latest_data:
@@ -134,7 +145,7 @@ def update_drama_data():
         if not os.path.exists("public"): os.makedirs("public")
         with open(MAIN_FILE, 'w', encoding='utf-8') as f:
             json.dump(latest_data, f, ensure_ascii=False, indent=2)
-        print(f"✅ Main file updated: {latest_data['date']} (Encoding Fixed)")
+        print(f"✅ Main file updated: {latest_date_str} (Encoding Fixed)")
         
     else:
         # 데이터가 없을 경우 빈 파일
