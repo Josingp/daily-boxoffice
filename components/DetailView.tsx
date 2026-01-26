@@ -110,7 +110,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
     setNewsList([]); setPosterUrl(''); setMovieDetail(null); setChartMetric('audi');
     
     try {
-      // 1. 실시간 모드일 경우 별도 히스토리 파일 로드
+      // 실시간 모드일 경우 별도 히스토리 파일 로드
       if (type === 'REALTIME') {
           try {
              const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
@@ -125,7 +125,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
           } catch (e) { console.error("Realtime history load failed", e); }
       }
 
-      // 2. 상세 정보 로드
+      // 상세 정보 로드
       let info = (movie as any).detail;
       if (!info && movie.movieCd && movie.movieCd !== "0") info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
@@ -134,7 +134,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
       if (manual?.posterUrl) { setPosterUrl(manual.posterUrl); fetchMovieNews(movie.movieNm).then(setNewsList); }
       else { const [p, n] = await Promise.all([fetchMoviePoster(movie.movieNm), fetchMovieNews(movie.movieNm)]); setPosterUrl(p); setNewsList(n); }
       
-      // 3. 실시간 정보 (보라색 카드) 로드
+      // 실시간 정보 (보라색 카드) 로드
       let rt = movie.realtime;
       if(!rt) { 
           const l = await fetchRealtimeReservation(movie.movieNm, movie.movieCd); 
@@ -353,6 +353,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                         metric={chartMetric}
                         loading={loading}
                         prediction={predictionSeries.length > 0 ? { predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} } : null} 
+                        openDt={movie.openDt || movieDetail?.openDt} // D-Day 계산을 위해 전달
                     />
                 </div>
 
