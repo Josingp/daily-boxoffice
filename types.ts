@@ -1,20 +1,34 @@
 export interface TrendDataPoint {
   date: string;
-  dateDisplay: string;
+  dateDisplay?: string; // 옵션으로 변경
   audiCnt: number;
   salesAmt: number;
   scrnCnt: number;
   showCnt: number;
 }
 
-export interface RealtimeData {
+export interface MovieInfo {
+  movieNm: string;
+  movieNmEn: string;
+  showTm: string;
+  prdtYear: string;
+  openDt: string;
+  genres: { genreNm: string }[];
+  directors: { peopleNm: string }[];
+  actors: { peopleNm: string }[];
+  watchGradeNm?: string;
+}
+
+export interface RealtimeMovie {
   rank: string;
-  rate: string;       // 예매율
-  audiCnt: string;    // 예매관객수 (그래프 기준)
-  salesAmt: string;   // 예매매출액
-  audiAcc: string;    // 누적관객수
-  salesAcc: string;   // 누적매출액
-  crawledTime?: string; // 업데이트 기준 시간
+  title: string;
+  rate: string;
+  audiCnt: string; // 예매 관객수
+  salesAmt: string;
+  audiAcc: string; // 누적 관객수
+  salesAcc: string;
+  crawledTime?: string;
+  detail?: MovieInfo; // 상세정보 포함 가능
 }
 
 export interface DailyBoxOfficeList {
@@ -36,44 +50,41 @@ export interface DailyBoxOfficeList {
   audiAcc: string;
   scrnCnt: string;
   showCnt: string;
-  
-  // 확장 데이터
-  scrnInten?: number; 
-  showInten?: number;
-  trend?: TrendDataPoint[];
-  realtime?: RealtimeData;
-  posterUrl?: string;
+  trend?: TrendDataPoint[]; // 트렌드 데이터
+  detail?: MovieInfo;       // 상세 정보
+  realtime?: RealtimeMovie; // 실시간 정보 (매칭될 경우)
+  scrnInten?: number;       // 전일 대비 스크린 증감 (계산됨)
+  showInten?: number;       // 전일 대비 상영회차 증감 (계산됨)
 }
 
-export interface RealtimeMovie {
-  movieCd: string;
-  rank: string;
-  title: string;
-  rate: string;
-  audiCnt: string;
-  salesAmt: string;
-  audiAcc: string;
-  salesAcc: string;
-}
-
-export interface MovieInfo {
-  movieCd: string;
-  movieNm: string;
-  openDt: string;
-  genres: { genreNm: string }[];
-  directors: { peopleNm: string }[];
-  actors: { peopleNm: string }[];
+export interface BoxOfficeResult {
+  boxofficeType: string;
+  showRange: string;
+  dailyBoxOfficeList: DailyBoxOfficeList[];
 }
 
 export interface PredictionResult {
-  analysisText: string;
-  predictedFinalAudi: { min: number; max: number; avg: number };
-  predictionSeries: number[];
+    movieName: string;
+    predictionSeries: number[];
+    analysisText: string;
+    predictedFinalAudi: {
+        min: number;
+        max: number;
+        avg: number;
+    } | null;
 }
 
-export interface NewsItem {
+// [추가됨] 드라마 데이터 타입
+export interface DramaItem {
+  rank: string;
+  channel: string;
   title: string;
-  link: string;
-  desc: string;
-  press: string;
+  rating: string;
+  area: string;
+}
+
+export interface DramaData {
+  date: string;
+  nationwide: DramaItem[];
+  capital: DramaItem[];
 }
