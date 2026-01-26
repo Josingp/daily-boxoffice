@@ -4,8 +4,8 @@ import { PredictionResult } from '../types';
 
 interface TrendChartProps {
   data: any[];
-  type: 'DAILY' | 'REALTIME' | 'DRAMA'; // DRAMA 추가
-  metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating'; // rating 추가
+  type: 'DAILY' | 'REALTIME' | 'DRAMA'; // DRAMA 타입 추가
+  metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating'; // rating 메트릭 추가
   loading?: boolean;
   prediction?: PredictionResult | null;
 }
@@ -32,14 +32,14 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
     if (type === 'DRAMA') {
         // 드라마 데이터 매핑
         return data.map((item) => {
-             // date: 20260126 -> 01/26
+             // date: 20260126 -> 01/26 변환
             let label = item.date;
             if (label && label.length === 8) {
                 label = `${label.substring(4,6)}/${label.substring(6,8)}`;
             }
             return {
                 label,
-                value: item.rating, // ratingVal
+                value: item.rating, // ratingVal 사용됨
                 date: item.date
             };
         });
@@ -89,7 +89,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
   if (!chartData.length) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터가 없습니다.</div>;
 
   const color = type === 'REALTIME' ? '#8b5cf6' : 
-                type === 'DRAMA' ? '#9333ea' : // 보라색
+                type === 'DRAMA' ? '#9333ea' : // 드라마는 보라색
                 metric === 'audi' ? '#3b82f6' : 
                 metric === 'sales' ? '#10b981' : '#f59e0b';
 
