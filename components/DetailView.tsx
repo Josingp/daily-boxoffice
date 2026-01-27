@@ -4,7 +4,7 @@ import { formatNumber, formatKoreanNumber } from '../constants';
 import { fetchMovieDetail, fetchMovieNews, fetchMoviePoster, fetchRealtimeReservation, NewsItem } from '../services/kobisService';
 import manualDataJson from '../manual_data.json';
 import TrendChart from './TrendChart';
-import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock, Coins, BrainCircuit, Tv } from 'lucide-react';
+import { X, TrendingUp, DollarSign, Share2, Sparkles, Film, User, Calendar as CalendarIcon, ExternalLink, Newspaper, Monitor, PlayCircle, Users, Check, Clock, Coins, BrainCircuit, Tv, Search } from 'lucide-react';
 
 const MANUAL_JSON = manualDataJson as Record<string, { posterUrl?: string, productionCost?: number }>;
 
@@ -110,22 +110,27 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
     setNewsList([]); setPosterUrl(''); setMovieDetail(null); setChartMetric('audi');
     
     try {
-      // 실시간 모드일 경우 별도 히스토리 파일 로드
+      // 1. [핵심] 실시간 모드일 때 그래프 데이터 로드
       if (type === 'REALTIME') {
           try {
              const res = await fetch(`/realtime_data.json?t=${Date.now()}`);
              if (res.ok) {
                  const json = await res.json();
+                 // 제목 매칭 (공백 제거)
                  const searchTitle = movie.movieNm.replace(/\s+/g, '');
                  const key = Object.keys(json).find(k => k.replace(/\s+/g, '') === searchTitle);
+                 
+                 // 키를 찾았고 배열 데이터가 있다면 설정
                  if (key && Array.isArray(json[key])) {
                      setTrendData(json[key]);
                  }
              }
-          } catch (e) { console.error("Realtime history load failed", e); }
+          } catch (e) { 
+              console.error("Realtime history load failed", e); 
+          }
       }
 
-      // 상세 정보 로드
+      // 2. 상세 정보 로드
       let info = (movie as any).detail;
       if (!info && movie.movieCd && movie.movieCd !== "0") info = await fetchMovieDetail(movie.movieCd);
       setMovieDetail(info);
@@ -134,7 +139,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
       if (manual?.posterUrl) { setPosterUrl(manual.posterUrl); fetchMovieNews(movie.movieNm).then(setNewsList); }
       else { const [p, n] = await Promise.all([fetchMoviePoster(movie.movieNm), fetchMovieNews(movie.movieNm)]); setPosterUrl(p); setNewsList(n); }
       
-      // 실시간 정보 (보라색 카드) 로드
+      // 3. 실시간 정보 (보라색 카드) 로드
       let rt = movie.realtime;
       if(!rt) { 
           const l = await fetchRealtimeReservation(movie.movieNm, movie.movieCd); 
@@ -153,10 +158,12 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         const sales = currentRt ? parseInt(String(currentRt.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
         const audi = currentRt ? parseInt(String(currentRt.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
         const atp = audi > 0 ? (sales / audi) : 12000;
+        
+        // AI 분석에 사용할 히스토리 데이터 선택
         const history = type === 'REALTIME' ? trendData : null; 
         const trend = type === 'DAILY' ? trendData : [];
 
-        const res = await fetch('/predict', {
+        const res = await fetch('/api/predict', { // vercel api 경로 주의
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -300,6 +307,16 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                     </div>
                 )}
 
+                {/* 네이버 검색 버튼 */}
+                <div className="flex justify-end mb-4">
+                    <button 
+                        onClick={() => window.open(`https://search.naver.com/search.naver?query=드라마 ${drama.title}`, '_blank')}
+                        className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-purple-600 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm transition-colors"
+                    >
+                        <Search size={12} /> 네이버 상세 검색
+                    </button>
+                </div>
+
                 <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-4 border-b border-slate-50 pb-2">
                          <TrendingUp size={16} className="text-purple-600"/>
@@ -353,7 +370,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                         metric={chartMetric}
                         loading={loading}
                         prediction={predictionSeries.length > 0 ? { predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} } : null} 
-                        openDt={movie.openDt || movieDetail?.openDt} // D-Day 계산을 위해 전달
+                        openDt={movie.openDt || movieDetail?.openDt}
                     />
                 </div>
 
