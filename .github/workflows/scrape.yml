@@ -2,8 +2,8 @@ name: Daily Scrape
 
 on:
   schedule:
-    - cron: '0 15 * * *' # 한국 시간 00:00 (UTC 15:00)
-  workflow_dispatch:
+    - cron: '0 * * * *' # 1시간마다 실행 (실시간 예매율용)
+  workflow_dispatch:    # 수동 실행 버튼
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ jobs:
       with:
         python-version: '3.9'
 
-    # [최적화] Pip 캐싱 추가 (설치 속도 향상)
+    # Pip 캐싱 (속도 향상)
     - name: Cache Pip packages
       uses: actions/cache@v3
       with:
@@ -34,27 +34,58 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
-    # 실패해도 다음 단계 진행 (continue-on-error)
-    - name: Run Daily Box Office
-      continue-on-error: true
-      env:
-        KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
-      run: python scripts/update_daily.py
-
+    # 1. 실시간 예매율 (매 시간 무조건 실행)
     - name: Run Realtime Ranking
       continue-on-error: true
       env:
         KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
       run: python scripts/update_realtime.py
 
+    # 2. 일별 박스오피스 (한국시간 아침 7시 = UTC 22시에만 실행)
+    - name: Run Daily Box Office
+      continue-on-error: true
+      env:
+        KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
+      run: |
+        # 현재 UTC 시간(시) 구하기
+        HOUR=$(date -u +%H)
+        
+        # UTC 22시(한국 07시) 이거나, 수동 실행(workflow_dispatch)일 때만 작동
+        if [ "$HOUR" == "22" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "⏰ It's 07:00 KST. Running Daily Box Office Update..."
+          python scripts/update_daily.py
+        else
+          echo "💤 Skipping Daily Box Office (Current UTC: $HOUR, Target: 22)"
+        fi
+
+    # 3. 드라마 시청률 (한국시간 아침 7시 = UTC 22시에만 실행)
     - name: Run Drama Scraper
-      continue-on-error: true 
-      run: python scripts/update_drama.py
+      continue-on-error: true
+      run: |
+        HOUR=$(date -u +%H)
+        
+        if [ "$HOUR" == "22" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "⏰ It's 07:00 KST. Running Drama Scraper..."
+          python scripts/update_drama.py
+        else
+          echo "💤 Skipping Drama Scraper (Current UTC: $HOUR, Target: 22)"
+        fi
 
     - name: Commit and Push
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add public/
-        git commit -m "Update data: $(date +'%Y-%m-%d')" || exit 0
+        
+        # 변경사항이 없으면 에러 없이 종료
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+          exit 0
+        fi
+
+        git commit -m "Update data: $(date +'%Y-%m-%d %H:%M')"
+        
+        # 최신 코드 당겨와서 충돌 방지
+        git pull --rebase origin main
+        
         git push
