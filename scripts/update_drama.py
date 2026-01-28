@@ -4,7 +4,7 @@ import requests
 import time
 import re
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # --- [설정] ---
 MAIN_FILE = "public/drama_data.json"
@@ -15,14 +15,10 @@ NAVER_SEARCH_URL = "https://search.naver.com/search.naver?where=nexearch&query="
 def get_naver_drama_info(raw_title):
     """
     드라마 제목으로 네이버 검색 후 포스터와 기본 정보를 크롤링합니다.
-    예: '주말드라마(화려한 날들)' -> '화려한 날들' 로 변환 후 검색
     """
-    # 1. 제목 정제: 괄호 안의 내용이나 불필요한 수식어 제거
-    # 예: "일일드라마(결혼하자 맹꽁아)" -> "결혼하자 맹꽁아"
     clean_title = re.sub(r'\(.*?\)', '', raw_title).strip()
     clean_title = re.sub(r'기획.*', '', clean_title).strip()
     
-    # 검색어 생성: "드라마 제목 + 드라마" (정확도를 위해)
     query = f"{clean_title} 드라마"
     
     headers = {
@@ -40,17 +36,15 @@ def get_naver_drama_info(raw_title):
             "summary": ""
         }
         
-        # A. 포스터 이미지 찾기 (네이버 검색 결과 구조)
-        # 여러 클래스 시도 (네이버가 구조를 자주 바꿈)
+        # A. 포스터 이미지
         poster_img = soup.select_one(".detail_info .thumb img") or \
                      soup.select_one(".info_group .thumb img") or \
-                     soup.select_one("img[src*='csearch-phinf']") # fallback
+                     soup.select_one("img[src*='csearch-phinf']")
                      
         if poster_img:
             info['posterUrl'] = poster_img.get('src')
 
         # B. 방송사 및 편성 정보
-        # 예: KBS2 (월~금) 오후 08:30
         broadcast_info = soup.select_one(".info_group dt:contains('편성') + dd")
         if not broadcast_info:
              broadcast_info = soup.select_one(".info_group .text")
@@ -58,7 +52,7 @@ def get_naver_drama_info(raw_title):
         if broadcast_info:
             info['broadcaster'] = broadcast_info.get_text(strip=True)
 
-        # C. 제작진/출연진 (간단히)
+        # C. 제작진/출연진
         cast_info = soup.select_one(".info_group dt:contains('출연') + dd")
         if cast_info:
             info['cast'] = cast_info.get_text(strip=True)
@@ -114,14 +108,15 @@ def fetch_nielsen_rating(date_str, area_code):
 
 def update_drama_data():
     print("Starting Drama Update (Nielsen + Naver Crawling)...")
-    today = datetime.now()
+    
+    # [수정] UTC 서버에서도 한국 시간(KST) 기준으로 오늘 날짜 계산
+    kst_timezone = timezone(timedelta(hours=9))
+    today = datetime.now(kst_timezone)
     
     # 1. 닐슨 데이터 수집 (최근 30일)
     trend_history = {}
     latest_data = None
     
-    # 드라마 상세 정보 캐시 (한 번 긁은건 메모리에 저장해두고 재사용)
-    # 실제로는 파일로 저장해두면 좋지만, 여기서는 실행 시마다 최신정보 갱신
     drama_details_cache = {} 
 
     if not os.path.exists(ARCHIVE_ROOT): os.makedirs(ARCHIVE_ROOT)
@@ -168,30 +163,27 @@ def update_drama_data():
             # A. 트렌드 주입
             item['trend'] = sorted(trend_history.get(title_key, []), key=lambda x: x['date'])
             
-            # B. 네이버 정보 크롤링 (캐싱하여 중복 요청 방지)
+            # B. 네이버 정보 크롤링
             raw_title = item['title']
             if raw_title not in drama_details_cache:
                 print(f"  [Scrape Naver] {raw_title}")
                 naver_info = get_naver_drama_info(raw_title)
                 if naver_info:
                     drama_details_cache[raw_title] = naver_info
-                time.sleep(1) # 차단 방지 딜레이
+                time.sleep(1)
             
-            # 정보 병합
             if raw_title in drama_details_cache:
                 item.update(drama_details_cache[raw_title])
 
-        # 수도권 데이터 처리 (전국 데이터의 정보를 재사용)
+        # 수도권 데이터 처리
         for item in latest_data.get("capital", []):
             title_key = item['title'].replace(" ", "").strip()
             item['trend'] = sorted(trend_history.get(title_key, []), key=lambda x: x['date'])
             
             raw_title = item['title']
-            # 전국 리스트 처리할 때 이미 캐시에 들어갔을 확률 높음
             if raw_title in drama_details_cache:
                 item.update(drama_details_cache[raw_title])
             else:
-                # 없으면 수집 (전국 순위에 없고 수도권에만 있는 경우)
                 print(f"  [Scrape Naver] {raw_title}")
                 naver_info = get_naver_drama_info(raw_title)
                 if naver_info:
