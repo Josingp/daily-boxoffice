@@ -154,22 +154,45 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
       try {
         const manual = getManualInfo(movie.movieNm);
         const cost = manual?.productionCost || 0;
+        
+        // [수정] 현재 화면에 로드된 realtimeInfo를 우선 사용하여 5대 지표 추출
         const currentRt = realtimeInfo;
-        const sales = currentRt ? parseInt(String(currentRt.salesAcc).replace(/,/g,'')) : parseInt(movie.salesAcc || "0");
-        const audi = currentRt ? parseInt(String(currentRt.audiAcc).replace(/,/g,'')) : parseInt(movie.audiAcc || "0");
-        const atp = audi > 0 ? (sales / audi) : 12000;
+        const parseVal = (v: any) => parseInt(String(v||0).replace(/,/g,'')) || 0;
+        const parseFloatVal = (v: any) => parseFloat(String(v||0).replace(/,/g,'')) || 0;
+
+        // 5대 지표 추출 (없으면 0)
+        const rate = currentRt ? parseFloatVal(currentRt.rate) : 0;           // 예매율
+        const rtAudiCnt = currentRt ? parseVal(currentRt.audiCnt) : 0;        // 예매 관객수
+        const rtSalesAmt = currentRt ? parseVal(currentRt.salesAmt) : 0;      // 예매 매출액
+        const currentAudiAcc = currentRt ? parseVal(currentRt.audiAcc) : parseVal(movie.audiAcc); // 누적 관객수
+        const currentSalesAcc = currentRt ? parseVal(currentRt.salesAcc) : parseVal(movie.salesAcc); // 누적 매출액
+        
+        const atp = currentAudiAcc > 0 ? (currentSalesAcc / currentAudiAcc) : 12000;
         
         // AI 분석에 사용할 히스토리 데이터 선택
         const history = type === 'REALTIME' ? trendData : null; 
         const trend = type === 'DAILY' ? trendData : [];
 
-        const res = await fetch('/api/predict', { // vercel api 경로 주의
+        const res = await fetch('/api/predict', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                movieName: movie.movieNm, trendData: trend, movieInfo: movieDetail, 
-                currentAudiAcc: movie.audiAcc, type, historyData: history,
-                productionCost: cost, salesAcc: sales, audiAcc: audi, avgTicketPrice: atp
+                movieName: movie.movieNm, 
+                trendData: trend, 
+                movieInfo: movieDetail, 
+                // [중요] 5대 지표를 명시적으로 모두 전달
+                reservationRate: rate,
+                reservationAudi: rtAudiCnt,
+                reservationSales: rtSalesAmt,
+                currentAudiAcc: currentAudiAcc, 
+                currentSalesAcc: currentSalesAcc,
+                
+                type, 
+                historyData: history,
+                productionCost: cost, 
+                audiAcc: currentAudiAcc, // 호환성을 위해 유지
+                salesAcc: currentSalesAcc,
+                avgTicketPrice: atp
             })
         });
         const data = await res.json();
@@ -177,7 +200,8 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         if(data.predictionSeries) setPredictionSeries(data.predictionSeries);
         if(data.predictedFinalAudi) setFinalAudiPredict(data.predictedFinalAudi);
       } catch(e) {
-          setAnalysis("분석 중 오류가 발생했습니다.");
+          console.error(e);
+          setAnalysis("분석 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       } finally {
           setIsAnalyzing(false);
       }
