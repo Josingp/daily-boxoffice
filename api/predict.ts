@@ -1,8 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
 /** =========================================================
- *  CONFIG
- *  ========================================================= */
+ * CONFIG
+ * ========================================================= */
 const CFG = {
   USE_LLM_DEFAULT: true,
 
@@ -87,8 +87,8 @@ const CFG = {
 } as const;
 
 /** =========================================================
- *  utils
- *  ========================================================= */
+ * utils
+ * ========================================================= */
 const cleanJsonString = (str: string) => (str || "{}").replace(/```json/gi, "").replace(/```/g, "").trim();
 const clamp = (x: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, x));
 const safeNum = (v: any, fallback = 0) => {
@@ -211,8 +211,8 @@ const stdResidual = (ys: number[], yhat: number[]) => {
 };
 
 /** =========================================================
- *  data normalization
- *  ========================================================= */
+ * data normalization
+ * ========================================================= */
 type TrendRow = {
   date: string;
   dateDisplay?: string;
@@ -270,8 +270,8 @@ const findEffectiveStartIndex = (rows: TrendRow[], ratio = 0.30) => {
 };
 
 /** =========================================================
- *  DOW multipliers
- *  ========================================================= */
+ * DOW multipliers
+ * ========================================================= */
 const computeDowMultipliers = (rows: TrendRow[]) => {
   const slice = rows.slice(-28);
   const buckets: Record<DowName, number[]> = { Sun: [], Mon: [], Tue: [], Wed: [], Thu: [], Fri: [], Sat: [] };
@@ -315,8 +315,8 @@ const deSeasonalize = (rows: TrendRow[], mult: Record<DowName, number>) => {
 };
 
 /** =========================================================
- *  Model A: Screen × APS (structural)
- *  ========================================================= */
+ * Model A: Screen × APS (structural)
+ * ========================================================= */
 const computeApsSeries = (rows: TrendRow[]) => {
   return rows.map((r) => {
     const audi = safeNum(r.audiCnt, 0);
@@ -406,8 +406,8 @@ const predictNext3_ScreenAPS = (
 };
 
 /** =========================================================
- *  Model B: Bass diffusion (가능할 때만)
- *  ========================================================= */
+ * Model B: Bass diffusion (가능할 때만)
+ * ========================================================= */
 const solveBassParams = (a: number, b: number, c: number) => {
   const disc = b * b - 4 * c * a;
   if (!Number.isFinite(disc) || disc <= 0 || Math.abs(c) < 1e-12) return null;
@@ -529,8 +529,8 @@ const predictNext3_Bass = (rows: TrendRow[], mult: Record<DowName, number>, bass
 };
 
 /** =========================================================
- *  Model C: Kalman (local linear on log(y+1))
- *  ========================================================= */
+ * Model C: Kalman (local linear on log(y+1))
+ * ========================================================= */
 const kalmanLocalLinear = (z: number[]) => {
   let level = z[0] ?? 0;
   let slope = (z.length >= 2) ? (z[1] - z[0]) : 0;
@@ -589,8 +589,8 @@ const predictNext3_Kalman = (rows: TrendRow[], mult: Record<DowName, number>) =>
 };
 
 /** =========================================================
- *  daySince 기반 폭주 방지 (3중 락)
- *  ========================================================= */
+ * daySince 기반 폭주 방지 (3중 락)
+ * ========================================================= */
 const sameDowMedian = (rows: TrendRow[], targetDow: DowName, lookbackDays = 28) => {
   const slice = rows.slice(-lookbackDays);
   const vals = slice
@@ -667,8 +667,8 @@ const applyDaySinceLocks = (
 };
 
 /** =========================================================
- *  Final range (finite tail + remaining cap)
- *  ========================================================= */
+ * Final range (finite tail + remaining cap)
+ * ========================================================= */
 const predictFinalRange_StructuralTail = (
   rows: TrendRow[],
   mult: Record<DowName, number>,
@@ -733,8 +733,8 @@ const predictFinalRange_StructuralTail = (
 };
 
 /** =========================================================
- *  Unreleased (reservation-only)
- *  ========================================================= */
+ * Unreleased (reservation-only)
+ * ========================================================= */
 const computeMomentum = (arr: number[]) => {
   if (arr.length < 3) return 0;
   const xs = arr.map((_, i) => i);
@@ -837,8 +837,8 @@ const buildUnreleasedNumbers = (openDate: string, historyData: any[], movieInfo:
 };
 
 /** =========================================================
- *  Main handler
- *  ========================================================= */
+ * Main handler
+ * ========================================================= */
 export default async function handler(req, res) {
   // CORS
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -855,13 +855,18 @@ export default async function handler(req, res) {
       movieName,
       trendData,
       movieInfo,
+      // [수정] 5대 지표 수신
+      reservationRate,
+      reservationAudi,
+      reservationSales,
       currentAudiAcc,
+      currentSalesAcc,
+      
       historyData,
       productionCost,
-      audiAcc,
       avgTicketPrice,
-      peopleContext, // (선택) 신뢰 가능한 사람 정보 텍스트(사용자가 제공)
-      useLLM,        // (선택) true면 LLM로 “문장만” 보강
+      peopleContext,
+      useLLM,        
     } = req.body;
 
     const todayKST = getKST_YYYYMMDD();
@@ -873,13 +878,26 @@ export default async function handler(req, res) {
     const directors = movieInfo?.directors?.map((d: any) => d.peopleNm).join(", ") || "Unknown Director";
     const actors = movieInfo?.actors?.slice(0, 5).map((a: any) => a.peopleNm).join(", ") || "Unknown Actors";
 
+    // BEP Context 생성
     let bepContext = "Production cost unknown.";
     if (productionCost && Number(productionCost) > 0) {
       const cost = Number(productionCost);
       const atp = Number(avgTicketPrice || 12000);
       const bepAudi = Math.round(cost / (atp * 0.4));
-      const percent = bepAudi > 0 ? ((Number(audiAcc) / bepAudi) * 100).toFixed(1) : "0.0";
+      const percent = bepAudi > 0 ? ((Number(currentAudiAcc) / bepAudi) * 100).toFixed(1) : "0.0";
       bepContext = `Production Cost: ${Math.round(cost)} KRW. Avg Ticket Price: ${Math.round(atp)} KRW. BEP Target: approx ${bepAudi}. Progress: ${percent}%.`;
+    }
+
+    // [수정] 실시간 예매 정보 텍스트 생성
+    let realtimeStatsContext = "No Realtime Data.";
+    if (reservationRate || reservationAudi) {
+        realtimeStatsContext = 
+            `Current Realtime Stats (KOBIS): ` +
+            `Reservation Rate: ${reservationRate || 0}%, ` +
+            `Pre-sales Audi: ${safeNum(reservationAudi, 0).toLocaleString()} people, ` +
+            `Pre-sales Sales: ${safeNum(reservationSales, 0).toLocaleString()} KRW, ` +
+            `Total Audi Acc: ${safeNum(currentAudiAcc, 0).toLocaleString()} people, ` +
+            `Total Sales Acc: ${safeNum(currentSalesAcc, 0).toLocaleString()} KRW.`;
     }
 
     let rowsAll = normalizeTrend(trendData);
@@ -993,7 +1011,7 @@ export default async function handler(req, res) {
 
     const realtimeTrend = Array.isArray(historyData) && historyData.length
       ? historyData.slice(-10).map((d: any) => `[${d.time}] Rank:${d.rank}, Rate:${d.rate}%, Audi:${d.val_audi}`).join("\n")
-      : "No realtime/reservation data";
+      : "No realtime history";
 
     const prompt = `
 Role: Elite Box Office Analyst (Korea). Write concise Korean.
@@ -1007,11 +1025,12 @@ Open Date(KOBIS): ${openDate || "Unknown"}
 Today(KST): ${todayKST}
 Now(KST): ${nowKST}
 Financial Context: ${bepContext}
+Realtime Stats: ${realtimeStatsContext}
 
 Recent Daily Trend:
 ${recentTrend}
 
-Realtime/Reservation:
+Realtime/Reservation History:
 ${realtimeTrend}
 
 ANCHOR (do not deviate much):
