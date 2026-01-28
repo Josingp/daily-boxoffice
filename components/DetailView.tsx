@@ -155,7 +155,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
         const manual = getManualInfo(movie.movieNm);
         const cost = manual?.productionCost || 0;
         
-        // [수정] 현재 화면에 로드된 realtimeInfo를 우선 사용하여 5대 지표 추출
+        // 현재 화면에 로드된 realtimeInfo를 우선 사용
         const currentRt = realtimeInfo;
         const parseVal = (v: any) => parseInt(String(v||0).replace(/,/g,'')) || 0;
         const parseFloatVal = (v: any) => parseFloat(String(v||0).replace(/,/g,'')) || 0;
@@ -440,6 +440,15 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                             <div>
                                 <div className="opacity-70 mb-0.5">누적 관객수</div>
                                 <div className="font-bold text-sm">{formatNumber(String(realtimeInfo.audiAcc).replace(/,/g,''))}명</div>
+                            </div>
+                            {/* [수정] 매출액 UI 추가 */}
+                            <div>
+                                <div className="opacity-70 mb-0.5">예매 매출액</div>
+                                <div className="font-bold text-sm">{formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원</div>
+                            </div>
+                             <div>
+                                <div className="opacity-70 mb-0.5">누적 매출액</div>
+                                <div className="font-bold text-sm">{formatKoreanNumber(String(realtimeInfo.salesAcc).replace(/,/g,''))}원</div>
                             </div>
                         </div>
                     </div>
