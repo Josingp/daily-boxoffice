@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, Brush } from 'recharts';
 import { PredictionResult } from '../types';
 
@@ -32,7 +32,7 @@ const parseDateString = (dateStr: string) => {
 };
 
 // 커스텀 X축 틱
-const CustomTick = ({ x, y, payload, chartData }: any) => {
+const CustomTick = ({ x, y, payload, chartData, isMobile }: any) => {
     const dataItem = chartData[payload.index];
     if (!dataItem) return null; // 방어 코드
 
@@ -41,14 +41,29 @@ const CustomTick = ({ x, y, payload, chartData }: any) => {
 
     return (
         <g transform={`translate(${x},${y})`}>
-            {/* D-Day */}
+            {/* D-Day: 모바일에서는 공간 절약을 위해 선택적으로 표시하거나 폰트를 줄임 */}
             {dDay && (
-                <text x={0} y={-4} dy={0} textAnchor="middle" fill={dDay.includes('D-') || dDay === 'D-Day' ? '#ef4444' : '#3b82f6'} fontSize={10} fontWeight="bold">
+                <text 
+                    x={0} 
+                    y={-6} 
+                    dy={0} 
+                    textAnchor="middle" 
+                    fill={dDay.includes('D-') || dDay === 'D-Day' ? '#ef4444' : '#3b82f6'} 
+                    fontSize={isMobile ? 8 : 10} 
+                    fontWeight="bold"
+                >
                     {dDay}
                 </text>
             )}
             {/* 날짜 */}
-            <text x={0} y={12} dy={0} textAnchor="middle" fill="#94a3b8" fontSize={10}>
+            <text 
+                x={0} 
+                y={10} 
+                dy={0} 
+                textAnchor="middle" 
+                fill="#94a3b8" 
+                fontSize={isMobile ? 9 : 10}
+            >
                 {label}
             </text>
         </g>
@@ -56,7 +71,20 @@ const CustomTick = ({ x, y, payload, chartData }: any) => {
 };
 
 const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, prediction, openDt }) => {
-  
+  // 모바일 감지 State
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+    };
+    
+    // 초기 실행 및 리스너 등록
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const getUnit = () => {
       if (type === 'REALTIME') return '명'; 
       if (type === 'DRAMA' || metric === 'rating') return '%';
@@ -87,11 +115,14 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
             
             // 라벨 포맷팅
             if (item.dateDisplay) {
-                label = `${item.dateDisplay}(${dayName})`;
+                // 모바일이면 요일 제거하여 짧게 표시
+                label = isMobile ? item.dateDisplay : `${item.dateDisplay}(${dayName})`;
             } else if (dateStr.length === 8) {
-                label = `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}(${dayName})`;
+                const md = `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}`;
+                label = isMobile ? md : `${md}(${dayName})`;
             } else {
-                label = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}(${dayName})`;
+                const md = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}`;
+                label = isMobile ? md : `${md}(${dayName})`;
             }
 
             // D-Day 계산
@@ -162,7 +193,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         value: item.val_audi || 0,
         rate: item.rate
     }));
-  }, [data, prediction, type, metric, openDt]);
+  }, [data, prediction, type, metric, openDt, isMobile]); // isMobile 변경 시 재계산
 
   if (loading) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터 로딩 중...</div>;
   if (!chartData.length) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터가 없습니다.</div>;
@@ -200,18 +231,20 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
             dataKey="label" 
             axisLine={false} 
             tickLine={false} 
-            interval={0} // Brush가 있으므로 모든 라벨 렌더링 시도
+            // 모바일일 때는 자동 간격 조정(겹침 방지), PC일 때는 모든 라벨 표시(Brush 사용)
+            interval={isMobile ? 'preserveStartEnd' : 0}
+            minTickGap={isMobile ? 15 : 0} // 모바일에서 최소 간격 확보
             height={50} // D-Day 공간
-            tick={<CustomTick chartData={chartData} />}
+            tick={<CustomTick chartData={chartData} isMobile={isMobile} />}
           />
           
           <YAxis 
-            tick={{fontSize: 10, fill: '#94a3b8'}} 
+            tick={{fontSize: isMobile ? 9 : 10, fill: '#94a3b8'}} 
             axisLine={false} 
             tickLine={false} 
             tickFormatter={formatYAxis} 
             domain={type === 'DRAMA' ? ['auto', 'auto'] : [0, 'auto']} 
-            width={40}
+            width={isMobile ? 35 : 40}
           />
           
           <Tooltip 
