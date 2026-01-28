@@ -395,6 +395,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                         loading={loading}
                         prediction={predictionSeries.length > 0 ? { predictionSeries, analysisText: '', predictedFinalAudi: {min:0,max:0,avg:0} } : null} 
                         openDt={movie.openDt || movieDetail?.openDt}
+                        realtimeData={realtimeInfo} // 실시간 데이터 전달
                     />
                 </div>
 
@@ -441,7 +442,6 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                                 <div className="opacity-70 mb-0.5">누적 관객수</div>
                                 <div className="font-bold text-sm">{formatNumber(String(realtimeInfo.audiAcc).replace(/,/g,''))}명</div>
                             </div>
-                            {/* [수정] 매출액 UI 추가 */}
                             <div>
                                 <div className="opacity-70 mb-0.5">예매 매출액</div>
                                 <div className="font-bold text-sm">{formatKoreanNumber(String(realtimeInfo.salesAmt).replace(/,/g,''))}원</div>
