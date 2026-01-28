@@ -66,16 +66,22 @@ def fetch_movie_detail(movie_cd, movie_nm, cache, manual_data):
     return {}
 
 def main():
-    if not KOBIS_API_KEY: return
+    if not KOBIS_API_KEY: 
+        print("❌ Error: KOBIS_API_KEY is missing.")
+        return
 
-    today = datetime.datetime.now()
+    # [수정] UTC 서버에서도 한국 시간(KST) 기준으로 날짜 계산
+    kst_timezone = datetime.timezone(datetime.timedelta(hours=9))
+    today = datetime.datetime.now(kst_timezone)
     yesterday = (today - datetime.timedelta(days=1)).strftime("%Y%m%d")
-    print(f"Target: {yesterday}")
+    print(f"Target Date (KST Yesterday): {yesterday}")
 
     detail_cache, trend_cache, manual_data = load_existing_data()
     target_list = fetch_api_list(yesterday)
     
-    if not target_list: return
+    if not target_list: 
+        print("⚠️ No data fetched from KOBIS.")
+        return
 
     final_movies = []
 
