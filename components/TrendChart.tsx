@@ -8,7 +8,8 @@ interface TrendChartProps {
   metric: 'audi' | 'sales' | 'scrn' | 'show' | 'rating';
   loading?: boolean;
   prediction?: PredictionResult | null;
-  openDt?: string; // 개봉일 (D-Day 계산용)
+  openDt?: string;
+  realtimeData?: any; // 추가된 실시간 데이터 Prop
 }
 
 // 날짜 파싱 헬퍼
@@ -70,7 +71,7 @@ const CustomTick = ({ x, y, payload, chartData, isMobile }: any) => {
     );
 };
 
-const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, prediction, openDt }) => {
+const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, prediction, openDt, realtimeData }) => {
   // 모바일 감지 State
   const [isMobile, setIsMobile] = useState(false);
 
@@ -161,16 +162,44 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                      metric === 'scrn' ? item.scrnCnt : item.showCnt,
               label,
               dDay,
-              predict: null
+              predict: null,
+              isRealtime: false
             };
         });
 
-        // AI 예측 데이터 추가
-        if (metric === 'audi' && prediction && prediction.predictionSeries) {
+        // [추가] 실시간 데이터 (오늘) 추가
+        if (realtimeData) {
             const today = new Date();
+            const dateStr = today.toISOString().slice(0, 10).replace(/-/g, "");
+            const { label, dDay } = enrichData({}, dateStr);
+            
+            // Metric에 따라 값 선택
+            let rtValue = 0;
+            if (metric === 'audi') rtValue = parseInt(String(realtimeData.audiCnt || '0').replace(/,/g, ''));
+            else if (metric === 'sales') rtValue = parseInt(String(realtimeData.salesAmt || '0').replace(/,/g, ''));
+            // 스크린/상영수는 실시간 데이터가 없으므로 0 처리 (또는 이전 데이터 유지)
+
+            if (rtValue > 0) {
+                recentData.push({
+                    date: today.toISOString(),
+                    label: "실시간", // 라벨을 명시적으로 구분
+                    value: rtValue,
+                    audiCnt: metric === 'audi' ? rtValue : 0,
+                    salesAmt: metric === 'sales' ? rtValue : 0,
+                    scrnCnt: 0, showCnt: 0,
+                    predict: null,
+                    dDay,
+                    isRealtime: true
+                });
+            }
+        }
+
+        // AI 예측 데이터 추가 (실시간 포인트 다음부터)
+        if (metric === 'audi' && prediction && prediction.predictionSeries) {
+            const baseDate = new Date(); // 오늘 기준
             prediction.predictionSeries.forEach((val, i) => {
-                const nextDate = new Date(today);
-                nextDate.setDate(today.getDate() + (i + 1));
+                const nextDate = new Date(baseDate);
+                nextDate.setDate(baseDate.getDate() + (i + 1));
                 const dateStr = nextDate.toISOString().slice(0, 10).replace(/-/g, "");
                 const { label, dDay } = enrichData({}, dateStr);
                 
@@ -180,7 +209,8 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
                     value: null, 
                     audiCnt: 0, salesAmt: 0, scrnCnt: 0, showCnt: 0,
                     predict: val,
-                    dDay
+                    dDay,
+                    isRealtime: false
                 });
             });
         }
@@ -193,7 +223,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
         value: item.val_audi || 0,
         rate: item.rate
     }));
-  }, [data, prediction, type, metric, openDt, isMobile]); // isMobile 변경 시 재계산
+  }, [data, prediction, type, metric, openDt, isMobile, realtimeData]);
 
   if (loading) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터 로딩 중...</div>;
   if (!chartData.length) return <div className="h-48 flex items-center justify-center bg-slate-50 rounded-xl text-xs text-slate-400">데이터가 없습니다.</div>;
@@ -249,10 +279,17 @@ const TrendChart: React.FC<TrendChartProps> = ({ data, type, metric, loading, pr
           
           <Tooltip 
               contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.1)'}}
-              formatter={(val: number, name) => [
-                  type === 'DRAMA' || metric === 'rating' ? `${val}%` : `${val.toLocaleString()}${unit}`, 
-                  name === 'predict' ? 'AI예측' : (type==='REALTIME' ? `예매관객` : type==='DRAMA' ? '시청률' : '수치')
-              ]}
+              formatter={(val: number, name, props) => {
+                  const isRT = props.payload.isRealtime;
+                  let label = (type==='REALTIME' ? `예매관객` : type==='DRAMA' ? '시청률' : '수치');
+                  if (name === 'predict') label = 'AI예측';
+                  else if (isRT) label = '실시간(예매)';
+                  
+                  return [
+                      type === 'DRAMA' || metric === 'rating' ? `${val}%` : `${val.toLocaleString()}${unit}`, 
+                      label
+                  ];
+              }}
               labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }}
           />
           
