@@ -12,6 +12,9 @@ const CFG = {
   // 개봉 전(예매 기반) 가정
   ASSUMED_RESERVED_MARKET: { weekday: 420_000, weekend: 600_000 },
   OPENING_CAP: { min: 40_000, max: 3_200_000 },
+  
+  // 평균 상영 기간 (보수적 판단 기준점)
+  AVG_RUN_DAYS: 60,
 
   // 개봉 전: legs prior (최종 / 오프닝3일)
   LEGS_PRIOR: {
@@ -638,12 +641,19 @@ const applyDaySinceLocks = (
     const dow = dowNameOf(date);
     const wk = isWeekend(date);
 
+    // [보수적 예측 적용] 평균 상영일(AVG_RUN_DAYS)에 가까워질수록 감소폭 확대
+    // daySince가 35일 이상이거나, 스크린이 급격히 줄면(0.85 미만) 강한 감소 적용
+    let decayFactor = 1.0;
+    if (daySince > CFG.AVG_RUN_DAYS * 0.6) decayFactor *= 0.9; // 후반부 진입
+    if (daySince > CFG.AVG_RUN_DAYS * 0.9) decayFactor *= 0.8; // 종영 임박
+    if (screenTrend < 0.85) decayFactor *= 0.85; // 스크린 급감은 종영 신호
+
     // 1) 같은 요일 중앙값 캡
     const sameMed = sameDowMedian(rows, dow, 28);
-    const capSameDow = sameMed > 0 ? sameMed * CFG.LOCKS.phaseCapFactor(daySince, wk) : Infinity;
+    const capSameDow = sameMed > 0 ? sameMed * CFG.LOCKS.phaseCapFactor(daySince, wk) * decayFactor : Infinity;
 
     // 2) 전일 대비 성장률 캡
-    const capGrowth = prev > 0 ? prev * CFG.LOCKS.growthCap(daySince, wk) : Infinity;
+    const capGrowth = prev > 0 ? prev * CFG.LOCKS.growthCap(daySince, wk) * decayFactor : Infinity;
 
     // 3) 물리 캡
     const scrnPred = scrnBase * Math.pow(clamp(screenTrend, 0.75, 1.25), i / 7);
@@ -652,13 +662,16 @@ const applyDaySinceLocks = (
     // 4) 후반부 추가: 최근 최대치 기반
     const capRecent =
       daySince >= 14 && recentMax > 0
-        ? recentMax * (wk ? 1.25 : 1.10)
+        ? recentMax * (wk ? 1.25 : 1.10) * decayFactor
         : Infinity;
 
     const hardCap = Math.min(capSameDow, capGrowth, capPhysical, capRecent);
-    const floor = Math.max(0, recentMin * 0.55);
+    const floor = Math.max(0, recentMin * 0.55 * decayFactor); // 바닥도 같이 낮춤
 
-    const y = Math.round(clamp(next3[i - 1], floor, Number.isFinite(hardCap) ? hardCap : next3[i - 1]));
+    let y = Math.round(clamp(next3[i - 1] * decayFactor, floor, Number.isFinite(hardCap) ? hardCap : next3[i - 1]));
+    
+    // 최종 보정
+    y = Math.round(y * decayFactor);
     out.push(y);
     prev = y;
   }
@@ -855,7 +868,7 @@ export default async function handler(req, res) {
       movieName,
       trendData,
       movieInfo,
-      // [수정] 5대 지표 수신
+      // 5대 지표 수신
       reservationRate,
       reservationAudi,
       reservationSales,
@@ -888,7 +901,7 @@ export default async function handler(req, res) {
       bepContext = `Production Cost: ${Math.round(cost)} KRW. Avg Ticket Price: ${Math.round(atp)} KRW. BEP Target: approx ${bepAudi}. Progress: ${percent}%.`;
     }
 
-    // [수정] 실시간 예매 정보 텍스트 생성
+    // 실시간 예매 정보 텍스트 생성
     let realtimeStatsContext = "No Realtime Data.";
     if (reservationRate || reservationAudi) {
         realtimeStatsContext = 
@@ -952,7 +965,7 @@ export default async function handler(req, res) {
         Math.round(w[0] * nextA[i] + w[1] * nextB[i] + w[2] * nextC[i])
       );
 
-      // ✅ 폭주 방지 3중 락 적용
+      // ✅ 폭주 방지 3중 락 적용 (보수적 판단 포함)
       baseForecast3 = applyDaySinceLocks(rows, ensemble, daySince, mult, screenTrend);
 
       // ✅ 유한 tail + remaining cap
