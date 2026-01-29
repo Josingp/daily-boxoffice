@@ -344,15 +344,15 @@
       "movieCd": "20247457",
       "movieNm": "신의악단",
       "openDt": "2025-12-31",
-      "salesAmt": "230634420",
+      "salesAmt": "230640420",
       "salesShare": "15.1",
-      "salesInten": "9089110",
+      "salesInten": "9095110",
       "salesChange": "4.1",
-      "salesAcc": "7254734050",
-      "audiCnt": "29565",
-      "audiInten": "5498",
+      "salesAcc": "7254740050",
+      "audiCnt": "29566",
+      "audiInten": "5499",
       "audiChange": "22.8",
-      "audiAcc": "761347",
+      "audiAcc": "761348",
       "scrnCnt": "684",
       "showCnt": "1590",
       "trend": [
@@ -770,15 +770,15 @@
       "movieCd": "20250644",
       "movieNm": "직장상사 길들이기",
       "openDt": "2026-01-28",
-      "salesAmt": "105012300",
+      "salesAmt": "105026300",
       "salesShare": "6.9",
-      "salesInten": "105012300",
+      "salesInten": "105026300",
       "salesChange": "100",
-      "salesAcc": "120615300",
-      "audiCnt": "13398",
-      "audiInten": "13398",
+      "salesAcc": "120629300",
+      "audiCnt": "13400",
+      "audiInten": "13400",
       "audiChange": "100",
-      "audiAcc": "14964",
+      "audiAcc": "14966",
       "scrnCnt": "654",
       "showCnt": "1547",
       "trend": [
@@ -874,15 +874,15 @@
       "movieCd": "20256396",
       "movieNm": "아바타: 불과 재",
       "openDt": "2025-12-17",
-      "salesAmt": "137023230",
+      "salesAmt": "137007270",
       "salesShare": "8.9",
-      "salesInten": "-17408420",
+      "salesInten": "-17424380",
       "salesChange": "-11.3",
-      "salesAcc": "77140899430",
-      "audiCnt": "13208",
-      "audiInten": "590",
+      "salesAcc": "77140883470",
+      "audiCnt": "13207",
+      "audiInten": "589",
       "audiChange": "4.7",
-      "audiAcc": "6603803",
+      "audiAcc": "6603802",
       "scrnCnt": "602",
       "showCnt": "1083",
       "trend": [
@@ -1366,7 +1366,172 @@
       ],
       "scrnInten": 0,
       "showInten": 0,
-      "detail": {}
+      "detail": {
+        "movieCd": "20247690",
+        "movieNm": "시스터",
+        "movieNmEn": "SISTER",
+        "movieNmOg": "",
+        "showTm": "86",
+        "prdtYear": "2025",
+        "openDt": "20260128",
+        "prdtStatNm": "개봉",
+        "typeNm": "장편",
+        "nations": [
+          {
+            "nationNm": "한국"
+          }
+        ],
+        "genres": [
+          {
+            "genreNm": "스릴러"
+          }
+        ],
+        "directors": [
+          {
+            "peopleNm": "진성문",
+            "peopleNmEn": "JIN Seong-moon"
+          }
+        ],
+        "actors": [
+          {
+            "peopleNm": "정지소",
+            "peopleNmEn": "JEONG Ji-so",
+            "cast": "해란",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "이수혁",
+            "peopleNmEn": "LEE Soo-hyuk",
+            "cast": "태수",
+            "castEn": ""
+          },
+          {
+            "peopleNm": "차주영",
+            "peopleNmEn": "",
+            "cast": "소진",
+            "castEn": ""
+          }
+        ],
+        "showTypes": [
+          {
+            "showTypeGroupNm": "2D",
+            "showTypeNm": "디지털"
+          }
+        ],
+        "companys": [
+          {
+            "companyCd": "20141672",
+            "companyNm": "(주)와인드업필름",
+            "companyNmEn": "",
+            "companyPartNm": "제작사"
+          },
+          {
+            "companyCd": "2019641",
+            "companyNm": "(주)스튜디오 산타클로스엔터테인먼트",
+            "companyNmEn": "STUDIO SANTACLAUS ENTERTAINMENT",
+            "companyPartNm": "공동제작사"
+          },
+          {
+            "companyCd": "20154810",
+            "companyNm": "(주)블러썸픽쳐스",
+            "companyNmEn": "BLOSSOM Pictures Corp.",
+            "companyPartNm": "공동제작사"
+          },
+          {
+            "companyCd": "2019641",
+            "companyNm": "(주)스튜디오 산타클로스엔터테인먼트",
+            "companyNmEn": "STUDIO SANTACLAUS ENTERTAINMENT",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "20063188",
+            "companyNm": "씨제이 씨지브이(CJ CGV)(주)",
+            "companyNmEn": "CJ CGV",
+            "companyPartNm": "배급사"
+          },
+          {
+            "companyCd": "2019641",
+            "companyNm": "(주)스튜디오 산타클로스엔터테인먼트",
+            "companyNmEn": "STUDIO SANTACLAUS ENTERTAINMENT",
+            "companyPartNm": "제공"
+          }
+        ],
+        "audits": [
+          {
+            "auditNo": "2025-MF03532",
+            "watchGradeNm": "15세이상관람가"
+          }
+        ],
+        "staffs": [
+          {
+            "peopleNm": "홍현재",
+            "peopleNmEn": "",
+            "staffRoleNm": "투자"
+          },
+          {
+            "peopleNm": "이강일",
+            "peopleNmEn": "",
+            "staffRoleNm": "투자"
+          },
+          {
+            "peopleNm": "윤혜진",
+            "peopleNmEn": "YOON Hye-jin",
+            "staffRoleNm": "투자"
+          },
+          {
+            "peopleNm": "배준오",
+            "peopleNmEn": "",
+            "staffRoleNm": "투자"
+          },
+          {
+            "peopleNm": "김광수",
+            "peopleNmEn": "KIM Kwang-su",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "이강일",
+            "peopleNmEn": "",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "김성중",
+            "peopleNmEn": "",
+            "staffRoleNm": "작사/작곡/편곡"
+          },
+          {
+            "peopleNm": "정이준",
+            "peopleNmEn": "",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "조헌태",
+            "peopleNmEn": "Cho heon tae",
+            "staffRoleNm": "프로듀서"
+          },
+          {
+            "peopleNm": "윤혜진",
+            "peopleNmEn": "YOON Hye-jin",
+            "staffRoleNm": "제작"
+          },
+          {
+            "peopleNm": "진성문",
+            "peopleNmEn": "JIN Seong-moon",
+            "staffRoleNm": "시나리오(각본)"
+          },
+          {
+            "peopleNm": "변봉선",
+            "peopleNmEn": "BYUN Bong-sun",
+            "staffRoleNm": "촬영"
+          },
+          {
+            "peopleNm": "한은영",
+            "peopleNmEn": "HAN Eun-young",
+            "staffRoleNm": "기획"
+          }
+        ],
+        "posterUrl": "https://www.kobis.or.kr/common/mast/movie/2026/01/a6ac4e9145574623829780397924fbe9.jpg",
+        "productionCost": 0
+      }
     },
     {
       "rnum": "6",
@@ -1376,15 +1541,15 @@
       "movieCd": "20250686",
       "movieNm": "하우스메이드",
       "openDt": "2026-01-28",
-      "salesAmt": "72425160",
+      "salesAmt": "72408160",
       "salesShare": "4.7",
-      "salesInten": "72425160",
+      "salesInten": "72408160",
       "salesChange": "100",
-      "salesAcc": "95176160",
-      "audiCnt": "9299",
-      "audiInten": "9299",
+      "salesAcc": "95159160",
+      "audiCnt": "9297",
+      "audiInten": "9297",
       "audiChange": "100",
-      "audiAcc": "11712",
+      "audiAcc": "11710",
       "scrnCnt": "533",
       "showCnt": "915",
       "trend": [
@@ -1485,15 +1650,15 @@
       "movieCd": "20258885",
       "movieNm": "프라이메이트",
       "openDt": "2026-01-28",
-      "salesAmt": "62307300",
+      "salesAmt": "62291300",
       "salesShare": "4.1",
-      "salesInten": "62307300",
+      "salesInten": "62291300",
       "salesChange": "100",
-      "salesAcc": "75550300",
-      "audiCnt": "7924",
-      "audiInten": "7924",
+      "salesAcc": "75534300",
+      "audiCnt": "7922",
+      "audiInten": "7922",
       "audiChange": "100",
-      "audiAcc": "9391",
+      "audiAcc": "9389",
       "scrnCnt": "502",
       "showCnt": "911",
       "trend": [
@@ -1551,15 +1716,15 @@
       "movieCd": "20040549",
       "movieNm": "천공의 성 라퓨타",
       "openDt": "2004-04-30",
-      "salesAmt": "46805870",
+      "salesAmt": "46833870",
       "salesShare": "3.1",
-      "salesInten": "12492700",
-      "salesChange": "36.4",
-      "salesAcc": "699690660",
-      "audiCnt": "5745",
-      "audiInten": "2232",
-      "audiChange": "63.5",
-      "audiAcc": "78378",
+      "salesInten": "12520700",
+      "salesChange": "36.5",
+      "salesAcc": "699718660",
+      "audiCnt": "5749",
+      "audiInten": "2236",
+      "audiChange": "63.6",
+      "audiAcc": "78382",
       "scrnCnt": "168",
       "showCnt": "217",
       "trend": [
@@ -1830,11 +1995,11 @@
       "movieCd": "20250112",
       "movieNm": "극장판 총집편 걸즈 밴드 크라이 청춘광주곡",
       "openDt": "2026-01-28",
-      "salesAmt": "46809610",
+      "salesAmt": "46808610",
       "salesShare": "3.1",
-      "salesInten": "46809610",
+      "salesInten": "46808610",
       "salesChange": "100",
-      "salesAcc": "54165610",
+      "salesAcc": "54164610",
       "audiCnt": "5344",
       "audiInten": "5344",
       "audiChange": "100",
