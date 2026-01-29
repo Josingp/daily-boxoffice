@@ -140,7 +140,7 @@ const App: React.FC = () => {
         <header className="bg-white px-5 pt-6 pb-4 sticky top-0 z-10 border-b border-slate-100">
           <div className="flex justify-between items-end mb-4">
             <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">BoxOffice Pro</h1>
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">영화, TV 순위</h1>
               <p className="text-xs text-slate-500 font-medium mt-1">
                 {boxOfficeType === 'DAILY' ? '일별 박스오피스 리포트' : 
                  boxOfficeType === 'REALTIME' ? 'KOBIS 실시간 예매율' : 'TV 시청률 통합 랭킹'}
