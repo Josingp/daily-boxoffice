@@ -58,17 +58,19 @@ jobs:
           echo "💤 Skipping Daily Box Office (Current UTC: $HOUR, Target: 22)"
         fi
 
-    # 3. 드라마 시청률 (한국시간 아침 7시 = UTC 22시에만 실행)
+    # 3. 드라마 시청률 (한국시간 아침 7, 8, 9시 실행 - 데이터 지연 대비 재시도 로직 적용)
     - name: Run Drama Scraper
       continue-on-error: true
       run: |
         HOUR=$(date -u +%H)
         
-        if [ "$HOUR" == "22" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          echo "⏰ It's 07:00 KST. Running Drama Scraper..."
+        # UTC 22, 23, 00시 (한국 07, 08, 09시) 혹은 수동 실행일 때 작동
+        # 닐슨 데이터가 늦게 뜨는 경우가 있어 3번 시도함 (스크립트 내부에서 중복 실행 방지됨)
+        if [ "$HOUR" == "22" ] || [ "$HOUR" == "23" ] || [ "$HOUR" == "00" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "⏰ It's Morning in KST ($HOUR UTC). Running Drama Scraper..."
           python scripts/update_drama.py
         else
-          echo "💤 Skipping Drama Scraper (Current UTC: $HOUR, Target: 22)"
+          echo "💤 Skipping Drama Scraper (Current UTC: $HOUR)"
         fi
 
     - name: Commit and Push
