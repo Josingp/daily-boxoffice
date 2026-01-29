@@ -9,11 +9,10 @@ from datetime import datetime, timedelta, timezone
 # --- [설정] ---
 MAIN_FILE = "public/drama_data.json"
 ARCHIVE_ROOT = "public/archive/drama"
-# 닐슨 기본 URL (파라미터로 메뉴 조작)
 NIELSEN_BASE_URL = "https://www.nielsenkorea.co.kr/tv_terrestrial_day.asp"
 NAVER_SEARCH_URL = "https://search.naver.com/search.naver?where=nexearch&query="
 
-# 매체 코드 정의 (1:지상파, 2:종편, 3:케이블)
+# 매체 코드 (1:지상파, 2:종편, 3:케이블)
 MEDIA_TYPES = [
     {'code': '1', 'name': '지상파'},
     {'code': '2', 'name': '종편'},
@@ -64,7 +63,7 @@ def get_naver_drama_info(raw_title):
 
 def fetch_integrated_ranking(date_str, area_code, is_weekly=False):
     """
-    지상파/종편/케이블 데이터를 모두 가져와 하나로 합친 뒤 시청률 순으로 정렬합니다.
+    지상파(1)+종편(2)+케이블(3) 데이터를 모두 가져와 하나로 합친 뒤 시청률 순으로 정렬합니다.
     """
     combined_list = []
     # sub_menu: 일일은 1, 주간은 2 (예: 지상파 일일=1_1, 지상파 주간=1_2)
@@ -72,7 +71,7 @@ def fetch_integrated_ranking(date_str, area_code, is_weekly=False):
     
     headers = { "User-Agent": "Mozilla/5.0" }
 
-    # 1. 3개 매체 반복 수집
+    # 3개 매체 반복 수집
     for media in MEDIA_TYPES:
         menu_code = media['code']
         media_name = media['name']
@@ -101,7 +100,8 @@ def fetch_integrated_ranking(date_str, area_code, is_weekly=False):
                 try:
                     title = cols[2].get_text(strip=True)
                     rating_str = cols[3].get_text(strip=True).replace("\t", "").strip()
-                    rating_val = float(rating_str) if rating_str else 0.0
+                    # 탭 문자 제거 및 숫자 변환
+                    rating_val = float(rating_str.replace(',', '')) if rating_str else 0.0
                     
                     combined_list.append({
                         "channel": cols[1].get_text(strip=True),
@@ -118,16 +118,27 @@ def fetch_integrated_ranking(date_str, area_code, is_weekly=False):
         except Exception as e:
             print(f"  Error fetching {media_name}: {e}")
 
-    # 2. 통합 리스트를 시청률 순(내림차순) 정렬
+    # 통합 리스트를 시청률 순(내림차순) 정렬
     combined_list.sort(key=lambda x: x['ratingVal'], reverse=True)
     
-    # 3. 통합 순위 부여 (상위 20개만 자름)
+    # 통합 순위 부여 (상위 20개만 자름)
     final_list = []
     for idx, item in enumerate(combined_list[:20]):
         item['rank'] = idx + 1
         final_list.append(item)
         
     return final_list
+
+def is_data_complete(data_list):
+    """
+    데이터 리스트가 통합 데이터인지 확인 (종편/케이블 포함 여부)
+    """
+    if not data_list: return False
+    # 리스트에 '지상파' 외의 다른 매체('종편' or '케이블')가 하나라도 있으면 통합된 것으로 간주
+    has_others = any(item.get('mediaType') in ['종편', '케이블'] for item in data_list)
+    # 또는 mediaType 필드 자체가 있는지도 확인
+    has_field = any('mediaType' in item for item in data_list)
+    return has_others or (has_field and len(data_list) > 10)
 
 def update_drama_data():
     print("Starting Integrated Drama Update (Terrestrial + Jongpyeon + Cable)...")
@@ -148,16 +159,29 @@ def update_drama_data():
         d_str = target_date.strftime("%Y%m%d")
         f_path = os.path.join(ARCHIVE_ROOT, f"{d_str}.json")
         
+        need_fetch = True
         daily_json = None
+
+        # 파일이 존재하면 로드해서 검사
         if os.path.exists(f_path):
             try:
-                with open(f_path, 'r', encoding='utf-8') as f: daily_json = json.load(f)
-            except: pass
+                with open(f_path, 'r', encoding='utf-8') as f: 
+                    daily_json = json.load(f)
+                
+                # [핵심] 기존 데이터가 '지상파만' 있는 반쪽짜리 데이터인지 확인
+                nw_list = daily_json.get("nationwide", [])
+                if is_data_complete(nw_list):
+                    need_fetch = False
+                    print(f"  [Skip] {d_str} (Already integrated)")
+                else:
+                    print(f"  [Reload] {d_str} (Found incomplete data, re-fetching...)")
+                    need_fetch = True
+            except: 
+                need_fetch = True
         
-        # 파일 없으면 수집
-        if not daily_json:
+        # 데이터가 없거나, 불완전하면 새로 수집
+        if need_fetch:
             print(f"  [Fetch Daily Integrated] {d_str}...")
-            # 통합 랭킹 수집 (일일)
             nw = fetch_integrated_ranking(d_str, "00", is_weekly=False)
             cp = fetch_integrated_ranking(d_str, "01", is_weekly=False)
             
@@ -165,10 +189,11 @@ def update_drama_data():
                 daily_json = { "date": d_str, "nationwide": nw, "capital": cp }
                 with open(f_path, 'w', encoding='utf-8') as f:
                     json.dump(daily_json, f, ensure_ascii=False, indent=2)
-                print(f"  ✅ Saved combined data for {d_str}")
+                print(f"  ✅ Saved integrated data for {d_str}")
                 time.sleep(0.5)
             else:
-                print(f"  ⚠️ No data yet for {d_str}")
+                print(f"  ⚠️ No data available for {d_str}")
+                daily_json = None # 수집 실패 처리
         
         # 트렌드용 히스토리 축적
         if daily_json:
@@ -205,6 +230,7 @@ def update_drama_data():
         ]
         
         for lst in target_lists:
+            if not lst: continue
             for item in lst:
                 # 트렌드 매핑
                 title_key = item['title'].replace(" ", "").strip()
