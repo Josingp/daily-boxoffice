@@ -2,326 +2,366 @@
   "date": "20260105",
   "nationwide": [
     {
-      "rank": "1",
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "10.7",
       "ratingVal": 10.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 1
     },
     {
-      "rank": "2",
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "9.5",
       "ratingVal": 9.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 2
     },
     {
-      "rank": "3",
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "7.4",
       "ratingVal": 7.4,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 3
     },
     {
-      "rank": "3",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "7.4",
       "ratingVal": 7.4,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 4
     },
     {
-      "rank": "5",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.2",
       "ratingVal": 7.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 5
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "6.0",
       "ratingVal": 6.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 6
     },
     {
-      "rank": "7",
       "channel": "KBS1",
       "title": "가요무대",
       "rating": "5.9",
       "ratingVal": 5.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 7
     },
     {
-      "rank": "8",
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "5.8",
       "ratingVal": 5.8,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 8
     },
     {
-      "rank": "9",
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "5.0",
       "ratingVal": 5.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 9
     },
     {
-      "rank": "10",
+      "channel": "tvN",
+      "title": "TVN월화드라마(스프링피버<본>)",
+      "rating": "4.832",
+      "ratingVal": 4.832,
+      "mediaType": "케이블",
+      "area": "전국",
+      "rank": 10
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스광장2부",
       "rating": "4.2",
       "ratingVal": 4.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 11
     },
     {
-      "rank": "10",
       "channel": "KBS2",
       "title": "2TV생생정보",
       "rating": "4.2",
       "ratingVal": 4.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 12
     },
     {
-      "rank": "12",
       "channel": "SBS",
       "title": "동상이몽2너는내운명",
       "rating": "4.0",
       "ratingVal": 4.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 13
     },
     {
-      "rank": "13",
       "channel": "SBS",
       "title": "생활의달인",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 14
     },
     {
-      "rank": "13",
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 15
     },
     {
-      "rank": "15",
+      "channel": "JTBC",
+      "title": "JTBC뉴스룸",
+      "rating": "3.863",
+      "ratingVal": 3.863,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 16
+    },
+    {
       "channel": "MBC",
       "title": "오은영리포트결혼지옥",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 17
     },
     {
-      "rank": "15",
       "channel": "KBS1",
       "title": "KBS뉴스특보",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 18
     },
     {
-      "rank": "17",
+      "channel": "ENA",
+      "title": "아이돌아이<본>",
+      "rating": "3.486",
+      "ratingVal": 3.486,
+      "mediaType": "케이블",
+      "area": "전국",
+      "rank": 19
+    },
+    {
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS1",
-      "title": "초이스걸어서세계속으로<재>",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS1",
-      "title": "KBS뉴스특보",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "전국"
-    },
-    {
-      "rank": "20",
-      "channel": "KBS1",
-      "title": "뉴스라인W",
-      "rating": "2.6",
-      "ratingVal": 2.6,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 20
     }
   ],
   "capital": [
     {
-      "rank": "1",
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "9.1",
       "ratingVal": 9.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 1
     },
     {
-      "rank": "2",
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "7.9",
       "ratingVal": 7.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 2
     },
     {
-      "rank": "3",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.2",
       "ratingVal": 7.2,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 3
     },
     {
-      "rank": "4",
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "6.0",
       "ratingVal": 6.0,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 4
     },
     {
-      "rank": "5",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "5.9",
       "ratingVal": 5.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 5
     },
     {
-      "rank": "6",
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 6
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "가요무대",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 7
     },
     {
-      "rank": "8",
+      "channel": "tvN",
+      "title": "TVN월화드라마(스프링피버<본>)",
+      "rating": "4.676",
+      "ratingVal": 4.676,
+      "mediaType": "케이블",
+      "area": "수도권",
+      "rank": 8
+    },
+    {
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "4.5",
       "ratingVal": 4.5,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 9
     },
     {
-      "rank": "9",
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "4.3",
       "ratingVal": 4.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 10
     },
     {
-      "rank": "10",
       "channel": "SBS",
       "title": "생활의달인",
       "rating": "4.0",
       "ratingVal": 4.0,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 11
     },
     {
-      "rank": "11",
       "channel": "MBC",
       "title": "오은영리포트결혼지옥",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 12
     },
     {
-      "rank": "11",
       "channel": "SBS",
       "title": "동상이몽2너는내운명",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 13
     },
     {
-      "rank": "11",
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 14
     },
     {
-      "rank": "14",
       "channel": "KBS2",
       "title": "2TV생생정보",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 15
     },
     {
-      "rank": "15",
+      "channel": "ENA",
+      "title": "아이돌아이<본>",
+      "rating": "3.532",
+      "ratingVal": 3.532,
+      "mediaType": "케이블",
+      "area": "수도권",
+      "rank": 16
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스광장2부",
       "rating": "3.4",
       "ratingVal": 3.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 17
     },
     {
-      "rank": "16",
+      "channel": "JTBC",
+      "title": "JTBC뉴스룸",
+      "rating": "3.327",
+      "ratingVal": 3.327,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 18
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "3.1",
       "ratingVal": 3.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 19
     },
     {
-      "rank": "16",
       "channel": "KBS1",
       "title": "KBS뉴스특보",
       "rating": "3.1",
       "ratingVal": 3.1,
-      "area": "수도권"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS1",
-      "title": "KBS뉴스특보",
-      "rating": "2.7",
-      "ratingVal": 2.7,
-      "area": "수도권"
-    },
-    {
-      "rank": "19",
-      "channel": "KBS1",
-      "title": "초이스걸어서세계속으로<재>",
-      "rating": "2.5",
-      "ratingVal": 2.5,
-      "area": "수도권"
-    },
-    {
-      "rank": "20",
-      "channel": "SBS",
-      "title": "모닝와이드3부",
-      "rating": "2.3",
-      "ratingVal": 2.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 20
     }
   ]
 }

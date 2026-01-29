@@ -2,326 +2,366 @@
   "date": "20260113",
   "nationwide": [
     {
-      "rank": "1",
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "10.8",
       "ratingVal": 10.8,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 1
     },
     {
-      "rank": "2",
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글3부",
+      "rating": "9.539",
+      "ratingVal": 9.539,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 2
+    },
+    {
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글2부",
+      "rating": "9.538",
+      "ratingVal": 9.538,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 3
+    },
+    {
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "8.9",
       "ratingVal": 8.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 4
     },
     {
-      "rank": "3",
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "7.9",
       "ratingVal": 7.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 5
     },
     {
-      "rank": "4",
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글1부",
+      "rating": "7.346",
+      "ratingVal": 7.346,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 6
+    },
+    {
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.0",
       "ratingVal": 7.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 7
     },
     {
-      "rank": "5",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "6.7",
       "ratingVal": 6.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 8
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "6.5",
       "ratingVal": 6.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 9
     },
     {
-      "rank": "7",
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "5.9",
       "ratingVal": 5.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 10
     },
     {
-      "rank": "8",
+      "channel": "tvN",
+      "title": "TVN월화드라마(스프링피버<본>)",
+      "rating": "5.041",
+      "ratingVal": 5.041,
+      "mediaType": "케이블",
+      "area": "전국",
+      "rank": 11
+    },
+    {
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "4.9",
       "ratingVal": 4.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 12
     },
     {
-      "rank": "9",
       "channel": "KBS1",
       "title": "KBS뉴스광장2부",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 13
     },
     {
-      "rank": "10",
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "4.5",
       "ratingVal": 4.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 14
     },
     {
-      "rank": "11",
+      "channel": "JTBC",
+      "title": "JTBC뉴스룸",
+      "rating": "4.338",
+      "ratingVal": 4.338,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 15
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스7",
       "rating": "4.3",
       "ratingVal": 4.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 16
     },
     {
-      "rank": "12",
       "channel": "SBS",
       "title": "틈만나면",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 17
     },
     {
-      "rank": "13",
       "channel": "KBS1",
       "title": "이웃집찰스",
       "rating": "3.5",
       "ratingVal": 3.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 18
     },
     {
-      "rank": "14",
       "channel": "KBS2",
       "title": "2TV생생정보",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 19
     },
     {
-      "rank": "14",
       "channel": "SBS",
       "title": "SBS뉴스특보",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
-    },
-    {
-      "rank": "16",
-      "channel": "MBC",
-      "title": "PD수첩",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "전국"
-    },
-    {
-      "rank": "16",
-      "channel": "KBS1",
-      "title": "동물의왕국",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "SBS",
-      "title": "SBS8뉴스",
-      "rating": "2.9",
-      "ratingVal": 2.9,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "SBS",
-      "title": "틈만나면",
-      "rating": "2.9",
-      "ratingVal": 2.9,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS2",
-      "title": "KBS스포츠축구(2026AFCU23아시안컵한국:우즈베키스탄)",
-      "rating": "2.9",
-      "ratingVal": 2.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 20
     }
   ],
   "capital": [
     {
-      "rank": "1",
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "9.4",
       "ratingVal": 9.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 1
     },
     {
-      "rank": "2",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.3",
       "ratingVal": 7.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 2
     },
     {
-      "rank": "2",
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "7.3",
       "ratingVal": 7.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 3
     },
     {
-      "rank": "4",
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글3부",
+      "rating": "7.072",
+      "ratingVal": 7.072,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 4
+    },
+    {
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글2부",
+      "rating": "6.921",
+      "ratingVal": 6.921,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 5
+    },
+    {
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "6.5",
       "ratingVal": 6.5,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 6
     },
     {
-      "rank": "5",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "6.1",
       "ratingVal": 6.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 7
     },
     {
-      "rank": "6",
+      "channel": "MBN",
+      "title": "현역가왕3프로들의정글1부",
+      "rating": "5.628",
+      "ratingVal": 5.628,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 8
+    },
+    {
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "5.3",
       "ratingVal": 5.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 9
     },
     {
-      "rank": "7",
+      "channel": "tvN",
+      "title": "TVN월화드라마(스프링피버<본>)",
+      "rating": "4.858",
+      "ratingVal": 4.858,
+      "mediaType": "케이블",
+      "area": "수도권",
+      "rank": 10
+    },
+    {
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 11
     },
     {
-      "rank": "8",
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "4.6",
       "ratingVal": 4.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 12
     },
     {
-      "rank": "9",
       "channel": "SBS",
       "title": "틈만나면",
       "rating": "4.4",
       "ratingVal": 4.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 13
     },
     {
-      "rank": "10",
+      "channel": "JTBC",
+      "title": "JTBC뉴스룸",
+      "rating": "4.121",
+      "ratingVal": 4.121,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 14
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스7",
       "rating": "4.1",
       "ratingVal": 4.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 15
     },
     {
-      "rank": "11",
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "4.0",
       "ratingVal": 4.0,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 16
     },
     {
-      "rank": "12",
       "channel": "SBS",
       "title": "SBS뉴스특보",
       "rating": "3.7",
       "ratingVal": 3.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 17
     },
     {
-      "rank": "13",
       "channel": "KBS1",
       "title": "이웃집찰스",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 18
     },
     {
-      "rank": "14",
       "channel": "KBS1",
       "title": "KBS뉴스광장2부",
       "rating": "3.4",
       "ratingVal": 3.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 19
     },
     {
-      "rank": "15",
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "수도권"
-    },
-    {
-      "rank": "16",
-      "channel": "SBS",
-      "title": "틈만나면",
-      "rating": "3.2",
-      "ratingVal": 3.2,
-      "area": "수도권"
-    },
-    {
-      "rank": "17",
-      "channel": "KBS1",
-      "title": "동물의왕국",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "수도권"
-    },
-    {
-      "rank": "18",
-      "channel": "MBC",
-      "title": "PD수첩",
-      "rating": "2.8",
-      "ratingVal": 2.8,
-      "area": "수도권"
-    },
-    {
-      "rank": "19",
-      "channel": "KBS2",
-      "title": "KBS스포츠축구(2026AFCU23아시안컵한국:우즈베키스탄)",
-      "rating": "2.7",
-      "ratingVal": 2.7,
-      "area": "수도권"
-    },
-    {
-      "rank": "19",
-      "channel": "KBS2",
-      "title": "2TV생생정보",
-      "rating": "2.7",
-      "ratingVal": 2.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 20
     }
   ]
 }

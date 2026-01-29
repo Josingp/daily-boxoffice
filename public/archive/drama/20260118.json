@@ -2,326 +2,366 @@
   "date": "20260118",
   "nationwide": [
     {
-      "rank": "1",
       "channel": "KBS2",
       "title": "주말드라마(화려한날들)",
       "rating": "19.6",
       "ratingVal": 19.6,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 1
     },
     {
-      "rank": "2",
       "channel": "SBS",
       "title": "미운우리새끼다시쓰는육아일기",
       "rating": "10.1",
       "ratingVal": 10.1,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 2
     },
     {
-      "rank": "3",
       "channel": "KBS1",
       "title": "전국노래자랑",
       "rating": "7.5",
       "ratingVal": 7.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 3
     },
     {
-      "rank": "4",
       "channel": "KBS2",
       "title": "KBS2토일미니시리즈(은애하는도적님아)",
       "rating": "6.9",
       "ratingVal": 6.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 4
     },
     {
-      "rank": "4",
       "channel": "KBS2",
       "title": "1박2일",
       "rating": "6.9",
       "ratingVal": 6.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 5
     },
     {
-      "rank": "6",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "6.0",
       "ratingVal": 6.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 6
     },
     {
-      "rank": "7",
+      "channel": "tvN",
+      "title": "언더커버미쓰홍<본>",
+      "rating": "5.672",
+      "ratingVal": 5.672,
+      "mediaType": "케이블",
+      "area": "전국",
+      "rank": 7
+    },
+    {
       "channel": "MBC",
       "title": "탐사기획스트레이트",
       "rating": "5.3",
       "ratingVal": 5.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 8
     },
     {
-      "rank": "8",
       "channel": "KBS2",
       "title": "사장님귀는당나귀귀",
       "rating": "4.9",
       "ratingVal": 4.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 9
     },
     {
-      "rank": "9",
       "channel": "KBS1",
       "title": "KBS뉴스(12:00)",
       "rating": "4.8",
       "ratingVal": 4.8,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 10
     },
     {
-      "rank": "10",
       "channel": "SBS",
       "title": "TV동물농장",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 11
     },
     {
-      "rank": "10",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "4.7",
       "ratingVal": 4.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 12
     },
     {
-      "rank": "12",
       "channel": "MBC",
       "title": "극한84",
       "rating": "4.0",
       "ratingVal": 4.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 13
     },
     {
-      "rank": "13",
       "channel": "SBS",
       "title": "런닝맨",
       "rating": "3.5",
       "ratingVal": 3.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 14
     },
     {
-      "rank": "14",
       "channel": "MBC",
       "title": "미스터리음악쇼복면가왕10년의기록",
       "rating": "3.4",
       "ratingVal": 3.4,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 15
     },
     {
-      "rank": "15",
       "channel": "KBS1",
       "title": "이슈PICK쌤과함께",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 16
     },
     {
-      "rank": "15",
       "channel": "KBS1",
       "title": "동네한바퀴<재>",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 17
     },
     {
-      "rank": "15",
       "channel": "KBS1",
       "title": "특파원보고세계는지금<재>",
       "rating": "3.3",
       "ratingVal": 3.3,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 18
     },
     {
-      "rank": "18",
       "channel": "KBS1",
       "title": "동물의왕국",
       "rating": "3.2",
       "ratingVal": 3.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 19
     },
     {
-      "rank": "18",
       "channel": "KBS1",
       "title": "TV쇼진품명품",
       "rating": "3.2",
       "ratingVal": 3.2,
-      "area": "전국"
-    },
-    {
-      "rank": "20",
-      "channel": "KBS1",
-      "title": "KBS뉴스(19:00)",
-      "rating": "3.1",
-      "ratingVal": 3.1,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 20
     }
   ],
   "capital": [
     {
-      "rank": "1",
       "channel": "KBS2",
       "title": "주말드라마(화려한날들)",
       "rating": "18.1",
       "ratingVal": 18.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 1
     },
     {
-      "rank": "2",
       "channel": "SBS",
       "title": "미운우리새끼다시쓰는육아일기",
       "rating": "9.9",
       "ratingVal": 9.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 2
     },
     {
-      "rank": "3",
       "channel": "KBS1",
       "title": "전국노래자랑",
       "rating": "7.1",
       "ratingVal": 7.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 3
     },
     {
-      "rank": "4",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "6.6",
       "ratingVal": 6.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 4
     },
     {
-      "rank": "5",
       "channel": "KBS2",
       "title": "1박2일",
       "rating": "6.2",
       "ratingVal": 6.2,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 5
     },
     {
-      "rank": "6",
       "channel": "KBS2",
       "title": "KBS2토일미니시리즈(은애하는도적님아)",
       "rating": "6.1",
       "ratingVal": 6.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 6
     },
     {
-      "rank": "7",
       "channel": "MBC",
       "title": "탐사기획스트레이트",
       "rating": "5.7",
       "ratingVal": 5.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 7
     },
     {
-      "rank": "8",
+      "channel": "tvN",
+      "title": "언더커버미쓰홍<본>",
+      "rating": "5.697",
+      "ratingVal": 5.697,
+      "mediaType": "케이블",
+      "area": "수도권",
+      "rank": 8
+    },
+    {
       "channel": "KBS1",
       "title": "KBS뉴스(12:00)",
       "rating": "4.8",
       "ratingVal": 4.8,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 9
     },
     {
-      "rank": "9",
       "channel": "SBS",
       "title": "TV동물농장",
       "rating": "4.6",
       "ratingVal": 4.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 10
     },
     {
-      "rank": "9",
       "channel": "KBS2",
       "title": "사장님귀는당나귀귀",
       "rating": "4.6",
       "ratingVal": 4.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 11
     },
     {
-      "rank": "11",
       "channel": "MBC",
       "title": "극한84",
       "rating": "4.5",
       "ratingVal": 4.5,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 12
     },
     {
-      "rank": "12",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "4.0",
       "ratingVal": 4.0,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 13
     },
     {
-      "rank": "13",
       "channel": "SBS",
       "title": "런닝맨",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 14
     },
     {
-      "rank": "14",
       "channel": "KBS1",
       "title": "특파원보고세계는지금<재>",
       "rating": "3.2",
       "ratingVal": 3.2,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 15
     },
     {
-      "rank": "14",
       "channel": "KBS1",
       "title": "이슈PICK쌤과함께",
       "rating": "3.2",
       "ratingVal": 3.2,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 16
     },
     {
-      "rank": "14",
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.2",
       "ratingVal": 3.2,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 17
     },
     {
-      "rank": "17",
       "channel": "MBC",
       "title": "미스터리음악쇼복면가왕10년의기록",
       "rating": "3.1",
       "ratingVal": 3.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 18
     },
     {
-      "rank": "17",
       "channel": "KBS1",
       "title": "동물의왕국",
       "rating": "3.1",
       "ratingVal": 3.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 19
     },
     {
-      "rank": "19",
       "channel": "KBS1",
       "title": "동네한바퀴<재>",
       "rating": "2.9",
       "ratingVal": 2.9,
-      "area": "수도권"
-    },
-    {
-      "rank": "20",
-      "channel": "KBS1",
-      "title": "TV쇼진품명품",
-      "rating": "2.8",
-      "ratingVal": 2.8,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 20
     }
   ]
 }

@@ -2,326 +2,366 @@
   "date": "20260101",
   "nationwide": [
     {
-      "rank": "1",
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-2부",
+      "rating": "12.591",
+      "ratingVal": 12.591,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 1
+    },
+    {
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-1부",
+      "rating": "11.621",
+      "ratingVal": 11.621,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 2
+    },
+    {
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-3부",
+      "rating": "11.027",
+      "ratingVal": 11.027,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 3
+    },
+    {
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "10.9",
       "ratingVal": 10.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 4
     },
     {
-      "rank": "2",
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "9.9",
       "ratingVal": 9.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 5
     },
     {
-      "rank": "3",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.2",
       "ratingVal": 7.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 6
     },
     {
-      "rank": "4",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "7.0",
       "ratingVal": 7.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 7
     },
     {
-      "rank": "5",
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "6.4",
       "ratingVal": 6.4,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 8
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "5.7",
       "ratingVal": 5.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 9
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "KBS뉴스(19:00)",
       "rating": "5.7",
       "ratingVal": 5.7,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 10
     },
     {
-      "rank": "8",
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "5.5",
       "ratingVal": 5.5,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 11
     },
     {
-      "rank": "9",
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "5.2",
       "ratingVal": 5.2,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 12
     },
     {
-      "rank": "10",
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "5.0",
       "ratingVal": 5.0,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 13
     },
     {
-      "rank": "11",
       "channel": "KBS1",
       "title": "한국인의밥상",
       "rating": "4.9",
       "ratingVal": 4.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 14
     },
     {
-      "rank": "12",
       "channel": "KBS2",
       "title": "2TV생생정보",
       "rating": "4.6",
       "ratingVal": 4.6,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 15
     },
     {
-      "rank": "13",
       "channel": "MBC",
       "title": "실화탐사대",
       "rating": "4.4",
       "ratingVal": 4.4,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 16
     },
     {
-      "rank": "14",
       "channel": "KBS2",
       "title": "옥탑방의문제아들",
       "rating": "4.1",
       "ratingVal": 4.1,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 17
     },
     {
-      "rank": "14",
       "channel": "KBS1",
       "title": "초이스걸어서세계속으로",
       "rating": "4.1",
       "ratingVal": 4.1,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 18
     },
     {
-      "rank": "16",
+      "channel": "JTBC",
+      "title": "JTBC뉴스룸",
+      "rating": "3.552",
+      "ratingVal": 3.552,
+      "mediaType": "종편",
+      "area": "전국",
+      "rank": 19
+    },
+    {
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.5",
       "ratingVal": 3.5,
-      "area": "전국"
-    },
-    {
-      "rank": "17",
-      "channel": "KBS1",
-      "title": "KBS뉴스광장2부",
-      "rating": "3.4",
-      "ratingVal": 3.4,
-      "area": "전국"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS1",
-      "title": "동물의왕국",
-      "rating": "3.2",
-      "ratingVal": 3.2,
-      "area": "전국"
-    },
-    {
-      "rank": "19",
-      "channel": "KBS1",
-      "title": "KBS뉴스(17:00)",
-      "rating": "2.9",
-      "ratingVal": 2.9,
-      "area": "전국"
-    },
-    {
-      "rank": "19",
-      "channel": "KBS1",
-      "title": "다큐인사이트(2026신년기획AI빅퀘스트)",
-      "rating": "2.9",
-      "ratingVal": 2.9,
-      "area": "전국"
+      "mediaType": "지상파",
+      "area": "전국",
+      "rank": 20
     }
   ],
   "capital": [
     {
-      "rank": "1",
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-2부",
+      "rating": "10.183",
+      "ratingVal": 10.183,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 1
+    },
+    {
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-1부",
+      "rating": "9.127",
+      "ratingVal": 9.127,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 2
+    },
+    {
+      "channel": "TV CHOSUN",
+      "title": "미스트롯4-3부",
+      "rating": "9.031",
+      "ratingVal": 9.031,
+      "mediaType": "종편",
+      "area": "수도권",
+      "rank": 3
+    },
+    {
       "channel": "KBS1",
       "title": "일일드라마(마리와별난아빠들)",
       "rating": "9.0",
       "ratingVal": 9.0,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 4
     },
     {
-      "rank": "2",
       "channel": "KBS2",
       "title": "일일드라마(친밀한리플리)",
       "rating": "8.3",
       "ratingVal": 8.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 5
     },
     {
-      "rank": "3",
       "channel": "MBC",
       "title": "MBC뉴스데스크",
       "rating": "7.3",
       "ratingVal": 7.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 6
     },
     {
-      "rank": "4",
       "channel": "KBS1",
       "title": "KBS9시뉴스",
       "rating": "5.5",
       "ratingVal": 5.5,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 7
     },
     {
-      "rank": "5",
       "channel": "KBS1",
       "title": "6시내고향",
       "rating": "5.4",
       "ratingVal": 5.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 8
     },
     {
-      "rank": "6",
       "channel": "KBS1",
       "title": "KBS뉴스(19:00)",
       "rating": "5.3",
       "ratingVal": 5.3,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 9
     },
     {
-      "rank": "7",
       "channel": "KBS1",
       "title": "KBS뉴스930",
       "rating": "5.1",
       "ratingVal": 5.1,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 10
     },
     {
-      "rank": "8",
       "channel": "MBC",
       "title": "일일드라마(첫번째남자)",
       "rating": "4.9",
       "ratingVal": 4.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 11
     },
     {
-      "rank": "9",
       "channel": "KBS1",
       "title": "아침마당",
       "rating": "4.4",
       "ratingVal": 4.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 12
     },
     {
-      "rank": "9",
       "channel": "MBC",
       "title": "실화탐사대",
       "rating": "4.4",
       "ratingVal": 4.4,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 13
     },
     {
-      "rank": "11",
       "channel": "KBS1",
       "title": "한국인의밥상",
       "rating": "3.9",
       "ratingVal": 3.9,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 14
     },
     {
-      "rank": "12",
       "channel": "SBS",
       "title": "SBS8뉴스",
       "rating": "3.8",
       "ratingVal": 3.8,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 15
     },
     {
-      "rank": "12",
       "channel": "KBS1",
       "title": "인간극장",
       "rating": "3.8",
       "ratingVal": 3.8,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 16
     },
     {
-      "rank": "14",
       "channel": "KBS1",
       "title": "초이스걸어서세계속으로",
       "rating": "3.7",
       "ratingVal": 3.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 17
     },
     {
-      "rank": "14",
       "channel": "KBS2",
       "title": "옥탑방의문제아들",
       "rating": "3.7",
       "ratingVal": 3.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 18
     },
     {
-      "rank": "16",
       "channel": "KBS2",
       "title": "2TV생생정보",
       "rating": "3.6",
       "ratingVal": 3.6,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 19
     },
     {
-      "rank": "17",
       "channel": "KBS1",
       "title": "동물의왕국",
       "rating": "3.1",
       "ratingVal": 3.1,
-      "area": "수도권"
-    },
-    {
-      "rank": "18",
-      "channel": "KBS1",
-      "title": "KBS뉴스(17:00)",
-      "rating": "3.0",
-      "ratingVal": 3.0,
-      "area": "수도권"
-    },
-    {
-      "rank": "19",
-      "channel": "MBC",
-      "title": "2025MBC방송연예대상2부<재>",
-      "rating": "2.8",
-      "ratingVal": 2.8,
-      "area": "수도권"
-    },
-    {
-      "rank": "20",
-      "channel": "KBS1",
-      "title": "다큐인사이트(2026신년기획AI빅퀘스트)",
-      "rating": "2.7",
-      "ratingVal": 2.7,
-      "area": "수도권"
+      "mediaType": "지상파",
+      "area": "수도권",
+      "rank": 20
     }
   ]
 }
