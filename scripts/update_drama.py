@@ -44,8 +44,8 @@ def get_naver_drama_info(raw_title):
         if poster_img:
             info['posterUrl'] = poster_img.get('src')
 
-        # B. 방송사 및 편성 정보
-        broadcast_info = soup.select_one(".info_group dt:contains('편성') + dd")
+        # B. 방송사 및 편성 정보 (deprecated 경고 수정: :contains -> :-soup-contains)
+        broadcast_info = soup.select_one(".info_group dt:-soup-contains('편성') + dd")
         if not broadcast_info:
              broadcast_info = soup.select_one(".info_group .text")
              
@@ -53,12 +53,12 @@ def get_naver_drama_info(raw_title):
             info['broadcaster'] = broadcast_info.get_text(strip=True)
 
         # C. 제작진/출연진
-        cast_info = soup.select_one(".info_group dt:contains('출연') + dd")
+        cast_info = soup.select_one(".info_group dt:-soup-contains('출연') + dd")
         if cast_info:
             info['cast'] = cast_info.get_text(strip=True)
             
         # D. 소개글
-        desc_info = soup.select_one(".info_group dt:contains('소개') + dd")
+        desc_info = soup.select_one(".info_group dt:-soup-contains('소개') + dd")
         if desc_info:
             info['summary'] = desc_info.get_text(strip=True)
 
@@ -109,7 +109,7 @@ def fetch_nielsen_rating(date_str, area_code):
 def update_drama_data():
     print("Starting Drama Update (Nielsen + Naver Crawling)...")
     
-    # [수정] UTC 서버에서도 한국 시간(KST) 기준으로 오늘 날짜 계산
+    # KST 기준 날짜 설정
     kst_timezone = timezone(timedelta(hours=9))
     today = datetime.now(kst_timezone)
     
@@ -127,20 +127,27 @@ def update_drama_data():
         f_path = os.path.join(ARCHIVE_ROOT, f"{d_str}.json")
         
         daily_json = None
+        # 이미 파일이 있으면 로드 (재시도 시 API 호출 절약)
         if os.path.exists(f_path):
             try:
                 with open(f_path, 'r', encoding='utf-8') as f: daily_json = json.load(f)
             except: pass
         
+        # 파일이 없으면 새로 수집 시도
         if not daily_json:
             print(f"  [Fetch Nielsen] {d_str}...")
             nw = fetch_nielsen_rating(d_str, "00")
             cp = fetch_nielsen_rating(d_str, "01")
+            
+            # [중요] 데이터가 실제로 존재할 때만 파일 저장
             if nw and len(nw) > 0:
                 daily_json = { "date": d_str, "nationwide": nw, "capital": cp }
                 with open(f_path, 'w', encoding='utf-8') as f:
                     json.dump(daily_json, f, ensure_ascii=False, indent=2)
+                print(f"  ✅ Saved data for {d_str}")
                 time.sleep(0.5)
+            else:
+                print(f"  ⚠️ No data yet for {d_str}")
         
         if daily_json:
             if latest_data is None: latest_data = daily_json
@@ -154,16 +161,13 @@ def update_drama_data():
 
     # 2. 최신 데이터에 Naver 정보 + 트렌드 주입
     if latest_data:
-        print("Enriching with Naver Info & Trends...")
+        print(f"Enriching data for {latest_data['date']} with Naver Info & Trends...")
         
         # 전국 데이터 처리
         for item in latest_data.get("nationwide", []):
             title_key = item['title'].replace(" ", "").strip()
-            
-            # A. 트렌드 주입
             item['trend'] = sorted(trend_history.get(title_key, []), key=lambda x: x['date'])
             
-            # B. 네이버 정보 크롤링
             raw_title = item['title']
             if raw_title not in drama_details_cache:
                 print(f"  [Scrape Naver] {raw_title}")
@@ -191,14 +195,14 @@ def update_drama_data():
                     item.update(naver_info)
                 time.sleep(1)
 
-        # 저장
+        # 메인 파일 저장
         if not os.path.exists("public"): os.makedirs("public")
         with open(MAIN_FILE, 'w', encoding='utf-8') as f:
             json.dump(latest_data, f, ensure_ascii=False, indent=2)
         print("✅ Drama Data Updated with Poster & Info.")
         
     else:
-        print("⚠️ No data found.")
+        print("⚠️ No data found at all.")
 
 if __name__ == "__main__":
     update_drama_data()
