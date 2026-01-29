@@ -334,7 +334,7 @@ const DetailView: React.FC<DetailViewProps> = ({ movie, drama, targetDate, type,
                 {/* 네이버 검색 버튼 */}
                 <div className="flex justify-end mb-4">
                     <button 
-                        onClick={() => window.open(`https://search.naver.com/search.naver?query=드라마 ${drama.title}`, '_blank')}
+                        onClick={() => window.open(`https://search.naver.com/search.naver?query=${drama.title}`, '_blank')}
                         className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-purple-600 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm transition-colors"
                     >
                         <Search size={12} /> 네이버 상세 검색
