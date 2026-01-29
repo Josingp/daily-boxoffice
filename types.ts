@@ -79,9 +79,9 @@ export interface DramaTrend {
     rating: number; 
 }
 
-// [수정] 드라마 상세 정보 필드 추가
 export interface DramaItem {
-  rank: string;
+  rank: string | number; // 순위가 숫자일 수도 있음
+  mediaType?: string;    // 지상파/종편/케이블 구분
   channel: string;
   title: string;
   rating: string;     
@@ -91,13 +91,16 @@ export interface DramaItem {
   
   // 네이버 크롤링 추가 필드
   posterUrl?: string;
-  broadcaster?: string; // 편성 정보 (예: KBS2 월~금...)
-  cast?: string;        // 출연진
-  summary?: string;     // 줄거리/소개
+  broadcaster?: string; 
+  cast?: string;        
+  summary?: string;     
 }
 
+// [수정] 주간 순위 데이터 추가
 export interface DramaData {
   date: string;
-  nationwide: DramaItem[];
-  capital: DramaItem[];
+  nationwide: DramaItem[];        // 일일 전국
+  capital: DramaItem[];           // 일일 수도권
+  weekly_nationwide?: DramaItem[]; // 주간 전국 (옵셔널)
+  weekly_capital?: DramaItem[];    // 주간 수도권 (옵셔널)
 }
