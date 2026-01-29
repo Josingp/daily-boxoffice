@@ -6,7 +6,7 @@ import MovieListItem from './components/MovieListItem';
 import DetailView from './components/DetailView';
 import SearchBar from './components/SearchBar';
 import DramaList from './components/DramaList';
-import { Calendar, Clock, RotateCw } from 'lucide-react';
+import { Calendar, Clock, RotateCw, Tv } from 'lucide-react';
 
 type BoxOfficeType = 'DAILY' | 'REALTIME' | 'DRAMA';
 
@@ -23,7 +23,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedMovie, setSelectedMovie] = useState<DailyBoxOfficeList | null>(null);
-  const [selectedDrama, setSelectedDrama] = useState<DramaItem | null>(null); // 드라마 선택 State
+  const [selectedDrama, setSelectedDrama] = useState<DramaItem | null>(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -48,7 +48,8 @@ const App: React.FC = () => {
       // 2. 탭별 데이터 로드
       if (boxOfficeType === 'DRAMA') {
           try {
-            const res = await fetch('/drama_data.json');
+            // 캐시 무효화를 위해 타임스탬프 추가
+            const res = await fetch(`/drama_data.json?t=${new Date().getTime()}`);
             if (res.ok) {
                 const json = await res.json();
                 setDramaData(json);
@@ -125,10 +126,9 @@ const App: React.FC = () => {
     }
   };
 
-  // [중요] 드라마 클릭 핸들러
   const handleDramaClick = (item: DramaItem) => {
       setSelectedMovie(null);
-      setSelectedDrama(item); // 선택된 드라마 저장 -> DetailView 열림
+      setSelectedDrama(item);
   };
 
   const dateInputValue = `${targetDate.substring(0, 4)}-${targetDate.substring(4, 6)}-${targetDate.substring(6, 8)}`;
@@ -143,7 +143,7 @@ const App: React.FC = () => {
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">BoxOffice Pro</h1>
               <p className="text-xs text-slate-500 font-medium mt-1">
                 {boxOfficeType === 'DAILY' ? '일별 박스오피스 리포트' : 
-                 boxOfficeType === 'REALTIME' ? 'KOBIS 실시간 예매율' : 'TV 시청률 랭킹 (닐슨코리아)'}
+                 boxOfficeType === 'REALTIME' ? 'KOBIS 실시간 예매율' : 'TV 시청률 통합 랭킹'}
               </p>
             </div>
             
@@ -209,13 +209,45 @@ const App: React.FC = () => {
              </div>
           ) : boxOfficeType === 'DRAMA' ? (
              dramaData ? (
-                <div className="animate-fade-in pb-10">
-                    <div className="text-center mb-4 text-xs text-slate-400 bg-white inline-block px-3 py-1 rounded-full border border-slate-100 shadow-sm mx-auto">
-                        📅 기준일: {dramaData.date.substring(0,4)}.{dramaData.date.substring(4,6)}.{dramaData.date.substring(6,8)} (닐슨코리아)
+                <div className="animate-fade-in pb-10 space-y-6">
+                    <div className="text-center mb-2">
+                        <span className="text-[10px] text-purple-600 bg-purple-50 px-3 py-1 rounded-full font-bold border border-purple-100 shadow-sm">
+                            📺 지상파 + 종편 + 케이블 통합 순위
+                        </span>
+                        <div className="text-[10px] text-slate-400 mt-2">
+                            📅 기준일: {dramaData.date.substring(0,4)}.{dramaData.date.substring(4,6)}.{dramaData.date.substring(6,8)}
+                        </div>
                     </div>
-                    {/* [중요] 리스트에 클릭 핸들러 전달 */}
-                    <DramaList title="전국 시청률 TOP 10" items={dramaData.nationwide} onItemClick={handleDramaClick} />
-                    <DramaList title="수도권 시청률 TOP 10" items={dramaData.capital} onItemClick={handleDramaClick} />
+
+                    {/* 일일 통합 순위 */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-3 px-1">
+                            <Tv size={16} className="text-purple-600" />
+                            <h3 className="text-sm font-bold text-slate-800">일일 통합 시청률</h3>
+                        </div>
+                        <div className="space-y-4">
+                            <DramaList title="전국 일일 TOP 20" items={dramaData.nationwide} onItemClick={handleDramaClick} />
+                            <DramaList title="수도권 일일 TOP 20" items={dramaData.capital} onItemClick={handleDramaClick} />
+                        </div>
+                    </div>
+
+                    {/* 주간 통합 순위 (데이터가 있을 경우만) */}
+                    {(dramaData.weekly_nationwide || dramaData.weekly_capital) && (
+                        <div className="pt-4 border-t border-slate-200">
+                            <div className="flex items-center gap-2 mb-3 px-1 mt-2">
+                                <Calendar size={16} className="text-blue-600" />
+                                <h3 className="text-sm font-bold text-slate-800">주간 통합 시청률</h3>
+                            </div>
+                            <div className="space-y-4">
+                                {dramaData.weekly_nationwide && (
+                                    <DramaList title="전국 주간 TOP 20" items={dramaData.weekly_nationwide} onItemClick={handleDramaClick} />
+                                )}
+                                {dramaData.weekly_capital && (
+                                    <DramaList title="수도권 주간 TOP 20" items={dramaData.weekly_capital} onItemClick={handleDramaClick} />
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
              ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
